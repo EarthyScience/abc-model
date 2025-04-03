@@ -1,0 +1,12 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+
+[project]
+name = "abc-model"
+version = "0.1.0"
+dependencies = ["jax"]
+
+[tool.ruff.lint]
+ignore = ["E731", "F722"]
