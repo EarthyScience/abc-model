@@ -1,4 +1,4 @@
-class MixedLayerModel:
+class LandSurfaceModel:
     def __init__(self):
         pass
 

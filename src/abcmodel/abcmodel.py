@@ -1,46 +1,22 @@
-#
-# CLASS
-# Copyright (c) 2010-2015 Meteorology and Air Quality section, Wageningen University and Research centre
-# Copyright (c) 2011-2015 Jordi Vila-Guerau de Arellano
-# Copyright (c) 2011-2015 Chiel van Heerwaarden
-# Copyright (c) 2011-2015 Bart van Stratum
-# Copyright (c) 2011-2015 Kees van den Dries
-#
-# This file is part of CLASS
-#
-# CLASS is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# CLASS is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with CLASS.  If not, see <http://www.gnu.org/licenses/>.
-#
-
 import copy as cp
 import sys
 
 import numpy as np
 
-# import ribtol
+from .utils import esat, qsat
 
 
-def esat(T):
-    return 0.611e3 * np.exp(17.2694 * (T - 273.16) / (T - 35.86))
+class Model:
+    def __init__(
+        self,
+        dt: float,
+        runtime: float,
+        model_input,
+    ):
+        self.dt = dt
+        self.runtime = runtime
 
-
-def qsat(T, p):
-    return 0.622 * esat(T) / p
-
-
-class model:
-    def __init__(self, model_input):
-        # initialize the different components of the model
+        # old initialization
         self.input = cp.deepcopy(model_input)
 
     def run(self):
@@ -330,8 +306,7 @@ class model:
         self.wqM = 0.0  # Cloud core moisture flux [kg kg-1 m s-1]
 
         # initialize time variables
-        self.tsteps = int(np.floor(self.input.runtime / self.input.dt))
-        self.dt = self.input.dt
+        self.tsteps = int(np.floor(self.runtime / self.dt))
         self.t = 0
 
         # Some sanity checks for valid input
@@ -340,7 +315,7 @@ class model:
         assert self.c_beta >= 0 or self.c_beta <= 1
 
         # initialize output
-        self.out = model_output(self.tsteps)
+        self.out = ModelOutput(self.tsteps)
 
         self.statistics()
 
@@ -1319,7 +1294,7 @@ class model:
 
 
 # class for storing mixed-layer model output data
-class model_output:
+class ModelOutput:
     def __init__(self, tsteps):
         self.t = np.zeros(tsteps)  # time [s]
 
@@ -1425,12 +1400,9 @@ class model_output:
 
 
 # class for storing mixed-layer model input data
-class model_input:
+class ModelInput:
     def __init__(self):
-        # general model variables
-        self.runtime = None  # duration of model run [s]
-        self.dt = None  # time step [s]
-
+        #######################
         # mixed-layer variables
         self.sw_ml = None  # mixed-layer model switch
         self.sw_shearwe = None  # Shear growth ABL switch
@@ -1471,7 +1443,9 @@ class model_input:
         self.dv = None  # initial v-wind jump at h [m s-1]
         self.gammav = None  # free atmosphere v-wind speed lapse rate [s-1]
         self.advv = None  # advection of v-wind [m s-2]
+        #######################
 
+        #########################
         # surface layer variables
         self.sw_sl = None  # surface layer switch
         self.ustar = None  # surface friction velocity [m s-1]
@@ -1481,7 +1455,9 @@ class model_input:
         self.Cs = None  # drag coefficient for scalars [-]
         self.L = None  # Obukhov length [-]
         self.Rib = None  # bulk Richardson number [-]
+        #########################
 
+        ######################
         # radiation parameters
         self.sw_rad = None  # radiation switch
         self.lat = None  # latitude [deg]
@@ -1491,7 +1467,9 @@ class model_input:
         self.cc = None  # cloud cover fraction [-]
         self.Q = None  # net radiation [W m-2]
         self.dFz = None  # cloud top radiative divergence [W m-2]
+        ######################
 
+        #########################
         # land surface parameters
         self.sw_ls = None  # land surface switch
         self.ls_type = None  # land-surface parameterization ('js' for Jarvis-Stewart or 'ags' for A-Gs)
@@ -1530,7 +1508,10 @@ class model_input:
 
         # A-Gs parameters
         self.c3c4 = None  # Plant type ('c3' or 'c4')
+        #########################
 
+        ####################
         # Cumulus parameters
         self.sw_cu = None  # Cumulus parameterization switch
         self.dz_h = None  # Transition layer thickness [m]
+        ###################

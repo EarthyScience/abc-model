@@ -1,22 +1,13 @@
-#
-# Example of how to run the Python code, and access the output
-# This case is identical to the default setup of CLASS (the version with interface)
-#
-
-
 import matplotlib.pyplot as plt
 
 from abcmodel.abcmodel import *
 
-# from pylab import *
+# new initialization
+dt = 60.0  # time step [s]
+runtime = 12 * 3600  # total run time [s]
 
-"""
-Create empty model_input and set up case
-"""
-run1input = model_input()
-
-run1input.dt = 60.0  # time step [s]
-run1input.runtime = 12 * 3600  # total run time [s]
+# create empty model_input and set up case
+run1input = ModelInput()
 
 # mixed-layer input
 run1input.sw_ml = True  # mixed-layer model switch
@@ -110,15 +101,15 @@ run1input.c3c4 = "c3"  # Plant type ('c3' or 'c4')
 run1input.sw_cu = False  # Cumulus parameterization switch
 run1input.dz_h = 150.0  # Transition layer thickness [m]
 
-"""
-Init and run the model
-"""
-r1 = model(run1input)
+# init and run the model
+r1 = Model(
+    dt,
+    runtime,
+    run1input,
+)
 r1.run()
 
-"""
-Plot output
-"""
+# plot output
 plt.figure()
 plt.subplot(131)
 plt.plot(r1.out.t, r1.out.h)
