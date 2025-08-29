@@ -226,7 +226,7 @@ class Model:
         # initialize output
         self.out = ModelOutput(self.tsteps)
 
-        self.statistics()
+        self.mixed_layer.statistics(self.t)
 
         # calculate initial diagnostic variables
         self.radiation.run(
@@ -299,7 +299,7 @@ class Model:
             )
 
     def timestep(self):
-        self.statistics()
+        self.mixed_layer.statistics(self.t)
 
         # run radiation model
         self.radiation.run(
@@ -372,60 +372,6 @@ class Model:
         # time integrate mixed-layer model
         if self.mixed_layer.sw_ml:
             self.mixed_layer.integrate(self.dt)
-
-    def statistics(self):
-        # Calculate virtual temperatures
-        self.mixed_layer.thetav = (
-            self.mixed_layer.theta + 0.61 * self.mixed_layer.theta * self.mixed_layer.q
-        )
-        self.mixed_layer.wthetav = (
-            self.mixed_layer.wtheta
-            + 0.61 * self.mixed_layer.theta * self.mixed_layer.wq
-        )
-        self.mixed_layer.dthetav = (
-            self.mixed_layer.theta + self.mixed_layer.dtheta
-        ) * (
-            1.0 + 0.61 * (self.mixed_layer.q + self.mixed_layer.dq)
-        ) - self.mixed_layer.theta * (1.0 + 0.61 * self.mixed_layer.q)
-
-        # Mixed-layer top properties
-        self.mixed_layer.top_p = (
-            self.mixed_layer.surf_pressure
-            - self.const.rho * self.const.g * self.mixed_layer.abl_height
-        )
-        self.mixed_layer.top_T = (
-            self.mixed_layer.theta
-            - self.const.g / self.const.cp * self.mixed_layer.abl_height
-        )
-        self.mixed_layer.top_rh = self.mixed_layer.q / get_qsat(
-            self.mixed_layer.top_T, self.mixed_layer.top_p
-        )
-
-        # Find lifting condensation level iteratively
-        if self.t == 0:
-            self.mixed_layer.lcl = self.mixed_layer.abl_height
-            RHlcl = 0.5
-        else:
-            RHlcl = 0.9998
-
-        itmax = 30
-        it = 0
-        while ((RHlcl <= 0.9999) or (RHlcl >= 1.0001)) and it < itmax:
-            self.mixed_layer.lcl += (1.0 - RHlcl) * 1000.0
-            p_lcl = (
-                self.mixed_layer.surf_pressure
-                - self.const.rho * self.const.g * self.mixed_layer.lcl
-            )
-            T_lcl = (
-                self.mixed_layer.theta
-                - self.const.g / self.const.cp * self.mixed_layer.lcl
-            )
-            RHlcl = self.mixed_layer.q / get_qsat(T_lcl, p_lcl)
-            it += 1
-
-        if it == itmax:
-            print("LCL calculation not converged!!")
-            print("RHlcl = %f, zlcl=%f" % (RHlcl, self.mixed_layer.lcl))
 
     def jarvis_stewart(self):
         # calculate surface resistances using Jarvis-Stewart model

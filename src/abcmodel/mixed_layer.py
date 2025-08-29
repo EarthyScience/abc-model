@@ -1,4 +1,4 @@
-from .utils import PhysicalConstants
+from .utils import PhysicalConstants, get_qsat
 
 
 class MixedLayerModel:
@@ -323,3 +323,38 @@ class MixedLayerModel:
             self.du = du0 + dt * self.dutend
             self.v = v0 + dt * self.vtend
             self.dv = dv0 + dt * self.dvtend
+
+    def statistics(self, t: float):
+        # Calculate virtual temperatures
+        self.thetav = self.theta + 0.61 * self.theta * self.q
+        self.wthetav = self.wtheta + 0.61 * self.theta * self.wq
+        self.dthetav = (self.theta + self.dtheta) * (
+            1.0 + 0.61 * (self.q + self.dq)
+        ) - self.theta * (1.0 + 0.61 * self.q)
+
+        # Mixed-layer top properties
+        self.top_p = (
+            self.surf_pressure - self.const.rho * self.const.g * self.abl_height
+        )
+        self.top_T = self.theta - self.const.g / self.const.cp * self.abl_height
+        self.top_rh = self.q / get_qsat(self.top_T, self.top_p)
+
+        # Find lifting condensation level iteratively
+        if t == 0:
+            self.lcl = self.abl_height
+            RHlcl = 0.5
+        else:
+            RHlcl = 0.9998
+
+        itmax = 30
+        it = 0
+        while ((RHlcl <= 0.9999) or (RHlcl >= 1.0001)) and it < itmax:
+            self.lcl += (1.0 - RHlcl) * 1000.0
+            p_lcl = self.surf_pressure - self.const.rho * self.const.g * self.lcl
+            T_lcl = self.theta - self.const.g / self.const.cp * self.lcl
+            RHlcl = self.q / get_qsat(T_lcl, p_lcl)
+            it += 1
+
+        if it == itmax:
+            print("LCL calculation not converged!!")
+            print("RHlcl = %f, zlcl=%f" % (RHlcl, self.lcl))
