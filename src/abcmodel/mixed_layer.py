@@ -435,7 +435,7 @@ class StandardMixedLayerModel(AbstractMixedLayerModel):
         else:
             self.wstar = 1e-6
 
-        # Virtual heat entrainment flux
+        # virtual heat entrainment flux
         self.wthetave = -self.beta * self.wthetav
 
         # compute mixed-layer tendencies
@@ -447,11 +447,11 @@ class StandardMixedLayerModel(AbstractMixedLayerModel):
         else:
             self.we = -self.wthetave / self.dthetav
 
-        # Don't allow boundary layer shrinking if wtheta < 0
+        # don't allow boundary layer shrinking if wtheta < 0
         if self.we < 0:
             self.we = 0.0
 
-        # Calculate entrainment fluxes
+        # calculate entrainment fluxes
         self.wthetae = -self.we * self.dtheta
         self.wqe = -self.we * self.dq
         self.wCO2e = -self.we * self.dCO2
@@ -522,7 +522,7 @@ class StandardMixedLayerModel(AbstractMixedLayerModel):
         self.dCO2 = dCO20 + dt * self.dCO2tend
         self.dz_h = dz0 + dt * self.dztend
 
-        # Limit dz to minimal value
+        # limit dz to minimal value
         dz0 = 50
         if self.dz_h < dz0:
             self.dz_h = dz0

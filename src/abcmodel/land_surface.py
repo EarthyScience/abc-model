@@ -339,7 +339,7 @@ class AbstractStandardLandSurfaceModel(AbstractLandSurfaceModel):
         self,
         surface_layer: AbstractSurfaceLayerModel,
         mixed_layer: AbstractMixedLayerModel,
-    ):
+    ) -> None:
         raise NotImplementedError
 
     def run(
