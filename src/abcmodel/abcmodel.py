@@ -4,7 +4,7 @@ from abcmodel.land_surface import MinimalLandSurfaceModel
 
 from .clouds import AbstractCloudModel, NoCloudModel
 from .land_surface import AbstractLandSurfaceModel
-from .mixed_layer import AbstractMixedLayerModel
+from .mixed_layer import AbstractMixedLayerModel, MinimalMixedLayerModel
 from .radiation import AbstractRadiationModel, MinimalRadiationModel
 from .surface_layer import AbstractSurfaceLayerModel, MinimalSurfaceLayerModel
 from .utils import PhysicalConstants
@@ -66,7 +66,6 @@ class ABCModel:
         )
 
         for _ in range(10):
-            assert isinstance(self.mixed_layer.thetav, float)
             self.surface_layer.run(self.const, self.land_surface, self.mixed_layer)
 
         self.land_surface.run(
@@ -107,7 +106,6 @@ class ABCModel:
         )
 
         # run surface layer model
-        assert isinstance(self.mixed_layer.thetav, float)
         self.surface_layer.run(self.const, self.land_surface, self.mixed_layer)
 
         # run land surface model
@@ -143,6 +141,7 @@ class ABCModel:
         t = self.t
 
         if not isinstance(self.radiation, MinimalRadiationModel):
+            # limamau: this should be 100% out of this clause :)
             self.out.t[t] = t * self.dt / 3600.0 + self.radiation.tstart
             self.out.in_srad[t] = self.radiation.in_srad
             self.out.out_srad[t] = self.radiation.out_srad
@@ -184,44 +183,37 @@ class ABCModel:
         self.out.theta[t] = self.mixed_layer.theta
         self.out.thetav[t] = self.mixed_layer.thetav
         self.out.dtheta[t] = self.mixed_layer.dtheta
-        self.out.dthetav[t] = self.mixed_layer.dthetav
         self.out.wtheta[t] = self.mixed_layer.wtheta
         self.out.wthetav[t] = self.mixed_layer.wthetav
-        self.out.wthetae[t] = self.mixed_layer.wthetae
-        self.out.wthetave[t] = self.mixed_layer.wthetave
-
         self.out.q[t] = self.mixed_layer.q
         self.out.dq[t] = self.mixed_layer.dq
         self.out.wq[t] = self.mixed_layer.wq
         self.out.wqe[t] = self.mixed_layer.wqe
-        self.out.wqM[t] = self.clouds.cc_qf
-
         self.out.qsat[t] = self.mixed_layer.qsat
         self.out.e[t] = self.mixed_layer.e
         self.out.esat[t] = self.mixed_layer.esat
-
         fac = (self.const.rho * self.const.mco2) / self.const.mair
         self.out.co2[t] = self.mixed_layer.co2
         self.out.dCO2[t] = self.mixed_layer.dCO2
         self.out.wCO2[t] = self.mixed_layer.wCO2 * fac
-        # limamau: this was failing when no mixed layer model is defined
-        # and I don't feel like adding an if else clause here... let's see
-        # self.out.wCO2e[t] = self.mixed_layer.wCO2e * fac
+        self.out.wCO2e[t] = self.mixed_layer.wCO2e * fac
         self.out.wCO2R[t] = self.mixed_layer.wCO2R * fac
         self.out.wCO2A[t] = self.mixed_layer.wCO2A * fac
-
         self.out.u[t] = self.mixed_layer.u
-        self.out.du[t] = self.mixed_layer.du
-
         self.out.v[t] = self.mixed_layer.v
-        self.out.dv[t] = self.mixed_layer.dv
-
-        self.out.zlcl[t] = self.mixed_layer.lcl
-        self.out.top_rh[t] = self.mixed_layer.top_rh
+        self.out.dz_h[t] = self.mixed_layer.dz_h
+        if not isinstance(self.mixed_layer, MinimalMixedLayerModel):
+            self.out.wthetae[t] = self.mixed_layer.wthetae
+            self.out.dthetav[t] = self.mixed_layer.dthetav
+            self.out.wthetave[t] = self.mixed_layer.wthetave
+            self.out.du[t] = self.mixed_layer.du
+            self.out.dv[t] = self.mixed_layer.dv
+            self.out.zlcl[t] = self.mixed_layer.lcl
+            self.out.top_rh[t] = self.mixed_layer.top_rh
 
         self.out.cc_frac[t] = self.clouds.cc_frac
+        self.out.wqM[t] = self.clouds.cc_qf
         self.out.cc_mf[t] = self.clouds.cc_mf
-        self.out.dz_h[t] = self.mixed_layer.dz_h
 
 
 class ABCOutput:

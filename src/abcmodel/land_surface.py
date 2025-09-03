@@ -243,7 +243,8 @@ class AbstractStandardLandSurfaceModel(AbstractLandSurfaceModel):
         )
 
         # limamau: should eastsurf just be deleted here?
-        esatsurf = get_esat(self.surf_temp)
+        # or should it rather be updated on mixed layer?
+        # esatsurf = get_esat(self.surf_temp)
         mixed_layer.qsatsurf = get_qsat(self.surf_temp, mixed_layer.surf_pressure)
 
         self.le_veg = (
@@ -629,7 +630,7 @@ class AquaCropModel(AbstractStandardLandSurfaceModel):
 
         # calculate gross primary productivity
         # limamau: this is just not being used?
-        ag = (am + rdark) * (1 - np.exp(alphac * par / (am + rdark)))
+        # ag = (am + rdark) * (1 - np.exp(alphac * par / (am + rdark)))
 
         # 1.- calculate upscaling from leaf to canopy: net flow CO2 into the plant (An)
         y = alphac * self.kx[self.c3c4] * par / (am + rdark)
