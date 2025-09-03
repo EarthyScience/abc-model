@@ -237,7 +237,13 @@ class AbstractMixedLayerModel:
 
 
 class AbstractCloudModel:
-    # required by no-clouds:
+    """
+    Abstract base class for atmospheric cloud models in mixed-layer systems.
+
+    This class defines the interface that all cloud models must implement for
+    integration with mixed-layer boundary layer models.
+    """
+
     # cloud core fraction [-]
     cc_frac: float
     # cloud core mass flux [m s-1]

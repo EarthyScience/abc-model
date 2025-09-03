@@ -5,6 +5,10 @@ from .utils import get_qsat
 
 
 class NoCloudModel(AbstractCloudModel):
+    """
+    No cloud is formed using this model.
+    """
+
     def __init__(self):
         # cloud core fraction [-]
         self.cc_frac = 0.0
@@ -18,8 +22,62 @@ class NoCloudModel(AbstractCloudModel):
 
 
 class StandardCumulusModel(AbstractCloudModel):
-    # limamau: should this really be intialized like that?
-    # or would we rather actually use args?
+    """
+    Standard cumulus cloud model based on Neggers et al. (2006/7).
+
+    This model calculates shallow cumulus convection properties using a variance-based
+    approach to determine cloud core fraction and associated mass fluxes.
+
+    **Physical Process Overview:**
+
+    The model characterizes turbulent fluctuations in the mixed layer that lead to
+    cloud formation. It quantifies the variance of humidity and CO2 at the mixed-layer
+    top and uses this to determine what fraction reaches saturation.
+
+    **Calculation Steps:**
+
+    **Step 1: Mixed-Layer Top Variance**
+
+    Calculates turbulent variance for humidity and CO2 at the mixed-layer top
+    using entrainment fluxes and convective scaling (Neggers et al. 2006/7):
+
+    - Humidity variance: q2_h = -(wqe + cc_qf) * dq * h / (dz_h * wstar)
+    - CO2 variance: top_CO22 = -(wCO2e + wCO2M) * dCO2 * h / (dz_h * wstar)
+    - Set to zero when wthetav <= 0 (no convection)
+
+    **Step 2: Cloud Core Fraction**
+
+    Determines fraction of mixed-layer top that becomes saturated using
+    arctangent formulation based on saturation deficit:
+
+    - Saturation deficit: (q - qsat) / sqrt(q2_h)
+    - Cloud fraction: max(0, 0.5 + 0.36 * arctan(1.55 * deficit))
+    - Returns 0 when q2_h <= 0
+
+    **Step 3: Cloud Core Properties**
+
+    Calculates mass flux and moisture flux through cloud cores:
+
+    - Mass flux: cc_mf = cc_frac * wstar
+    - Moisture flux: cc_qf = cc_mf * sqrt(q2_h)
+
+    **Step 4: CO2 Mass Flux**
+
+    Computes CO2 transport only when CO2 decreases with height:
+
+    - CO2 flux: wCO2M = cc_mf * sqrt(top_CO22) if dCO2 < 0
+    - Set to zero otherwise
+
+    Attributes
+    ----------
+    cc_frac : float
+        Cloud core fraction [-], range 0 to 1
+    cc_mf : float
+        Cloud core mass flux [m/s]
+    cc_qf : float
+        Cloud core moisture flux [kg/kg/s]
+    """
+
     def __init__(self):
         # cloud core fraction [-]
         self.cc_frac = 0.0
@@ -28,45 +86,130 @@ class StandardCumulusModel(AbstractCloudModel):
         # cloud core moisture flux [kg kg-1 m s-1]
         self.cc_qf = 0.0
 
+    def _calculate_mixed_layer_variance(
+        self,
+        wthetav: float,
+        wqe: float,
+        dq: float,
+        abl_height: float,
+        dz_h: float,
+        wstar: float,
+        wCO2e: float,
+        wCO2M: float,
+        dCO2: float,
+    ) -> tuple[float, float]:
+        """
+        Calculate mixed-layer top relative humidity variance and CO2 variance.
+        Based on Neggers et. al 2006/7.
+        """
+        if wthetav > 0.0:
+            q2_h = -(wqe + self.cc_qf) * dq * abl_height / (dz_h * wstar)
+            top_CO22 = -(wCO2e + wCO2M) * dCO2 * abl_height / (dz_h * wstar)
+        else:
+            q2_h = 0.0
+            top_CO22 = 0.0
+
+        return q2_h, top_CO22
+
+    def _calculate_cloud_core_fraction(
+        self,
+        q: float,
+        top_T: float,
+        top_p: float,
+        q2_h: float,
+    ):
+        """
+        Calculate cloud core fraction using the arctangent formulation.
+        """
+        if q2_h <= 0.0:
+            self.cc_frac = 0.0
+            return None
+
+        qsat = get_qsat(top_T, top_p)
+        saturation_deficit = (q - qsat) / (q2_h**0.5)
+        cc_frac = 0.5 + 0.36 * np.arctan(1.55 * saturation_deficit)
+        self.cc_frac = max(0.0, cc_frac)
+
+    def _calculate_cloud_core_properties(self, wstar: float, q2_h: float):
+        """
+        Calculate and update cloud core mass flux and moisture flux.
+        No return needed since we're updating self attributes directly.
+        """
+        self.cc_mf = self.cc_frac * wstar
+        self.cc_qf = self.cc_mf * (q2_h**0.5) if q2_h > 0.0 else 0.0
+
+    def _calculate_co2_mass_flux(self, top_CO22: float, dCO2: float) -> float:
+        """
+        Calculate CO2 mass flux, only if mixed-layer top jump is negative.
+        """
+        if dCO2 < 0 and top_CO22 > 0.0:
+            return self.cc_mf * (top_CO22**0.5)
+        else:
+            return 0.0
+
     def run(self, mixed_layer: AbstractMixedLayerModel):
-        # calculate mixed-layer top relative humidity variance (Neggers et. al 2006/7)
-        if mixed_layer.wthetav > 0.0:
-            mixed_layer.q2_h = (
-                -(mixed_layer.wqe + self.cc_qf)
-                * mixed_layer.dq
-                * mixed_layer.abl_height
-                / (mixed_layer.dz_h * mixed_layer.wstar)
-            )
-            mixed_layer.top_CO22 = (
-                -(mixed_layer.wCO2e + mixed_layer.wCO2M)
-                * mixed_layer.dCO2
-                * mixed_layer.abl_height
-                / (mixed_layer.dz_h * mixed_layer.wstar)
-            )
-        else:
-            mixed_layer.q2_h = 0.0
-            mixed_layer.top_CO22 = 0.0
+        """
+        Parameters
+        ----------
+        ``mixed_layer`` : AbstractMixedLayerModel
+        Mixed-layer model containing required thermodynamic and flux variables.
 
-        # calculate cloud core fraction (ac), mass flux (M) and moisture flux (wqM)
-        self.cc_frac = max(
-            0.0,
-            0.5
-            + (
-                0.36
-                * np.arctan(
-                    1.55
-                    * (
-                        (mixed_layer.q - get_qsat(mixed_layer.top_T, mixed_layer.top_p))
-                        / mixed_layer.q2_h**0.5
-                    )
-                )
-            ),
+        **Required attributes:**
+
+        * ``wthetav`` : float - Virtual potential temperature flux [K m/s]
+        * ``wqe`` : float - Moisture flux at entrainment [kg/kg m/s]
+        * ``dq`` : float - Moisture jump at mixed-layer top [kg/kg]
+        * ``abl_height`` : float - Atmospheric boundary layer height [m]
+        * ``dz_h`` : float - Layer thickness at mixed-layer top [m]
+        * ``wstar`` : float - Convective velocity scale [m/s]
+        * ``wCO2e`` : float - CO2 flux at entrainment [ppm m/s]
+        * ``wCO2M`` : float - CO2 mass flux [ppm m/s]
+        * ``dCO2`` : float - CO2 jump at mixed-layer top [ppm]
+        * ``q`` : float - Specific humidity [kg/kg]
+        * ``top_T`` : float - Temperature at mixed-layer top [K]
+        * ``top_p`` : float - Pressure at mixed-layer top [Pa]
+
+        Updates
+        -------
+        **self attributes modified:**
+
+        * ``cc_frac`` : float
+            Cloud core fraction (0 to 1)
+        * ``cc_mf`` : float
+            Cloud core mass flux [m/s]
+        * ``cc_qf`` : float
+            Cloud core moisture flux [kg/kg/s]
+
+        **mixed_layer attributes modified:**
+
+        * ``q2_h`` : float
+            Humidity variance at mixed-layer top
+        * ``top_CO22`` : float
+            CO2 variance at mixed-layer top
+        * ``wCO2M`` : float
+            CO2 mass flux [ppm m/s]
+        """
+        mixed_layer.q2_h, mixed_layer.top_CO22 = self._calculate_mixed_layer_variance(
+            mixed_layer.wthetav,
+            mixed_layer.wqe,
+            mixed_layer.dq,
+            mixed_layer.abl_height,
+            mixed_layer.dz_h,
+            mixed_layer.wstar,
+            mixed_layer.wCO2e,
+            mixed_layer.wCO2M,
+            mixed_layer.dCO2,
         )
-        self.cc_mf = self.cc_frac * mixed_layer.wstar
-        self.cc_qf = self.cc_mf * mixed_layer.q2_h**0.5
 
-        # only calculate CO2 mass-flux if mixed-layer top jump is negative
-        if mixed_layer.dCO2 < 0:
-            mixed_layer.wCO2M = self.cc_mf * mixed_layer.top_CO22**0.5
-        else:
-            mixed_layer.wCO2M = 0.0
+        self._calculate_cloud_core_fraction(
+            mixed_layer.q,
+            mixed_layer.top_T,
+            mixed_layer.top_p,
+            mixed_layer.q2_h,
+        )
+
+        self._calculate_cloud_core_properties(mixed_layer.wstar, mixed_layer.q2_h)
+
+        mixed_layer.wCO2M = self._calculate_co2_mass_flux(
+            mixed_layer.top_CO22, mixed_layer.dCO2
+        )
