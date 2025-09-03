@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 
-from abcmodel.abcmodel import ABCModel
+from abcmodel import ABCModel
 from abcmodel.clouds import StandardCumulusModel
 from abcmodel.land_surface import MinimalLandSurfaceModel
 from abcmodel.mixed_layer import StandardMixedLayerModel
