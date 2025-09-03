@@ -65,6 +65,20 @@ class AbstractRadiationModel:
 
 
 class AbstractLandSurfaceModel:
+    # required by minimal
+    alpha: float
+    surf_temp: float
+    # used to output
+    rs: float
+    hf: float
+    le: float
+    le_liq: float
+    le_veg: float
+    le_soil: float
+    le_pot: float
+    le_ref: float
+    gf: float
+
     @abstractmethod
     def run(
         self,
@@ -74,8 +88,9 @@ class AbstractLandSurfaceModel:
     ) -> None:
         raise NotImplementedError
 
+    @abstractmethod
     def integrate(self, dt: float) -> None:
-        pass
+        raise NotImplementedError
 
 
 # limamau: redefine init outside abstract

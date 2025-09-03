@@ -10,9 +10,12 @@ from .surface_layer import AbstractSurfaceLayerModel
 from .utils import PhysicalConstants, get_esat, get_qsat
 
 
-class NoLandSurfaceModel(AbstractLandSurfaceModel):
-    def __init__(self):
-        pass
+class MinimalLandSurfaceModel(AbstractLandSurfaceModel):
+    def __init__(self, alpha: float, surf_temp: float):
+        # surface albedo [-]
+        self.alpha = alpha
+        # surface temperature [K]
+        self.surf_temp = surf_temp
 
     def run(
         self,
@@ -22,11 +25,23 @@ class NoLandSurfaceModel(AbstractLandSurfaceModel):
     ):
         pass
 
+    def integrate(self, dt: float):
+        pass
+
 
 class AbstractStandardLandSurfaceModel(AbstractLandSurfaceModel):
+    # wet fraction [-]
+    cliq: float
+    # tendencies
+    # soil temperature tendency [K s-1]
+    temp_soil_tend: float
+    # soil moisture tendency [m3 m-3 s-1]
+    wgtend: float
+    # equivalent liquid water tendency [m s-1]
+    wltend: float
+
     def __init__(
         self,
-        ls_type: str,
         wg: float,
         w2: float,
         temp_soil: float,
@@ -50,60 +65,8 @@ class AbstractStandardLandSurfaceModel(AbstractLandSurfaceModel):
         wmax: float,
         wl: float,
         lam: float,
-        c3c4: str,
     ):
         self.const = PhysicalConstants()
-
-        # ls type
-        self.ls_type = ls_type
-
-        # A-Gs constants and settings
-        # plant type: [C3, C4]
-        # CO2 compensation concentration [mg m-3]
-        self.co2comp298 = [68.5, 4.3]
-        # function parameter to calculate CO2 compensation concentration [-]
-        self.net_rad10CO2 = [1.5, 1.5]
-        # mesophyill conductance at 298 K [mm s-1]
-        self.gm298 = [7.0, 17.5]
-        # CO2 maximal primary productivity [mg m-2 s-1]
-        self.ammax298 = [2.2, 1.7]
-        # function parameter to calculate mesophyll conductance [-]
-        self.net_rad10gm = [2.0, 2.0]
-        # reference temperature to calculate mesophyll conductance gm [K]
-        self.temp1gm = [278.0, 286.0]
-        # reference temperature to calculate mesophyll conductance gm [K]
-        self.temp2gm = [301.0, 309.0]
-        # function parameter to calculate maximal primary profuctivity Ammax
-        self.net_rad10Am = [2.0, 2.0]
-        # reference temperature to calculate maximal primary profuctivity Ammax [K]
-        self.temp1Am = [281.0, 286.0]
-        # reference temperature to calculate maximal primary profuctivity Ammax [K]
-        self.temp2Am = [311.0, 311.0]
-        # maximum value Cfrac [-]
-        self.f0 = [0.89, 0.85]
-        # regression coefficient to calculate Cfrac [kPa-1]
-        self.ad = [0.07, 0.15]
-        # initial low light conditions [mg J-1]
-        self.alpha0 = [0.017, 0.014]
-        # extinction coefficient PAR [-]
-        self.kx = [0.7, 0.7]
-        # cuticular (minimum) conductance [mm s-1]
-        self.gmin = [0.25e-3, 0.25e-3]
-        # ratio molecular viscosity water to carbon dioxide
-        self.nuco2q = 1.6
-        # constant water stress correction (eq. 13 Jacobs et al. 2007) [-]
-        self.cw = 0.0016
-        # upper reference value soil water [-]
-        self.wmax = 0.55
-        # lower reference value soil water [-]
-        self.wmin = 0.005
-        # respiration at 10 C [mg CO2 m-2 s-1]
-        self.r10 = 0.23
-        # activation energy [53.3 kJ kmol-1]
-        self.e0 = 53.3e3
-        # initialize A-Gs surface scheme
-        self.c3c4 = c3c4  # plant type ('c3' or 'c4')
-
         # water content parameters
         # volumetric water content top soil layer [m3 m-3]
         self.wg = wg
@@ -135,10 +98,6 @@ class AbstractStandardLandSurfaceModel(AbstractLandSurfaceModel):
         self.c1sat = c1sat
         self.c2ref = c2ref
 
-        # limamau: was this assigned at any point?
-        # # curvature plant water-stress factor (0..1) [-]
-        self.c_beta = None
-
         # vegetation parameters
         # leaf area index [-]
         self.lai = lai
@@ -164,41 +123,13 @@ class AbstractStandardLandSurfaceModel(AbstractLandSurfaceModel):
         self.wmax = wmax
         # equivalent water layer depth for wet vegetation [m]
         self.wl = wl
-        # wet fraction [-]
-        self.cliq = None
 
         # thermal diffusivity
         self.lamb = lam  # thermal diffusivity skin layer [-]
 
-        # tendencies
-        # soil temperature tendency [K s-1]
-        self.temp_soil_tend = None
-        # soil moisture tendency [m3 m-3 s-1]
-        self.wgtend = None
-        # equivalent liquid water tendency [m s-1]
-        self.wltend = None
-
-        # heat and water fluxes
-        # sensible heat flux [W m-2]
-        self.hf = None
-        # evapotranspiration [W m-2]
-        self.le = None
-        # open water evaporation [W m-2]
-        self.le_liq = None
-        # transpiration [W m-2]
-        self.le_veg = None
-        # soil evaporation [W m-2]
-        self.le_soil = None
-        # potential evaporation [W m-2]
-        self.le_pot = None
-        # reference evaporation using rs = rsmin / LAI [W m-2]
-        self.le_ref = None
-        # ground heat flux [W m-2]
-        self.gf = None
-
-        # some sanity checks for valid input
-        if self.c_beta is None:
-            self.c_beta = 0.0  # zero curvature; linear response
+        # old: some sanity checks for valid input
+        # limamau: I think this is supposed to be a parameter
+        self.c_beta = 0.0  # zero curvature; linear response
         assert self.c_beta >= 0.0 or self.c_beta <= 1.0
 
     @abstractmethod
@@ -409,7 +340,6 @@ class AbstractStandardLandSurfaceModel(AbstractLandSurfaceModel):
 class JarvisStewartModel(AbstractStandardLandSurfaceModel):
     def __init__(
         self,
-        ls_type: str,
         wg: float,
         w2: float,
         temp_soil: float,
@@ -433,10 +363,8 @@ class JarvisStewartModel(AbstractStandardLandSurfaceModel):
         wmax: float,
         wl: float,
         lam: float,
-        c3c4: str,
     ):
         super().__init__(
-            ls_type,
             wg,
             w2,
             temp_soil,
@@ -460,7 +388,6 @@ class JarvisStewartModel(AbstractStandardLandSurfaceModel):
             wmax,
             wl,
             lam,
-            c3c4,
         )
 
     def compute_surface_resistance(
@@ -493,9 +420,12 @@ class JarvisStewartModel(AbstractStandardLandSurfaceModel):
 
 
 class AquaCropModel(AbstractStandardLandSurfaceModel):
+    rsCO2: float
+    gcco2: float
+    ci: float
+
     def __init__(
         self,
-        ls_type: str,
         wg: float,
         w2: float,
         temp_soil: float,
@@ -521,8 +451,59 @@ class AquaCropModel(AbstractStandardLandSurfaceModel):
         lam: float,
         c3c4: str,
     ):
+        # A-Gs constants and settings
+        # plant type: [C3, C4]
+        if c3c4 == "c3":
+            self.c3c4 = 0
+        elif c3c4 == "c4":
+            self.c3c4 = 1
+        else:
+            raise ValueError(f'Invalid option "{c3c4}" for "c3c4".')
+
+        # CO2 compensation concentration [mg m-3]
+        self.co2comp298 = [68.5, 4.3]
+        # function parameter to calculate CO2 compensation concentration [-]
+        self.net_rad10CO2 = [1.5, 1.5]
+        # mesophyill conductance at 298 K [mm s-1]
+        self.gm298 = [7.0, 17.5]
+        # CO2 maximal primary productivity [mg m-2 s-1]
+        self.ammax298 = [2.2, 1.7]
+        # function parameter to calculate mesophyll conductance [-]
+        self.net_rad10gm = [2.0, 2.0]
+        # reference temperature to calculate mesophyll conductance gm [K]
+        self.temp1gm = [278.0, 286.0]
+        # reference temperature to calculate mesophyll conductance gm [K]
+        self.temp2gm = [301.0, 309.0]
+        # function parameter to calculate maximal primary profuctivity Ammax
+        self.net_rad10Am = [2.0, 2.0]
+        # reference temperature to calculate maximal primary profuctivity Ammax [K]
+        self.temp1Am = [281.0, 286.0]
+        # reference temperature to calculate maximal primary profuctivity Ammax [K]
+        self.temp2Am = [311.0, 311.0]
+        # maximum value Cfrac [-]
+        self.f0 = [0.89, 0.85]
+        # regression coefficient to calculate Cfrac [kPa-1]
+        self.ad = [0.07, 0.15]
+        # initial low light conditions [mg J-1]
+        self.alpha0 = [0.017, 0.014]
+        # extinction coefficient PAR [-]
+        self.kx = [0.7, 0.7]
+        # cuticular (minimum) conductance [mm s-1]
+        self.gmin = [0.25e-3, 0.25e-3]
+        # ratio molecular viscosity water to carbon dioxide
+        self.nuco2q = 1.6
+        # constant water stress correction (eq. 13 Jacobs et al. 2007) [-]
+        self.cw = 0.0016
+        # upper reference value soil water [-]
+        self.wmax = 0.55
+        # lower reference value soil water [-]
+        self.wmin = 0.005
+        # respiration at 10 C [mg CO2 m-2 s-1]
+        self.r10 = 0.23
+        # activation energy [53.3 kJ kmol-1]
+        self.e0 = 53.3e3
+
         super().__init__(
-            ls_type,
             wg,
             w2,
             temp_soil,
@@ -546,11 +527,7 @@ class AquaCropModel(AbstractStandardLandSurfaceModel):
             wmax,
             wl,
             lam,
-            c3c4,
         )
-        self.rsCO2 = None
-        self.gcco2 = None
-        self.ci = None
 
     def compute_surface_resistance(
         self,
@@ -558,43 +535,45 @@ class AquaCropModel(AbstractStandardLandSurfaceModel):
         surface_layer: AbstractSurfaceLayerModel,
         mixed_layer: AbstractMixedLayerModel,
     ):
-        # Select index for plant type
-        if self.c3c4 == "c3":
-            c = 0
-        elif self.c3c4 == "c4":
-            c = 1
-        else:
-            raise ValueError(f'Invalid option "{self.c3c4}" for "c3c4".')
-
         # calculate CO2 compensation concentration
         co2comp = (
-            self.co2comp298[c]
+            self.co2comp298[self.c3c4]
             * self.const.rho
-            * pow(self.net_rad10CO2[c], (0.1 * (surface_layer.thetasurf - 298.0)))
+            * pow(
+                self.net_rad10CO2[self.c3c4], (0.1 * (surface_layer.thetasurf - 298.0))
+            )
         )
 
         # calculate mesophyll conductance
         gm = (
-            self.gm298[c]
-            * pow(self.net_rad10gm[c], (0.1 * (surface_layer.thetasurf - 298.0)))
+            self.gm298[self.c3c4]
+            * pow(
+                self.net_rad10gm[self.c3c4], (0.1 * (surface_layer.thetasurf - 298.0))
+            )
             / (
-                (1.0 + np.exp(0.3 * (self.temp1gm[c] - surface_layer.thetasurf)))
-                * (1.0 + np.exp(0.3 * (surface_layer.thetasurf - self.temp2gm[c])))
+                (
+                    1.0
+                    + np.exp(0.3 * (self.temp1gm[self.c3c4] - surface_layer.thetasurf))
+                )
+                * (
+                    1.0
+                    + np.exp(0.3 * (surface_layer.thetasurf - self.temp2gm[self.c3c4]))
+                )
             )
         )
         # conversion from mm s-1 to m s-1
         gm = gm / 1000.0
 
         # calculate CO2 concentration inside the leaf (ci)
-        fmin0 = self.gmin[c] / self.nuco2q - 1.0 / 9.0 * gm
+        fmin0 = self.gmin[self.c3c4] / self.nuco2q - 1.0 / 9.0 * gm
         fmin = -fmin0 + pow(
-            (pow(fmin0, 2.0) + 4 * self.gmin[c] / self.nuco2q * gm), 0.5
+            (pow(fmin0, 2.0) + 4 * self.gmin[self.c3c4] / self.nuco2q * gm), 0.5
         ) / (2.0 * gm)
 
         ds = (get_esat(self.surf_temp) - mixed_layer.e) / 1000.0  # kPa
-        d0 = (self.f0[c] - fmin) / self.ad[c]
+        d0 = (self.f0[self.c3c4] - fmin) / self.ad[self.c3c4]
 
-        cfrac = self.f0[c] * (1.0 - (ds / d0)) + fmin * (ds / d0)
+        cfrac = self.f0[self.c3c4] * (1.0 - (ds / d0)) + fmin * (ds / d0)
         self.co2abs = (
             mixed_layer.co2 * (self.const.mco2 / self.const.mair) * self.const.rho
         )
@@ -603,11 +582,19 @@ class AquaCropModel(AbstractStandardLandSurfaceModel):
 
         # calculate maximal gross primary production in high light conditions (Ag)
         ammax = (
-            self.ammax298[c]
-            * pow(self.net_rad10Am[c], (0.1 * (surface_layer.thetasurf - 298.0)))
+            self.ammax298[self.c3c4]
+            * pow(
+                self.net_rad10Am[self.c3c4], (0.1 * (surface_layer.thetasurf - 298.0))
+            )
             / (
-                (1.0 + np.exp(0.3 * (self.temp1Am[c] - surface_layer.thetasurf)))
-                * (1.0 + np.exp(0.3 * (surface_layer.thetasurf - self.temp2Am[c])))
+                (
+                    1.0
+                    + np.exp(0.3 * (self.temp1Am[self.c3c4] - surface_layer.thetasurf))
+                )
+                * (
+                    1.0
+                    + np.exp(0.3 * (surface_layer.thetasurf - self.temp2Am[self.c3c4]))
+                )
             )
         )
 
@@ -634,7 +621,9 @@ class AquaCropModel(AbstractStandardLandSurfaceModel):
 
         # calculate  light use efficiency
         alphac = (
-            self.alpha0[c] * (self.co2abs - co2comp) / (self.co2abs + 2.0 * co2comp)
+            self.alpha0[self.c3c4]
+            * (self.co2abs - co2comp)
+            / (self.co2abs + 2.0 * co2comp)
         )
 
         # calculate gross primary productivity
@@ -642,20 +631,20 @@ class AquaCropModel(AbstractStandardLandSurfaceModel):
         ag = (am + rdark) * (1 - np.exp(alphac * par / (am + rdark)))
 
         # 1.- calculate upscaling from leaf to canopy: net flow CO2 into the plant (An)
-        y = alphac * self.kx[c] * par / (am + rdark)
+        y = alphac * self.kx[self.c3c4] * par / (am + rdark)
         an = (am + rdark) * (
             1.0
             - 1.0
-            / (self.kx[c] * self.lai)
-            * (exp1(y * np.exp(-self.kx[c] * self.lai)) - exp1(y))
+            / (self.kx[self.c3c4] * self.lai)
+            * (exp1(y * np.exp(-self.kx[self.c3c4] * self.lai)) - exp1(y))
         )
 
         # 2.- calculate upscaling from leaf to canopy: CO2 conductance at canopy level
-        a1 = 1.0 / (1.0 - self.f0[c])
-        dstar = d0 / (a1 * (self.f0[c] - fmin))
+        a1 = 1.0 / (1.0 - self.f0[self.c3c4])
+        dstar = d0 / (a1 * (self.f0[self.c3c4] - fmin))
 
         self.gcco2 = self.lai * (
-            self.gmin[c] / self.nuco2q
+            self.gmin[self.c3c4] / self.nuco2q
             + a1 * fstr * an / ((self.co2abs - co2comp) * (1.0 + ds / dstar))
         )
 

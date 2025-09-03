@@ -124,8 +124,6 @@ def main():
 
     # 4. define land surface model
     land_surface_model = JarvisStewartModel(
-        # land-surface parameterization ('js' for Jarvis-Stewart or 'ags' for A-Gs)
-        ls_type="js",
         # volumetric water content top soil layer [m3 m-3]
         wg=0.21,
         # volumetric water content deeper soil layer [m3 m-3]
@@ -172,8 +170,6 @@ def main():
         wl=0.0000,
         # thermal diffusivity skin layer [-]
         lam=5.9,
-        # plant type ('c3' or 'c4')
-        c3c4="c3",
     )
 
     # 5. clouds

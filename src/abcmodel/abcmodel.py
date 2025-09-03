@@ -1,5 +1,7 @@
 import numpy as np
 
+from abcmodel.land_surface import MinimalLandSurfaceModel
+
 from .clouds import AbstractCloudModel, NoCloudModel
 from .land_surface import AbstractLandSurfaceModel
 from .mixed_layer import AbstractMixedLayerModel, NoMixedLayerModel
@@ -169,6 +171,7 @@ class ABCModel:
         self.out.drag_s[t] = self.surface_layer.drag_s
         self.out.obukhov_length[t] = self.surface_layer.obukhov_length
         self.out.rib_number[t] = self.surface_layer.rib_number
+        self.out.ra[t] = self.surface_layer.ra
 
         self.out.in_srad[t] = self.radiation.in_srad
         self.out.out_srad[t] = self.radiation.out_srad
@@ -176,16 +179,17 @@ class ABCModel:
         self.out.out_lrad[t] = self.radiation.out_lrad
         self.out.net_rad[t] = self.radiation.net_rad
 
-        self.out.ra[t] = self.surface_layer.ra
-        self.out.rs[t] = self.land_surface.rs
-        self.out.hf[t] = self.land_surface.hf
-        self.out.le[t] = self.land_surface.le
-        self.out.le_liq[t] = self.land_surface.le_liq
-        self.out.le_veg[t] = self.land_surface.le_veg
-        self.out.le_soil[t] = self.land_surface.le_soil
-        self.out.le_pot[t] = self.land_surface.le_pot
-        self.out.le_ref[t] = self.land_surface.le_ref
-        self.out.gf[t] = self.land_surface.gf
+        # limamau: this can be addressed with a land surface diagnostic class
+        if not isinstance(self.land_surface, MinimalLandSurfaceModel):
+            self.out.rs[t] = self.land_surface.rs
+            self.out.hf[t] = self.land_surface.hf
+            self.out.le[t] = self.land_surface.le
+            self.out.le_liq[t] = self.land_surface.le_liq
+            self.out.le_veg[t] = self.land_surface.le_veg
+            self.out.le_soil[t] = self.land_surface.le_soil
+            self.out.le_pot[t] = self.land_surface.le_pot
+            self.out.le_ref[t] = self.land_surface.le_ref
+            self.out.gf[t] = self.land_surface.gf
 
         self.out.zlcl[t] = self.mixed_layer.lcl
         self.out.top_rh[t] = self.mixed_layer.top_rh
