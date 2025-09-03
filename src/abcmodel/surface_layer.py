@@ -5,12 +5,13 @@ from .components import (
     AbstractMixedLayerModel,
     AbstractSurfaceLayerModel,
 )
-from .utils import get_psih, get_psim, get_qsat
+from .utils import PhysicalConstants, get_psih, get_psim, get_qsat
 
 
 class InertSurfaceLayerModel(AbstractSurfaceLayerModel):
     def run(
         self,
+        const: PhysicalConstants,
         land_surface: AbstractLandSurfaceModel,
         mixed_layer: AbstractMixedLayerModel,
     ):
@@ -96,6 +97,7 @@ class StandardSurfaceLayerModel(AbstractSurfaceLayerModel):
 
     def run(
         self,
+        const: PhysicalConstants,
         land_surface: AbstractLandSurfaceModel,
         mixed_layer: AbstractMixedLayerModel,
     ):
@@ -112,7 +114,7 @@ class StandardSurfaceLayerModel(AbstractSurfaceLayerModel):
 
         zsl = 0.1 * mixed_layer.abl_height
         self.rib_number = (
-            self.const.g
+            const.g
             / mixed_layer.thetav
             * zsl
             * (mixed_layer.thetav - self.thetavsurf)
@@ -127,7 +129,7 @@ class StandardSurfaceLayerModel(AbstractSurfaceLayerModel):
         self.obukhov_length = self.get_ribtol(zsl)
 
         self.drag_m = (
-            self.const.k**2.0
+            const.k**2.0
             / (
                 np.log(zsl / self.z0m)
                 - get_psim(zsl / self.obukhov_length)
@@ -136,7 +138,7 @@ class StandardSurfaceLayerModel(AbstractSurfaceLayerModel):
             ** 2.0
         )
         self.drag_s = (
-            self.const.k**2.0
+            const.k**2.0
             / (
                 np.log(zsl / self.z0m)
                 - get_psim(zsl / self.obukhov_length)
@@ -154,18 +156,12 @@ class StandardSurfaceLayerModel(AbstractSurfaceLayerModel):
         self.vw = -self.drag_m * ueff * mixed_layer.v
 
         # diagnostic meteorological variables
-        self.temp_2m = (
-            self.thetasurf
-            - mixed_layer.wtheta
-            / self.ustar
-            / self.const.k
-            * (
-                np.log(2.0 / self.z0h)
-                - get_psih(2.0 / self.obukhov_length)
-                + get_psih(self.z0h / self.obukhov_length)
-            )
+        self.temp_2m = self.thetasurf - mixed_layer.wtheta / self.ustar / const.k * (
+            np.log(2.0 / self.z0h)
+            - get_psih(2.0 / self.obukhov_length)
+            + get_psih(self.z0h / self.obukhov_length)
         )
-        self.q2m = self.qsurf - mixed_layer.wq / self.ustar / self.const.k * (
+        self.q2m = self.qsurf - mixed_layer.wq / self.ustar / const.k * (
             np.log(2.0 / self.z0h)
             - get_psih(2.0 / self.obukhov_length)
             + get_psih(self.z0h / self.obukhov_length)
@@ -173,7 +169,7 @@ class StandardSurfaceLayerModel(AbstractSurfaceLayerModel):
         self.u2m = (
             -self.uw
             / self.ustar
-            / self.const.k
+            / const.k
             * (
                 np.log(2.0 / self.z0m)
                 - get_psim(2.0 / self.obukhov_length)
@@ -183,7 +179,7 @@ class StandardSurfaceLayerModel(AbstractSurfaceLayerModel):
         self.v2m = (
             -self.vw
             / self.ustar
-            / self.const.k
+            / const.k
             * (
                 np.log(2.0 / self.z0m)
                 - get_psim(2.0 / self.obukhov_length)

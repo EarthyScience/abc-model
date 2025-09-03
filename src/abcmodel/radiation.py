@@ -5,6 +5,7 @@ from .components import (
     AbstractMixedLayerModel,
     AbstractRadiationModel,
 )
+from .utils import PhysicalConstants
 
 
 class NoRadiationModel(AbstractRadiationModel):
@@ -34,6 +35,7 @@ class NoRadiationModel(AbstractRadiationModel):
         self,
         t: float,
         dt: float,
+        const: PhysicalConstants,
         land_surface: AbstractLandSurfaceModel,
         mixed_layer: AbstractMixedLayerModel,
     ):
@@ -68,6 +70,7 @@ class StandardRadiationModel(AbstractRadiationModel):
         self,
         t: float,
         dt: float,
+        const: PhysicalConstants,
         land_surface: AbstractLandSurfaceModel,
         mixed_layer: AbstractMixedLayerModel,
     ):
@@ -83,17 +86,17 @@ class StandardRadiationModel(AbstractRadiationModel):
         Ta = mixed_layer.theta * (
             (
                 mixed_layer.surf_pressure
-                - 0.1 * mixed_layer.abl_height * self.const.rho * self.const.g
+                - 0.1 * mixed_layer.abl_height * const.rho * const.g
             )
             / mixed_layer.surf_pressure
-        ) ** (self.const.rd / self.const.cp)
+        ) ** (const.rd / const.cp)
 
         Tr = (0.6 + 0.2 * sinlea) * (1.0 - 0.4 * self.cc)
 
-        self.in_srad = self.const.solar_in * Tr * sinlea
-        self.out_srad = land_surface.alpha * self.const.solar_in * Tr * sinlea
-        self.in_lrad = 0.8 * self.const.bolz * Ta**4.0
-        self.out_lrad = self.const.bolz * land_surface.surf_temp**4.0
+        self.in_srad = const.solar_in * Tr * sinlea
+        self.out_srad = land_surface.alpha * const.solar_in * Tr * sinlea
+        self.in_lrad = 0.8 * const.bolz * Ta**4.0
+        self.out_lrad = const.bolz * land_surface.surf_temp**4.0
 
         self.net_rad = self.in_srad - self.out_srad + self.in_lrad - self.out_lrad
 

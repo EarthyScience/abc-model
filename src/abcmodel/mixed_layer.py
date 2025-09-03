@@ -4,6 +4,7 @@ from .components import (
     AbstractRadiationModel,
     AbstractSurfaceLayerModel,
 )
+from .utils import PhysicalConstants
 
 
 class NoMixedLayerModel(AbstractMixedLayerModel):
@@ -160,6 +161,7 @@ class StandardMixedLayerModel(AbstractMixedLayerModel):
 
     def run(
         self,
+        const: PhysicalConstants,
         radiation: AbstractRadiationModel,
         surface_layer: AbstractSurfaceLayerModel,
         clouds: AbstractCloudModel,
@@ -178,13 +180,13 @@ class StandardMixedLayerModel(AbstractMixedLayerModel):
             w_CO2_ft = 0.0
 
         # calculate mixed-layer growth due to cloud top radiative divergence
-        self.wf = radiation.dFz / (self.const.rho * self.const.cp * self.dtheta)
+        self.wf = radiation.dFz / (const.rho * const.cp * self.dtheta)
 
         # calculate convective velocity scale w*
         if self.wthetav > 0.0:
-            self.wstar = (
-                (self.const.g * self.abl_height * self.wthetav) / self.thetav
-            ) ** (1.0 / 3.0)
+            self.wstar = ((const.g * self.abl_height * self.wthetav) / self.thetav) ** (
+                1.0 / 3.0
+            )
         else:
             self.wstar = 1e-6
 
@@ -198,7 +200,7 @@ class StandardMixedLayerModel(AbstractMixedLayerModel):
                 + 5.0
                 * surface_layer.ustar**3.0
                 * self.thetav
-                / (self.const.g * self.abl_height)
+                / (const.g * self.abl_height)
             ) / self.dthetav
         else:
             self.we = -self.wthetave / self.dthetav

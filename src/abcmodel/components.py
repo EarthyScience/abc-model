@@ -24,8 +24,6 @@ class AbstractRadiationModel:
         net_rad: float,
         dFz: float,
     ):
-        # constants
-        self.const = PhysicalConstants()
         # latitude [deg]
         self.lat = lat
         # longitude [deg]
@@ -54,6 +52,7 @@ class AbstractRadiationModel:
         self,
         t: float,
         dt: float,
+        const: PhysicalConstants,
         land_surface: "AbstractLandSurfaceModel",
         mixed_layer: "AbstractMixedLayerModel",
     ) -> None:
@@ -82,6 +81,7 @@ class AbstractLandSurfaceModel:
     @abstractmethod
     def run(
         self,
+        const: PhysicalConstants,
         radiation: "AbstractRadiationModel",
         surface_layer: "AbstractSurfaceLayerModel",
         mixed_layer: "AbstractMixedLayerModel",
@@ -102,8 +102,6 @@ class AbstractSurfaceLayerModel:
         z0h: float,
         theta: float,
     ):
-        # constants
-        self.const = PhysicalConstants()
         # surface friction velocity [m s-1]
         self.ustar = ustar
         # roughness length for momentum [m]
@@ -148,6 +146,7 @@ class AbstractSurfaceLayerModel:
     @abstractmethod
     def run(
         self,
+        const: PhysicalConstants,
         land_surface: "AbstractLandSurfaceModel",
         mixed_layer: "AbstractMixedLayerModel",
     ) -> None:
@@ -196,9 +195,6 @@ class AbstractMixedLayerModel:
         advv: float,
         dz_h: float,
     ):
-        # constants
-        self.const = PhysicalConstants()
-
         # 1. mixed layer switches
         # mixed-layer model switch
         self.sw_ml = sw_ml
@@ -288,7 +284,8 @@ class AbstractMixedLayerModel:
         self.wthetave = None
         # 10. CO2
         # conversion factor mgC m-2 s-1 to ppm m s-1
-        fac = self.const.mair / (self.const.rho * self.const.mco2)
+        const = PhysicalConstants()
+        fac = const.mair / (const.rho * const.mco2)
         # initial mixed-layer CO2 [ppm]
         self.co2 = co2
         # initial CO2 jump at h [ppm]
@@ -355,6 +352,7 @@ class AbstractMixedLayerModel:
     @abstractmethod
     def run(
         self,
+        const: PhysicalConstants,
         radiation: "AbstractRadiationModel",
         surface_layer: "AbstractSurfaceLayerModel",
         clouds: "AbstractCloudModel",
@@ -365,7 +363,7 @@ class AbstractMixedLayerModel:
     def integrate(self, dt: float) -> None:
         raise NotImplementedError
 
-    def statistics(self, t: float):
+    def statistics(self, t: float, const: PhysicalConstants):
         # calculate virtual temperatures
         self.thetav = self.theta + 0.61 * self.theta * self.q
         self.wthetav = self.wtheta + 0.61 * self.theta * self.wq
@@ -374,10 +372,8 @@ class AbstractMixedLayerModel:
         ) - self.theta * (1.0 + 0.61 * self.q)
 
         # mixed-layer top properties
-        self.top_p = (
-            self.surf_pressure - self.const.rho * self.const.g * self.abl_height
-        )
-        self.top_T = self.theta - self.const.g / self.const.cp * self.abl_height
+        self.top_p = self.surf_pressure - const.rho * const.g * self.abl_height
+        self.top_T = self.theta - const.g / const.cp * self.abl_height
         self.top_rh = self.q / get_qsat(self.top_T, self.top_p)
 
         # find lifting condensation level iteratively
@@ -391,8 +387,8 @@ class AbstractMixedLayerModel:
         it = 0
         while ((RHlcl <= 0.9999) or (RHlcl >= 1.0001)) and it < itmax:
             self.lcl += (1.0 - RHlcl) * 1000.0
-            p_lcl = self.surf_pressure - self.const.rho * self.const.g * self.lcl
-            T_lcl = self.theta - self.const.g / self.const.cp * self.lcl
+            p_lcl = self.surf_pressure - const.rho * const.g * self.lcl
+            T_lcl = self.theta - const.g / const.cp * self.lcl
             RHlcl = self.q / get_qsat(T_lcl, p_lcl)
             it += 1
 

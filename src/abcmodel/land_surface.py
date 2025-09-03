@@ -19,6 +19,7 @@ class MinimalLandSurfaceModel(AbstractLandSurfaceModel):
 
     def run(
         self,
+        const: PhysicalConstants,
         radiation: AbstractRadiationModel,
         surface_layer: AbstractSurfaceLayerModel,
         mixed_layer: AbstractMixedLayerModel,
@@ -66,7 +67,6 @@ class AbstractStandardLandSurfaceModel(AbstractLandSurfaceModel):
         wl: float,
         lam: float,
     ):
-        self.const = PhysicalConstants()
         # water content parameters
         # volumetric water content top soil layer [m3 m-3]
         self.wg = wg
@@ -135,6 +135,7 @@ class AbstractStandardLandSurfaceModel(AbstractLandSurfaceModel):
     @abstractmethod
     def compute_surface_resistance(
         self,
+        const: PhysicalConstants,
         radiation: AbstractRadiationModel,
         surface_layer: AbstractSurfaceLayerModel,
         mixed_layer: AbstractMixedLayerModel,
@@ -144,6 +145,7 @@ class AbstractStandardLandSurfaceModel(AbstractLandSurfaceModel):
     @abstractmethod
     def compute_co2_flux(
         self,
+        const: PhysicalConstants,
         surface_layer: AbstractSurfaceLayerModel,
         mixed_layer: AbstractMixedLayerModel,
     ) -> None:
@@ -151,6 +153,7 @@ class AbstractStandardLandSurfaceModel(AbstractLandSurfaceModel):
 
     def run(
         self,
+        const: PhysicalConstants,
         radiation: AbstractRadiationModel,
         surface_layer: AbstractSurfaceLayerModel,
         mixed_layer: AbstractMixedLayerModel,
@@ -171,8 +174,8 @@ class AbstractStandardLandSurfaceModel(AbstractLandSurfaceModel):
         mixed_layer.e = mixed_layer.q * mixed_layer.surf_pressure / 0.622
 
         # sub-model part
-        self.compute_surface_resistance(radiation, surface_layer, mixed_layer)
-        self.compute_co2_flux(surface_layer, mixed_layer)
+        self.compute_surface_resistance(const, radiation, surface_layer, mixed_layer)
+        self.compute_co2_flux(const, surface_layer, mixed_layer)
 
         # recompute f2 using wg instead of w2
         if self.wg > self.wwilt:  # and self.w2 <= self.wfc):
@@ -187,11 +190,11 @@ class AbstractStandardLandSurfaceModel(AbstractLandSurfaceModel):
         # calculate skin temperature implicitly
         self.surf_temp = (
             radiation.net_rad
-            + self.const.rho * self.const.cp / surface_layer.ra * mixed_layer.theta
+            + const.rho * const.cp / surface_layer.ra * mixed_layer.theta
             + self.cveg
             * (1.0 - self.cliq)
-            * self.const.rho
-            * self.const.lv
+            * const.rho
+            * const.lv
             / (surface_layer.ra + self.rs)
             * (
                 mixed_layer.dqsatdT * mixed_layer.theta
@@ -199,8 +202,8 @@ class AbstractStandardLandSurfaceModel(AbstractLandSurfaceModel):
                 + mixed_layer.q
             )
             + (1.0 - self.cveg)
-            * self.const.rho
-            * self.const.lv
+            * const.rho
+            * const.lv
             / (surface_layer.ra + self.rssoil)
             * (
                 mixed_layer.dqsatdT * mixed_layer.theta
@@ -209,8 +212,8 @@ class AbstractStandardLandSurfaceModel(AbstractLandSurfaceModel):
             )
             + self.cveg
             * self.cliq
-            * self.const.rho
-            * self.const.lv
+            * const.rho
+            * const.lv
             / surface_layer.ra
             * (
                 mixed_layer.dqsatdT * mixed_layer.theta
@@ -219,22 +222,22 @@ class AbstractStandardLandSurfaceModel(AbstractLandSurfaceModel):
             )
             + self.lamb * self.temp_soil
         ) / (
-            self.const.rho * self.const.cp / surface_layer.ra
+            const.rho * const.cp / surface_layer.ra
             + self.cveg
             * (1.0 - self.cliq)
-            * self.const.rho
-            * self.const.lv
+            * const.rho
+            * const.lv
             / (surface_layer.ra + self.rs)
             * mixed_layer.dqsatdT
             + (1.0 - self.cveg)
-            * self.const.rho
-            * self.const.lv
+            * const.rho
+            * const.lv
             / (surface_layer.ra + self.rssoil)
             * mixed_layer.dqsatdT
             + self.cveg
             * self.cliq
-            * self.const.rho
-            * self.const.lv
+            * const.rho
+            * const.lv
             / surface_layer.ra
             * mixed_layer.dqsatdT
             + self.lamb
@@ -247,8 +250,8 @@ class AbstractStandardLandSurfaceModel(AbstractLandSurfaceModel):
         self.le_veg = (
             (1.0 - self.cliq)
             * self.cveg
-            * self.const.rho
-            * self.const.lv
+            * const.rho
+            * const.lv
             / (surface_layer.ra + self.rs)
             * (
                 mixed_layer.dqsatdT * (self.surf_temp - mixed_layer.theta)
@@ -259,8 +262,8 @@ class AbstractStandardLandSurfaceModel(AbstractLandSurfaceModel):
         self.le_liq = (
             self.cliq
             * self.cveg
-            * self.const.rho
-            * self.const.lv
+            * const.rho
+            * const.lv
             / surface_layer.ra
             * (
                 mixed_layer.dqsatdT * (self.surf_temp - mixed_layer.theta)
@@ -270,8 +273,8 @@ class AbstractStandardLandSurfaceModel(AbstractLandSurfaceModel):
         )
         self.le_soil = (
             (1.0 - self.cveg)
-            * self.const.rho
-            * self.const.lv
+            * const.rho
+            * const.lv
             / (surface_layer.ra + self.rssoil)
             * (
                 mixed_layer.dqsatdT * (self.surf_temp - mixed_layer.theta)
@@ -280,34 +283,32 @@ class AbstractStandardLandSurfaceModel(AbstractLandSurfaceModel):
             )
         )
 
-        self.wltend = -self.le_liq / (self.const.rhow * self.const.lv)
+        self.wltend = -self.le_liq / (const.rhow * const.lv)
 
         self.le = self.le_soil + self.le_veg + self.le_liq
         self.hf = (
-            self.const.rho
-            * self.const.cp
+            const.rho
+            * const.cp
             / surface_layer.ra
             * (self.surf_temp - mixed_layer.theta)
         )
         self.gf = self.lamb * (self.surf_temp - self.temp_soil)
         self.le_pot = (
             mixed_layer.dqsatdT * (radiation.net_rad - self.gf)
-            + self.const.rho
-            * self.const.cp
+            + const.rho
+            * const.cp
             / surface_layer.ra
             * (mixed_layer.qsat - mixed_layer.q)
-        ) / (mixed_layer.dqsatdT + self.const.cp / self.const.lv)
+        ) / (mixed_layer.dqsatdT + const.cp / const.lv)
         self.le_ref = (
             mixed_layer.dqsatdT * (radiation.net_rad - self.gf)
-            + self.const.rho
-            * self.const.cp
+            + const.rho
+            * const.cp
             / surface_layer.ra
             * (mixed_layer.qsat - mixed_layer.q)
         ) / (
             mixed_layer.dqsatdT
-            + self.const.cp
-            / self.const.lv
-            * (1.0 + self.rsmin / self.lai / surface_layer.ra)
+            + const.cp / const.lv * (1.0 + self.rsmin / self.lai / surface_layer.ra)
         )
 
         cg = self.cgsat * (self.wsat / self.w2) ** (self.b / (2.0 * np.log(10.0)))
@@ -324,12 +325,12 @@ class AbstractStandardLandSurfaceModel(AbstractLandSurfaceModel):
             * (1.0 - (self.w2 / self.wsat) ** (8.0 * self.p))
         )
         self.wgtend = -c1 / (
-            self.const.rhow * d1
-        ) * self.le_soil / self.const.lv - c2 / 86400.0 * (self.wg - wgeq)
+            const.rhow * d1
+        ) * self.le_soil / const.lv - c2 / 86400.0 * (self.wg - wgeq)
 
         # calculate kinematic heat fluxes
-        mixed_layer.wtheta = self.hf / (self.const.rho * self.const.cp)
-        mixed_layer.wq = self.le / (self.const.rho * self.const.lv)
+        mixed_layer.wtheta = self.hf / (const.rho * const.cp)
+        mixed_layer.wq = self.le / (const.rho * const.lv)
 
     def integrate(self, dt: float):
         self.temp_soil = self.temp_soil + dt * self.temp_soil_tend
@@ -392,6 +393,7 @@ class JarvisStewartModel(AbstractStandardLandSurfaceModel):
 
     def compute_surface_resistance(
         self,
+        const: PhysicalConstants,
         radiation: AbstractRadiationModel,
         surface_layer: AbstractSurfaceLayerModel,
         mixed_layer: AbstractMixedLayerModel,
@@ -413,6 +415,7 @@ class JarvisStewartModel(AbstractStandardLandSurfaceModel):
 
     def compute_co2_flux(
         self,
+        const: PhysicalConstants,
         surface_layer: AbstractSurfaceLayerModel,
         mixed_layer: AbstractMixedLayerModel,
     ):
@@ -531,6 +534,7 @@ class AquaCropModel(AbstractStandardLandSurfaceModel):
 
     def compute_surface_resistance(
         self,
+        const: PhysicalConstants,
         radiation: AbstractRadiationModel,
         surface_layer: AbstractSurfaceLayerModel,
         mixed_layer: AbstractMixedLayerModel,
@@ -538,7 +542,7 @@ class AquaCropModel(AbstractStandardLandSurfaceModel):
         # calculate CO2 compensation concentration
         co2comp = (
             self.co2comp298[self.c3c4]
-            * self.const.rho
+            * const.rho
             * pow(
                 self.net_rad10CO2[self.c3c4], (0.1 * (surface_layer.thetasurf - 298.0))
             )
@@ -574,9 +578,7 @@ class AquaCropModel(AbstractStandardLandSurfaceModel):
         d0 = (self.f0[self.c3c4] - fmin) / self.ad[self.c3c4]
 
         cfrac = self.f0[self.c3c4] * (1.0 - (ds / d0)) + fmin * (ds / d0)
-        self.co2abs = (
-            mixed_layer.co2 * (self.const.mco2 / self.const.mair) * self.const.rho
-        )
+        self.co2abs = mixed_layer.co2 * (const.mco2 / const.mair) * const.rho
         # conversion mumol mol-1 (ppm) to mgCO2 m3
         self.ci = cfrac * (self.co2abs - co2comp) + co2comp
 
@@ -653,6 +655,7 @@ class AquaCropModel(AbstractStandardLandSurfaceModel):
 
     def compute_co2_flux(
         self,
+        const: PhysicalConstants,
         surface_layer: AbstractSurfaceLayerModel,
         mixed_layer: AbstractMixedLayerModel,
     ):
@@ -671,8 +674,6 @@ class AquaCropModel(AbstractStandardLandSurfaceModel):
         )
 
         # CO2 flux
-        mixed_layer.wCO2A = an * (self.const.mair / (self.const.rho * self.const.mco2))
-        mixed_layer.wCO2R = resp * (
-            self.const.mair / (self.const.rho * self.const.mco2)
-        )
+        mixed_layer.wCO2A = an * (const.mair / (const.rho * const.mco2))
+        mixed_layer.wCO2R = resp * (const.mair / (const.rho * const.mco2))
         mixed_layer.wCO2 = mixed_layer.wCO2A + mixed_layer.wCO2R
