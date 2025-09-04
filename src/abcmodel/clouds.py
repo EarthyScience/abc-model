@@ -10,14 +10,12 @@ class NoCloudModel(AbstractCloudModel):
     """
 
     def __init__(self):
-        # cloud core fraction [-]
         self.cc_frac = 0.0
-        # cloud core mass flux [m s-1]
         self.cc_mf = 0.0
-        # cloud core moisture flux [kg kg-1 m s-1]
         self.cc_qf = 0.0
 
     def run(self, mixed_layer: AbstractMixedLayerModel):
+        """No calculations."""
         pass
 
 
@@ -68,22 +66,20 @@ class StandardCumulusModel(AbstractCloudModel):
     - CO2 flux: wCO2M = cc_mf * sqrt(top_CO22) if dCO2 < 0
     - Set to zero otherwise
 
-    Attributes
+    Arguments
+    ---------
+    None.
+
+    Updates
     ----------
-    cc_frac : float
-        Cloud core fraction [-], range 0 to 1
-    cc_mf : float
-        Cloud core mass flux [m/s]
-    cc_qf : float
-        Cloud core moisture flux [kg/kg/s]
+    - ``cc_frac``: cloud core fraction [-], range 0 to 1.
+    - ``cc_mf``: cloud core mass flux [m/s].
+    - ``cc_qf``: cloud core moisture flux [kg/kg/s].
     """
 
     def __init__(self):
-        # cloud core fraction [-]
         self.cc_frac = 0.0
-        # cloud core mass flux [m s-1]
         self.cc_mf = 0.0
-        # cloud core moisture flux [kg kg-1 m s-1]
         self.cc_qf = 0.0
 
     def _calculate_mixed_layer_variance(
