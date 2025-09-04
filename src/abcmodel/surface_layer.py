@@ -137,7 +137,10 @@ class StandardSurfaceLayerModel(AbstractSurfaceLayerModel):
         self.thetasurf = theta
 
     def _calculate_effective_wind_speed(
-        self, u: float, v: float, wstar: float
+        self,
+        u: float,
+        v: float,
+        wstar: float,
     ) -> float:
         """Calculate effective wind speed including convective effects."""
         return max(0.01, np.sqrt(u**2.0 + v**2.0 + wstar**2.0))
