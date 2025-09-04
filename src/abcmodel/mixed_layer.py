@@ -45,38 +45,19 @@ class AbstractStandardStatsModel(AbstractMixedLayerModel):
 class MinimalMixedLayerModel(AbstractStandardStatsModel):
     def __init__(
         self,
-        # sw_ml: bool,
-        # sw_shearwe: bool,
-        # sw_fixft: bool,
         abl_height: float,
         surf_pressure: float,
-        # divU: float,
-        # coriolis_param: float,
         theta: float,
         dtheta: float,
-        # gammatheta: float,
-        # advtheta: float,
-        # beta: float,
         wtheta: float,
         q: float,
         dq: float,
-        # gammaq: float,
-        # advq: float,
         wq: float,
         co2: float,
         dCO2: float,
-        # gammaCO2: float,
-        # advCO2: float,
         wCO2: float,
-        # sw_wind: bool,
         u: float,
-        # du: float,
-        # gammau: float,
-        # advu: float,
         v: float,
-        # dv: float,
-        # gammav: float,
-        # advv: float,
         dz_h: float,
     ):
         pass
@@ -404,32 +385,15 @@ class StandardMixedLayerModel(AbstractStandardStatsModel):
             self.dztend = 0.0
 
     def integrate(self, dt: float):
-        # set values previous time step
-        h0 = self.abl_height
-
-        theta0 = self.theta
-        dtheta0 = self.dtheta
-        q0 = self.q
-        dq0 = self.dq
-        CO20 = self.co2
-        dCO20 = self.dCO2
-
-        u0 = self.u
-        du0 = self.du
-        v0 = self.v
-        dv0 = self.dv
-
-        dz0 = self.dz_h
-
         # integrate mixed-layer equations
-        self.abl_height = h0 + dt * self.htend
-        self.theta = theta0 + dt * self.thetatend
-        self.dtheta = dtheta0 + dt * self.dthetatend
-        self.q = q0 + dt * self.qtend
-        self.dq = dq0 + dt * self.dqtend
-        self.co2 = CO20 + dt * self.co2tend
-        self.dCO2 = dCO20 + dt * self.dCO2tend
-        self.dz_h = dz0 + dt * self.dztend
+        self.abl_height += dt * self.htend
+        self.theta += dt * self.thetatend
+        self.dtheta += dt * self.dthetatend
+        self.q += dt * self.qtend
+        self.dq += dt * self.dqtend
+        self.co2 += dt * self.co2tend
+        self.dCO2 += dt * self.dCO2tend
+        self.dz_h += dt * self.dztend
 
         # limit dz to minimal value
         dz0 = 50
@@ -437,7 +401,7 @@ class StandardMixedLayerModel(AbstractStandardStatsModel):
             self.dz_h = dz0
 
         if self.sw_wind:
-            self.u = u0 + dt * self.utend
-            self.du = du0 + dt * self.dutend
-            self.v = v0 + dt * self.vtend
-            self.dv = dv0 + dt * self.dvtend
+            self.u += dt * self.utend
+            self.du += dt * self.dutend
+            self.v += dt * self.vtend
+            self.dv += dt * self.dvtend

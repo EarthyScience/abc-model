@@ -333,9 +333,9 @@ class AbstractStandardLandSurfaceModel(AbstractLandSurfaceModel):
         mixed_layer.wq = self.le / (const.rho * const.lv)
 
     def integrate(self, dt: float):
-        self.temp_soil = self.temp_soil + dt * self.temp_soil_tend
-        self.wg = self.wg + dt * self.wgtend
-        self.wl = self.wl + dt * self.wltend
+        self.temp_soil += dt * self.temp_soil_tend
+        self.wg += dt * self.wgtend
+        self.wl += dt * self.wltend
 
 
 class JarvisStewartModel(AbstractStandardLandSurfaceModel):
