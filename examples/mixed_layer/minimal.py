@@ -172,14 +172,14 @@ def main():
     plt.ylabel("cloud fraction [-]")
 
     plt.subplot(233)
-    plt.plot(r1.out.t, r1.out.wCO2)
+    plt.plot(r1.out.t, r1.out.co2)
     plt.xlabel("time [h]")
-    plt.ylabel("surface kinematic CO2 flux [ppm m s-1]")
+    plt.ylabel("mixed-layer CO2 [ppm]")
 
     plt.subplot(236)
-    plt.plot(r1.out.t, r1.out.le_veg)
+    plt.plot(r1.out.t, r1.out.u)
     plt.xlabel("time [h]")
-    plt.ylabel("transpiration [W m-2]")
+    plt.ylabel("mixed-layer u-wind speed [m s-1]")
 
     plt.tight_layout()
     plt.show()
