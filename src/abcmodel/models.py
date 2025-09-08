@@ -6,9 +6,13 @@ import numpy as np
 
 from .utils import PhysicalConstants
 
-
 # limamau: how to enforce that every model should take params, init_conds
 # and diagnostics as input on the initialization method?
+# limamau: it would be also niceto implement something like "check_dependencies"
+# in order to verify if the concrete model assigned to one of the 5 components in
+# the abc model has all variables needed from other models (minimal variables)...
+
+
 class AbstractModel:
     """Abstract model class to define the interface for all models."""
 
@@ -126,43 +130,12 @@ class AbstractLandSurfaceModel:
         raise NotImplementedError
 
 
-class AbstractSurfaceLayerModel:
+class AbstractSurfaceLayerModel(AbstractModel):
     # required by minimal:
-    # surface friction velocity [m s-1]
     ustar: float
-    # used to output:
-    # surface momentum flux u [m2 s-2]
-    uw: float
-    # surface momentum flux v [m2 s-2]
-    vw: float
-    # 2m temperature [K]
-    temp_2m: float
-    # 2m specific humidity [kg kg-1]
-    q2m: float
-    # 2m u-wind [m s-1]
-    u2m: float
-    # 2m v-wind [m s-1]
-    v2m: float
-    # 2m vapor pressure [Pa]
-    e2m: float
-    # 2m saturated vapor pressure [Pa]
-    esat2m: float
-    # surface potential temperature [K]
-    thetasurf: float
-    # surface virtual potential temperature [K]
-    thetavsurf: float
-    # surface specific humidity [g kg-1]
-    qsurf: float
-    # drag coefficient for momentum [-]
-    drag_m: float
-    # drag coefficient for scalars [-]
-    drag_s: float
-    # Obukhov length [m]
-    obukhov_length: float
-    # bulk Richardson number [-]
-    rib_number: float
-    # aerodynamic resistance [s m-1]
     ra: float
+    # limamau the following is currently not computed by minimal model (!!!)
+    thetasurf: float
 
     @abstractmethod
     def run(

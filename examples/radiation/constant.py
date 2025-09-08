@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 
+import configs.class_model as cm
 from abcmodel import ABCModel
 from abcmodel.clouds import StandardCumulusModel
 from abcmodel.land_surface import JarvisStewartModel
@@ -98,27 +99,13 @@ def main():
 
     # 2. define surface layer model
     surface_layer_model = StandardSurfaceLayerModel(
-        # surface friction velocity [m s-1]
-        ustar=0.3,
-        # roughness length for momentum [m]
-        z0m=0.02,
-        # roughness length for scalars [m]
-        z0h=0.002,
-        # initial mixed-layer potential temperature [K]
-        theta=theta,
+        cm.params.surface_layer,
+        cm.init_conds.surface_layer,
     )
 
     # 3. define radiation model
-    rad_params = ConstantRadiationParams(
-        # cloud top radiative divergence [W m-2]
-        dFz=0.0,
-        # time of the day [h UTC]
-        tstart=6.8,
-    )
-    rad_init_conds = ConstantRadiationInitConds(
-        # net radiation [W m-2]
-        net_rad=400.0,
-    )
+    rad_params = ConstantRadiationParams(dFz=0.0, tstart=6.8)
+    rad_init_conds = ConstantRadiationInitConds(net_rad=400.0)
     radiation_model = ConstantRadiationModel(rad_params, rad_init_conds)
 
     # 4. define land surface model

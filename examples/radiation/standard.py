@@ -95,14 +95,8 @@ def main():
 
     # 2. define surface layer model
     surface_layer_model = StandardSurfaceLayerModel(
-        # surface friction velocity [m s-1]
-        ustar=0.3,
-        # roughness length for momentum [m]
-        z0m=0.02,
-        # roughness length for scalars [m]
-        z0h=0.002,
-        # initial mixed-layer potential temperature [K]
-        theta=theta,
+        cm.params.surface_layer,
+        cm.init_conds.surface_layer,
     )
 
     # 3. define radiation model

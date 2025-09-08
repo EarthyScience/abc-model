@@ -10,7 +10,6 @@ from .models import (
     AbstractRadiationModel,
     AbstractSurfaceLayerModel,
 )
-from .surface_layer import MinimalSurfaceLayerModel
 from .utils import PhysicalConstants
 
 
@@ -37,11 +36,14 @@ class ABCModel:
         # models and diagnostics
         self.radiation = radiation
         self.radiation.diagnostics.post_init(self.tsteps)
-        assert self.radiation.diagnostics is not None
-        self.mixed_layer = mixed_layer
-        self.surface_layer = surface_layer
         self.land_surface = land_surface
+        # self.land_surface.diagnostics.post_init(self.tsteps) - TBD
+        self.surface_layer = surface_layer
+        self.surface_layer.diagnostics.post_init(self.tsteps)
+        self.mixed_layer = mixed_layer
+        # self.mixed_layer.diagnostics.post_init(self.tsteps) - TBD
         self.clouds = clouds
+        # self.clouds.diagnostics.post_init(self.tsteps) - TBD
 
         # initialize output
         self.out = ABCOutput(self.tsteps)
@@ -135,8 +137,10 @@ class ABCModel:
     # store model output
     def store(self):
         t = self.t
+        # limamau: IMO tstart should be taken out of radiation
         self.out.t[t] = t * self.dt / 3600.0 + self.radiation.tstart
         self.radiation.store(t)
+        self.surface_layer.store(t)
 
         if not isinstance(self.land_surface, MinimalLandSurfaceModel):
             self.out.rs[t] = self.land_surface.rs
@@ -148,25 +152,6 @@ class ABCModel:
             self.out.le_pot[t] = self.land_surface.le_pot
             self.out.le_ref[t] = self.land_surface.le_ref
             self.out.gf[t] = self.land_surface.gf
-
-        if not isinstance(self.surface_layer, MinimalSurfaceLayerModel):
-            self.out.uw[t] = self.surface_layer.uw
-            self.out.vw[t] = self.surface_layer.vw
-            self.out.temp_2m[t] = self.surface_layer.temp_2m
-            self.out.q2m[t] = self.surface_layer.q2m
-            self.out.u2m[t] = self.surface_layer.u2m
-            self.out.v2m[t] = self.surface_layer.v2m
-            self.out.e2m[t] = self.surface_layer.e2m
-            self.out.esat2m[t] = self.surface_layer.esat2m
-            self.out.thetasurf[t] = self.surface_layer.thetasurf
-            self.out.thetavsurf[t] = self.surface_layer.thetavsurf
-            self.out.qsurf[t] = self.surface_layer.qsurf
-            self.out.ustar[t] = self.surface_layer.ustar
-            self.out.drag_m[t] = self.surface_layer.drag_m
-            self.out.drag_s[t] = self.surface_layer.drag_s
-            self.out.obukhov_length[t] = self.surface_layer.obukhov_length
-            self.out.rib_number[t] = self.surface_layer.rib_number
-            self.out.ra[t] = self.surface_layer.ra
 
         self.out.h[t] = self.mixed_layer.abl_height
         self.out.theta[t] = self.mixed_layer.theta
@@ -268,54 +253,12 @@ class ABCOutput:
         self.u = np.zeros(tsteps)
         # initial u-wind jump at h [m s-1]
         self.du = np.zeros(tsteps)
-        # surface momentum flux u [m2 s-2]
-        self.uw = np.zeros(tsteps)
         # initial mixed-layer u-wind speed [m s-1]
         self.v = np.zeros(tsteps)
         # initial u-wind jump at h [m s-1]
         self.dv = np.zeros(tsteps)
-        # surface momentum flux v [m2 s-2]
-        self.vw = np.zeros(tsteps)
-
-        # diagnostic meteorological variables
-        # 2m temperature [K]
-        self.temp_2m = np.zeros(tsteps)
-        # 2m specific humidity [kg kg-1]
-        self.q2m = np.zeros(tsteps)
-        # 2m u-wind [m s-1]
-        self.u2m = np.zeros(tsteps)
-        # 2m v-wind [m s-1]
-        self.v2m = np.zeros(tsteps)
-        # 2m vapor pressure [Pa]
-        self.e2m = np.zeros(tsteps)
-        # 2m saturated vapor pressure [Pa]
-        self.esat2m = np.zeros(tsteps)
-
-        # surface-layer variables
-        # surface potential temperature [K]
-        self.thetasurf = np.zeros(tsteps)
-        # surface virtual potential temperature [K]
-        self.thetavsurf = np.zeros(tsteps)
-        # surface specific humidity [kg kg-1]
-        self.qsurf = np.zeros(tsteps)
-        # surface friction velocity [m s-1]
-        self.ustar = np.zeros(tsteps)
-        # roughness length for momentum [m]
-        self.z0m = np.zeros(tsteps)
-        # roughness length for scalars [m]
-        self.z0h = np.zeros(tsteps)
-        # drag coefficient for momentum []
-        self.drag_m = np.zeros(tsteps)
-        # drag coefficient for scalars []
-        self.drag_s = np.zeros(tsteps)
-        # Obukhov length [m]
-        self.obukhov_length = np.zeros(tsteps)
-        # bulk Richardson number [-]
-        self.rib_number = np.zeros(tsteps)
 
         # land surface variables
-        # aerodynamic resistance [s m-1]
-        self.ra = np.zeros(tsteps)
         # surface resistance [s m-1]
         self.rs = np.zeros(tsteps)
         # sensible heat flux [W m-2]

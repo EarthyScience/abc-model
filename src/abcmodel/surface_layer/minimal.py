@@ -1,41 +1,79 @@
 import numpy as np
 
+from ..diagnostics import AbstractDiagnostics
 from ..models import (
+    AbstractInitConds,
     AbstractLandSurfaceModel,
     AbstractMixedLayerModel,
+    AbstractParams,
     AbstractSurfaceLayerModel,
 )
 from ..utils import PhysicalConstants
 
 
-class MinimalSurfaceLayerModel(AbstractSurfaceLayerModel):
-    """Minimal surface layer model with constant friction velocity.
+class MinimalSurfaceLayerParams(AbstractParams["MinimalSurfaceLayerModel"]):
+    """Data class for minimal surface layer model parameters.
 
-    A surface layer model that uses a fixed friction velocity to calculate
-    momentum fluxes and aerodynamic resistance without atmospheric stability effects.
+    It doesn't carry any parameters.
+    """
 
-    **Running processes:**
+    def __init__(self):
+        pass
 
-    Calculate momentum fluxes based on wind components and friction velocity.
 
-    **Auxiliary processes:**
-
-    Compute aerodynamic resistance using effective wind speed.
+class MinimalSurfaceLayerInitConds(AbstractInitConds["MinimalSurfaceLayerModel"]):
+    """Data class for minimal surface layer model initial conditions.
 
     Arguments
-    ----------
+    ---------
     - ``ustar``: surface friction velocity [m/s].
-
-    Updates
-    --------
-    - ``uw``: u-component momentum flux [m²/s²].
-    - ``vw``: v-component momentum flux [m²/s²].
-    - ``ra``: aerodynamic resistance [s/m] (aux).
     """
 
     def __init__(self, ustar: float):
-        # surface friction velocity [m s-1]
         self.ustar = ustar
+
+
+class MinimalSurfaceLayerDiagnostics(AbstractDiagnostics["MinimalSurfaceLayerModel"]):
+    """Class for minimal surface layer model diagnostic variables.
+
+    Variables
+    -------
+    - ``uw``: wind speed [m/s].
+    - ``vw``: wind speed [m/s].
+    - ``ustar``: surface friction velocity [m/s].
+    - ``ra``: aerodynamic resistance [s m-1].
+    """
+
+    def post_init(self, tsteps: int):
+        self.uw = np.zeros(tsteps)
+        self.vw = np.zeros(tsteps)
+        self.ustar = np.zeros(tsteps)
+        self.ra = np.zeros(tsteps)
+
+    def store(self, t: int, model: "MinimalSurfaceLayerModel"):
+        self.uw[t] = model.uw
+        self.vw[t] = model.vw
+        self.ustar[t] = model.ustar
+        self.ra[t] = model.ra
+
+
+class MinimalSurfaceLayerModel(AbstractSurfaceLayerModel):
+    """Minimal surface layer model with constant friction velocity."""
+
+    def __init__(
+        self,
+        params: MinimalSurfaceLayerParams,
+        init_conds: MinimalSurfaceLayerInitConds,
+        diagnostics: AbstractDiagnostics = MinimalSurfaceLayerDiagnostics(),
+    ):
+        self.ustar: float = init_conds.ustar
+
+        # other variables exist as floats, but are not assigned here
+        self.uw: float
+        self.vw: float
+        self.ra: float
+
+        self.diagnostics = diagnostics
 
     def run(
         self,

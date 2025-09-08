@@ -1,11 +1,16 @@
 import matplotlib.pyplot as plt
 
+import configs.class_model as cm
 from abcmodel import ABCModel
 from abcmodel.clouds import StandardCumulusModel
 from abcmodel.land_surface import JarvisStewartModel
 from abcmodel.mixed_layer import BulkMixedLayerModel
 from abcmodel.radiation import StandardRadiationModel
-from abcmodel.surface_layer import MinimalSurfaceLayerModel
+from abcmodel.surface_layer import (
+    MinimalSurfaceLayerInitConds,
+    MinimalSurfaceLayerModel,
+    MinimalSurfaceLayerParams,
+)
 
 
 def main():
@@ -93,27 +98,14 @@ def main():
     )
 
     # 2. define surface layer model
-    surface_layer_model = MinimalSurfaceLayerModel(
-        # surface friction velocity [m s-1]
-        ustar=0.3,
-    )
+    suflayer_params = MinimalSurfaceLayerParams()
+    suflayer_init_conds = MinimalSurfaceLayerInitConds(ustar=0.3)
+    surface_layer_model = MinimalSurfaceLayerModel(suflayer_params, suflayer_init_conds)
 
     # 3. define radiation model
     radiation_model = StandardRadiationModel(
-        # latitude [deg]
-        lat=51.97,
-        # longitude [deg]
-        lon=-4.93,
-        # day of the year [-]
-        doy=268.0,
-        # time of the day [h UTC]
-        tstart=6.8,
-        # cloud cover fraction [-]
-        cc=0.0,
-        # net radiation [W m-2]
-        net_rad=400.0,
-        # cloud top radiative divergence [W m-2]
-        dFz=0.0,
+        cm.params.radiation,
+        cm.init_conds.radiation,
     )
 
     # 4. define land surface model
@@ -170,7 +162,7 @@ def main():
     cloud_model = StandardCumulusModel()
 
     # init and run the model
-    r1 = ABCModel(
+    abc = ABCModel(
         dt=dt,
         runtime=runtime,
         mixed_layer=mixed_layer_model,
@@ -179,40 +171,40 @@ def main():
         land_surface=land_surface_model,
         clouds=cloud_model,
     )
-    r1.run()
+    abc.run()
 
     # plot output
     plt.figure(figsize=(12, 8))
 
     plt.subplot(231)
-    plt.plot(r1.out.t, r1.out.h)
+    plt.plot(abc.out.t, abc.out.h)
     plt.xlabel("time [h]")
     plt.ylabel("h [m]")
 
     plt.subplot(234)
-    plt.plot(r1.out.t, r1.out.theta)
+    plt.plot(abc.out.t, abc.out.theta)
     plt.xlabel("time [h]")
     plt.ylabel("theta [K]")
 
     plt.subplot(232)
-    plt.plot(r1.out.t, r1.out.q * 1000.0)
+    plt.plot(abc.out.t, abc.out.q * 1000.0)
     plt.xlabel("time [h]")
     plt.ylabel("q [g kg-1]")
 
     plt.subplot(235)
-    plt.plot(r1.out.t, r1.out.cc_frac)
+    plt.plot(abc.out.t, abc.out.cc_frac)
     plt.xlabel("time [h]")
     plt.ylabel("cloud fraction [-]")
 
     plt.subplot(233)
-    plt.plot(r1.out.t, r1.out.q2m)
+    plt.plot(abc.out.t, abc.surface_layer.diagnostics.get("ra"))
     plt.xlabel("time [h]")
-    plt.ylabel("2m specific humidity [kg kg-1]")
+    plt.ylabel("aerodynamic resistance [s m-1]")
 
     plt.subplot(236)
-    plt.plot(r1.out.t, r1.out.esat2m)
+    plt.plot(abc.out.t, abc.surface_layer.diagnostics.get("ustar"))
     plt.xlabel("time [h]")
-    plt.ylabel("2m saturated vapor pressure [Pa]")
+    plt.ylabel("surface friction velocity [m/s]")
 
     plt.tight_layout()
     plt.show()

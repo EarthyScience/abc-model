@@ -1,4 +1,5 @@
 from abcmodel.radiation import StandardRadiationParams
+from abcmodel.surface_layer import StandardSurfaceLayerParams
 
 radiation = StandardRadiationParams(
     # latitude [deg]
@@ -14,3 +15,5 @@ radiation = StandardRadiationParams(
     # cloud top radiative divergence [W m-2]
     dFz=0.0,
 )
+
+surface_layer = StandardSurfaceLayerParams()
