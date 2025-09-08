@@ -9,12 +9,6 @@ class AbstractStandardStatsModel(AbstractMixedLayerModel):
 
     Provides a common calculation method for virtual temperature, mixed-layer top
     properties, and lifting condensation level determination.
-
-    Updates
-    --------
-    - ``thetav``, ``wthetav``, ``dthetav``: virtual temperature variables.
-    - ``top_p``, ``top_T``, ``top_rh``: mixed-layer top properties.
-    - ``lcl``: lifting condensation level height [m].
     """
 
     def statistics(self, t: float, const: PhysicalConstants):
@@ -27,8 +21,9 @@ class AbstractStandardStatsModel(AbstractMixedLayerModel):
 
         Updates
         -------
-        Updates virtual temperatures, mixed-layer top properties, and lifting
-        condensation level based on current thermodynamic state.
+        - ``thetav``, ``wthetav``, ``dthetav``: virtual temperature variables.
+        - ``top_p``, ``top_T``, ``top_rh``: mixed-layer top properties.
+        - ``lcl``: lifting condensation level height [m].
         """
         # calculate virtual temperatures
         self.thetav = self.theta + 0.61 * self.theta * self.q
@@ -51,6 +46,7 @@ class AbstractStandardStatsModel(AbstractMixedLayerModel):
 
         itmax = 30
         it = 0
+        # limamau: this can be replace by a jax.lax.while_loop
         while ((rhlcl <= 0.9999) or (rhlcl >= 1.0001)) and it < itmax:
             self.lcl += (1.0 - rhlcl) * 1000.0
             p_lcl = self.surf_pressure - const.rho * const.g * self.lcl

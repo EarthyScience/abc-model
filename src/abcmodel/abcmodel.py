@@ -2,7 +2,6 @@ import numpy as np
 
 from .clouds import NoCloudModel
 from .land_surface import MinimalLandSurfaceModel
-from .mixed_layer import MinimalMixedLayerModel
 from .models import (
     AbstractCloudModel,
     AbstractLandSurfaceModel,
@@ -41,7 +40,7 @@ class ABCModel:
         self.surface_layer = surface_layer
         self.surface_layer.diagnostics.post_init(self.tsteps)
         self.mixed_layer = mixed_layer
-        # self.mixed_layer.diagnostics.post_init(self.tsteps) - TBD
+        self.mixed_layer.diagnostics.post_init(self.tsteps)
         self.clouds = clouds
         self.clouds.diagnostics.post_init(self.tsteps)
 
@@ -154,106 +153,13 @@ class ABCModel:
             self.out.le_ref[t] = self.land_surface.le_ref
             self.out.gf[t] = self.land_surface.gf
 
-        self.out.h[t] = self.mixed_layer.abl_height
-        self.out.theta[t] = self.mixed_layer.theta
-        self.out.thetav[t] = self.mixed_layer.thetav
-        self.out.dtheta[t] = self.mixed_layer.dtheta
-        self.out.wtheta[t] = self.mixed_layer.wtheta
-        self.out.wthetav[t] = self.mixed_layer.wthetav
-        self.out.q[t] = self.mixed_layer.q
-        self.out.dq[t] = self.mixed_layer.dq
-        self.out.wq[t] = self.mixed_layer.wq
-        self.out.wqe[t] = self.mixed_layer.wqe
-        self.out.qsat[t] = self.mixed_layer.qsat
-        self.out.e[t] = self.mixed_layer.e
-        self.out.esat[t] = self.mixed_layer.esat
-        fac = (self.const.rho * self.const.mco2) / self.const.mair
-        self.out.co2[t] = self.mixed_layer.co2
-        self.out.dCO2[t] = self.mixed_layer.dCO2
-        self.out.wCO2[t] = self.mixed_layer.wCO2 * fac
-        self.out.wCO2e[t] = self.mixed_layer.wCO2e * fac
-        self.out.wCO2R[t] = self.mixed_layer.wCO2R * fac
-        self.out.wCO2A[t] = self.mixed_layer.wCO2A * fac
-        self.out.u[t] = self.mixed_layer.u
-        self.out.v[t] = self.mixed_layer.v
-        self.out.dz_h[t] = self.mixed_layer.dz_h
-        if not isinstance(self.mixed_layer, MinimalMixedLayerModel):
-            self.out.wthetae[t] = self.mixed_layer.wthetae
-            self.out.dthetav[t] = self.mixed_layer.dthetav
-            self.out.wthetave[t] = self.mixed_layer.wthetave
-            self.out.du[t] = self.mixed_layer.du
-            self.out.dv[t] = self.mixed_layer.dv
-            self.out.zlcl[t] = self.mixed_layer.lcl
-            self.out.top_rh[t] = self.mixed_layer.top_rh
+        self.mixed_layer.store(t)
 
 
 class ABCOutput:
     def __init__(self, tsteps):
         # time [s]
         self.t = np.zeros(tsteps)
-
-        # mixed-layer variables
-        # ABL height [m]
-        self.h = np.zeros(tsteps)
-
-        # initial mixed-layer potential temperature [K]
-        self.theta = np.zeros(tsteps)
-        # initial mixed-layer virtual potential temperature [K]
-        self.thetav = np.zeros(tsteps)
-        # initial potential temperature jump at h [K]
-        self.dtheta = np.zeros(tsteps)
-        # initial virtual potential temperature jump at h [K]
-        self.dthetav = np.zeros(tsteps)
-        # surface kinematic heat flux [K m s-1]s
-        self.wtheta = np.zeros(tsteps)
-        # surface kinematic virtual heat flux [K m s-1]s
-        self.wthetav = np.zeros(tsteps)
-        # entrainment kinematic heat flux [K m s-1]s
-        self.wthetae = np.zeros(tsteps)
-        # entrainment kinematic virtual heat flux [K m s-1]
-        self.wthetave = np.zeros(tsteps)
-
-        # mixed-layer specific humidity [kg kg-1]
-        self.q = np.zeros(tsteps)
-        # initial specific humidity jump at h [kg kg-1]
-        self.dq = np.zeros(tsteps)
-        # surface kinematic moisture flux [kg kg-1 m s-1]
-        self.wq = np.zeros(tsteps)
-        # entrainment kinematic moisture flux [kg kg-1 m s-1]
-        self.wqe = np.zeros(tsteps)
-        # cumulus mass-flux kinematic moisture flux [kg kg-1 m s-1]
-        self.wqM = np.zeros(tsteps)
-
-        # mixed-layer saturated specific humidity [kg kg-1]
-        self.qsat = np.zeros(tsteps)
-        # mixed-layer vapor pressure [Pa]
-        self.e = np.zeros(tsteps)
-        # mixed-layer saturated vapor pressure [Pa]
-        self.esat = np.zeros(tsteps)
-
-        # mixed-layer CO2 [ppm]
-        self.co2 = np.zeros(tsteps)
-        # initial CO2 jump at h [ppm]
-        self.dCO2 = np.zeros(tsteps)
-        # surface total CO2 flux [mgC m-2 s-1]
-        self.wCO2 = np.zeros(tsteps)
-        # surface assimilation CO2 flux [mgC m-2 s-1]
-        self.wCO2A = np.zeros(tsteps)
-        # surface respiration CO2 flux [mgC m-2 s-1]
-        self.wCO2R = np.zeros(tsteps)
-        # entrainment CO2 flux [mgC m-2 s-1]
-        self.wCO2e = np.zeros(tsteps)
-        # CO2 mass flux [mgC m-2 s-1]
-        self.wCO2M = np.zeros(tsteps)
-
-        # initial mixed-layer u-wind speed [m s-1]
-        self.u = np.zeros(tsteps)
-        # initial u-wind jump at h [m s-1]
-        self.du = np.zeros(tsteps)
-        # initial mixed-layer u-wind speed [m s-1]
-        self.v = np.zeros(tsteps)
-        # initial u-wind jump at h [m s-1]
-        self.dv = np.zeros(tsteps)
 
         # land surface variables
         # aerodynamic resistance [s m-1]
@@ -276,13 +182,3 @@ class ABCOutput:
         self.le_ref = np.zeros(tsteps)
         # ground heat flux [W m-2]
         self.gf = np.zeros(tsteps)
-
-        # mixed-layer top variables
-        # lifting condensation level [m]
-        self.zlcl = np.zeros(tsteps)
-        # mixed-layer top relative humidity [-]
-        self.top_rh = np.zeros(tsteps)
-
-        # cumulus variables
-        # transition layer thickness [m]
-        self.dz_h = np.zeros(tsteps)

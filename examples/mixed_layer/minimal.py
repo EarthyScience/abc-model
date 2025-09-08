@@ -4,7 +4,11 @@ import configs.class_model as cm
 from abcmodel import ABCModel
 from abcmodel.clouds import StandardCumulusModel
 from abcmodel.land_surface import JarvisStewartModel
-from abcmodel.mixed_layer import MinimalMixedLayerModel
+from abcmodel.mixed_layer import (
+    MinimalMixedLayerInitConds,
+    MinimalMixedLayerModel,
+    MinimalMixedLayerParams,
+)
 from abcmodel.radiation import StandardRadiationModel
 from abcmodel.surface_layer import StandardSurfaceLayerModel
 
@@ -18,20 +22,18 @@ def main():
     theta = 288.0
 
     # define mixed layer model
-    mixed_layer_model = MinimalMixedLayerModel(
-        # large scale parameters:
+    mixed_layer_params = MinimalMixedLayerParams()
+    mixed_layer_init_conds = MinimalMixedLayerInitConds(
         # initial ABL height [m]
         abl_height=200.0,
         # surface pressure [Pa]
         surf_pressure=101300.0,
-        # temperature parameters:
         # initial mixed-layer potential temperature [K]
         theta=theta,
         # initial temperature jump at h [K]
         dtheta=1.0,
         # surface kinematic heat flux [K m s-1]
         wtheta=0.1,
-        # moisture parameters:
         # initial mixed-layer specific humidity [kg kg-1]
         q=0.008,
         # initial specific humidity jump at h [kg kg-1]
@@ -45,13 +47,16 @@ def main():
         dCO2=-44.0,
         # surface kinematic CO2 flux [ppm m s-1]
         wCO2=0.0,
-        # wind parameters:
         # initial mixed-layer u-wind speed [m s-1]
         u=6.0,
         # initial mixed-layer v-wind speed [m s-1]
         v=-4.0,
         # transition layer thickness [m]
         dz_h=150.0,
+    )
+    mixed_layer_model = MinimalMixedLayerModel(
+        mixed_layer_params,
+        mixed_layer_init_conds,
     )
 
     # 2. define surface layer model
@@ -138,17 +143,17 @@ def main():
     plt.figure(figsize=(12, 8))
 
     plt.subplot(231)
-    plt.plot(abc.out.t, abc.out.h)
+    plt.plot(abc.out.t, abc.mixed_layer.diagnostics.get("abl_height"))
     plt.xlabel("time [h]")
     plt.ylabel("h [m]")
 
     plt.subplot(234)
-    plt.plot(abc.out.t, abc.out.theta)
+    plt.plot(abc.out.t, abc.mixed_layer.diagnostics.get("theta"))
     plt.xlabel("time [h]")
     plt.ylabel("theta [K]")
 
     plt.subplot(232)
-    plt.plot(abc.out.t, abc.out.q * 1000.0)
+    plt.plot(abc.out.t, abc.mixed_layer.diagnostics.get("q") * 1000.0)
     plt.xlabel("time [h]")
     plt.ylabel("q [g kg-1]")
 
@@ -158,12 +163,12 @@ def main():
     plt.ylabel("cloud fraction [-]")
 
     plt.subplot(233)
-    plt.plot(abc.out.t, abc.out.co2)
+    plt.plot(abc.out.t, abc.mixed_layer.diagnostics.get("co2"))
     plt.xlabel("time [h]")
     plt.ylabel("mixed-layer CO2 [ppm]")
 
     plt.subplot(236)
-    plt.plot(abc.out.t, abc.out.u)
+    plt.plot(abc.out.t, abc.mixed_layer.diagnostics.get("u"))
     plt.xlabel("time [h]")
     plt.ylabel("mixed-layer u-wind speed [m s-1]")
 

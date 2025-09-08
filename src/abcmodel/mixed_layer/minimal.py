@@ -1,42 +1,63 @@
+import numpy as np
+
 from ..models import (
     AbstractCloudModel,
+    AbstractDiagnostics,
+    AbstractInitConds,
+    AbstractParams,
     AbstractRadiationModel,
     AbstractSurfaceLayerModel,
 )
 from ..utils import PhysicalConstants
 from .stats import AbstractStandardStatsModel
 
+# limamau: is there a better way to do this?
+const = PhysicalConstants()
+# conversion factor mgC m-2 s-1 to ppm m s-1
+FAC = const.mair / (const.rho * const.mco2)
 
-class MinimalMixedLayerModel(AbstractStandardStatsModel):
-    """Minimal mixed layer model with constant properties.
 
-    Simple mixed layer model that maintains fixed atmospheric properties without
-    temporal evolution. Used for idealized simulations and testing.
+class MinimalMixedLayerParams(AbstractParams["MinimalMixedLayerModel"]):
+    """Data class for minimal mixed layer model parameters.
 
-    **Processes:**
-    1. Initialize all mixed layer variables with constant values.
-    2. No temporal integration - all values remain fixed.
+    Extra
+    -----
+    - ``wstar``: convective velocity scale [m s-1]. Defaults to 1e-6.
+    - ``wqe``: entrainment moisture flux [kg kg-1 m s-1]. Defaults to 0.0.
+    - ``wCO2e``: entrainment CO2 flux [ppm m s-1]. Defaults to 0.0.
+    """
+
+    def __init__(self):
+        self.wstar = 1e-6
+        self.wqe = 0.0
+        self.wCO2e = 0.0
+
+
+class MinimalMixedLayerInitConds(AbstractInitConds["MinimalMixedLayerModel"]):
+    """Data class for minimal mixed layer model initial conditions.
 
     Arguments
-    ----------
-    * ``abl_height``: initial ABL height [m].
-    * ``surf_pressure``: surface pressure [Pa].
-    * ``theta``: initial mixed-layer potential temperature [K].
-    * ``dtheta``: initial temperature jump at h [K].
-    * ``wtheta``: surface kinematic heat flux [K m/s].
-    * ``q``: initial mixed-layer specific humidity [kg/kg].
-    * ``dq``: initial specific humidity jump at h [kg/kg].
-    * ``wq``: surface kinematic moisture flux [kg/kg m/s].
-    * ``co2``: initial mixed-layer CO2 [ppm].
-    * ``dCO2``: initial CO2 jump at h [ppm].
-    * ``wCO2``: surface kinematic CO2 flux [mgC/m²/s].
-    * ``u``: initial mixed-layer u-wind speed [m/s].
-    * ``v``: initial mixed-layer v-wind speed [m/s].
-    * ``dz_h``: transition layer thickness [-].
+    ---------
+    - ``abl_height``: initial ABL height [m].
+    - ``surf_pressure``: surface pressure [Pa].
+    - ``theta``: initial mixed-layer potential temperature [K].
+    - ``dtheta``: initial temperature jump at h [K].
+    - ``wtheta``: surface kinematic heat flux [K m/s].
+    - ``q``: initial mixed-layer specific humidity [kg/kg].
+    - ``dq``: initial specific humidity jump at h [kg/kg].
+    - ``wq``: surface kinematic moisture flux [kg/kg m/s].
+    - ``co2``: initial mixed-layer CO2 [ppm].
+    - ``dCO2``: initial CO2 jump at h [ppm].
+    - ``wCO2``: surface kinematic CO2 flux [mgC/m²/s].
+    - ``u``: initial mixed-layer u-wind speed [m/s].
+    - ``v``: initial mixed-layer v-wind speed [m/s].
+    - ``dz_h``: transition layer thickness [-].
 
-    Updates
-    --------
-    * No updates - all values remain constant.
+    Extra
+    -----
+    - ``wCO2A``: surface assimulation CO2 flux [ppm m s-1]. Defaults to 0.0.
+    - ``wCO2R``: surface respiration CO2 flux [ppm m s-1]. Defaults to 0.0.
+    - ``wCO2M``: CO2 mass flux [ppm m s-1]. Defaults to 0.0.
     """
 
     def __init__(
@@ -56,49 +77,109 @@ class MinimalMixedLayerModel(AbstractStandardStatsModel):
         v: float,
         dz_h: float,
     ):
-        # initial ABL height [m]
         self.abl_height = abl_height
-        # surface pressure [Pa]
         self.surf_pressure = surf_pressure
-        # initial mixed-layer potential temperature [K]
         self.theta = theta
-        # # initial temperature jump at h [K]
         self.dtheta = dtheta
-        # surface kinematic heat flux [K m s-1]
         self.wtheta = wtheta
-        # convective velocity scale [m s-1] (small in minimal)
-        self.wstar = 1e-6
-        # initial mixed-layer specific humidity [kg kg-1]
         self.q = q
-        # initial specific humidity jump at h [kg kg-1]
         self.dq = dq
-        # surface kinematic moisture flux [kg kg-1 m s-1]
         self.wq = wq
-        # transition layer thickness [-]
-        self.dz_h = dz_h
-        # conversion factor mgC m-2 s-1 to ppm m s-1
-        const = PhysicalConstants()
-        fac = const.mair / (const.rho * const.mco2)
-        # initial mixed-layer CO2 [ppm]
         self.co2 = co2
-        # initial CO2 jump at h [ppm]
         self.dCO2 = dCO2
-        # surface kinematic CO2 flux [ppm m s-1]
-        self.wCO2 = wCO2 * fac
-        # surface assimulation CO2 flux [ppm m s-1]
-        self.wCO2A = 0.0
-        # surface respiration CO2 flux [ppm m s-1]
-        self.wCO2R = 0.0
-        # CO2 mass flux [ppm m s-1]
-        self.wCO2M = 0.0
-        # initial mixed-layer u-wind speed [m s-1]
+        self.wCO2 = wCO2
         self.u = u
-        # initial mixed-layer v-wind speed [m s-1]
         self.v = v
-        # entrainment moisture flux [kg kg-1 m s-1]
-        self.wqe = 0.0
-        # entrainment CO2 flux [ppm m s-1]
-        self.wCO2e = 0.0
+        self.dz_h = dz_h
+        self.wCO2A = 0.0
+        self.wCO2R = 0.0
+        self.wCO2M = 0.0
+
+
+class MinimalMixedLayerDiagnostics(AbstractDiagnostics["MinimalMixedLayerModel"]):
+    """Class for minimal mixed layer model diagnostics."""
+
+    def post_init(self, tsteps: int):
+        self.abl_height = np.zeros(tsteps)
+        self.theta = np.zeros(tsteps)
+        self.thetav = np.zeros(tsteps)
+        self.dtheta = np.zeros(tsteps)
+        self.wtheta = np.zeros(tsteps)
+        self.wthetav = np.zeros(tsteps)
+        self.q = np.zeros(tsteps)
+        self.dq = np.zeros(tsteps)
+        self.wq = np.zeros(tsteps)
+        self.wqe = np.zeros(tsteps)
+        self.qsat = np.zeros(tsteps)
+        self.e = np.zeros(tsteps)
+        self.esat = np.zeros(tsteps)
+        self.co2 = np.zeros(tsteps)
+        self.dCO2 = np.zeros(tsteps)
+        self.wCO2 = np.zeros(tsteps)
+        self.wCO2e = np.zeros(tsteps)
+        self.wCO2R = np.zeros(tsteps)
+        self.wCO2A = np.zeros(tsteps)
+        self.wCO2M = np.zeros(tsteps)
+        self.u = np.zeros(tsteps)
+        self.v = np.zeros(tsteps)
+        self.dz_h = np.zeros(tsteps)
+
+    def store(self, t: int, model: "MinimalMixedLayerModel"):
+        self.abl_height[t] = model.abl_height
+        self.theta[t] = model.theta
+        self.thetav[t] = model.thetav
+        self.dtheta[t] = model.dtheta
+        self.wtheta[t] = model.wtheta
+        self.wthetav[t] = model.wthetav
+        self.q[t] = model.q
+        self.dq[t] = model.dq
+        self.wq[t] = model.wq
+        self.wqe[t] = model.wqe
+        self.qsat[t] = model.qsat
+        self.e[t] = model.e
+        self.esat[t] = model.esat
+        self.co2[t] = model.co2
+        self.dCO2[t] = model.dCO2
+        self.wCO2[t] = model.wCO2 / FAC
+        self.wCO2e[t] = model.wCO2e / FAC
+        self.wCO2R[t] = model.wCO2R / FAC
+        self.wCO2A[t] = model.wCO2A / FAC
+        self.wCO2M[t] = model.wCO2M / FAC
+        self.u[t] = model.u
+        self.v[t] = model.v
+        self.dz_h[t] = model.dz_h
+
+
+class MinimalMixedLayerModel(AbstractStandardStatsModel):
+    """Minimal mixed layer model with constant properties."""
+
+    def __init__(
+        self,
+        params: MinimalMixedLayerParams,
+        init_conds: MinimalMixedLayerInitConds,
+        diagnostics: AbstractDiagnostics = MinimalMixedLayerDiagnostics(),
+    ):
+        self.abl_height = init_conds.abl_height
+        self.surf_pressure = init_conds.surf_pressure
+        self.theta = init_conds.theta
+        self.dtheta = init_conds.dtheta
+        self.wtheta = init_conds.wtheta
+        self.wstar = params.wstar
+        self.q = init_conds.q
+        self.dq = init_conds.dq
+        self.wq = init_conds.wq
+        self.dz_h = init_conds.dz_h
+        self.co2 = init_conds.co2
+        self.dCO2 = init_conds.dCO2
+        self.wCO2 = init_conds.wCO2 * FAC
+        self.wCO2A = init_conds.wCO2A
+        self.wCO2R = init_conds.wCO2R
+        self.wCO2M = init_conds.wCO2M
+        self.u = init_conds.u
+        self.v = init_conds.v
+        self.wqe = params.wqe
+        self.wCO2e = params.wCO2e
+        self.diagnostics = diagnostics
 
     def run(
         self,

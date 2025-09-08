@@ -16,10 +16,7 @@ class StandardSurfaceLayerParams(AbstractParams["StandardSurfaceLayerModel"]):
 
     Arguments
     ---------
-    - ``ustar``: surface friction velocity [m/s].
-    - ``z0m``: roughness length for momentum [m].
-    - ``z0h``: roughness length for scalars [m].
-    - ``theta``: surface potential temperature [K].
+    None.
     """
 
     def __init__(self):

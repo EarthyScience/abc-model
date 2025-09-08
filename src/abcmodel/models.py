@@ -133,7 +133,10 @@ class AbstractLandSurfaceModel:
 class AbstractSurfaceLayerModel(AbstractModel):
     # required by minimal:
     ustar: float
-    # limamau the following is currently not computed by minimal model (!!!)
+    uw: float
+    vw: float
+    # limamau the following is currently not computed by minimal model,
+    # so it will produce an error in land_surface.aquacrop model
     thetasurf: float
 
     @abstractmethod
@@ -150,7 +153,7 @@ class AbstractSurfaceLayerModel(AbstractModel):
         raise NotImplementedError
 
 
-class AbstractMixedLayerModel:
+class AbstractMixedLayerModel(AbstractModel):
     # required by minimal:
     # initial mixed-layer specific humidity [kg kg-1]
     q: float

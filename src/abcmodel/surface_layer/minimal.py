@@ -14,7 +14,9 @@ from ..utils import PhysicalConstants
 class MinimalSurfaceLayerParams(AbstractParams["MinimalSurfaceLayerModel"]):
     """Data class for minimal surface layer model parameters.
 
-    It doesn't carry any parameters.
+    Arguments
+    ---------
+    None.
     """
 
     def __init__(self):
