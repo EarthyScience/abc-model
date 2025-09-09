@@ -18,7 +18,7 @@ To setup the coupler we will always use 5 components. Every model needs two main
 We provide a config example (which we take from the [CLASS model](https://github.com/classmodel/modelpy)).
 This can be loaded through the `config` module:
 ```python
-import configs.class_model as cm
+import abcconfigs.class_model as cm
 ```
 
 Now we are ready to set up our models with ease...
@@ -27,8 +27,8 @@ The first one is the radiation model, and we can use the standard model:
 from abcmodel.radiation import StandardRadiationModel
 
 radiation_model = StandardRadiationModel(
-        cm.radiation.params,
-        cm.radiation.init_conds,
+        cm.standard_radiation.params,
+        cm.standard_radiation.init_conds,
     )
 ```
 
@@ -140,7 +140,6 @@ plt.show()
 
 Which should give us something like the figure below.
 ![readme_example](figs/readme-example.png "readme example")
-
 
 ## See also
 The model was constructed from the [CLASS model](https://github.com/classmodel/modelpy).

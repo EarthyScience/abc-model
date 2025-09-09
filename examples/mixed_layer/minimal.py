@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 
-import configs.class_model as cm
+import abcconfigs.class_model as cm
 from abcmodel import ABCoupler
 from abcmodel.clouds import StandardCumulusModel
 from abcmodel.land_surface import JarvisStewartModel
@@ -59,26 +59,26 @@ def main():
 
     # define surface layer model
     surface_layer_model = StandardSurfaceLayerModel(
-        cm.surface_layer.params,
-        cm.surface_layer.init_conds,
+        cm.standard_surface_layer.params,
+        cm.standard_surface_layer.init_conds,
     )
 
     # define radiation model
     radiation_model = StandardRadiationModel(
-        cm.radiation.params,
-        cm.radiation.init_conds,
+        cm.standard_radiation.params,
+        cm.standard_radiation.init_conds,
     )
 
     # define land surface model
     land_surface_model = JarvisStewartModel(
-        cm.land_surface.jarvis_stewart_params,
-        cm.land_surface.jarvis_stewart_init_conds,
+        cm.jarvis_stewart.params,
+        cm.jarvis_stewart.init_conds,
     )
 
     # clouds
     cloud_model = StandardCumulusModel(
-        cm.clouds.params,
-        cm.clouds.init_conds,
+        cm.standard_cumulus.params,
+        cm.standard_cumulus.init_conds,
     )
 
     # init and run the model
