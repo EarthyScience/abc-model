@@ -11,7 +11,7 @@ from .models import (
 from .utils import PhysicalConstants
 
 
-class ABCModel:
+class ABCoupler:
     def __init__(
         self,
         dt: float,

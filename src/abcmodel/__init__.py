@@ -1,3 +1,3 @@
-from .abcmodel import ABCModel
+from .coupling import ABCoupler
 
-__all__ = [ABCModel]
+__all__ = [ABCoupler]

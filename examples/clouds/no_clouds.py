@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 
 import configs.class_model as cm
-from abcmodel import ABCModel
+from abcmodel import ABCoupler
 from abcmodel.clouds import NoCloudInitConds, NoCloudModel, NoCloudParams
 from abcmodel.land_surface import JarvisStewartModel
 from abcmodel.mixed_layer import BulkMixedLayerModel
@@ -44,7 +44,7 @@ def main():
     cloud_model = NoCloudModel(clouds_params, clouds_init_conds)
 
     # init and run the model
-    abc = ABCModel(
+    abc = ABCoupler(
         dt=dt,
         runtime=runtime,
         mixed_layer=mixed_layer_model,
