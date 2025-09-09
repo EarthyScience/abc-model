@@ -122,19 +122,19 @@ class StandardLandSurfaceDiagnostics(AbstractDiagnostics[ST], Generic[ST]):
 
     Variables
     ---------
-    - ``cliq``: Wet fraction of the canopy [-].
-    - ``temp_soil_tend``: Soil temperature tendency [K s-1].
-    - ``wgtend``: Soil moisture tendency [m3 m-3 s-1].
-    - ``wltend``: Canopy water storage tendency [m s-1].
-    - ``surf_temp``: Surface temperature [K].
-    - ``le_veg``: Latent heat flux from vegetation [W m-2].
-    - ``le_liq``: Latent heat flux from liquid water [W m-2].
-    - ``le_soil``: Latent heat flux from soil [W m-2].
-    - ``le``: Total latent heat flux [W m-2].
-    - ``hf``: Sensible heat flux [W m-2].
-    - ``gf``: Ground heat flux [W m-2].
-    - ``le_pot``: Potential latent heat flux [W m-2].
-    - ``le_ref``: Reference latent heat flux [W m-2].
+    - ``cliq``: wet fraction of the canopy [-].
+    - ``temp_soil_tend``: soil temperature tendency [K s-1].
+    - ``wgtend``: soil moisture tendency [m3 m-3 s-1].
+    - ``wltend``: canopy water storage tendency [m s-1].
+    - ``surf_temp``: surface temperature [K].
+    - ``le_veg``: latent heat flux from vegetation [W m-2].
+    - ``le_liq``: latent heat flux from liquid water [W m-2].
+    - ``le_soil``: latent heat flux from soil [W m-2].
+    - ``le``: total latent heat flux [W m-2].
+    - ``hf``: sensible heat flux [W m-2].
+    - ``gf``: ground heat flux [W m-2].
+    - ``le_pot``: potential latent heat flux [W m-2].
+    - ``le_ref``: reference latent heat flux [W m-2].
     - ``ra``: Aerodynamic resistance [s m-1].
     """
 

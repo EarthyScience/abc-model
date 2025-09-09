@@ -14,9 +14,10 @@ from abcmodel.surface_layer import (
 
 
 def main():
-    # 0. running configurations:
-    dt = 60.0  # time step [s]
-    runtime = 96 * 3600.0  # total run time [s]
+    # time step [s]
+    dt = 60.0
+    # total run time [s]
+    runtime = 96 * 3600.0
 
     # define mixed layer model
     mixed_layer_model = BulkMixedLayerModel(
@@ -24,24 +25,24 @@ def main():
         cm.mixed_layer.init_conds,
     )
 
-    # 2. define surface layer model
+    # define surface layer model
     suflayer_params = MinimalSurfaceLayerParams()
     suflayer_init_conds = MinimalSurfaceLayerInitConds(ustar=0.3)
     surface_layer_model = MinimalSurfaceLayerModel(suflayer_params, suflayer_init_conds)
 
-    # 3. define radiation model
+    # define radiation model
     radiation_model = StandardRadiationModel(
         cm.radiation.params,
         cm.radiation.init_conds,
     )
 
-    # 4. define land surface model
+    # define land surface model
     land_surface_model = JarvisStewartModel(
         cm.land_surface.jarvis_stewart_params,
         cm.land_surface.jarvis_stewart_init_conds,
     )
 
-    # 5. clouds
+    # define cloud model
     cloud_model = StandardCumulusModel(
         cm.clouds.params,
         cm.clouds.init_conds,
