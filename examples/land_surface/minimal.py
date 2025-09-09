@@ -20,20 +20,20 @@ def main():
 
     # define mixed layer model
     mixed_layer_model = BulkMixedLayerModel(
-        cm.params.mixed_layer,
-        cm.init_conds.mixed_layer,
+        cm.mixed_layer.params,
+        cm.mixed_layer.init_conds,
     )
 
     # 2. define surface layer model
     surface_layer_model = StandardSurfaceLayerModel(
-        cm.params.surface_layer,
-        cm.init_conds.surface_layer,
+        cm.surface_layer.params,
+        cm.surface_layer.init_conds,
     )
 
     # 3. define radiation model
     radiation_model = StandardRadiationModel(
-        cm.params.radiation,
-        cm.init_conds.radiation,
+        cm.radiation.params,
+        cm.radiation.init_conds,
     )
 
     # 4. define land surface model
@@ -50,8 +50,8 @@ def main():
 
     # 5. clouds
     cloud_model = StandardCumulusModel(
-        cm.params.clouds,
-        cm.init_conds.clouds,
+        cm.clouds.params,
+        cm.clouds.init_conds,
     )
 
     # init and run the model

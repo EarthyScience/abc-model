@@ -61,26 +61,26 @@ def main():
 
     # 2. define surface layer model
     surface_layer_model = StandardSurfaceLayerModel(
-        cm.params.surface_layer,
-        cm.init_conds.surface_layer,
+        cm.surface_layer.params,
+        cm.surface_layer.init_conds,
     )
 
     # 3. define radiation model
     radiation_model = StandardRadiationModel(
-        cm.params.radiation,
-        cm.init_conds.radiation,
+        cm.radiation.params,
+        cm.radiation.init_conds,
     )
 
     # 4. define land surface model
     land_surface_model = JarvisStewartModel(
-        cm.params.jarvis_stewart,
-        cm.init_conds.jarvis_stewart,
+        cm.land_surface.jarvis_stewart_params,
+        cm.land_surface.jarvis_stewart_init_conds,
     )
 
     # 5. clouds
     cloud_model = StandardCumulusModel(
-        cm.params.clouds,
-        cm.init_conds.clouds,
+        cm.clouds.params,
+        cm.clouds.init_conds,
     )
 
     # init and run the model
