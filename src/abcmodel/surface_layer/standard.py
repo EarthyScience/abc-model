@@ -340,10 +340,6 @@ class StandardSurfaceLayerModel(AbstractSurfaceLayerModel):
 
         # limamau: the following is rather slow
         # we can probably use a scan when JAX is on
-        # before they had the option:
-        # Fast C++ iteration
-        # self.L    = ribtol.ribtol(self.Rib, zsl, self.z0m, self.z0h)
-        # we could make this faster with a scan or something using jax
         self.obukhov_length = self.ribtol(zsl)
 
         self.calculate_drag_coefficients(zsl, const.k)
@@ -358,6 +354,5 @@ class StandardSurfaceLayerModel(AbstractSurfaceLayerModel):
 
     def compute_ra(self, u: float, v: float, wstar: float):
         """Calculate aerodynamic resistance from wind speed and drag coefficient."""
-        # limamau: we should probably move this variable to land surface model class
         ueff = np.sqrt(u**2.0 + v**2.0 + wstar**2.0)
         return (self.drag_s * ueff) ** -1.0

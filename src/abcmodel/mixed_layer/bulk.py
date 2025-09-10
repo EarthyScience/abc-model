@@ -117,6 +117,8 @@ class BulkMixedLayerInitConds(AbstractInitConds["BulkMixedLayerModel"]):
     - ``wCO2M``: CO2 mass flux [ppm m s-1]. Defaults to 0.0.
     """
 
+    # limamau: the variables above could all go to the clouds class
+
     def __init__(
         self,
         abl_height: float,

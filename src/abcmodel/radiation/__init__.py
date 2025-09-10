@@ -1,8 +1,3 @@
-from .constant import (
-    ConstantRadiationInitConds,
-    ConstantRadiationModel,
-    ConstantRadiationParams,
-)
 from .standard import (
     StandardRadiationInitConds,
     StandardRadiationModel,
@@ -10,9 +5,6 @@ from .standard import (
 )
 
 __all__ = [
-    ConstantRadiationInitConds,
-    ConstantRadiationModel,
-    ConstantRadiationParams,
     StandardRadiationInitConds,
     StandardRadiationModel,
     StandardRadiationParams,
