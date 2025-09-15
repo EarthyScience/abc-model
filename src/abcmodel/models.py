@@ -6,23 +6,11 @@ import numpy as np
 
 from .utils import PhysicalConstants
 
-# limamau: how to enforce that every model should take params, init_conds
-# and diagnostics as input on the initialization method?
-# limamau: it would be also nice to implement something like "check_dependencies"
-# in order to verify if the concrete model assigned to one of the 5 components in
-# the abc model has all variables needed from other models (minimal variables)...
-# limamau: how to enforce that the minimal variables stated here are to be
-# implemented by all stantiations of the abstract models described here?
-
 
 class AbstractModel:
     """Abstract model class to define the interface for all models."""
 
     diagnostics: "AbstractDiagnostics"
-
-    @abstractmethod
-    def init_diagnostics(self, tsteps: int) -> None:
-        raise NotImplementedError
 
     def store(self, t: int):
         self.diagnostics.store(t, self)
@@ -69,8 +57,6 @@ class AbstractRadiationModel(AbstractModel):
     tstart: float
     dFz: float
     net_rad: float
-    # limamau: the following is used by AquaCrop, but not
-    # implemeneted by constant radiation...
     in_srad: float
 
     @abstractmethod

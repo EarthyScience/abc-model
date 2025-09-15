@@ -1,8 +1,9 @@
 import matplotlib.pyplot as plt
 
 import abcconfigs.class_model as cm
-from abcmodel import ABCoupler
 from abcmodel.clouds import StandardCumulusModel
+from abcmodel.coupling import ABCoupler
+from abcmodel.integration import integrate
 from abcmodel.land_surface import JarvisStewartModel
 from abcmodel.mixed_layer import (
     MinimalMixedLayerInitConds,
@@ -83,18 +84,15 @@ def main():
 
     # init and run the model
     abc = ABCoupler(
-        dt=dt,
-        runtime=runtime,
         mixed_layer=mixed_layer_model,
         surface_layer=surface_layer_model,
         radiation=radiation_model,
         land_surface=land_surface_model,
         clouds=cloud_model,
     )
-    abc.run()
+    time = integrate(abc, dt=dt, runtime=runtime)
 
     # plot output
-    time = abc.get_t()
     plt.figure(figsize=(12, 8))
 
     plt.subplot(231)
