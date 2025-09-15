@@ -162,7 +162,7 @@ class AquaCropModel(AbstractStandardLandSurfaceModel):
         elif params.c3c4 == "c4":
             self.c3c4 = 1
         else:
-            raise ValueError(f'Invalid option "{params.c3c4}" for "c3c4".')
+            raise ValueError(f'''Invalid option "{params.c3c4}" for "c3c4".''')
 
         self.co2comp298 = params.co2comp298
         self.net_rad10CO2 = params.net_rad10CO2
@@ -185,6 +185,128 @@ class AquaCropModel(AbstractStandardLandSurfaceModel):
         self.wmin = params.wmin
         self.r10 = params.r10
         self.e0 = params.e0
+
+    def calculate_co2_compensation_concentration(
+        self,
+        const: PhysicalConstants,
+        surface_layer: AbstractSurfaceLayerModel,
+    ) -> float:
+        """Calculate CO2 compensation concentration."""
+        temp_diff = 0.1 * (surface_layer.thetasurf - 298.0)
+        exp_term = pow(self.net_rad10CO2[self.c3c4], temp_diff)
+        return self.co2comp298[self.c3c4] * const.rho * exp_term
+
+    def calculate_mesophyll_conductance(
+        self,
+        surface_layer: AbstractSurfaceLayerModel,
+    ) -> float:
+        """Calculate mesophyll conductance."""
+        temp_diff = 0.1 * (surface_layer.thetasurf - 298.0)
+        exp_term = pow(self.net_rad10gm[self.c3c4], temp_diff)
+        temp_factor1 = 1.0 + np.exp(
+            0.3 * (self.temp1gm[self.c3c4] - surface_layer.thetasurf)
+        )
+        temp_factor2 = 1.0 + np.exp(
+            0.3 * (surface_layer.thetasurf - self.temp2gm[self.c3c4])
+        )
+        gm = self.gm298[self.c3c4] * exp_term / (temp_factor1 * temp_factor2)
+        return gm / 1000.0
+
+    def calculate_internal_co2(
+        self,
+        const: PhysicalConstants,
+        mixed_layer: AbstractMixedLayerModel,
+        co2comp: float,
+        gm: float,
+    ) -> tuple[float, float, float, float, float]:
+        """Calculate internal CO2 concentration and related parameters."""
+        fmin0 = self.gmin[self.c3c4] / self.nuco2q - 1.0 / 9.0 * gm
+        fmin_sq_term = pow(fmin0, 2.0) + 4 * self.gmin[self.c3c4] / self.nuco2q * gm
+        fmin = -fmin0 + pow(fmin_sq_term, 0.5) / (2.0 * gm)
+
+        ds = (get_esat(self.surf_temp) - mixed_layer.e) / 1000.0  # kPa
+        d0 = (self.f0[self.c3c4] - fmin) / self.ad[self.c3c4]
+
+        cfrac = self.f0[self.c3c4] * (1.0 - (ds / d0)) + fmin * (ds / d0)
+        co2abs = mixed_layer.co2 * (const.mco2 / const.mair) * const.rho
+        ci = cfrac * (co2abs - co2comp) + co2comp
+        return ci, co2abs, fmin, ds, d0
+
+    def calculate_max_gross_primary_production(
+        self,
+        surface_layer: AbstractSurfaceLayerModel,
+    ) -> float:
+        """Calculate maximal gross primary production in high light conditions (Ag)."""
+        temp_diff = 0.1 * (surface_layer.thetasurf - 298.0)
+        exp_term = pow(self.net_rad10Am[self.c3c4], temp_diff)
+        temp_factor1 = 1.0 + np.exp(
+            0.3 * (self.temp1Am[self.c3c4] - surface_layer.thetasurf)
+        )
+        temp_factor2 = 1.0 + np.exp(
+            0.3 * (surface_layer.thetasurf - self.temp2Am[self.c3c4])
+        )
+        ammax = self.ammax298[self.c3c4] * exp_term / (temp_factor1 * temp_factor2)
+        return ammax
+
+    def calculate_soil_moisture_stress_factor(self) -> float:
+        """Calculate effect of soil moisture stress on gross assimilation rate."""
+        soil_moisture_ratio = (self.w2 - self.wwilt) / (self.wfc - self.wwilt)
+        betaw = max(1e-3, min(1.0, soil_moisture_ratio))
+
+        if self.c_beta == 0:
+            return betaw
+
+        if self.c_beta < 0.25:
+            p = 6.4 * self.c_beta
+        elif self.c_beta < 0.50:
+            p = 7.6 * self.c_beta - 0.3
+        else:
+            p = 2 ** (3.66 * self.c_beta + 0.34) - 1
+        return (1.0 - np.exp(-p * betaw)) / (1 - np.exp(-p))
+
+    def calculate_gross_assimilation_and_light_use(
+        self,
+        ammax: float,
+        gm: float,
+        ci: float,
+        co2comp: float,
+        co2abs: float,
+        radiation: AbstractRadiationModel,
+    ) -> tuple[float, float, float, float]:
+        """Calculate gross assimilation rate, dark respiration, PAR, and light use efficiency."""
+        assimilation_factor = -(gm * (ci - co2comp) / ammax)
+        am = ammax * (1.0 - np.exp(assimilation_factor))
+        rdark = (1.0 / 9.0) * am
+        par = 0.5 * max(1e-1, radiation.in_srad * self.cveg)
+        co2_ratio = (co2abs - co2comp) / (co2abs + 2.0 * co2comp)
+        alphac = self.alpha0[self.c3c4] * co2_ratio
+        return am, rdark, par, alphac
+
+    def calculate_canopy_co2_conductance(
+        self,
+        alphac: float,
+        par: float,
+        am: float,
+        rdark: float,
+        fstr: float,
+        co2abs: float,
+        co2comp: float,
+        ds: float,
+        d0: float,
+        fmin: float,
+    ) -> float:
+        """Calculate upscaling from leaf to canopy and CO2 conductance at canopy level."""
+        y = alphac * self.kx[self.c3c4] * par / (am + rdark)
+        exp1_arg1 = y * np.exp(-self.kx[self.c3c4] * self.lai)
+        exp1_arg2 = y
+        exp1_term = exp1(exp1_arg1) - exp1(exp1_arg2)
+        an = (am + rdark) * (1.0 - (1.0 / (self.kx[self.c3c4] * self.lai)) * exp1_term)
+
+        a1 = 1.0 / (1.0 - self.f0[self.c3c4])
+        dstar = d0 / (a1 * (self.f0[self.c3c4] - fmin))
+        conductance_factor = a1 * fstr * an / ((co2abs - co2comp) * (1.0 + ds / dstar))
+        gcco2 = self.lai * (self.gmin[self.c3c4] / self.nuco2q + conductance_factor)
+        return gcco2
 
     def compute_surface_resistance(
         self,
@@ -209,118 +331,24 @@ class AquaCropModel(AbstractStandardLandSurfaceModel):
         coupled photosynthesis-stomatal conductance calculations. Also updates
         ``self.gcco2``, ``self.ci``, and ``self.co2abs``.
         """
-        # calculate CO2 compensation concentration
-        co2comp = (
-            self.co2comp298[self.c3c4]
-            * const.rho
-            * pow(
-                self.net_rad10CO2[self.c3c4], (0.1 * (surface_layer.thetasurf - 298.0))
-            )
+        co2comp = self.calculate_co2_compensation_concentration(const, surface_layer)
+        gm = self.calculate_mesophyll_conductance(surface_layer)
+
+        self.ci, self.co2abs, fmin, ds, d0 = self.calculate_internal_co2(
+            const, mixed_layer, co2comp, gm
         )
 
-        # calculate mesophyll conductance
-        gm = (
-            self.gm298[self.c3c4]
-            * pow(
-                self.net_rad10gm[self.c3c4], (0.1 * (surface_layer.thetasurf - 298.0))
-            )
-            / (
-                (
-                    1.0
-                    + np.exp(0.3 * (self.temp1gm[self.c3c4] - surface_layer.thetasurf))
-                )
-                * (
-                    1.0
-                    + np.exp(0.3 * (surface_layer.thetasurf - self.temp2gm[self.c3c4]))
-                )
-            )
-        )
-        # conversion from mm s-1 to m s-1
-        gm = gm / 1000.0
+        ammax = self.calculate_max_gross_primary_production(surface_layer)
+        fstr = self.calculate_soil_moisture_stress_factor()
 
-        # calculate CO2 concentration inside the leaf (ci)
-        fmin0 = self.gmin[self.c3c4] / self.nuco2q - 1.0 / 9.0 * gm
-        fmin = -fmin0 + pow(
-            (pow(fmin0, 2.0) + 4 * self.gmin[self.c3c4] / self.nuco2q * gm), 0.5
-        ) / (2.0 * gm)
-
-        ds = (get_esat(self.surf_temp) - mixed_layer.e) / 1000.0  # kPa
-        d0 = (self.f0[self.c3c4] - fmin) / self.ad[self.c3c4]
-
-        cfrac = self.f0[self.c3c4] * (1.0 - (ds / d0)) + fmin * (ds / d0)
-        self.co2abs = mixed_layer.co2 * (const.mco2 / const.mair) * const.rho
-        # conversion mumol mol-1 (ppm) to mgCO2 m3
-        self.ci = cfrac * (self.co2abs - co2comp) + co2comp
-
-        # calculate maximal gross primary production in high light conditions (Ag)
-        ammax = (
-            self.ammax298[self.c3c4]
-            * pow(
-                self.net_rad10Am[self.c3c4], (0.1 * (surface_layer.thetasurf - 298.0))
-            )
-            / (
-                (
-                    1.0
-                    + np.exp(0.3 * (self.temp1Am[self.c3c4] - surface_layer.thetasurf))
-                )
-                * (
-                    1.0
-                    + np.exp(0.3 * (surface_layer.thetasurf - self.temp2Am[self.c3c4]))
-                )
-            )
+        am, rdark, par, alphac = self.calculate_gross_assimilation_and_light_use(
+            ammax, gm, self.ci, co2comp, self.co2abs, radiation
         )
 
-        # calculate effect of soil moisture stress on gross assimilation rate
-        betaw = max(1e-3, min(1.0, (self.w2 - self.wwilt) / (self.wfc - self.wwilt)))
-
-        # calculate stress function
-        if self.c_beta == 0:
-            fstr = betaw
-        else:
-            # following Combe et al. (2016)
-            if self.c_beta < 0.25:
-                p = 6.4 * self.c_beta
-            elif self.c_beta < 0.50:
-                p = 7.6 * self.c_beta - 0.3
-            else:
-                p = 2 ** (3.66 * self.c_beta + 0.34) - 1
-            fstr = (1.0 - np.exp(-p * betaw)) / (1 - np.exp(-p))
-
-        # calculate gross assimilation rate (Am)
-        am = ammax * (1.0 - np.exp(-(gm * (self.ci - co2comp) / ammax)))
-        rdark = (1.0 / 9.0) * am
-        par = 0.5 * max(1e-1, radiation.in_srad * self.cveg)
-
-        # calculate  light use efficiency
-        alphac = (
-            self.alpha0[self.c3c4]
-            * (self.co2abs - co2comp)
-            / (self.co2abs + 2.0 * co2comp)
+        self.gcco2 = self.calculate_canopy_co2_conductance(
+            alphac, par, am, rdark, fstr, self.co2abs, co2comp, ds, d0, fmin
         )
 
-        # calculate gross primary productivity
-        # limamau: this is just not being used?
-        # ag = (am + rdark) * (1 - np.exp(alphac * par / (am + rdark)))
-
-        # 1.- calculate upscaling from leaf to canopy: net flow CO2 into the plant (An)
-        y = alphac * self.kx[self.c3c4] * par / (am + rdark)
-        an = (am + rdark) * (
-            1.0
-            - 1.0
-            / (self.kx[self.c3c4] * self.lai)
-            * (exp1(y * np.exp(-self.kx[self.c3c4] * self.lai)) - exp1(y))
-        )
-
-        # 2.- calculate upscaling from leaf to canopy: CO2 conductance at canopy level
-        a1 = 1.0 / (1.0 - self.f0[self.c3c4])
-        dstar = d0 / (a1 * (self.f0[self.c3c4] - fmin))
-
-        self.gcco2 = self.lai * (
-            self.gmin[self.c3c4] / self.nuco2q
-            + a1 * fstr * an / ((self.co2abs - co2comp) * (1.0 + ds / dstar))
-        )
-
-        # calculate surface resistance for moisture and carbon dioxide
         self.rs = 1.0 / (1.6 * self.gcco2)
 
     def compute_co2_flux(
@@ -332,13 +360,10 @@ class AquaCropModel(AbstractStandardLandSurfaceModel):
         self.rsCO2 = 1.0 / self.gcco2
         an = -(self.co2abs - self.ci) / (self.ra + self.rsCO2)
         fw = self.cw * self.wmax / (self.wg + self.wmin)
-        resp = (
-            self.r10
-            * (1.0 - fw)
-            * np.exp(self.e0 / (283.15 * 8.314) * (1.0 - 283.15 / (self.temp_soil)))
-        )
+        temp_ratio = 1.0 - 283.15 / self.temp_soil
+        resp_factor = np.exp(self.e0 / (283.15 * 8.314) * temp_ratio)
+        resp = self.r10 * (1.0 - fw) * resp_factor
 
-        # CO2 flux
         mixed_layer.wCO2A = an * (const.mair / (const.rho * const.mco2))
         mixed_layer.wCO2R = resp * (const.mair / (const.rho * const.mco2))
         mixed_layer.wCO2 = mixed_layer.wCO2A + mixed_layer.wCO2R

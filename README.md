@@ -16,9 +16,9 @@ pip install -e .
 To setup the coupler we will always use 5 models:
 1. Radiation model
 2. Land surface model
-3. Atmosphere surface layer model
-4. Atmosphere mixed layer model
-5. Atmosphere cloud model
+3. Surface layer model
+4. Mixed layer model
+5. Cloud model
 
 Every model needs two main arguments: `params`, `init_conds`, which can sometimes take a lot of arguments...
 But worry not! We provide a config example (which we take from the [CLASS model](https://github.com/classmodel/modelpy)).
@@ -50,7 +50,7 @@ land_surface_model = JarvisStewartModel(
 ```
 
 Now the atmosphere. We will use the standard model for the surface layer,
-the bulk model for the mixed layer and cumulus model for the clouds. We set them
+the bulk model for the mixed layer and the cumulus model for the clouds. We set them
 up just like before:
 ```python
 from abcmodel.surface_layer import StandardSurfaceLayerModel
@@ -85,7 +85,7 @@ from abcmodel import ABCoupler
 # time step [s]
 dt = 60.0
 # total run time [s]
-runtime = 96 * 3600.0
+runtime = 12 * 3600.0
 
 abc = ABCoupler(
     dt=dt,
