@@ -1,10 +1,61 @@
 from dataclasses import dataclass
 
-import numpy as np
-from jaxtyping import PyTree
+import jax
+import jax.numpy as jnp
+from jaxtyping import Array, PyTree
 
 from ..models import AbstractSurfaceLayerModel
 from ..utils import PhysicalConstants, get_psih, get_psim, get_qsat
+
+
+# helper functions:
+def calculate_effective_wind_speed(u: Array, v: Array, wstar: Array) -> Array:
+    """Calculate effective wind speed including convective effects."""
+    return jnp.maximum(0.01, jnp.sqrt(u**2.0 + v**2.0 + wstar**2.0))
+
+
+def calculate_surface_properties(
+    ueff: Array,
+    theta: Array,
+    wtheta: Array,
+    q: Array,
+    surf_pressure: Array,
+    rs: Array,
+    drag_s: Array,
+) -> tuple[Array, Array, Array]:
+    """Calculate surface temperature and humidity."""
+    thetasurf = theta + wtheta / (drag_s * ueff)
+    qsatsurf = get_qsat(thetasurf, surf_pressure)
+    cq = (1.0 + drag_s * ueff * rs) ** -1.0
+    qsurf = (1.0 - cq) * q + cq * qsatsurf
+    thetavsurf = thetasurf * (1.0 + 0.61 * qsurf)
+    return thetasurf, qsurf, thetavsurf
+
+
+def calculate_richardson_number(
+    ueff: Array, zsl: Array, g: float, thetav: Array, thetavsurf: Array
+) -> Array:
+    """Calculate bulk Richardson number."""
+    rib_number = g / thetav * zsl * (thetav - thetavsurf) / ueff**2.0
+    return jnp.minimum(rib_number, 0.2)
+
+
+def calculate_scalar_correction_term(zsl: Array, oblen: Array, z0h: Array) -> Array:
+    """Calculate scalar stability correction term."""
+    log_term = jnp.log(zsl / z0h)
+    upper_stability = get_psih(zsl / oblen)
+    surface_stability = get_psih(z0h / oblen)
+
+    return log_term - upper_stability + surface_stability
+
+
+def calculate_momentum_correction_term(zsl: Array, oblen: Array, z0m: Array) -> Array:
+    """Calculate momentum stability correction term."""
+    log_term = jnp.log(zsl / z0m)
+    upper_stability = get_psim(zsl / oblen)
+    surface_stability = get_psim(z0m / oblen)
+
+    return log_term - upper_stability + surface_stability
 
 
 @dataclass
@@ -49,19 +100,19 @@ class StandardSurfaceLayerInitConds:
     drag_s: float = 1e12
     # the following variables are initialized as NaNs and should
     # and are expected to be assigned during warmup
-    uw: float = np.nan
-    vw: float = np.nan
-    temp_2m: float = np.nan
-    q2m: float = np.nan
-    u2m: float = np.nan
-    v2m: float = np.nan
-    e2m: float = np.nan
-    esat2m: float = np.nan
-    thetasurf: float = np.nan
-    thetavsurf: float = np.nan
-    qsurf: float = np.nan
-    obukhov_length: float = np.nan
-    rib_number: float = np.nan
+    uw: float = jnp.nan
+    vw: float = jnp.nan
+    temp_2m: float = jnp.nan
+    q2m: float = jnp.nan
+    u2m: float = jnp.nan
+    v2m: float = jnp.nan
+    e2m: float = jnp.nan
+    esat2m: float = jnp.nan
+    thetasurf: float = jnp.nan
+    thetavsurf: float = jnp.nan
+    qsurf: float = jnp.nan
+    obukhov_length: float = jnp.nan
+    rib_number: float = jnp.nan
 
 
 class StandardSurfaceLayerModel(AbstractSurfaceLayerModel):
@@ -85,145 +136,85 @@ class StandardSurfaceLayerModel(AbstractSurfaceLayerModel):
     def __init__(self):
         pass
 
-    @staticmethod
-    def calculate_effective_wind_speed(
-        u: float,
-        v: float,
-        wstar: float,
-    ) -> float:
-        """Calculate effective wind speed including convective effects."""
-        return max(0.01, np.sqrt(u**2.0 + v**2.0 + wstar**2.0))
-
-    @staticmethod
-    def calculate_surface_properties(
-        ueff: float,
-        theta: float,
-        wtheta: float,
-        q: float,
-        surf_pressure: float,
-        rs: float,
-        drag_s: float,
-    ) -> tuple[float, float, float]:
-        """Calculate surface temperature and humidity."""
-        thetasurf = theta + wtheta / (drag_s * ueff)
-        qsatsurf = get_qsat(thetasurf, surf_pressure)
-        cq = (1.0 + drag_s * ueff * rs) ** -1.0
-        qsurf = (1.0 - cq) * q + cq * qsatsurf
-        thetavsurf = thetasurf * (1.0 + 0.61 * qsurf)
-        return thetasurf, qsurf, thetavsurf
-
-    @staticmethod
-    def calculate_richardson_number(
-        ueff: float, zsl: float, g: float, thetav: float, thetavsurf: float
-    ) -> float:
-        """Calculate bulk Richardson number."""
-        rib_number = g / thetav * zsl * (thetav - thetavsurf) / ueff**2.0
-        return min(rib_number, 0.2)
-
-    @staticmethod
-    def calculate_scalar_correction_term(zsl: float, oblen: float, z0h: float) -> float:
-        """Calculate scalar stability correction term."""
-        log_term = np.log(zsl / z0h)
-        upper_stability = get_psih(zsl / oblen)
-        surface_stability = get_psih(z0h / oblen)
-
-        return log_term - upper_stability + surface_stability
-
-    @staticmethod
-    def calculate_momentum_correction_term(
-        zsl: float, oblen: float, z0m: float
-    ) -> float:
-        """Calculate momentum stability correction term."""
-        log_term = np.log(zsl / z0m)
-        upper_stability = get_psim(zsl / oblen)
-        surface_stability = get_psim(z0m / oblen)
-
-        return log_term - upper_stability + surface_stability
-
-    @staticmethod
     def calculate_rib_function(
-        zsl: float, oblen: float, rib_number: float, z0h: float, z0m: float
-    ) -> float:
+        self,
+        zsl: Array,
+        oblen: Array,
+        rib_number: Array,
+        z0h: Array,
+        z0m: Array,
+    ) -> Array:
         """Calculate Richardson number function for iteration."""
-        scalar_term = StandardSurfaceLayerModel.calculate_scalar_correction_term(
-            zsl, oblen, z0h
-        )
-        momentum_term = StandardSurfaceLayerModel.calculate_momentum_correction_term(
-            zsl, oblen, z0m
-        )
+        scalar_term = calculate_scalar_correction_term(zsl, oblen, z0h)
+        momentum_term = calculate_momentum_correction_term(zsl, oblen, z0m)
 
         return rib_number - zsl / oblen * scalar_term / momentum_term**2.0
 
-    @staticmethod
     def calculate_rib_function_term(
-        zsl: float, oblen: float, z0h: float, z0m: float
-    ) -> float:
+        self,
+        zsl: Array,
+        oblen: Array,
+        z0h: Array,
+        z0m: Array,
+    ) -> Array:
         """Calculate function term for derivative calculation."""
-        scalar_term = StandardSurfaceLayerModel.calculate_scalar_correction_term(
-            zsl, oblen, z0h
-        )
-        momentum_term = StandardSurfaceLayerModel.calculate_momentum_correction_term(
-            zsl, oblen, z0m
-        )
+        scalar_term = calculate_scalar_correction_term(zsl, oblen, z0h)
+        momentum_term = calculate_momentum_correction_term(zsl, oblen, z0m)
 
         return -zsl / oblen * scalar_term / momentum_term**2.0
 
-    @staticmethod
-    def ribtol(zsl: float, rib_number: float, z0h: float, z0m: float) -> float:
-        """Iterative solution for Obukhov length from Richardson number."""
+    def ribtol(self, zsl: Array, rib_number: Array, z0h: Array, z0m: Array):
+        """Iterative solution for Obukhov length from Richardson number (JAX version)."""
+
         # initial guess based on stability
-        oblen = 1.0 if rib_number > 0.0 else -1.0
-        oblen0 = 2.0 if rib_number > 0.0 else -2.0
+        oblen = jnp.where(rib_number > 0.0, 1.0, -1.0)
+        oblen0 = jnp.where(rib_number > 0.0, 2.0, -2.0)
 
         convergence_threshold = 0.001
         perturbation = 0.001
 
-        while abs(oblen - oblen0) > convergence_threshold:
+        def cond_fun(carry):
+            oblen, oblen0 = carry
+            return jnp.logical_and(
+                jnp.abs(oblen - oblen0) > convergence_threshold,
+                jnp.abs(oblen) < 1e15,
+            ).squeeze()
+
+        def body_fun(carry):
+            oblen, _ = carry
             oblen0 = oblen
 
             # calculate function value at current estimate
-            fx = StandardSurfaceLayerModel.calculate_rib_function(
-                zsl, oblen, rib_number, z0h, z0m
-            )
+            fx = self.calculate_rib_function(zsl, oblen, rib_number, z0h, z0m)
 
-            # calculate derivative using finite differences
+            # finite difference derivative
             oblen_start = oblen - perturbation * oblen
             oblen_end = oblen + perturbation * oblen
 
-            fx_start = StandardSurfaceLayerModel.calculate_rib_function_term(
-                zsl, oblen_start, z0h, z0m
-            )
-            fx_end = StandardSurfaceLayerModel.calculate_rib_function_term(
-                zsl, oblen_end, z0h, z0m
-            )
+            fx_start = self.calculate_rib_function_term(zsl, oblen_start, z0h, z0m)
+            fx_end = self.calculate_rib_function_term(zsl, oblen_end, z0h, z0m)
 
             fxdif = (fx_start - fx_end) / (oblen_start - oblen_end)
 
-            # Newton-Raphson update
-            oblen = oblen - fx / fxdif
+            # Newton–Raphson update
+            oblen_new = oblen - fx / fxdif
 
-            # prevent runaway solutions
-            if abs(oblen) > 1e15:
-                break
+            return oblen_new, oblen0
 
+        oblen, _ = jax.lax.while_loop(cond_fun, body_fun, (oblen, oblen0))
         return oblen
 
-    @staticmethod
     def calculate_drag_coefficients(
-        zsl: float, k: float, obukhov_length: float, z0h: float, z0m: float
-    ) -> tuple[float, float]:
+        self, zsl: Array, k: float, obukhov_length: Array, z0h: Array, z0m: Array
+    ) -> tuple[Array, Array]:
         """Calculate drag coefficients with stability corrections."""
         # momentum stability correction
-        momentum_correction = (
-            StandardSurfaceLayerModel.calculate_momentum_correction_term(
-                zsl, obukhov_length, z0m
-            )
+        momentum_correction = calculate_momentum_correction_term(
+            zsl, obukhov_length, z0m
         )
 
         # scalar stability correction
-        scalar_correction = StandardSurfaceLayerModel.calculate_scalar_correction_term(
-            zsl, obukhov_length, z0h
-        )
+        scalar_correction = calculate_scalar_correction_term(zsl, obukhov_length, z0h)
 
         # drag coefficients
         drag_m = k**2.0 / momentum_correction**2.0
@@ -232,38 +223,38 @@ class StandardSurfaceLayerModel(AbstractSurfaceLayerModel):
 
     @staticmethod
     def calculate_momentum_fluxes(
-        ueff: float, u: float, v: float, drag_m: float
-    ) -> tuple[float, float, float]:
+        ueff: Array, u: Array, v: Array, drag_m: Array
+    ) -> tuple[Array, Array, Array]:
         """Calculate momentum fluxes and friction velocity."""
-        ustar = np.sqrt(drag_m) * ueff
+        ustar = jnp.sqrt(drag_m) * ueff
         uw = -drag_m * ueff * u
         vw = -drag_m * ueff * v
         return ustar, uw, vw
 
     @staticmethod
     def calculate_2m_variables(
-        wtheta: float,
-        wq: float,
-        surf_pressure: float,
+        wtheta: Array,
+        wq: Array,
+        surf_pressure: Array,
         k: float,
-        z0h: float,
-        z0m: float,
-        obukhov_length: float,
-        thetasurf: float,
-        qsurf: float,
-        ustar: float,
-        uw: float,
-        vw: float,
-    ) -> tuple[float, float, float, float, float, float]:
+        z0h: Array,
+        z0m: Array,
+        obukhov_length: Array,
+        thetasurf: Array,
+        qsurf: Array,
+        ustar: Array,
+        uw: Array,
+        vw: Array,
+    ) -> tuple[Array, Array, Array, Array, Array, Array]:
         """Calculate 2m diagnostic meteorological variables."""
         # stability correction terms
         scalar_correction = (
-            np.log(2.0 / z0h)
+            jnp.log(2.0 / z0h)
             - get_psih(2.0 / obukhov_length)
             + get_psih(z0h / obukhov_length)
         )
         momentum_correction = (
-            np.log(2.0 / z0m)
+            jnp.log(2.0 / z0m)
             - get_psim(2.0 / obukhov_length)
             + get_psim(z0m / obukhov_length)
         )
@@ -282,7 +273,7 @@ class StandardSurfaceLayerModel(AbstractSurfaceLayerModel):
 
         # vapor pressures at 2m
         # limamau: name these constants
-        esat2m = 0.611e3 * np.exp(17.2694 * (temp_2m - 273.16) / (temp_2m - 35.86))
+        esat2m = 0.611e3 * jnp.exp(17.2694 * (temp_2m - 273.16) / (temp_2m - 35.86))
         e2m = q2m * surf_pressure / 0.622
         return temp_2m, q2m, u2m, v2m, e2m, esat2m
 
@@ -295,13 +286,13 @@ class StandardSurfaceLayerModel(AbstractSurfaceLayerModel):
         Updates all surface layer variables including momentum fluxes, drag coefficients,
         Obukhov length, and 2m diagnostic meteorological variables.
         """
-        ueff = self.calculate_effective_wind_speed(state.u, state.v, state.wstar)
+        ueff = calculate_effective_wind_speed(state.u, state.v, state.wstar)
 
         (
             state.thetasurf,
             state.qsurf,
             state.thetavsurf,
-        ) = self.calculate_surface_properties(
+        ) = calculate_surface_properties(
             ueff,
             state.theta,
             state.wtheta,
@@ -312,12 +303,10 @@ class StandardSurfaceLayerModel(AbstractSurfaceLayerModel):
         )
 
         zsl = 0.1 * state.abl_height
-        state.rib_number = self.calculate_richardson_number(
+        state.rib_number = calculate_richardson_number(
             ueff, zsl, const.g, state.thetav, state.thetavsurf
         )
 
-        # limamau: the following is rather slow
-        # we can probably use a scan when JAX is on
         state.obukhov_length = self.ribtol(zsl, state.rib_number, state.z0h, state.z0m)
 
         state.drag_m, state.drag_s = self.calculate_drag_coefficients(
@@ -353,7 +342,7 @@ class StandardSurfaceLayerModel(AbstractSurfaceLayerModel):
         return state
 
     @staticmethod
-    def compute_ra(state: PyTree) -> float:
+    def compute_ra(state: PyTree) -> Array:
         """Calculate aerodynamic resistance from wind speed and drag coefficient."""
-        ueff = np.sqrt(state.u**2.0 + state.v**2.0 + state.wstar**2.0)
+        ueff = jnp.sqrt(state.u**2.0 + state.v**2.0 + state.wstar**2.0)
         return (state.drag_s * ueff) ** -1.0

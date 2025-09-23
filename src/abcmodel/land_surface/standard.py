@@ -1,8 +1,8 @@
 from abc import abstractmethod
 from dataclasses import dataclass
 
-import numpy as np
-from jaxtyping import PyTree
+import jax.numpy as jnp
+from jaxtyping import Array, PyTree
 
 from ..models import (
     AbstractLandSurfaceModel,
@@ -57,19 +57,19 @@ class StandardLandSurfaceInitConds:
     rssoil: float = 1.0e6
 
     # the following variables are expected to be assigned during warmup
-    cliq: float = np.nan
-    temp_soil_tend: float = np.nan
-    wgtend: float = np.nan
-    wltend: float = np.nan
-    le_veg: float = np.nan
-    le_liq: float = np.nan
-    le_soil: float = np.nan
-    le: float = np.nan
-    hf: float = np.nan
-    gf: float = np.nan
-    le_pot: float = np.nan
-    le_ref: float = np.nan
-    ra: float = np.nan
+    cliq: float = jnp.nan
+    temp_soil_tend: float = jnp.nan
+    wgtend: float = jnp.nan
+    wltend: float = jnp.nan
+    le_veg: float = jnp.nan
+    le_liq: float = jnp.nan
+    le_soil: float = jnp.nan
+    le: float = jnp.nan
+    hf: float = jnp.nan
+    gf: float = jnp.nan
+    le_pot: float = jnp.nan
+    le_ref: float = jnp.nan
+    ra: float = jnp.nan
 
 
 class AbstractStandardLandSurfaceModel(AbstractLandSurfaceModel):
@@ -149,6 +149,7 @@ class AbstractStandardLandSurfaceModel(AbstractLandSurfaceModel):
     ) -> PyTree:
         raise NotImplementedError
 
+    # limamau: this function needs some refactoring
     def run(
         self,
         state: PyTree,
@@ -174,14 +175,16 @@ class AbstractStandardLandSurfaceModel(AbstractLandSurfaceModel):
         self.compute_co2_flux(state, const)
 
         # recompute f2 using wg instead of w2
-        if state.wg > self.wwilt:  # and self.w2 <= self.wfc):
-            f2 = (self.wfc - self.wwilt) / (state.wg - self.wwilt)
-        else:
-            f2 = 1.0e8
+        f2 = jnp.where(
+            state.wg > self.wwilt,
+            (self.wfc - self.wwilt) / (state.wg - self.wwilt),
+            1.0e8,
+        )
+        assert isinstance(f2, Array)
         state.rssoil = self.rssoilmin * f2
 
         wlmx = self.lai * self.wmax
-        state.cliq = min(1.0, state.wl / wlmx)
+        state.cliq = jnp.minimum(1.0, state.wl / wlmx)
 
         # calculate skin temperature implicitly
         state.surf_temp = (
@@ -268,9 +271,9 @@ class AbstractStandardLandSurfaceModel(AbstractLandSurfaceModel):
             + const.cp / const.lv * (1.0 + self.rsmin / self.lai / state.ra)
         )
 
-        cg = self.cgsat * (self.wsat / state.w2) ** (self.b / (2.0 * np.log(10.0)))
+        cg = self.cgsat * (self.wsat / state.w2) ** (self.b / (2.0 * jnp.log(10.0)))
 
-        state.temp_soil_tend = cg * state.gf - 2.0 * np.pi / 86400.0 * (
+        state.temp_soil_tend = cg * state.gf - 2.0 * jnp.pi / 86400.0 * (
             state.temp_soil - state.temp2
         )
 

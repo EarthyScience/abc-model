@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
-import numpy as np
-from jaxtyping import PyTree
+import jax.numpy as jnp
+from jaxtyping import Array, PyTree
 
 from ..models import AbstractRadiationModel
 from ..utils import PhysicalConstants
@@ -24,10 +24,10 @@ class StandardRadiationInitConds:
     """
 
     net_rad: float
-    in_srad: float = np.nan
-    out_srad: float = np.nan
-    in_lrad: float = np.nan
-    out_lrad: float = np.nan
+    in_srad: float = jnp.nan
+    out_srad: float = jnp.nan
+    in_lrad: float = jnp.nan
+    out_lrad: float = jnp.nan
 
 
 class StandardRadiationModel(AbstractRadiationModel):
@@ -67,23 +67,23 @@ class StandardRadiationModel(AbstractRadiationModel):
         self.cc = cc
 
     @staticmethod
-    def calculate_solar_declination(doy: float) -> float:
+    def calculate_solar_declination(doy: float) -> Array:
         """Calculate solar declination angle based on day of year."""
-        return 0.409 * np.cos(2.0 * np.pi * (doy - 173.0) / 365.0)
+        return 0.409 * jnp.cos(2.0 * jnp.pi * (doy - 173.0) / 365.0)
 
     def calculate_solar_elevation(
-        self, t: int, dt: float, solar_declination: float
-    ) -> float:
+        self, t: int, dt: float, solar_declination: Array
+    ) -> Array:
         """Calculate solar elevation angle (sine of elevation)."""
-        lat_rad = 2.0 * np.pi * self.lat / 360.0
-        lon_rad = 2.0 * np.pi * self.lon / 360.0
-        time_rad = 2.0 * np.pi * (t * dt + self.tstart * 3600.0) / 86400.0
+        lat_rad = 2.0 * jnp.pi * self.lat / 360.0
+        lon_rad = 2.0 * jnp.pi * self.lon / 360.0
+        time_rad = 2.0 * jnp.pi * (t * dt + self.tstart * 3600.0) / 86400.0
 
-        sinlea = np.sin(lat_rad) * np.sin(solar_declination) - np.cos(lat_rad) * np.cos(
-            solar_declination
-        ) * np.cos(time_rad + lon_rad)
+        sinlea = jnp.sin(lat_rad) * jnp.sin(solar_declination) - jnp.cos(
+            lat_rad
+        ) * jnp.cos(solar_declination) * jnp.cos(time_rad + lon_rad)
 
-        return max(sinlea, 0.0001)
+        return jnp.maximum(sinlea, 0.0001)
 
     @staticmethod
     def calculate_air_temperature(
@@ -102,7 +102,7 @@ class StandardRadiationModel(AbstractRadiationModel):
 
         return air_temp
 
-    def calculate_atmospheric_transmission(self, solar_elevation: float) -> float:
+    def calculate_atmospheric_transmission(self, solar_elevation: Array) -> Array:
         """
         Calculate atmospheric transmission coefficient for solar radiation.
         """
@@ -116,13 +116,13 @@ class StandardRadiationModel(AbstractRadiationModel):
 
     def calculate_radiation_components(
         self,
-        solar_elevation: float,
-        atmospheric_transmission: float,
+        solar_elevation: Array,
+        atmospheric_transmission: Array,
         air_temp: float,
-        alpha: float,
-        surf_temp: float,
+        alpha: Array,
+        surf_temp: Array,
         const: PhysicalConstants,
-    ) -> tuple[float, float, float, float, float]:
+    ) -> tuple[Array, Array, Array, Array, Array]:
         """Calculate all radiation components and update attributes."""
         # shortwave radiation components
         in_srad = const.solar_in * atmospheric_transmission * solar_elevation

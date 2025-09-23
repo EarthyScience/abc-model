@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-import numpy as np
+import jax.numpy as jnp
 from jaxtyping import PyTree
 
 from ..utils import PhysicalConstants
@@ -63,11 +63,12 @@ class MinimalMixedLayerInitConds:
     wCO2e: float = 0.0
 
     # the following variables are expected to be assigned during warmup
-    thetav: float = np.nan
-    wthetav: float = np.nan
-    qsat: float = np.nan
-    e: float = np.nan
-    esat: float = np.nan
+    thetav: float = jnp.nan
+    wthetav: float = jnp.nan
+    qsat: float = jnp.nan
+    e: float = jnp.nan
+    esat: float = jnp.nan
+    lcl: float = jnp.nan
 
 
 class MinimalMixedLayerModel(AbstractStandardStatsModel):

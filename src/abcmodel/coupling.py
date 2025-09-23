@@ -15,9 +15,12 @@ from .utils import PhysicalConstants
 
 
 # limamau: is this ""optimized""??
+# also, for the static type checking of the code,
+# it would be nice to guarantee that all fields
+# are at least an instance of jax.Array
 @jax.tree_util.register_pytree_node_class
 class CoupledState(SimpleNamespace):
-    """A pytree-compatible state with attribute access! But not very type frindly..."""
+    """A pytree-compatible state with attribute access! But not very type friendly..."""
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

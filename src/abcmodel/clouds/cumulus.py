@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
-import numpy as np
-from jaxtyping import PyTree
+import jax.numpy as jnp
+from jaxtyping import Array, PyTree
 
 from ..models import AbstractCloudModel
 from ..utils import PhysicalConstants, get_qsat
@@ -52,67 +52,71 @@ class StandardCumulusModel(AbstractCloudModel):
 
     @staticmethod
     def calculate_mixed_layer_variance(
-        cc_qf: float,
-        wthetav: float,
-        wqe: float,
-        dq: float,
-        abl_height: float,
-        dz_h: float,
-        wstar: float,
-        wCO2e: float,
-        wCO2M: float,
-        dCO2: float,
-    ) -> tuple[float, float]:
+        cc_qf: Array,
+        wthetav: Array,
+        wqe: Array,
+        dq: Array,
+        abl_height: Array,
+        dz_h: Array,
+        wstar: Array,
+        wCO2e: Array,
+        wCO2M: Array,
+        dCO2: Array,
+    ) -> tuple[Array, Array]:
         """
         Calculate mixed-layer top relative humidity variance and CO2 variance.
         Based on Neggers et. al 2006/7.
         """
-        if wthetav > 0.0:
-            q2_h = -(wqe + cc_qf) * dq * abl_height / (dz_h * wstar)
-            top_CO22 = -(wCO2e + wCO2M) * dCO2 * abl_height / (dz_h * wstar)
-        else:
-            q2_h = 0.0
-            top_CO22 = 0.0
-
+        q2_h = jnp.where(
+            wthetav > 0.0, -(wqe + cc_qf) * dq * abl_height / (dz_h * wstar), 0.0
+        )
+        top_CO22 = jnp.where(
+            wthetav > 0.0, -(wCO2e + wCO2M) * dCO2 * abl_height / (dz_h * wstar), 0.0
+        )
         return q2_h, top_CO22
 
     @staticmethod
     def calculate_cloud_core_fraction(
-        q: float, top_T: float, top_p: float, q2_h: float
-    ) -> float:
+        q: Array, top_T: Array, top_p: Array, q2_h: Array
+    ) -> Array:
         """
         Calculate cloud core fraction using the arctangent formulation.
         """
-        if q2_h <= 0.0:
-            return 0.0
-
-        qsat = get_qsat(top_T, top_p)
-        saturation_deficit = (q - qsat) / (q2_h**0.5)
-        cc_frac = 0.5 + 0.36 * np.arctan(1.55 * saturation_deficit)
-        cc_frac = max(0.0, cc_frac)
+        cc_frac = jnp.where(
+            q2_h <= 0.0,
+            0.0,
+            jnp.maximum(
+                0.0,
+                0.5
+                + 0.36 * jnp.arctan(1.55 * (q - get_qsat(top_T, top_p)) / (q2_h**0.5)),
+            ),
+        )
         return cc_frac
 
     @staticmethod
     def calculate_cloud_core_properties(
-        cc_frac: float, wstar: float, q2_h: float
-    ) -> tuple[float, float]:
+        cc_frac: Array, wstar: Array, q2_h: Array
+    ) -> tuple[Array, Array]:
         """
         Calculate and update cloud core mass flux and moisture flux.
         No return needed since we're updating self attributes directly.
         """
         cc_mf = cc_frac * wstar
-        cc_qf = cc_mf * (q2_h**0.5) if q2_h > 0.0 else 0.0
+        cc_qf = jnp.where(q2_h > 0.0, cc_mf * (q2_h**0.5), 0.0)
         return cc_mf, cc_qf
 
     @staticmethod
-    def calculate_co2_mass_flux(cc_mf: float, top_CO22: float, dCO2: float) -> float:
+    def calculate_co2_mass_flux(cc_mf: Array, top_CO22: Array, dCO2: Array) -> Array:
         """
         Calculate CO2 mass flux, only if mixed-layer top jump is negative.
         """
-        if dCO2 < 0 and top_CO22 > 0.0:
-            return cc_mf * (top_CO22**0.5)
-        else:
-            return 0.0
+        # flux value
+        flux_value = cc_mf * (top_CO22**0.5)
+
+        # conditions: dCO2 < 0 AND top_CO22 > 0.0
+        condition = (dCO2 < 0) & (top_CO22 > 0.0)
+
+        return jnp.where(condition, flux_value, 0.0)
 
     def run(self, state: PyTree, const: PhysicalConstants):
         """

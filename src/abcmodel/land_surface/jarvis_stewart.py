@@ -1,5 +1,5 @@
-import numpy as np
-from jaxtyping import PyTree
+import jax.numpy as jnp
+from jaxtyping import Array, PyTree
 
 from ..utils import PhysicalConstants
 from .standard import (
@@ -43,14 +43,14 @@ class JarvisStewartModel(AbstractStandardLandSurfaceModel):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def get_f1(self, state: PyTree):
+    def get_f1(self, state: PyTree) -> Array:
         """Calculate radiation-dependent scaling factor for surface processes.
 
         Returns correction factor based on incoming solar radiation that typically
         ranges from 1.0 to higher values, used to scale surface flux calculations.
         """
         ratio = (0.004 * state.in_srad + 0.05) / (0.81 * (0.004 * state.in_srad + 1.0))
-        f1 = 1.0 / min(1.0, ratio)
+        f1 = 1.0 / jnp.minimum(1.0, ratio)
         return f1
 
     def compute_surface_resistance(
@@ -75,15 +75,15 @@ class JarvisStewartModel(AbstractStandardLandSurfaceModel):
         """
         # calculate surface resistances using Jarvis-Stewart model
         f1 = self.get_f1(state)
-
-        if state.w2 > self.wwilt:
-            f2 = (self.wfc - self.wwilt) / (state.w2 - self.wwilt)
-        else:
-            f2 = 1.0e8
-
+        f2 = jnp.where(
+            state.w2 > self.wwilt,
+            (self.wfc - self.wwilt) / (state.w2 - self.wwilt),
+            1.0e8,
+        )
         # limit f2 in case w2 > wfc, where f2 < 1
-        f2 = max(f2, 1.0)
-        f3 = 1.0 / np.exp(-self.gD * (state.esat - state.e) / 100.0)
+        assert isinstance(f2, Array)  # limmau: this is not good
+        f2 = jnp.maximum(f2, 1.0)
+        f3 = 1.0 / jnp.exp(-self.gD * (state.esat - state.e) / 100.0)
         f4 = 1.0 / (1.0 - 0.0016 * (298.0 - state.theta) ** 2.0)
 
         state.rs = self.rsmin / self.lai * f1 * f2 * f3 * f4

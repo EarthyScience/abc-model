@@ -1,6 +1,6 @@
 from abc import abstractmethod
 
-from jaxtyping import PyTree
+from jaxtyping import Array, PyTree
 
 from .utils import PhysicalConstants
 
@@ -40,7 +40,7 @@ class AbstractSurfaceLayerModel(AbstractModel):
 
     @staticmethod
     @abstractmethod
-    def compute_ra(state: PyTree) -> float:
+    def compute_ra(state: PyTree) -> Array:
         raise NotImplementedError
 
 

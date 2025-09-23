@@ -1,8 +1,9 @@
 from dataclasses import dataclass
 
-import numpy as np
-from jaxtyping import PyTree
-from scipy.special import exp1
+import jax
+import jax.numpy as jnp
+from jax.scipy.special import exp1
+from jaxtyping import Array, PyTree
 
 from ..utils import PhysicalConstants, get_esat
 from .standard import AbstractStandardLandSurfaceModel, StandardLandSurfaceInitConds
@@ -24,10 +25,10 @@ class AquaCropInitConds(StandardLandSurfaceInitConds):
     - ``co2abs``: CO2 assimilation rate.
     """
 
-    rsCO2: float = np.nan
-    gcco2: float = np.nan
-    ci: float = np.nan
-    co2abs: float = np.nan
+    rsCO2: float = jnp.nan
+    gcco2: float = jnp.nan
+    ci: float = jnp.nan
+    co2abs: float = jnp.nan
 
 
 class AquaCropModel(AbstractStandardLandSurfaceModel):
@@ -85,21 +86,21 @@ class AquaCropModel(AbstractStandardLandSurfaceModel):
         else:
             raise ValueError(f'''Invalid option "{c3c4}" for "c3c4".''')
 
-        self.co2comp298 = [68.5, 4.3]
-        self.net_rad10CO2 = [1.5, 1.5]
-        self.gm298 = [7.0, 17.5]
-        self.ammax298 = [2.2, 1.7]
-        self.net_rad10gm = [2.0, 2.0]
-        self.temp1gm = [278.0, 286.0]
-        self.temp2gm = [301.0, 309.0]
-        self.net_rad10Am = [2.0, 2.0]
-        self.temp1Am = [281.0, 286.0]
-        self.temp2Am = [311.0, 311.0]
-        self.f0 = [0.89, 0.85]
-        self.ad = [0.07, 0.15]
-        self.alpha0 = [0.017, 0.014]
-        self.kx = [0.7, 0.7]
-        self.gmin = [0.25e-3, 0.25e-3]
+        self.co2comp298 = jnp.array([68.5, 4.3])
+        self.net_rad10CO2 = jnp.array([1.5, 1.5])
+        self.gm298 = jnp.array([7.0, 17.5])
+        self.ammax298 = jnp.array([2.2, 1.7])
+        self.net_rad10gm = jnp.array([2.0, 2.0])
+        self.temp1gm = jnp.array([278.0, 286.0])
+        self.temp2gm = jnp.array([301.0, 309.0])
+        self.net_rad10Am = jnp.array([2.0, 2.0])
+        self.temp1Am = jnp.array([281.0, 286.0])
+        self.temp2Am = jnp.array([311.0, 311.0])
+        self.f0 = jnp.array([0.89, 0.85])
+        self.ad = jnp.array([0.07, 0.15])
+        self.alpha0 = jnp.array([0.017, 0.014])
+        self.kx = jnp.array([0.7, 0.7])
+        self.gmin = jnp.array([0.25e-3, 0.25e-3])
         self.nuco2q = 1.6
         self.cw = 0.0016
         self.wmax = 0.55
@@ -109,39 +110,39 @@ class AquaCropModel(AbstractStandardLandSurfaceModel):
 
     def calculate_co2_compensation_concentration(
         self,
-        thetasurf: float,
+        thetasurf: Array,
         const: PhysicalConstants,
-    ) -> float:
+    ) -> Array:
         """Calculate CO2 compensation concentration."""
         temp_diff = 0.1 * (thetasurf - 298.0)
-        exp_term = pow(self.net_rad10CO2[self.c3c4], temp_diff)
+        exp_term = jnp.pow(self.net_rad10CO2[self.c3c4], temp_diff)
         return self.co2comp298[self.c3c4] * const.rho * exp_term
 
     def calculate_mesophyll_conductance(
         self,
-        thetasurf: float,
-    ) -> float:
+        thetasurf: Array,
+    ) -> Array:
         """Calculate mesophyll conductance."""
         temp_diff = 0.1 * (thetasurf - 298.0)
-        exp_term = pow(self.net_rad10gm[self.c3c4], temp_diff)
-        temp_factor1 = 1.0 + np.exp(0.3 * (self.temp1gm[self.c3c4] - thetasurf))
-        temp_factor2 = 1.0 + np.exp(0.3 * (thetasurf - self.temp2gm[self.c3c4]))
+        exp_term = jnp.pow(self.net_rad10gm[self.c3c4], temp_diff)
+        temp_factor1 = 1.0 + jnp.exp(0.3 * (self.temp1gm[self.c3c4] - thetasurf))
+        temp_factor2 = 1.0 + jnp.exp(0.3 * (thetasurf - self.temp2gm[self.c3c4]))
         gm = self.gm298[self.c3c4] * exp_term / (temp_factor1 * temp_factor2)
         return gm / 1000.0
 
     def calculate_internal_co2(
         self,
-        surf_temp: float,
-        e: float,
-        co2: float,
-        co2comp: float,
-        gm: float,
+        surf_temp: Array,
+        e: Array,
+        co2: Array,
+        co2comp: Array,
+        gm: Array,
         const: PhysicalConstants,
-    ) -> tuple[float, float, float, float, float]:
+    ) -> tuple[Array, Array, Array, Array, Array]:
         """Calculate internal CO2 concentration and related parameters."""
         fmin0 = self.gmin[self.c3c4] / self.nuco2q - 1.0 / 9.0 * gm
-        fmin_sq_term = pow(fmin0, 2.0) + 4 * self.gmin[self.c3c4] / self.nuco2q * gm
-        fmin = -fmin0 + pow(fmin_sq_term, 0.5) / (2.0 * gm)
+        fmin_sq_term = jnp.pow(fmin0, 2.0) + 4 * self.gmin[self.c3c4] / self.nuco2q * gm
+        fmin = -fmin0 + jnp.pow(fmin_sq_term, 0.5) / (2.0 * gm)
         ds = (get_esat(surf_temp) - e) / 1000.0  # kPa
 
         d0 = (self.f0[self.c3c4] - fmin) / self.ad[self.c3c4]
@@ -151,69 +152,98 @@ class AquaCropModel(AbstractStandardLandSurfaceModel):
         ci = cfrac * (co2abs - co2comp) + co2comp
         return ci, co2abs, fmin, ds, d0
 
-    def calculate_max_gross_primary_production(self, thetasurf: float) -> float:
+    def calculate_max_gross_primary_production(self, thetasurf: Array) -> Array:
         """Calculate maximal gross primary production in high light conditions (Ag)."""
         temp_diff = 0.1 * (thetasurf - 298.0)
-        exp_term = pow(self.net_rad10Am[self.c3c4], temp_diff)
-        temp_factor1 = 1.0 + np.exp(0.3 * (self.temp1Am[self.c3c4] - thetasurf))
-        temp_factor2 = 1.0 + np.exp(0.3 * (thetasurf - self.temp2Am[self.c3c4]))
+        exp_term = jnp.power(self.net_rad10Am[self.c3c4], temp_diff)
+        temp_factor1 = 1.0 + jnp.exp(0.3 * (self.temp1Am[self.c3c4] - thetasurf))
+        temp_factor2 = 1.0 + jnp.exp(0.3 * (thetasurf - self.temp2Am[self.c3c4]))
         ammax = self.ammax298[self.c3c4] * exp_term / (temp_factor1 * temp_factor2)
         return ammax
 
-    def calculate_soil_moisture_stress_factor(self, w2: float) -> float:
+    def calculate_soil_moisture_stress_factor(self, w2: Array) -> Array:
         """Calculate effect of soil moisture stress on gross assimilation rate."""
+        # soil moisture ratio
         soil_moisture_ratio = (w2 - self.wwilt) / (self.wfc - self.wwilt)
-        betaw = max(1e-3, min(1.0, soil_moisture_ratio))
+        betaw = jnp.clip(soil_moisture_ratio, 1e-3, 1.0)
 
-        if self.c_beta == 0:
+        # branch functions for different c_beta ranges
+        def case_zero(_):
+            """c_beta == 0: return betaw directly"""
             return betaw
 
-        if self.c_beta < 0.25:
+        def case_low(_):
+            """c_beta < 0.25: p = 6.4 * c_beta"""
             p = 6.4 * self.c_beta
-        elif self.c_beta < 0.50:
+            numerator = 1.0 - jnp.exp(-p * betaw)
+            denominator = 1.0 - jnp.exp(-p)
+            return numerator / denominator
+
+        def case_medium(_):
+            """0.25 <= c_beta < 0.50: p = 7.6 * c_beta - 0.3"""
             p = 7.6 * self.c_beta - 0.3
-        else:
-            p = 2 ** (3.66 * self.c_beta + 0.34) - 1
-        return (1.0 - np.exp(-p * betaw)) / (1 - np.exp(-p))
+            numerator = 1.0 - jnp.exp(-p * betaw)
+            denominator = 1.0 - jnp.exp(-p)
+            return numerator / denominator
+
+        def case_high(_):
+            """c_beta >= 0.50: p = 2^(3.66 * c_beta + 0.34) - 1"""
+            p = 2.0 ** (3.66 * self.c_beta + 0.34) - 1.0
+            numerator = 1.0 - jnp.exp(-p * betaw)
+            denominator = 1.0 - jnp.exp(-p)
+            return numerator / denominator
+
+        # determine which case to use based on c_beta value
+        branch_index = jnp.where(
+            self.c_beta == 0,
+            0,
+            jnp.where(self.c_beta < 0.25, 1, jnp.where(self.c_beta < 0.50, 2, 3)),
+        )
+
+        # select the appropriate function
+        result = jax.lax.switch(
+            branch_index, [case_zero, case_low, case_medium, case_high], None
+        )
+
+        return result
 
     def calculate_gross_assimilation_and_light_use(
         self,
-        in_srad: float,
-        ammax: float,
-        gm: float,
-        ci: float,
-        co2comp: float,
-        co2abs: float,
-    ) -> tuple[float, float, float, float]:
+        in_srad: Array,
+        ammax: Array,
+        gm: Array,
+        ci: Array,
+        co2comp: Array,
+        co2abs: Array,
+    ) -> tuple[Array, Array, Array, Array]:
         """Calculate gross assimilation rate, dark respiration, PAR, and light use efficiency."""
         assimilation_factor = -(gm * (ci - co2comp) / ammax)
-        am = ammax * (1.0 - np.exp(assimilation_factor))
+        am = ammax * (1.0 - jnp.exp(assimilation_factor))
         rdark = (1.0 / 9.0) * am
-        par = 0.5 * max(1e-1, in_srad * self.cveg)
+        par = 0.5 * jnp.maximum(1e-1, in_srad * self.cveg)
         co2_ratio = (co2abs - co2comp) / (co2abs + 2.0 * co2comp)
         alphac = self.alpha0[self.c3c4] * co2_ratio
         return am, rdark, par, alphac
 
     def calculate_canopy_co2_conductance(
         self,
-        alphac: float,
-        par: float,
-        am: float,
-        rdark: float,
-        fstr: float,
-        co2abs: float,
-        co2comp: float,
-        ds: float,
-        d0: float,
-        fmin: float,
-    ) -> float:
+        alphac: Array,
+        par: Array,
+        am: Array,
+        rdark: Array,
+        fstr: Array,
+        co2abs: Array,
+        co2comp: Array,
+        ds: Array,
+        d0: Array,
+        fmin: Array,
+    ) -> Array:
         """Calculate upscaling from leaf to canopy and CO2 conductance at canopy level."""
         y = alphac * self.kx[self.c3c4] * par / (am + rdark)
-        exp1_arg1 = y * np.exp(-self.kx[self.c3c4] * self.lai)
+        exp1_arg1 = y * jnp.exp(-self.kx[self.c3c4] * self.lai)
         exp1_arg2 = y
         exp1_term = exp1(exp1_arg1) - exp1(exp1_arg2)
         an = (am + rdark) * (1.0 - (1.0 / (self.kx[self.c3c4] * self.lai)) * exp1_term)
-
         a1 = 1.0 / (1.0 - self.f0[self.c3c4])
         dstar = d0 / (a1 * (self.f0[self.c3c4] - fmin))
         conductance_factor = a1 * fstr * an / ((co2abs - co2comp) * (1.0 + ds / dstar))
@@ -252,7 +282,7 @@ class AquaCropModel(AbstractStandardLandSurfaceModel):
         an = -(state.co2abs - state.ci) / (state.ra + state.rsCO2)
         fw = self.cw * self.wmax / (state.wg + self.wmin)
         temp_ratio = 1.0 - 283.15 / state.temp_soil
-        resp_factor = np.exp(self.e0 / (283.15 * 8.314) * temp_ratio)
+        resp_factor = jnp.exp(self.e0 / (283.15 * 8.314) * temp_ratio)
         resp = self.r10 * (1.0 - fw) * resp_factor
         state.wCO2A = an * (const.mair / (const.rho * const.mco2))
         state.wCO2R = resp * (const.mair / (const.rho * const.mco2))

@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
-import numpy as np
-from jaxtyping import PyTree
+import jax.numpy as jnp
+from jaxtyping import Array, PyTree
 
 from ..utils import PhysicalConstants
 from .stats import AbstractStandardStatsModel
@@ -67,30 +67,30 @@ class BulkMixedLayerInitConds:
     wCO2M: float = 0.0
 
     # should be initialized during warmup
-    thetav: float = np.nan
-    wthetav: float = np.nan
-    wqe: float = np.nan
-    qsat: float = np.nan
-    e: float = np.nan
-    esat: float = np.nan
-    wCO2e: float = np.nan
-    wthetae: float = np.nan
-    dthetav: float = np.nan
-    wthetave: float = np.nan
-    lcl: float = np.nan
-    top_rh: float = np.nan
-    utend: float = np.nan
-    dutend: float = np.nan
-    vtend: float = np.nan
-    dvtend: float = np.nan
-    htend: float = np.nan
-    thetatend: float = np.nan
-    dthetatend: float = np.nan
-    qtend: float = np.nan
-    dqtend: float = np.nan
-    co2tend: float = np.nan
-    dCO2tend: float = np.nan
-    dztend: float = np.nan
+    thetav: float = jnp.nan
+    wthetav: float = jnp.nan
+    wqe: float = jnp.nan
+    qsat: float = jnp.nan
+    e: float = jnp.nan
+    esat: float = jnp.nan
+    wCO2e: float = jnp.nan
+    wthetae: float = jnp.nan
+    dthetav: float = jnp.nan
+    wthetave: float = jnp.nan
+    lcl: float = jnp.nan
+    top_rh: float = jnp.nan
+    utend: float = jnp.nan
+    dutend: float = jnp.nan
+    vtend: float = jnp.nan
+    dvtend: float = jnp.nan
+    htend: float = jnp.nan
+    thetatend: float = jnp.nan
+    dthetatend: float = jnp.nan
+    qtend: float = jnp.nan
+    dqtend: float = jnp.nan
+    co2tend: float = jnp.nan
+    dCO2tend: float = jnp.nan
+    dztend: float = jnp.nan
 
 
 class BulkMixedLayerModel(AbstractStandardStatsModel):
@@ -168,10 +168,10 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
 
     def calculate_vertical_motions(
         self,
-        abl_height: float,
-        dtheta: float,
+        abl_height: Array,
+        dtheta: Array,
         const: PhysicalConstants,
-    ) -> tuple[float, float]:
+    ) -> tuple[Array, Array]:
         """Calculate large-scale subsidence and radiative divergence effects."""
         # calculate large-scale vertical velocity (subsidence)
         ws = -self.divU * abl_height
@@ -182,31 +182,32 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
 
         return ws, wf
 
-    def calculate_free_troposphere_compensation(self, ws: float):
+    def calculate_free_troposphere_compensation(self, ws: Array):
         """Calculate compensation terms to fix free troposphere values."""
-        if self.sw_fixft:
-            w_th_ft = self.gammatheta * ws
-            w_q_ft = self.gammaq * ws
-            w_CO2_ft = self.gammaCO2 * ws
-        else:
-            w_th_ft = 0.0
-            w_q_ft = 0.0
-            w_CO2_ft = 0.0
+        # compensation terms
+        w_th_ft_active = self.gammatheta * ws
+        w_q_ft_active = self.gammaq * ws
+        w_CO2_ft_active = self.gammaCO2 * ws
+
+        # switch based on sw_fixft flag
+        w_th_ft = jnp.where(self.sw_fixft, w_th_ft_active, 0.0)
+        w_q_ft = jnp.where(self.sw_fixft, w_q_ft_active, 0.0)
+        w_CO2_ft = jnp.where(self.sw_fixft, w_CO2_ft_active, 0.0)
+
         return w_th_ft, w_q_ft, w_CO2_ft
 
     def calculate_convective_velocity_scale(
         self,
-        abl_height: float,
-        wthetav: float,
-        thetav: float,
+        abl_height: Array,
+        wthetav: Array,
+        thetav: Array,
         g: float,
     ):
         """Calculate convective velocity scale and entrainment parameters."""
-        if wthetav > 0.0:
-            buoyancy_term = g * abl_height * wthetav / thetav
-            wstar = buoyancy_term ** (1.0 / 3.0)
-        else:
-            wstar = 1e-6
+        # calculate wstar for positive wthetav case
+        buoyancy_term = g * abl_height * wthetav / thetav
+        wstar_positive = buoyancy_term ** (1.0 / 3.0)
+        wstar = jnp.where(wthetav > 0.0, wstar_positive, 1e-6)
 
         # virtual heat entrainment flux
         wthetave = -self.beta * wthetav
@@ -215,31 +216,33 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
 
     def calculate_entrainment_velocity(
         self,
-        abl_height: float,
-        wthetave: float,
-        dthetav: float,
-        thetav: float,
-        we: float,
-        ustar: float,
+        abl_height: Array,
+        wthetave: Array,
+        dthetav: Array,
+        thetav: Array,
+        ustar: Array,
         g: float,
     ):
         """Calculate entrainment velocity with optional shear effects."""
-        if self.sw_shearwe:
-            shear_term = 5.0 * ustar**3.0 * thetav / (g * abl_height)
-            numerator = -wthetave + shear_term
-            we = numerator / dthetav
-        else:
-            we = -wthetave / dthetav
+        # entrainment velocity with shear effects
+        shear_term = 5.0 * ustar**3.0 * thetav / (g * abl_height)
+        numerator = -wthetave + shear_term
+        we_with_shear = numerator / dthetav
+
+        # entrainment velocity without shear effects
+        we_no_shear = -wthetave / dthetav
+
+        # select based on sw_shearwe flag
+        we_calculated = jnp.where(self.sw_shearwe, we_with_shear, we_no_shear)
 
         # don't allow boundary layer shrinking if wtheta < 0
-        # limamau: we need to change that for nightime?
-        if we < 0:
-            we = 0.0
+        assert isinstance(we_calculated, jnp.ndarray)  # limmau: this is not good
+        we_final = jnp.where(we_calculated < 0.0, 0.0, we_calculated)
 
-        return we
+        return we_final
 
     @staticmethod
-    def calculate_entrainment_fluxes(we, dtheta, dq, dCO2):
+    def calculate_entrainment_fluxes(we: Array, dtheta: Array, dq: Array, dCO2: Array):
         """Calculate all entrainment fluxes."""
         wthetae = -we * dtheta
         wqe = -we * dq
@@ -248,22 +251,22 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
 
     def calculate_mixed_layer_tendencies(
         self,
-        ws: float,
-        wf: float,
-        wq: float,
-        wqe: float,
-        we: float,
-        cc_mf: float,
-        cc_qf: float,
-        wtheta: float,
-        wthetae: float,
-        abl_height: float,
-        wCO2: float,
-        wCO2e: float,
-        wCO2M: float,
-        w_th_ft: float,
-        w_q_ft: float,
-        w_CO2_ft: float,
+        ws: Array,
+        wf: Array,
+        wq: Array,
+        wqe: Array,
+        we: Array,
+        cc_mf: Array,
+        cc_qf: Array,
+        wtheta: Array,
+        wthetae: Array,
+        abl_height: Array,
+        wCO2: Array,
+        wCO2e: Array,
+        wCO2M: Array,
+        w_th_ft: Array,
+        w_q_ft: Array,
+        w_CO2_ft: Array,
     ):
         """Calculate tendency terms for mixed layer variables."""
         # boundary layer height tendency
@@ -291,50 +294,52 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
 
     def calculate_wind_tendencies(
         self,
-        we: float,
-        wf: float,
-        uw: float,
-        vw: float,
-        cc_mf: float,
-        du: float,
-        dv: float,
-        abl_height: float,
-    ) -> tuple[float, float, float, float]:
+        we: Array,
+        wf: Array,
+        uw: Array,
+        vw: Array,
+        cc_mf: Array,
+        du: Array,
+        dv: Array,
+        abl_height: Array,
+    ) -> tuple[Array, Array, Array, Array]:
         """Calculate wind tendency terms if wind is prognostic."""
-        # assume u + du = ug, so ug - u = du
-        if self.sw_wind:
-            coriolis_term_u = -self.coriolis_param * dv
-            momentum_flux_term_u = (uw + we * du) / abl_height
-            utend = coriolis_term_u + momentum_flux_term_u + self.advu
+        # wind tendencies for sw_wind = True case
+        coriolis_term_u = -self.coriolis_param * dv
+        momentum_flux_term_u = (uw + we * du) / abl_height
+        utend_active = coriolis_term_u + momentum_flux_term_u + self.advu
 
-            coriolis_term_v = self.coriolis_param * du
-            momentum_flux_term_v = (vw + we * dv) / abl_height
-            vtend = coriolis_term_v + momentum_flux_term_v + self.advv
+        coriolis_term_v = self.coriolis_param * du
+        momentum_flux_term_v = (vw + we * dv) / abl_height
+        vtend_active = coriolis_term_v + momentum_flux_term_v + self.advv
 
-            entrainment_growth_term = we + wf - cc_mf
-            dutend = self.gammau * entrainment_growth_term - utend
-            dvtend = self.gammav * entrainment_growth_term - vtend
+        entrainment_growth_term = we + wf - cc_mf
+        dutend_active = self.gammau * entrainment_growth_term - utend_active
+        dvtend_active = self.gammav * entrainment_growth_term - vtend_active
 
-            return utend, vtend, dutend, dvtend
+        # select based on sw_wind flag
+        utend = jnp.where(self.sw_wind, utend_active, 0.0)
+        vtend = jnp.where(self.sw_wind, vtend_active, 0.0)
+        dutend = jnp.where(self.sw_wind, dutend_active, 0.0)
+        dvtend = jnp.where(self.sw_wind, dvtend_active, 0.0)
 
-        else:
-            return 0.0, 0.0, 0.0, 0.0
+        return utend, vtend, dutend, dvtend
 
     def calculate_transition_layer_tendency(
         self,
-        lcl: float,
-        abl_height: float,
-        cc_frac: float,
-        dz_h: float,
+        lcl: Array,
+        abl_height: Array,
+        cc_frac: Array,
+        dz_h: Array,
     ):
         """Calculate transition layer thickness tendency."""
         lcl_distance = lcl - abl_height
 
-        if cc_frac > 0 or lcl_distance < 300:
-            target_thickness = lcl_distance - dz_h
-            dztend = target_thickness / 7200.0
-        else:
-            dztend = 0.0
+        # tendency for active case
+        target_thickness = lcl_distance - dz_h
+        dztend_active = target_thickness / 7200.0
+        condition = (cc_frac > 0) | (lcl_distance < 300)
+        dztend = jnp.where(condition, dztend_active, 0.0)
 
         return dztend
 
@@ -359,7 +364,6 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
             state.wthetave,
             state.dthetav,
             state.thetav,
-            state.we,
             state.ustar,
             const.g,
         )
@@ -425,14 +429,11 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
         state.dz_h += dt * state.dztend
 
         # limit dz to minimal value
-        dz0 = 50
-        if state.dz_h < dz0:
-            state.dz_h = dz0
+        state.dz_h = jnp.maximum(state.dz_h, 50.0)
 
-        if self.sw_wind:
-            state.u += dt * state.utend
-            state.du += dt * state.dutend
-            state.v += dt * state.vtend
-            state.dv += dt * state.dvtend
+        state.u = jnp.where(self.sw_wind, state.u + dt * state.utend, state.u)
+        state.du = jnp.where(self.sw_wind, state.du + dt * state.dutend, state.du)
+        state.v = jnp.where(self.sw_wind, state.v + dt * state.vtend, state.v)
+        state.dv = jnp.where(self.sw_wind, state.dv + dt * state.dvtend, state.dv)
 
         return state

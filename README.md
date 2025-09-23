@@ -1,5 +1,5 @@
 # ABC Model
-A simple column model coupling biosphere and atmosphere.
+A simple model coupling biosphere and atmosphere, but made fully differentiable using JAX.
 
 ## Installation
 Install with
@@ -20,8 +20,7 @@ To setup the coupler we will always use 5 models:
 4. Mixed layer model
 5. Cloud model
 
-Every model needs two main arguments: `params`, `init_conds`, which can sometimes take a lot of arguments...
-But worry not! We provide a config example (which we take from the [CLASS model](https://github.com/classmodel/modelpy)).
+Each model is a class that is initialized with model-specific parameters. We provide a config example (which we take from the [CLASS model](https://github.com/classmodel/modelpy)).
 This can be loaded through the `abcconfigs` module:
 ```python
 import abcconfigs.class_model as cm
@@ -29,55 +28,23 @@ import abcconfigs.class_model as cm
 
 Now we are ready to set up our models with ease...
 We will do this using the `abcmodel` module, which is the _de facto_ module in this repository.
-The first one is the radiation model, and we can use the standard model:
 ```python
 from abcmodel.radiation import StandardRadiationModel
-
-radiation_model = StandardRadiationModel(
-        cm.standard_radiation.params,
-        cm.standard_radiation.init_conds,
-    )
-```
-
-Next on the list, the land surface. Let's use the simple Jarvis Stewart model:
-```python
 from abcmodel.land_surface import JarvisStewartModel
-
-land_surface_model = JarvisStewartModel(
-    cm.jarvis_stewart.params,
-    cm.jarvis_stewart.init_conds,
-)
-```
-
-Now the atmosphere. We will use the standard model for the surface layer,
-the bulk model for the mixed layer and the cumulus model for the clouds. We set them
-up just like before:
-```python
 from abcmodel.surface_layer import StandardSurfaceLayerModel
 from abcmodel.mixed_layer import BulkMixedLayerModel
 from abcmodel.clouds import StandardCumulusModel
 
-# define surface layer model
-surface_layer_model = StandardSurfaceLayerModel(
-    cm.standard_surface_layer.params,
-    cm.standard_surface_layer.init_conds,
-)
-
-# define mixed layer model
-mixed_layer_model = BulkMixedLayerModel(
-    cm.bulk_mixed_layer.params,
-    cm.bulk_mixed_layer.init_conds,
-)
-
-# define cloud model
-cloud_model = StandardCumulusModel(
-    cm.standard_cumulus.params,
-    cm.standard_cumulus.init_conds,
-)
+# setup models
+radiation_model = StandardRadiationModel(**cm.standard_radiation.model_kwargs)
+land_surface_model = JarvisStewartModel(**cm.jarvis_stewart.model_kwargs)
+surface_layer_model = StandardSurfaceLayerModel() # no parameters
+mixed_layer_model = BulkMixedLayerModel(**cm.bulk_mixed_layer.model_kwargs)
+cloud_model = StandardCumulusModel() # no parameters
 ```
 
 We have everything we need for our vertical column structure. Now we can setup the coupler
-with these components together with the running time configuration. It typically goes as follows:
+with these components together with the running time configuration.
 
 ```python
 from abcmodel import ABCoupler
@@ -87,9 +54,7 @@ dt = 60.0
 # total run time [s]
 runtime = 12 * 3600.0
 
-abc = ABCoupler(
-    dt=dt,
-    runtime=runtime,
+abcoupler = ABCoupler(
     radiation=radiation_model,
     land_surface=land_surface_model,
     surface_layer=surface_layer_model,
@@ -98,48 +63,87 @@ abc = ABCoupler(
 )
 ```
 
-All set - let's run it!
+To setup the initial condition, we also take advantage of a ready-made config, and we can setup initial conditions for each model.
 ```python
-abc.run()
+from abcmodel.radiation import StandardRadiationInitConds
+from abcmodel.land_surface import JarvisStewartInitConds
+from abcmodel.surface_layer import StandardSurfaceLayerInitConds
+from abcmodel.mixed_layer import BulkMixedLayerInitConds
+from abcmodel.clouds import StandardCumulusInitConds
+
+# setup initial condition
+radiation_init_conds = StandardRadiationInitConds(
+    **cm.standard_radiation.init_conds_kwargs
+)
+land_surface_init_conds = JarvisStewartInitConds(
+    **cm.jarvis_stewart.init_conds_kwargs,
+)
+surface_layer_init_conds = StandardSurfaceLayerInitConds(
+    **cm.standard_surface_layer.init_conds_kwargs
+)
+mixed_layer_init_conds = BulkMixedLayerInitConds(
+    **cm.bulk_mixed_layer.init_conds_kwargs,
+)
+cloud_init_conds = StandardCumulusInitConds()
 ```
 
-All variables are stored under `diagnostics` (which are set by default, but you could also adjust that as you like).
-Now we can make beautiful plots. Here's one example:
+Finally we can use the coupler to bound everything in a initial state that will be carried by our model.
+```python
+state = abcoupler.init_state(
+    radiation_init_conds,
+    land_surface_init_conds,
+    surface_layer_init_conds,
+    mixed_layer_init_conds,
+    cloud_init_conds,
+)
+```
+
+
+All set - let's integrate our model by defining the timestepping and the run time.
+```python
+# time step [s]
+dt = 60.0
+# total run time [s]
+runtime = 12 * 3600.0
+
+time, trajectory = integrate(state, abcoupler, dt=dt, runtime=runtime)
+```
+
+To plot the results, we will typically follow something like the code below.
 ```python
 import matplotlib.pyplot as plt
 
-time = abc.get_t()
 plt.figure(figsize=(12, 8))
 
 plt.subplot(231)
-plt.plot(time, abc.mixed_layer.diagnostics.get("abl_height"))
+plt.plot(time, trajectory.abl_height)
 plt.xlabel("time [h]")
 plt.ylabel("h [m]")
 
 plt.subplot(234)
-plt.plot(time, abc.mixed_layer.diagnostics.get("theta"))
+plt.plot(time, trajectory.theta)
 plt.xlabel("time [h]")
 plt.ylabel("theta [K]")
 
 plt.subplot(232)
-plt.plot(time, abc.mixed_layer.diagnostics.get("q") * 1000.0)
+plt.plot(time, trajectory.q * 1000.0)
 plt.xlabel("time [h]")
 plt.ylabel("q [g kg-1]")
 
 plt.subplot(235)
-plt.plot(time, abc.clouds.diagnostics.get("cc_frac"))
+plt.plot(time, trajectory.cc_frac)
 plt.xlabel("time [h]")
 plt.ylabel("cloud fraction [-]")
 
 plt.subplot(233)
-plt.plot(time, abc.land_surface.diagnostics.get("gf"))
+plt.plot(time, trajectory.gf)
 plt.xlabel("time [h]")
 plt.ylabel("ground heat flux [W m-2]")
 
 plt.subplot(236)
-plt.plot(time, abc.land_surface.diagnostics.get("le_veg"))
+plt.plot(time, trajectory.le_veg)
 plt.xlabel("time [h]")
-plt.ylabel("transpiration [W m-2]")
+plt.ylabel("latent heat flux from vegetation [W m-2]")
 
 plt.tight_layout()
 plt.show()
@@ -154,24 +158,21 @@ Instead of the Jarvis Stewart model, you may choose AquaCrop.
 We also provide a configuration for that, which you can load using the `abcconfigs` module, as previously done.
 You can take a look at the config [here](https://git.bgc-jena.mpg.de/abc3/abc-model/-/blob/main/src/abcconfigs/class_model/aquacrop.py?ref_type=heads).
 
-Now you may change from C3 to C4 with something like
-```python
-my_config = cm.land_surface.jarvis_stewart.params
-my_config.c3c4 = "c4"
-```
-
-and define your new land surface model as
+Now, for example, you may change from C3 to C4 with something like the following.
 ```python
 from abcmodel.land_surface import AquaCropModel
 
-land_surface_model = AquaCropModel(
-    my_config,
-    cm.aquacrop.init_conds,
-)
+# new parameters definition
+aquacrop_model_kwargs = cm.aquacrop.model_kwargs
+aquacrop_model_kwargs['c3c4'] = 'c4'
+
+# define a new land model
+land_surface_model = AquaCropModel(**aquacrop_model_kwargs)
 ```
 
-then you can redefine the `ABCoupler` using this new model and run it to see different outcomes.
+Then you can redefine the coupler, create a new state and integrate it to see different outcomes. You can do something similar to change initial conditions, or even recreate your own!
 
+It is also possible to jit the model, but please remember to filter functions, which can be easily done with `equinox.filter_jit(integrate)`. Jitting a run for analysis does not bring any benefit right now, but it becomes important to accelerate eventual training loops for calibration of parameters.
 
 ## See also
 The model was constructed from the [CLASS model](https://github.com/classmodel/modelpy).
