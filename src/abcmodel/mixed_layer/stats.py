@@ -57,7 +57,6 @@ class AbstractStandardStatsModel(AbstractMixedLayerModel):
             under_max_iter = iteration < 30  # itmax = 30
             return not_converged & under_max_iter
 
-        # run iterative loop
         final_lcl, final_rhlcl, final_iter = jax.lax.while_loop(
             lcl_iteration_cond, lcl_iteration_body, (initial_lcl, initial_rhlcl, 0)
         )
