@@ -288,7 +288,9 @@ document.write(`
                 <article class="bd-article">
                   
   <h1>Source code for abcmodel.utils</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">jax.numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">jnp</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">jax.numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">jnp</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">jaxtyping</span><span class="w"> </span><span class="kn">import</span> <span class="n">Array</span>
 
 
@@ -297,13 +299,11 @@ document.write(`
 <span class="k">def</span><span class="w"> </span><span class="nf">get_esat</span><span class="p">(</span><span class="n">temp</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate saturated vapor pressure using Tetens formula.</span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    - ``temp``: temperature [K].</span>
+<span class="sd">    Args:</span>
+<span class="sd">        temp: temperature [K].</span>
 
 <span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    - Saturated vapor pressure [Pa].</span>
+<span class="sd">        Saturated vapor pressure [Pa].</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">temp_celsius</span> <span class="o">=</span> <span class="n">temp</span> <span class="o">-</span> <span class="mf">273.16</span>
     <span class="n">denominator</span> <span class="o">=</span> <span class="n">temp</span> <span class="o">-</span> <span class="mf">35.86</span>
@@ -316,14 +316,12 @@ document.write(`
 <span class="k">def</span><span class="w"> </span><span class="nf">get_qsat</span><span class="p">(</span><span class="n">temp</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">pressure</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate saturated specific humidity.</span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    - ``temp``: temperature [K].</span>
-<span class="sd">    - ``pressure``: pressure [Pa].</span>
+<span class="sd">    Args:</span>
+<span class="sd">        temp: temperature [K].</span>
+<span class="sd">        pressure: pressure [Pa].</span>
 
 <span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    - Saturated specific humidity [kg/kg].</span>
+<span class="sd">        Saturated specific humidity [kg/kg].</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">esat</span> <span class="o">=</span> <span class="n">get_esat</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
     <span class="k">return</span> <span class="mf">0.622</span> <span class="o">*</span> <span class="n">esat</span> <span class="o">/</span> <span class="n">pressure</span></div>
@@ -376,7 +374,7 @@ document.write(`
 <span class="sd">    Returns:</span>
 <span class="sd">        Scalar stability correction [-].</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># Constants for stable conditions</span>
+    <span class="c1"># constants for stable conditions</span>
     <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.35</span>
     <span class="n">beta</span> <span class="o">=</span> <span class="mf">5.0</span> <span class="o">/</span> <span class="n">alpha</span>
     <span class="n">gamma</span> <span class="o">=</span> <span class="p">(</span><span class="mf">10.0</span> <span class="o">/</span> <span class="mf">3.0</span><span class="p">)</span> <span class="o">/</span> <span class="n">alpha</span>
@@ -397,44 +395,37 @@ document.write(`
     <span class="k">return</span> <span class="n">psih</span></div>
 
 
-
 <div class="viewcode-block" id="PhysicalConstants">
 <a class="viewcode-back" href="../../source/api/abcmodel.utils.html#abcmodel.utils.PhysicalConstants">[docs]</a>
+<span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">PhysicalConstants</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Container for physical constants used throughout the model.&quot;&quot;&quot;</span>
-
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># 1. thermodynamic constants:</span>
-        <span class="c1"># heat of vaporization [J kg-1]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">lv</span> <span class="o">=</span> <span class="mf">2.5e6</span>
-        <span class="c1"># specific heat of dry air [J kg-1 K-1]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cp</span> <span class="o">=</span> <span class="mf">1005.0</span>
-        <span class="c1"># density of air [kg m-3]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">rho</span> <span class="o">=</span> <span class="mf">1.2</span>
-        <span class="c1"># gravity acceleration [m s-2]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">g</span> <span class="o">=</span> <span class="mf">9.81</span>
-        <span class="c1"># gas constant for dry air [J kg-1 K-1]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">rd</span> <span class="o">=</span> <span class="mf">287.0</span>
-        <span class="c1"># gas constant for moist air [J kg-1 K-1]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">rv</span> <span class="o">=</span> <span class="mf">461.5</span>
-        <span class="c1"># density of water [kg m-3]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">rhow</span> <span class="o">=</span> <span class="mf">1000.0</span>
-
-        <span class="c1"># 2. physical constants:</span>
-        <span class="c1"># von Karman constant [-]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="mf">0.4</span>
-        <span class="c1"># Boltzmann constant [-]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">bolz</span> <span class="o">=</span> <span class="mf">5.67e-8</span>
-        <span class="c1"># solar constant [W m-2]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">solar_in</span> <span class="o">=</span> <span class="mf">1368.0</span>
-
-        <span class="c1"># 3. molecular weights:</span>
-        <span class="c1"># molecular weight CO2 [g mol-1]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">mco2</span> <span class="o">=</span> <span class="mf">44.0</span>
-        <span class="c1"># molecular weight air [g mol-1]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">mair</span> <span class="o">=</span> <span class="mf">28.9</span>
-        <span class="c1"># ratio molecular viscosity water to carbon dioxide</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nuco2q</span> <span class="o">=</span> <span class="mf">1.6</span></div>
+    <span class="n">lv</span> <span class="o">=</span> <span class="mf">2.5e6</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Heat of vaporization [J kg-1].&quot;&quot;&quot;</span>
+    <span class="n">cp</span> <span class="o">=</span> <span class="mf">1005.0</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Specific heat of dry air [J kg-1 K-1].&quot;&quot;&quot;</span>
+    <span class="n">rho</span> <span class="o">=</span> <span class="mf">1.2</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Density of air [kg m-3].&quot;&quot;&quot;</span>
+    <span class="n">g</span> <span class="o">=</span> <span class="mf">9.81</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gravity acceleration [m s-2].&quot;&quot;&quot;</span>
+    <span class="n">rd</span> <span class="o">=</span> <span class="mf">287.0</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gas constant for dry air [J kg-1 K-1].&quot;&quot;&quot;</span>
+    <span class="n">rv</span> <span class="o">=</span> <span class="mf">461.5</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gas constant for moist air [J kg-1 K-1].&quot;&quot;&quot;</span>
+    <span class="n">rhow</span> <span class="o">=</span> <span class="mf">1000.0</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Density of water [kg m-3].&quot;&quot;&quot;</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="mf">0.4</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Von Karman constant [-].&quot;&quot;&quot;</span>
+    <span class="n">bolz</span> <span class="o">=</span> <span class="mf">5.67e-8</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Boltzmann constant [-].&quot;&quot;&quot;</span>
+    <span class="n">solar_in</span> <span class="o">=</span> <span class="mf">1368.0</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Solar constant [W m-2]&quot;&quot;&quot;</span>
+    <span class="n">mco2</span> <span class="o">=</span> <span class="mf">44.0</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Molecular weight CO2 [g mol-1].&quot;&quot;&quot;</span>
+    <span class="n">mair</span> <span class="o">=</span> <span class="mf">28.9</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Molecular weight air [g mol-1].&quot;&quot;&quot;</span>
+    <span class="n">nuco2q</span> <span class="o">=</span> <span class="mf">1.6</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Ratio molecular viscosity water to carbon dioxide.&quot;&quot;&quot;</span></div>
 
 </pre></div>
 

@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+
 import jax.numpy as jnp
 from jaxtyping import Array
 
@@ -5,13 +7,11 @@ from jaxtyping import Array
 def get_esat(temp: Array) -> Array:
     """Calculate saturated vapor pressure using Tetens formula.
 
-    Parameters
-    ----------
-    - ``temp``: temperature [K].
+    Args:
+        temp: temperature [K].
 
     Returns
-    -------
-    - Saturated vapor pressure [Pa].
+        Saturated vapor pressure [Pa].
     """
     temp_celsius = temp - 273.16
     denominator = temp - 35.86
@@ -21,14 +21,12 @@ def get_esat(temp: Array) -> Array:
 def get_qsat(temp: Array, pressure: Array) -> Array:
     """Calculate saturated specific humidity.
 
-    Parameters
-    ----------
-    - ``temp``: temperature [K].
-    - ``pressure``: pressure [Pa].
+    Args:
+        temp: temperature [K].
+        pressure: pressure [Pa].
 
     Returns
-    -------
-    - Saturated specific humidity [kg/kg].
+        Saturated specific humidity [kg/kg].
     """
     esat = get_esat(temp)
     return 0.622 * esat / pressure
@@ -45,9 +43,9 @@ def get_psim(zeta: Array) -> Array:
     """
     # Constants for stable conditions
     alpha = 0.35
-    beta = 5.0 / alpha  # 5.0 / 0.35
-    gamma = (10.0 / 3.0) / alpha  # (10.0 / 3.0) / 0.35
-    pi_half = jnp.pi / 2.0  # More accurate than hardcoded value
+    beta = 5.0 / alpha
+    gamma = (10.0 / 3.0) / alpha
+    pi_half = jnp.pi / 2.0
 
     # unstable conditions (zeta <= 0)
     x = (1.0 - 16.0 * zeta) ** 0.25
@@ -75,7 +73,7 @@ def get_psih(zeta: Array) -> Array:
     Returns:
         Scalar stability correction [-].
     """
-    # Constants for stable conditions
+    # constants for stable conditions
     alpha = 0.35
     beta = 5.0 / alpha
     gamma = (10.0 / 3.0) / alpha
@@ -95,39 +93,32 @@ def get_psih(zeta: Array) -> Array:
 
     return psih
 
-
+@dataclass
 class PhysicalConstants:
     """Container for physical constants used throughout the model."""
-
-    def __init__(self):
-        # 1. thermodynamic constants:
-        # heat of vaporization [J kg-1]
-        self.lv = 2.5e6
-        # specific heat of dry air [J kg-1 K-1]
-        self.cp = 1005.0
-        # density of air [kg m-3]
-        self.rho = 1.2
-        # gravity acceleration [m s-2]
-        self.g = 9.81
-        # gas constant for dry air [J kg-1 K-1]
-        self.rd = 287.0
-        # gas constant for moist air [J kg-1 K-1]
-        self.rv = 461.5
-        # density of water [kg m-3]
-        self.rhow = 1000.0
-
-        # 2. physical constants:
-        # von Karman constant [-]
-        self.k = 0.4
-        # Boltzmann constant [-]
-        self.bolz = 5.67e-8
-        # solar constant [W m-2]
-        self.solar_in = 1368.0
-
-        # 3. molecular weights:
-        # molecular weight CO2 [g mol-1]
-        self.mco2 = 44.0
-        # molecular weight air [g mol-1]
-        self.mair = 28.9
-        # ratio molecular viscosity water to carbon dioxide
-        self.nuco2q = 1.6
+    lv = 2.5e6
+    """Heat of vaporization [J kg-1]."""
+    cp = 1005.0
+    """Specific heat of dry air [J kg-1 K-1]."""
+    rho = 1.2
+    """Density of air [kg m-3]."""
+    g = 9.81
+    """Gravity acceleration [m s-2]."""
+    rd = 287.0
+    """Gas constant for dry air [J kg-1 K-1]."""
+    rv = 461.5
+    """Gas constant for moist air [J kg-1 K-1]."""
+    rhow = 1000.0
+    """Density of water [kg m-3]."""
+    k = 0.4
+    """Von Karman constant [-]."""
+    bolz = 5.67e-8
+    """Boltzmann constant [-]."""
+    solar_in = 1368.0
+    """Solar constant [W m-2]"""
+    mco2 = 44.0
+    """Molecular weight CO2 [g mol-1]."""
+    mair = 28.9
+    """Molecular weight air [g mol-1]."""
+    nuco2q = 1.6
+    """Ratio molecular viscosity water to carbon dioxide."""

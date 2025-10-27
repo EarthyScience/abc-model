@@ -269,14 +269,7 @@ class StandardSurfaceLayerModel(AbstractSurfaceLayerModel):
         return temp_2m, q2m, u2m, v2m, e2m, esat2m
 
     def run(self, state: PyTree, const: PhysicalConstants):
-        """
-        Calculate surface layer turbulent exchange and diagnostic variables.
-
-        Updates
-        -------
-        Updates all surface layer variables including momentum fluxes, drag coefficients,
-        Obukhov length, and 2m diagnostic meteorological variables.
-        """
+        """Run the model."""
         ueff = calculate_effective_wind_speed(state.u, state.v, state.wstar)
 
         (

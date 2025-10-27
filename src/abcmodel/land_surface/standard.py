@@ -14,6 +14,7 @@ from ..utils import PhysicalConstants, get_esat, get_qsat
 @dataclass
 class StandardLandSurfaceInitConds:
     """Standard land surface model initial state."""
+
     # the following variables are supposed to be initialized by the user
     alpha: float
     """Slope of the light response curve [mol J-1]."""
