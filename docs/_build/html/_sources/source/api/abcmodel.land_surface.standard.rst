@@ -1,5 +1,6 @@
-abcmodel.land\_surface.standard module
-======================================
+
+Standard
+========
 
 .. automodule:: abcmodel.land_surface.standard
    :members:

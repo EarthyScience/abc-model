@@ -133,7 +133,7 @@ important for accelerating training loops during parameter calibration.
 Detailed API Reference
 ----------------------
 
-For a detailed description of each model and its functions, see the components section.
+For a detailed description of each model and its functions, see the API section.
 
 .. toctree::
    :hidden:

@@ -1,6 +1,6 @@
-abcmodel.mixed\_layer package
-=============================
 
+Mixed Layer
+===========
 Submodules
 ----------
 

@@ -1,5 +1,6 @@
-abcmodel.integration module
-===========================
+
+Integration
+===========
 
 .. automodule:: abcmodel.integration
    :members:

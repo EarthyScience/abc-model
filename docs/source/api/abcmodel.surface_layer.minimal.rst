@@ -1,5 +1,6 @@
-abcmodel.surface\_layer.minimal module
-======================================
+
+Minimal
+=======
 
 .. automodule:: abcmodel.surface_layer.minimal
    :members:

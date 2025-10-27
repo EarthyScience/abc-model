@@ -1,5 +1,6 @@
-abcmodel.mixed\_layer.bulk module
-=================================
+
+Bulk
+====
 
 .. automodule:: abcmodel.mixed_layer.bulk
    :members:

@@ -1,5 +1,6 @@
-abcmodel.coupling module
-========================
+
+Coupling
+========
 
 .. automodule:: abcmodel.coupling
    :members:

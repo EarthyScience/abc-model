@@ -1,5 +1,6 @@
-abcmodel.mixed\_layer.minimal module
-====================================
+
+Minimal
+=======
 
 .. automodule:: abcmodel.mixed_layer.minimal
    :members:

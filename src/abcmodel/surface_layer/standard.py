@@ -62,30 +62,26 @@ def calculate_momentum_correction_term(zsl: Array, oblen: Array, z0m: Array) -> 
 class StandardSurfaceLayerInitConds:
     """Data class for standard surface layer model initial conditions.
 
-    Arguments
-    ---------
-    - ``ustar``: surface friction velocity [m/s].
-    - ``z0m``: roughness length for momentum [m].
-    - ``z0h``: roughness length for scalars [m].
-    - ``theta``: surface potential temperature [K].
-
-    Others
-    ------
-    - ``drag_m``: drag coefficient for momentum [-]. Default: 1e12.
-    - ``drag_s``: drag coefficient for scalars [-]. Default: 1e12.
-    - ``uw``: surface momentum flux u [m2 s-2].
-    - ``vw``: surface momentum flux v [m2 s-2].
-    - ``temp_2m``: 2m temperature [K].
-    - ``q2m``: 2m specific humidity [kg kg-1].
-    - ``u2m``: 2m u-wind [m s-1].
-    - ``v2m``: 2m v-wind [m s-1].
-    - ``e2m``: 2m vapor pressure [Pa].
-    - ``esat2m``: 2m saturated vapor pressure [Pa].
-    - ``thetasurf``: surface potential temperature [K].
-    - ``thetavsurf``: surface virtual potential temperature [K].
-    - ``qsurf``: surface specific humidity [kg kg-1].
-    - ``obukhov_length``: Obukhov length [m].
-    - ``rib_number``: bulk Richardson number [-].
+    Args:
+        ustar: surface friction velocity [m/s].
+        z0m: roughness length for momentum [m].
+        z0h: roughness length for scalars [m].
+        theta: surface potential temperature [K].
+        drag_m: drag coefficient for momentum [-]. Default: 1e12.
+        drag_s: drag coefficient for scalars [-]. Default: 1e12.
+        uw: surface momentum flux u [m2 s-2].
+        vw: surface momentum flux v [m2 s-2].
+        temp_2m: 2m temperature [K].
+        q2m: 2m specific humidity [kg kg-1].
+        u2m: 2m u-wind [m s-1].
+        v2m: 2m v-wind [m s-1].
+        e2m: 2m vapor pressure [Pa].
+        esat2m: 2m saturated vapor pressure [Pa].
+        thetasurf: surface potential temperature [K].
+        thetavsurf: surface virtual potential temperature [K].
+        qsurf: surface specific humidity [kg kg-1].
+        obukhov_length: Obukhov length [m].
+        rib_number: bulk Richardson number [-].
     """
 
     # the following variables should be initialized by the user

@@ -1,5 +1,6 @@
-abcmodel.utils module
-=====================
+
+Utils
+=====
 
 .. automodule:: abcmodel.utils
    :members:

@@ -11,14 +11,12 @@ from ..utils import PhysicalConstants
 class MinimalSurfaceLayerInitConds:
     """Data class for minimal surface layer model initial conditions.
 
-    Arguments
-    ---------
-    - ``ustar``: surface friction velocity [m/s].
+    Args:
+        ustar: surface friction velocity [m/s].
 
-    Others
-    ------
-    - ``uw``: surface momentum flux u [m2 s-2].
-    - ``vw``: surface momentum flux v [m2 s-2].
+    Args:
+        uw: surface momentum flux u [m2 s-2].
+        vw: surface momentum flux v [m2 s-2].
     """
 
     ustar: float

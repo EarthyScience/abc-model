@@ -1,5 +1,6 @@
-abcmodel.land\_surface.jarvis\_stewart module
-=============================================
+
+Jarvis Stewart
+==============
 
 .. automodule:: abcmodel.land_surface.jarvis_stewart
    :members:

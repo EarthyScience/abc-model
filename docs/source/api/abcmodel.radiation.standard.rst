@@ -1,5 +1,6 @@
-abcmodel.radiation.standard module
-==================================
+
+Standard
+========
 
 .. automodule:: abcmodel.radiation.standard
    :members:

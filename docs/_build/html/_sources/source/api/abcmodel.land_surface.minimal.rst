@@ -1,5 +1,6 @@
-abcmodel.land\_surface.minimal module
-=====================================
+
+Minimal
+=======
 
 .. automodule:: abcmodel.land_surface.minimal
    :members:

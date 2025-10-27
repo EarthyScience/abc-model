@@ -1,5 +1,6 @@
-abcmodel.mixed\_layer.stats module
-==================================
+
+Stats
+=====
 
 .. automodule:: abcmodel.mixed_layer.stats
    :members:

@@ -1,0 +1,14 @@
+{%- if show_headings %}
+{%- if '.' in basename %}
+{# This is a SUB-module, like "abcmodel.my_utils" #}
+{{- basename.split('.')[-1].replace('_', ' ') | title | e | heading }}
+{%- else %}
+{# This is a ROOT module, e.g., "setup.py" if it were documented #}
+{{- [basename, "module"] | join(' ') | e | heading }}
+{%- endif %}
+
+{% endif -%}
+.. automodule:: {{ qualname }}
+{%- for option in automodule_options %}
+   :{{ option }}:
+{%- endfor %}

@@ -11,8 +11,6 @@ from ..utils import PhysicalConstants, get_qsat
 class StandardCumulusInitConds:
     """Standard cumulus model state.
 
-    Here it goes.
-
     Args:
         cc_frac: cloud core fraction [-], range 0 to 1.
         cc_mf: cloud core mass flux [m/s].

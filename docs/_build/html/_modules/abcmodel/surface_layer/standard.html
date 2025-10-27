@@ -147,13 +147,45 @@
  </script></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
-        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Model Components:</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../../components/radiation.html">Radiation Models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../components/land_surface.html">Land Surface Models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../components/surface_layer.html">Surface Layer Models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../components/mixed_layer.html">Mixed Layer Models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../components/clouds.html">Cloud Models</a></li>
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../source/api/modules.html">API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../source/api/abcmodel.html">abcmodel package</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../source/api/abcmodel.clouds.html">Clouds</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.clouds.cumulus.html">Cumulus</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.clouds.no_clouds.html">No Clouds</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../source/api/abcmodel.land_surface.html">Land Surface</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.land_surface.aquacrop.html">Aquacrop</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.land_surface.jarvis_stewart.html">Jarvis Stewart</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.land_surface.minimal.html">Minimal</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.land_surface.standard.html">Standard</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../source/api/abcmodel.mixed_layer.html">Mixed Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.mixed_layer.bulk.html">Bulk</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.mixed_layer.minimal.html">Minimal</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.mixed_layer.stats.html">Stats</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../source/api/abcmodel.radiation.html">Radiation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.radiation.standard.html">Standard</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.radiation.standard_w_clouds.html">Standard W Clouds</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../source/api/abcmodel.surface_layer.html">Surface Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.surface_layer.minimal.html">Minimal</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../source/api/abcmodel.surface_layer.standard.html">Standard</a></li>
+</ul>
+</details></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../source/api/abcmodel.coupling.html">Coupling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../source/api/abcmodel.integration.html">Integration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../source/api/abcmodel.models.html">Models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../source/api/abcmodel.utils.html">Utils</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
 </ul>
 
     </div>
@@ -197,19 +229,18 @@
 <div class="article-header-buttons">
 
 
-
-<button onclick="toggleFullScreen()"
-  class="btn btn-sm btn-fullscreen-button"
-  title="Fullscreen mode"
-  data-bs-placement="bottom" data-bs-toggle="tooltip"
+<a href="https://git.bgc-jena.mpg.de/abc3/abc-model" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
 >
   
 
 <span class="btn__icon-container">
-  <i class="fas fa-expand"></i>
+  <i class="fab fa-gitlab"></i>
   </span>
 
-</button>
+</a>
 
 
 
@@ -268,11 +299,16 @@ document.write(`
 
 
 <span class="c1"># helper functions:</span>
+<div class="viewcode-block" id="calculate_effective_wind_speed">
+<a class="viewcode-back" href="../../../source/api/abcmodel.surface_layer.standard.html#abcmodel.surface_layer.calculate_effective_wind_speed">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">calculate_effective_wind_speed</span><span class="p">(</span><span class="n">u</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">wstar</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate effective wind speed including convective effects.&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">u</span><span class="o">**</span><span class="mf">2.0</span> <span class="o">+</span> <span class="n">v</span><span class="o">**</span><span class="mf">2.0</span> <span class="o">+</span> <span class="n">wstar</span><span class="o">**</span><span class="mf">2.0</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">u</span><span class="o">**</span><span class="mf">2.0</span> <span class="o">+</span> <span class="n">v</span><span class="o">**</span><span class="mf">2.0</span> <span class="o">+</span> <span class="n">wstar</span><span class="o">**</span><span class="mf">2.0</span><span class="p">))</span></div>
 
 
+
+<div class="viewcode-block" id="calculate_surface_properties">
+<a class="viewcode-back" href="../../../source/api/abcmodel.surface_layer.standard.html#abcmodel.surface_layer.calculate_surface_properties">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">calculate_surface_properties</span><span class="p">(</span>
     <span class="n">ueff</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
     <span class="n">theta</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
@@ -288,65 +324,71 @@ document.write(`
     <span class="n">cq</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">drag_s</span> <span class="o">*</span> <span class="n">ueff</span> <span class="o">*</span> <span class="n">rs</span><span class="p">)</span> <span class="o">**</span> <span class="o">-</span><span class="mf">1.0</span>
     <span class="n">qsurf</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">cq</span><span class="p">)</span> <span class="o">*</span> <span class="n">q</span> <span class="o">+</span> <span class="n">cq</span> <span class="o">*</span> <span class="n">qsatsurf</span>
     <span class="n">thetavsurf</span> <span class="o">=</span> <span class="n">thetasurf</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="mf">0.61</span> <span class="o">*</span> <span class="n">qsurf</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">thetasurf</span><span class="p">,</span> <span class="n">qsurf</span><span class="p">,</span> <span class="n">thetavsurf</span>
+    <span class="k">return</span> <span class="n">thetasurf</span><span class="p">,</span> <span class="n">qsurf</span><span class="p">,</span> <span class="n">thetavsurf</span></div>
 
 
+
+<div class="viewcode-block" id="calculate_richardson_number">
+<a class="viewcode-back" href="../../../source/api/abcmodel.surface_layer.standard.html#abcmodel.surface_layer.calculate_richardson_number">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">calculate_richardson_number</span><span class="p">(</span>
     <span class="n">ueff</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">zsl</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">g</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">thetav</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">thetavsurf</span><span class="p">:</span> <span class="n">Array</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate bulk Richardson number.&quot;&quot;&quot;</span>
     <span class="n">rib_number</span> <span class="o">=</span> <span class="n">g</span> <span class="o">/</span> <span class="n">thetav</span> <span class="o">*</span> <span class="n">zsl</span> <span class="o">*</span> <span class="p">(</span><span class="n">thetav</span> <span class="o">-</span> <span class="n">thetavsurf</span><span class="p">)</span> <span class="o">/</span> <span class="n">ueff</span><span class="o">**</span><span class="mf">2.0</span>
-    <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">rib_number</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">rib_number</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">)</span></div>
 
 
+
+<div class="viewcode-block" id="calculate_scalar_correction_term">
+<a class="viewcode-back" href="../../../source/api/abcmodel.surface_layer.standard.html#abcmodel.surface_layer.calculate_scalar_correction_term">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">calculate_scalar_correction_term</span><span class="p">(</span><span class="n">zsl</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">oblen</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">z0h</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate scalar stability correction term.&quot;&quot;&quot;</span>
     <span class="n">log_term</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">zsl</span> <span class="o">/</span> <span class="n">z0h</span><span class="p">)</span>
     <span class="n">upper_stability</span> <span class="o">=</span> <span class="n">get_psih</span><span class="p">(</span><span class="n">zsl</span> <span class="o">/</span> <span class="n">oblen</span><span class="p">)</span>
     <span class="n">surface_stability</span> <span class="o">=</span> <span class="n">get_psih</span><span class="p">(</span><span class="n">z0h</span> <span class="o">/</span> <span class="n">oblen</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">log_term</span> <span class="o">-</span> <span class="n">upper_stability</span> <span class="o">+</span> <span class="n">surface_stability</span>
+    <span class="k">return</span> <span class="n">log_term</span> <span class="o">-</span> <span class="n">upper_stability</span> <span class="o">+</span> <span class="n">surface_stability</span></div>
 
 
+
+<div class="viewcode-block" id="calculate_momentum_correction_term">
+<a class="viewcode-back" href="../../../source/api/abcmodel.surface_layer.standard.html#abcmodel.surface_layer.calculate_momentum_correction_term">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">calculate_momentum_correction_term</span><span class="p">(</span><span class="n">zsl</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">oblen</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">z0m</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate momentum stability correction term.&quot;&quot;&quot;</span>
     <span class="n">log_term</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">zsl</span> <span class="o">/</span> <span class="n">z0m</span><span class="p">)</span>
     <span class="n">upper_stability</span> <span class="o">=</span> <span class="n">get_psim</span><span class="p">(</span><span class="n">zsl</span> <span class="o">/</span> <span class="n">oblen</span><span class="p">)</span>
     <span class="n">surface_stability</span> <span class="o">=</span> <span class="n">get_psim</span><span class="p">(</span><span class="n">z0m</span> <span class="o">/</span> <span class="n">oblen</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">log_term</span> <span class="o">-</span> <span class="n">upper_stability</span> <span class="o">+</span> <span class="n">surface_stability</span>
+    <span class="k">return</span> <span class="n">log_term</span> <span class="o">-</span> <span class="n">upper_stability</span> <span class="o">+</span> <span class="n">surface_stability</span></div>
+
 
 
 <div class="viewcode-block" id="StandardSurfaceLayerInitConds">
-<a class="viewcode-back" href="../../../components/surface_layer.html#abcmodel.surface_layer.StandardSurfaceLayerInitConds">[docs]</a>
+<a class="viewcode-back" href="../../../source/api/abcmodel.surface_layer.standard.html#abcmodel.surface_layer.StandardSurfaceLayerInitConds">[docs]</a>
 <span class="nd">@dataclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">StandardSurfaceLayerInitConds</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Data class for standard surface layer model initial conditions.</span>
 
-<span class="sd">    Arguments</span>
-<span class="sd">    ---------</span>
-<span class="sd">    - ``ustar``: surface friction velocity [m/s].</span>
-<span class="sd">    - ``z0m``: roughness length for momentum [m].</span>
-<span class="sd">    - ``z0h``: roughness length for scalars [m].</span>
-<span class="sd">    - ``theta``: surface potential temperature [K].</span>
-
-<span class="sd">    Others</span>
-<span class="sd">    ------</span>
-<span class="sd">    - ``drag_m``: drag coefficient for momentum [-]. Default: 1e12.</span>
-<span class="sd">    - ``drag_s``: drag coefficient for scalars [-]. Default: 1e12.</span>
-<span class="sd">    - ``uw``: surface momentum flux u [m2 s-2].</span>
-<span class="sd">    - ``vw``: surface momentum flux v [m2 s-2].</span>
-<span class="sd">    - ``temp_2m``: 2m temperature [K].</span>
-<span class="sd">    - ``q2m``: 2m specific humidity [kg kg-1].</span>
-<span class="sd">    - ``u2m``: 2m u-wind [m s-1].</span>
-<span class="sd">    - ``v2m``: 2m v-wind [m s-1].</span>
-<span class="sd">    - ``e2m``: 2m vapor pressure [Pa].</span>
-<span class="sd">    - ``esat2m``: 2m saturated vapor pressure [Pa].</span>
-<span class="sd">    - ``thetasurf``: surface potential temperature [K].</span>
-<span class="sd">    - ``thetavsurf``: surface virtual potential temperature [K].</span>
-<span class="sd">    - ``qsurf``: surface specific humidity [kg kg-1].</span>
-<span class="sd">    - ``obukhov_length``: Obukhov length [m].</span>
-<span class="sd">    - ``rib_number``: bulk Richardson number [-].</span>
+<span class="sd">    Args:</span>
+<span class="sd">        ustar: surface friction velocity [m/s].</span>
+<span class="sd">        z0m: roughness length for momentum [m].</span>
+<span class="sd">        z0h: roughness length for scalars [m].</span>
+<span class="sd">        theta: surface potential temperature [K].</span>
+<span class="sd">        drag_m: drag coefficient for momentum [-]. Default: 1e12.</span>
+<span class="sd">        drag_s: drag coefficient for scalars [-]. Default: 1e12.</span>
+<span class="sd">        uw: surface momentum flux u [m2 s-2].</span>
+<span class="sd">        vw: surface momentum flux v [m2 s-2].</span>
+<span class="sd">        temp_2m: 2m temperature [K].</span>
+<span class="sd">        q2m: 2m specific humidity [kg kg-1].</span>
+<span class="sd">        u2m: 2m u-wind [m s-1].</span>
+<span class="sd">        v2m: 2m v-wind [m s-1].</span>
+<span class="sd">        e2m: 2m vapor pressure [Pa].</span>
+<span class="sd">        esat2m: 2m saturated vapor pressure [Pa].</span>
+<span class="sd">        thetasurf: surface potential temperature [K].</span>
+<span class="sd">        thetavsurf: surface virtual potential temperature [K].</span>
+<span class="sd">        qsurf: surface specific humidity [kg kg-1].</span>
+<span class="sd">        obukhov_length: Obukhov length [m].</span>
+<span class="sd">        rib_number: bulk Richardson number [-].</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># the following variables should be initialized by the user</span>
@@ -377,7 +419,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="StandardSurfaceLayerModel">
-<a class="viewcode-back" href="../../../components/surface_layer.html#abcmodel.surface_layer.StandardSurfaceLayerModel">[docs]</a>
+<a class="viewcode-back" href="../../../source/api/abcmodel.surface_layer.standard.html#abcmodel.surface_layer.StandardSurfaceLayerModel">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">StandardSurfaceLayerModel</span><span class="p">(</span><span class="n">AbstractSurfaceLayerModel</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Standard surface layer model with atmospheric stability corrections.</span>
 
@@ -400,7 +442,7 @@ document.write(`
         <span class="k">pass</span>
 
 <div class="viewcode-block" id="StandardSurfaceLayerModel.calculate_rib_function">
-<a class="viewcode-back" href="../../../components/surface_layer.html#abcmodel.surface_layer.StandardSurfaceLayerModel.calculate_rib_function">[docs]</a>
+<a class="viewcode-back" href="../../../source/api/abcmodel.surface_layer.standard.html#abcmodel.surface_layer.StandardSurfaceLayerModel.calculate_rib_function">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">calculate_rib_function</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">zsl</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
@@ -417,7 +459,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="StandardSurfaceLayerModel.calculate_rib_function_term">
-<a class="viewcode-back" href="../../../components/surface_layer.html#abcmodel.surface_layer.StandardSurfaceLayerModel.calculate_rib_function_term">[docs]</a>
+<a class="viewcode-back" href="../../../source/api/abcmodel.surface_layer.standard.html#abcmodel.surface_layer.StandardSurfaceLayerModel.calculate_rib_function_term">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">calculate_rib_function_term</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">zsl</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
@@ -433,7 +475,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="StandardSurfaceLayerModel.ribtol">
-<a class="viewcode-back" href="../../../components/surface_layer.html#abcmodel.surface_layer.StandardSurfaceLayerModel.ribtol">[docs]</a>
+<a class="viewcode-back" href="../../../source/api/abcmodel.surface_layer.standard.html#abcmodel.surface_layer.StandardSurfaceLayerModel.ribtol">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">ribtol</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">zsl</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">rib_number</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">z0h</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">z0m</span><span class="p">:</span> <span class="n">Array</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Iterative solution for Obukhov length from Richardson number (JAX version).&quot;&quot;&quot;</span>
 
@@ -480,7 +522,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="StandardSurfaceLayerModel.calculate_drag_coefficients">
-<a class="viewcode-back" href="../../../components/surface_layer.html#abcmodel.surface_layer.StandardSurfaceLayerModel.calculate_drag_coefficients">[docs]</a>
+<a class="viewcode-back" href="../../../source/api/abcmodel.surface_layer.standard.html#abcmodel.surface_layer.StandardSurfaceLayerModel.calculate_drag_coefficients">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">calculate_drag_coefficients</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">zsl</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">obukhov_length</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">z0h</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">z0m</span><span class="p">:</span> <span class="n">Array</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Array</span><span class="p">,</span> <span class="n">Array</span><span class="p">]:</span>
@@ -500,7 +542,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="StandardSurfaceLayerModel.calculate_momentum_fluxes">
-<a class="viewcode-back" href="../../../components/surface_layer.html#abcmodel.surface_layer.StandardSurfaceLayerModel.calculate_momentum_fluxes">[docs]</a>
+<a class="viewcode-back" href="../../../source/api/abcmodel.surface_layer.standard.html#abcmodel.surface_layer.StandardSurfaceLayerModel.calculate_momentum_fluxes">[docs]</a>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">calculate_momentum_fluxes</span><span class="p">(</span>
         <span class="n">ueff</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">u</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">drag_m</span><span class="p">:</span> <span class="n">Array</span>
@@ -513,7 +555,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="StandardSurfaceLayerModel.calculate_2m_variables">
-<a class="viewcode-back" href="../../../components/surface_layer.html#abcmodel.surface_layer.StandardSurfaceLayerModel.calculate_2m_variables">[docs]</a>
+<a class="viewcode-back" href="../../../source/api/abcmodel.surface_layer.standard.html#abcmodel.surface_layer.StandardSurfaceLayerModel.calculate_2m_variables">[docs]</a>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">calculate_2m_variables</span><span class="p">(</span>
         <span class="n">wtheta</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
@@ -562,7 +604,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="StandardSurfaceLayerModel.run">
-<a class="viewcode-back" href="../../../components/surface_layer.html#abcmodel.surface_layer.StandardSurfaceLayerModel.run">[docs]</a>
+<a class="viewcode-back" href="../../../source/api/abcmodel.surface_layer.standard.html#abcmodel.surface_layer.StandardSurfaceLayerModel.run">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">PyTree</span><span class="p">,</span> <span class="n">const</span><span class="p">:</span> <span class="n">PhysicalConstants</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculate surface layer turbulent exchange and diagnostic variables.</span>
@@ -629,7 +671,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="StandardSurfaceLayerModel.compute_ra">
-<a class="viewcode-back" href="../../../components/surface_layer.html#abcmodel.surface_layer.StandardSurfaceLayerModel.compute_ra">[docs]</a>
+<a class="viewcode-back" href="../../../source/api/abcmodel.surface_layer.standard.html#abcmodel.surface_layer.StandardSurfaceLayerModel.compute_ra">[docs]</a>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">compute_ra</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">PyTree</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate aerodynamic resistance from wind speed and drag coefficient.&quot;&quot;&quot;</span>
@@ -665,7 +707,7 @@ document.write(`
   <div class="footer-item">
     
 <p class="component-author">
-By Mauricio Lima, Niels Behr, David Hafezi Rachti, Christian Reimers, Alexander Winkler
+By ABC3 Group
 </p>
 
   </div>
@@ -675,7 +717,7 @@ By Mauricio Lima, Niels Behr, David Hafezi Rachti, Christian Reimers, Alexander 
 
   <p class="copyright">
     
-      © Copyright 2025, Mauricio Lima, Niels Behr, David Hafezi Rachti, Christian Reimers, Alexander Winkler.
+      © Copyright ABC3 Group.
       <br/>
     
   </p>
