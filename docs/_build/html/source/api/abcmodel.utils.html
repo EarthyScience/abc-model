@@ -40,6 +40,7 @@
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'source/api/abcmodel.utils';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -379,16 +380,25 @@ document.write(`
 <dl class="py function">
 <dt class="sig sig-object py" id="abcmodel.utils.get_esat">
 <span class="sig-prename descclassname"><span class="pre">abcmodel.utils.</span></span><span class="sig-name descname"><span class="pre">get_esat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">temp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/utils.html#get_esat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.utils.get_esat" title="Link to this definition">#</a></dt>
-<dd><p>Calculate saturated vapor pressure using Tetens formula.</p>
+<dd><p>Calculate saturated vapor pressure using the August-Roche-Magnus formula.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>temp</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></span>) – temperature [K].</p>
 </dd>
-</dl>
-<dl class="simple">
-<dt>Returns</dt><dd><p>Saturated vapor pressure [Pa].</p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Saturated vapor pressure [Pa].</p>
 </dd>
 </dl>
+<p class="rubric">Notes</p>
+<p>First, the temperature is converted from Kelvin
+(<span class="math notranslate nohighlight">\(T_K\)</span>) to Celsius (<span class="math notranslate nohighlight">\(T_C\)</span>) with</p>
+<div class="math notranslate nohighlight">
+\[T_C = T_K - 273.16,\]</div>
+<p>then, the saturated vapor pressure (<span class="math notranslate nohighlight">\(e_{sat}\)</span>) is calculated as</p>
+<div class="math notranslate nohighlight">
+\[e_{\text{sat}}(T_C) = 611 \cdot \exp\left( \frac{17.2694 \cdot T_C}{T_C + 237.3} \right),\]</div>
+<p>where <span class="math notranslate nohighlight">\(611\)</span> [Pa] is a reference pressure. For more on this, see
+<a class="reference external" href="https://en.wikipedia.org/wiki/Clausius–Clapeyron_relation#Meteorology_and_climatology">wikipedia</a>.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -402,11 +412,27 @@ document.write(`
 <li><p><strong>pressure</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></span>) – pressure [Pa].</p></li>
 </ul>
 </dd>
-</dl>
-<dl class="simple">
-<dt>Returns</dt><dd><p>Saturated specific humidity [kg/kg].</p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Saturated specific humidity [kg/kg].</p>
 </dd>
 </dl>
+<p class="rubric">Notes</p>
+<p>Saturated specific humidity (<span class="math notranslate nohighlight">\(q_{sat}\)</span>) is the maximum amount of
+water vapor (as a mass fraction) that a parcel of air can hold at
+a given temperature and pressure.</p>
+<p>The full formula for <span class="math notranslate nohighlight">\(q_{sat}\)</span> is</p>
+<div class="math notranslate nohighlight">
+\[q_{\text{sat}} = \frac{\epsilon \cdot e_{\text{sat}}}{p - (1-\epsilon)e_{\text{sat}}},\]</div>
+<p>where <span class="math notranslate nohighlight">\(e_{\text{sat}}\)</span> is the saturated vapor pressure [Pa] from <a class="reference internal" href="#abcmodel.utils.get_esat" title="abcmodel.utils.get_esat"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_esat()</span></code></a>,
+<span class="math notranslate nohighlight">\(p\)</span> is the total atmospheric pressure [Pa] and
+<span class="math notranslate nohighlight">\(\epsilon \approx 0.622\)</span> is the ratio of the molar mass of water vapor to the molar mass of dry air.
+This formula can be derived from the definition of specific humidity (a ratio of vapour and total air mass),
+and then using the Ideal Gas Law and Dalton’s Law of Partial Pressures.</p>
+<p>In the code, this function uses a common approximation where the
+<span class="math notranslate nohighlight">\((1-\epsilon)e_{\text{sat}}\)</span> term in the denominator is
+negligible compared to <span class="math notranslate nohighlight">\(p\)</span>, simplifying the formula to</p>
+<div class="math notranslate nohighlight">
+\[q_{\text{sat}} \approx \epsilon \frac{e_{\text{sat}}}{p}.\]</div>
 </dd></dl>
 
 <dl class="py function">
@@ -421,6 +447,31 @@ document.write(`
 <dd class="field-even"><p>Momentum stability correction [-].</p>
 </dd>
 </dl>
+<p class="rubric">Notes</p>
+<p>This function calculates the integrated stability correction function for
+momentum (<span class="math notranslate nohighlight">\(\Psi_m\)</span>), which is used to adjust wind profiles based
+on atmospheric stability.</p>
+<p>The function is piecewise, depending on the stability parameter
+<span class="math notranslate nohighlight">\(\zeta = z/L\)</span>.</p>
+<p><strong>1. For Unstable Conditions (ζ ≤ 0):</strong></p>
+<p>Based on Businger-Dyer relations, an intermediate variable <span class="math notranslate nohighlight">\(x\)</span>
+is defined:</p>
+<div class="math notranslate nohighlight">
+\[x = (1 - 16\zeta)^{1/4}\]</div>
+<p>The integrated stability function <span class="math notranslate nohighlight">\(\Psi_m\)</span> is then:</p>
+<div class="math notranslate nohighlight">
+\[\Psi_m(\zeta) = \ln\left( \frac{(1+x)^2 (1+x^2)}{8} \right)
+                 - 2 \arctan(x) + \frac{\pi}{2}\]</div>
+<p><strong>2. For Stable Conditions (ζ &gt; 0):</strong>
+This uses an empirical formula (e.g., Holtslag and De Bruin, 1988)
+with constants:
+* <span class="math notranslate nohighlight">\(\alpha = 0.35\)</span>
+* <span class="math notranslate nohighlight">\(\beta = 5.0 / \alpha\)</span>
+* <span class="math notranslate nohighlight">\(\gamma = (10.0 / 3.0) / \alpha\)</span></p>
+<p>The stability function is:</p>
+<div class="math notranslate nohighlight">
+\[\Psi_m(\zeta) = -\frac{2}{3}(\zeta - \beta)e^{-\alpha \zeta}
+                 - \zeta - \gamma\]</div>
 </dd></dl>
 
 <dl class="py function">
@@ -435,6 +486,27 @@ document.write(`
 <dd class="field-even"><p>Scalar stability correction [-].</p>
 </dd>
 </dl>
+<p class="rubric">Notes</p>
+<p>This function calculates the integrated stability correction function for
+scalars (<span class="math notranslate nohighlight">\(\Psi_h\)</span>) (like heat and humidity), which is used to
+adjust temperature and humidity profiles based on atmospheric stability.</p>
+<p>The function is piecewise, depending on the stability parameter
+<span class="math notranslate nohighlight">\(\zeta = z/L\)</span>.</p>
+<p><strong>1. For Unstable Conditions (ζ ≤ 0):</strong></p>
+<p>Based on Businger-Dyer relations, using the same intermediate
+variable <span class="math notranslate nohighlight">\(x\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[x = (1 - 16\zeta)^{1/4}\]</div>
+<p>The integrated stability function <span class="math notranslate nohighlight">\(\Psi_h\)</span> is:</p>
+<div class="math notranslate nohighlight">
+\[\Psi_h(\zeta) = 2 \ln\left( \frac{1+x^2}{2} \right)\]</div>
+<p><strong>2. For Stable Conditions (ζ &gt; 0):</strong></p>
+<p>This uses a corresponding empirical formula with the same constants
+(<span class="math notranslate nohighlight">\(\alpha\)</span>, <span class="math notranslate nohighlight">\(\beta\)</span>, <span class="math notranslate nohighlight">\(\gamma\)</span>):</p>
+<div class="math notranslate nohighlight">
+\[\Psi_h(\zeta) = -\frac{2}{3}(\zeta - \beta)e^{-\alpha \zeta}
+                - \left(1 + \frac{2}{3}\zeta\right)^{3/2}
+                - \gamma + 1\]</div>
 </dd></dl>
 
 <dl class="py class">

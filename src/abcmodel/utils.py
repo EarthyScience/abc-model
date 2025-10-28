@@ -5,13 +5,28 @@ from jaxtyping import Array
 
 
 def get_esat(temp: Array) -> Array:
-    """Calculate saturated vapor pressure using Tetens formula.
+    """Calculate saturated vapor pressure using the August-Roche-Magnus formula.
 
     Args:
         temp: temperature [K].
 
-    Returns
+    Returns:
         Saturated vapor pressure [Pa].
+
+    Notes:
+        First, the temperature is converted from Kelvin
+        (:math:`T_K`) to Celsius (:math:`T_C`) with
+
+        .. math::
+            T_C = T_K - 273.16,
+
+        then, the saturated vapor pressure (:math:`e_{sat}`) is calculated as
+
+        .. math::
+            e_{\\text{sat}}(T_C) = 611 \\cdot \\exp\\left( \\frac{17.2694 \\cdot T_C}{T_C + 237.3} \\right),
+
+        where :math:`611` [Pa] is a reference pressure. For more on this, see
+        `wikipedia <https://en.wikipedia.org/wiki/Clausius–Clapeyron_relation#Meteorology_and_climatology>`_.
     """
     temp_celsius = temp - 273.16
     denominator = temp - 35.86
@@ -25,8 +40,31 @@ def get_qsat(temp: Array, pressure: Array) -> Array:
         temp: temperature [K].
         pressure: pressure [Pa].
 
-    Returns
+    Returns:
         Saturated specific humidity [kg/kg].
+
+    Notes:
+        Saturated specific humidity (:math:`q_{sat}`) is the maximum amount of
+        water vapor (as a mass fraction) that a parcel of air can hold at
+        a given temperature and pressure.
+
+        The full formula for :math:`q_{sat}` is
+
+        .. math::
+            q_{\\text{sat}} = \\frac{\\epsilon \\cdot e_{\\text{sat}}}{p - (1-\\epsilon)e_{\\text{sat}}},
+
+        where :math:`e_{\\text{sat}}` is the saturated vapor pressure [Pa] from :func:`~get_esat`,
+        :math:`p` is the total atmospheric pressure [Pa] and
+        :math:`\\epsilon \\approx 0.622` is the ratio of the molar mass of water vapor to the molar mass of dry air.
+        This formula can be derived from the definition of specific humidity (a ratio of vapour and total air mass),
+        and then using the Ideal Gas Law and Dalton's Law of Partial Pressures.
+
+        In the code, this function uses a common approximation where the
+        :math:`(1-\\epsilon)e_{\\text{sat}}` term in the denominator is
+        negligible compared to :math:`p`, simplifying the formula to
+
+        .. math::
+            q_{\\text{sat}} \\approx \\epsilon \\frac{e_{\\text{sat}}}{p}.
     """
     esat = get_esat(temp)
     return 0.622 * esat / pressure
@@ -40,8 +78,43 @@ def get_psim(zeta: Array) -> Array:
 
     Returns:
         Momentum stability correction [-].
+
+    Notes:
+        This function calculates the integrated stability correction function for
+        momentum (:math:`\\Psi_m`), which is used to adjust wind profiles based
+        on atmospheric stability.
+
+        The function is piecewise, depending on the stability parameter
+        :math:`\\zeta = z/L`.
+
+        **1. For Unstable Conditions (ζ ≤ 0):**
+
+        Based on Businger-Dyer relations, an intermediate variable :math:`x`
+        is defined:
+
+        .. math::
+            x = (1 - 16\\zeta)^{1/4}
+
+        The integrated stability function :math:`\\Psi_m` is then:
+
+        .. math::
+            \\Psi_m(\\zeta) = \\ln\\left( \\frac{(1+x)^2 (1+x^2)}{8} \\right)
+                             - 2 \\arctan(x) + \\frac{\\pi}{2}
+
+        **2. For Stable Conditions (ζ > 0):**
+        This uses an empirical formula (e.g., Holtslag and De Bruin, 1988)
+        with constants:
+        * :math:`\\alpha = 0.35`
+        * :math:`\\beta = 5.0 / \\alpha`
+        * :math:`\\gamma = (10.0 / 3.0) / \\alpha`
+
+        The stability function is:
+
+        .. math::
+            \\Psi_m(\\zeta) = -\\frac{2}{3}(\\zeta - \\beta)e^{-\\alpha \\zeta}
+                             - \\zeta - \\gamma
     """
-    # Constants for stable conditions
+    # constants for stable conditions
     alpha = 0.35
     beta = 5.0 / alpha
     gamma = (10.0 / 3.0) / alpha
@@ -72,6 +145,37 @@ def get_psih(zeta: Array) -> Array:
 
     Returns:
         Scalar stability correction [-].
+
+    Notes:
+        This function calculates the integrated stability correction function for
+        scalars (:math:`\\Psi_h`) (like heat and humidity), which is used to
+        adjust temperature and humidity profiles based on atmospheric stability.
+
+        The function is piecewise, depending on the stability parameter
+        :math:`\\zeta = z/L`.
+
+        **1. For Unstable Conditions (ζ ≤ 0):**
+
+        Based on Businger-Dyer relations, using the same intermediate
+        variable :math:`x`:
+
+        .. math::
+            x = (1 - 16\\zeta)^{1/4}
+
+        The integrated stability function :math:`\\Psi_h` is:
+
+        .. math::
+            \\Psi_h(\\zeta) = 2 \\ln\\left( \\frac{1+x^2}{2} \\right)
+
+        **2. For Stable Conditions (ζ > 0):**
+
+        This uses a corresponding empirical formula with the same constants
+        (:math:`\\alpha`, :math:`\\beta`, :math:`\\gamma`):
+
+        .. math::
+            \\Psi_h(\\zeta) = -\\frac{2}{3}(\\zeta - \\beta)e^{-\\alpha \\zeta}
+                            - \\left(1 + \\frac{2}{3}\\zeta\\right)^{3/2}
+                            - \\gamma + 1
     """
     # constants for stable conditions
     alpha = 0.35
@@ -93,9 +197,11 @@ def get_psih(zeta: Array) -> Array:
 
     return psih
 
+
 @dataclass
 class PhysicalConstants:
     """Container for physical constants used throughout the model."""
+
     lv = 2.5e6
     """Heat of vaporization [J kg-1]."""
     cp = 1005.0

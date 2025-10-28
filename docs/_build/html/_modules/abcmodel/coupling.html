@@ -318,7 +318,7 @@ document.write(`
 <span class="c1"># it would be nice to guarantee that all fields</span>
 <span class="c1"># are at least an instance of jax.Array</span>
 <div class="viewcode-block" id="CoupledState">
-<a class="viewcode-back" href="../../source/api/abcmodel.coupling.html#abcmodel.CoupledState">[docs]</a>
+<a class="viewcode-back" href="../../source/api/abcmodel.coupling.html#abcmodel.coupling.CoupledState">[docs]</a>
 <span class="nd">@jax</span><span class="o">.</span><span class="n">tree_util</span><span class="o">.</span><span class="n">register_pytree_node_class</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">CoupledState</span><span class="p">(</span><span class="n">SimpleNamespace</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A pytree-compatible state with attribute access! But not very type friendly...&quot;&quot;&quot;</span>
@@ -327,14 +327,14 @@ document.write(`
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
 <div class="viewcode-block" id="CoupledState.tree_flatten">
-<a class="viewcode-back" href="../../source/api/abcmodel.coupling.html#abcmodel.CoupledState.tree_flatten">[docs]</a>
+<a class="viewcode-back" href="../../source/api/abcmodel.coupling.html#abcmodel.coupling.CoupledState.tree_flatten">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">tree_flatten</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># children are the values, aux is the keys</span>
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span></div>
 
 
 <div class="viewcode-block" id="CoupledState.tree_unflatten">
-<a class="viewcode-back" href="../../source/api/abcmodel.coupling.html#abcmodel.CoupledState.tree_unflatten">[docs]</a>
+<a class="viewcode-back" href="../../source/api/abcmodel.coupling.html#abcmodel.coupling.CoupledState.tree_unflatten">[docs]</a>
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">tree_unflatten</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">aux</span><span class="p">,</span> <span class="n">children</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">aux</span><span class="p">,</span> <span class="n">children</span><span class="p">)))</span></div>
@@ -343,7 +343,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="ABCoupler">
-<a class="viewcode-back" href="../../source/api/abcmodel.coupling.html#abcmodel.ABCoupler">[docs]</a>
+<a class="viewcode-back" href="../../source/api/abcmodel.coupling.html#abcmodel.coupling.ABCoupler">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">ABCoupler</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Coupling class to bound all the components.&quot;&quot;&quot;</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
@@ -365,7 +365,7 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">clouds</span> <span class="o">=</span> <span class="n">clouds</span>
 
 <div class="viewcode-block" id="ABCoupler.init_state">
-<a class="viewcode-back" href="../../source/api/abcmodel.coupling.html#abcmodel.ABCoupler.init_state">[docs]</a>
+<a class="viewcode-back" href="../../source/api/abcmodel.coupling.html#abcmodel.coupling.ABCoupler.init_state">[docs]</a>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">init_state</span><span class="p">(</span>
         <span class="n">radiation_init_conds</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
