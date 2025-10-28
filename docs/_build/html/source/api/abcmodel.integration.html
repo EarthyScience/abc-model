@@ -334,10 +334,10 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.integration.integrate"><code class="docutils literal notranslate"><span class="pre">integrate()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.integration.print_nan_variables"><code class="docutils literal notranslate"><span class="pre">print_nan_variables()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.integration.timestep"><code class="docutils literal notranslate"><span class="pre">timestep()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.integration.warmup"><code class="docutils literal notranslate"><span class="pre">warmup()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.integration.timestep"><code class="docutils literal notranslate"><span class="pre">timestep()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.integration.integrate"><code class="docutils literal notranslate"><span class="pre">integrate()</span></code></a></li>
 </ul>
             </nav>
         </div>
@@ -352,15 +352,20 @@ document.write(`
   <section id="module-abcmodel.integration">
 <span id="integration"></span><h1>Integration<a class="headerlink" href="#module-abcmodel.integration" title="Link to this heading">#</a></h1>
 <dl class="py function">
-<dt class="sig sig-object py" id="abcmodel.integration.integrate">
-<span class="sig-prename descclassname"><span class="pre">abcmodel.integration.</span></span><span class="sig-name descname"><span class="pre">integrate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coupler</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">runtime</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/integration.html#integrate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.integration.integrate" title="Link to this definition">#</a></dt>
-<dd><p>Integrate the coupler forward in time.</p>
-</dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="abcmodel.integration.print_nan_variables">
 <span class="sig-prename descclassname"><span class="pre">abcmodel.integration.</span></span><span class="sig-name descname"><span class="pre">print_nan_variables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/integration.html#print_nan_variables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.integration.print_nan_variables" title="Link to this definition">#</a></dt>
 <dd><p>Print all variables in a CoupledState that have NaN values</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="abcmodel.integration.warmup">
+<span class="sig-prename descclassname"><span class="pre">abcmodel.integration.</span></span><span class="sig-name descname"><span class="pre">warmup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coupler</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/integration.html#warmup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.integration.warmup" title="Link to this definition">#</a></dt>
+<dd><p>Warmup the model by running it for a few timesteps.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyTree</span></code></span></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -375,14 +380,9 @@ document.write(`
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="abcmodel.integration.warmup">
-<span class="sig-prename descclassname"><span class="pre">abcmodel.integration.</span></span><span class="sig-name descname"><span class="pre">warmup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coupler</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/integration.html#warmup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.integration.warmup" title="Link to this definition">#</a></dt>
-<dd><p>Warmup the model by running it for a few timesteps.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyTree</span></code></span></p>
-</dd>
-</dl>
+<dt class="sig sig-object py" id="abcmodel.integration.integrate">
+<span class="sig-prename descclassname"><span class="pre">abcmodel.integration.</span></span><span class="sig-name descname"><span class="pre">integrate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coupler</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">runtime</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/integration.html#integrate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.integration.integrate" title="Link to this definition">#</a></dt>
+<dd><p>Integrate the coupler forward in time.</p>
 </dd></dl>
 
 </section>
@@ -432,10 +432,10 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.integration.integrate"><code class="docutils literal notranslate"><span class="pre">integrate()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.integration.print_nan_variables"><code class="docutils literal notranslate"><span class="pre">print_nan_variables()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.integration.timestep"><code class="docutils literal notranslate"><span class="pre">timestep()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.integration.warmup"><code class="docutils literal notranslate"><span class="pre">warmup()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.integration.timestep"><code class="docutils literal notranslate"><span class="pre">timestep()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.integration.integrate"><code class="docutils literal notranslate"><span class="pre">integrate()</span></code></a></li>
 </ul>
   </nav></div>
 

@@ -341,9 +341,9 @@ document.write(`
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Constants for stable conditions</span>
     <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.35</span>
-    <span class="n">beta</span> <span class="o">=</span> <span class="mf">5.0</span> <span class="o">/</span> <span class="n">alpha</span>  <span class="c1"># 5.0 / 0.35</span>
-    <span class="n">gamma</span> <span class="o">=</span> <span class="p">(</span><span class="mf">10.0</span> <span class="o">/</span> <span class="mf">3.0</span><span class="p">)</span> <span class="o">/</span> <span class="n">alpha</span>  <span class="c1"># (10.0 / 3.0) / 0.35</span>
-    <span class="n">pi_half</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">2.0</span>  <span class="c1"># More accurate than hardcoded value</span>
+    <span class="n">beta</span> <span class="o">=</span> <span class="mf">5.0</span> <span class="o">/</span> <span class="n">alpha</span>
+    <span class="n">gamma</span> <span class="o">=</span> <span class="p">(</span><span class="mf">10.0</span> <span class="o">/</span> <span class="mf">3.0</span><span class="p">)</span> <span class="o">/</span> <span class="n">alpha</span>
+    <span class="n">pi_half</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">2.0</span>
 
     <span class="c1"># unstable conditions (zeta &lt;= 0)</span>
     <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="mf">16.0</span> <span class="o">*</span> <span class="n">zeta</span><span class="p">)</span> <span class="o">**</span> <span class="mf">0.25</span>

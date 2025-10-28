@@ -37,3 +37,4 @@ html_theme_options = {
     "repository_provider": "gitlab",
 }
 autosummary_generate = True
+autodoc_member_order = 'bysource'

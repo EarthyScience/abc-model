@@ -334,13 +334,13 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.coupling.ABCoupler"><code class="docutils literal notranslate"><span class="pre">ABCoupler</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.coupling.ABCoupler.init_state"><code class="docutils literal notranslate"><span class="pre">ABCoupler.init_state()</span></code></a></li>
-</ul>
-</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.coupling.CoupledState"><code class="docutils literal notranslate"><span class="pre">CoupledState</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.coupling.CoupledState.tree_flatten"><code class="docutils literal notranslate"><span class="pre">CoupledState.tree_flatten()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.coupling.CoupledState.tree_unflatten"><code class="docutils literal notranslate"><span class="pre">CoupledState.tree_unflatten()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.coupling.ABCoupler"><code class="docutils literal notranslate"><span class="pre">ABCoupler</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.coupling.ABCoupler.init_state"><code class="docutils literal notranslate"><span class="pre">ABCoupler.init_state()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -357,18 +357,6 @@ document.write(`
   <section id="module-abcmodel.coupling">
 <span id="coupling"></span><h1>Coupling<a class="headerlink" href="#module-abcmodel.coupling" title="Link to this heading">#</a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="abcmodel.coupling.ABCoupler">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">abcmodel.coupling.</span></span><span class="sig-name descname"><span class="pre">ABCoupler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radiation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">land_surface</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surface_layer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mixed_layer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clouds</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/coupling.html#ABCoupler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.coupling.ABCoupler" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Coupling class to bound all the components.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="abcmodel.coupling.ABCoupler.init_state">
-<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">init_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radiation_init_conds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">land_surface_init_conds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surface_layer_init_conds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mixed_layer_init_conds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clouds_init_conds</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/coupling.html#ABCoupler.init_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.coupling.ABCoupler.init_state" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
 <dt class="sig sig-object py" id="abcmodel.coupling.CoupledState">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">abcmodel.coupling.</span></span><span class="sig-name descname"><span class="pre">CoupledState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/coupling.html#CoupledState"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.coupling.CoupledState" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">SimpleNamespace</span></code></p>
@@ -381,6 +369,18 @@ document.write(`
 <dl class="py method">
 <dt class="sig sig-object py" id="abcmodel.coupling.CoupledState.tree_unflatten">
 <em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tree_unflatten</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">aux</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">children</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/coupling.html#CoupledState.tree_unflatten"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.coupling.CoupledState.tree_unflatten" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="abcmodel.coupling.ABCoupler">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">abcmodel.coupling.</span></span><span class="sig-name descname"><span class="pre">ABCoupler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radiation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">land_surface</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surface_layer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mixed_layer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clouds</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/coupling.html#ABCoupler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.coupling.ABCoupler" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Coupling class to bound all the components.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.coupling.ABCoupler.init_state">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">init_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radiation_init_conds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">land_surface_init_conds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surface_layer_init_conds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mixed_layer_init_conds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clouds_init_conds</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/coupling.html#ABCoupler.init_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.coupling.ABCoupler.init_state" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -432,13 +432,13 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.coupling.ABCoupler"><code class="docutils literal notranslate"><span class="pre">ABCoupler</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.coupling.ABCoupler.init_state"><code class="docutils literal notranslate"><span class="pre">ABCoupler.init_state()</span></code></a></li>
-</ul>
-</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.coupling.CoupledState"><code class="docutils literal notranslate"><span class="pre">CoupledState</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.coupling.CoupledState.tree_flatten"><code class="docutils literal notranslate"><span class="pre">CoupledState.tree_flatten()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.coupling.CoupledState.tree_unflatten"><code class="docutils literal notranslate"><span class="pre">CoupledState.tree_unflatten()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.coupling.ABCoupler"><code class="docutils literal notranslate"><span class="pre">ABCoupler</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.coupling.ABCoupler.init_state"><code class="docutils literal notranslate"><span class="pre">ABCoupler.init_state()</span></code></a></li>
 </ul>
 </li>
 </ul>

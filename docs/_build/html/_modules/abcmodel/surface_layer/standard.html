@@ -599,14 +599,7 @@ document.write(`
 <div class="viewcode-block" id="StandardSurfaceLayerModel.run">
 <a class="viewcode-back" href="../../../source/api/abcmodel.surface_layer.standard.html#abcmodel.surface_layer.StandardSurfaceLayerModel.run">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">PyTree</span><span class="p">,</span> <span class="n">const</span><span class="p">:</span> <span class="n">PhysicalConstants</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Calculate surface layer turbulent exchange and diagnostic variables.</span>
-
-<span class="sd">        Updates</span>
-<span class="sd">        -------</span>
-<span class="sd">        Updates all surface layer variables including momentum fluxes, drag coefficients,</span>
-<span class="sd">        Obukhov length, and 2m diagnostic meteorological variables.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Run the model.&quot;&quot;&quot;</span>
         <span class="n">ueff</span> <span class="o">=</span> <span class="n">calculate_effective_wind_speed</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">u</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">v</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">wstar</span><span class="p">)</span>
 
         <span class="p">(</span>

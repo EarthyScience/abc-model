@@ -342,11 +342,11 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.cumulus.StandardCumulusModel"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.cumulus.StandardCumulusModel.calculate_mixed_layer_variance"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel.calculate_mixed_layer_variance()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.cumulus.StandardCumulusModel.calculate_cloud_core_fraction"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel.calculate_cloud_core_fraction()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.cumulus.StandardCumulusModel.calculate_cloud_core_properties"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel.calculate_cloud_core_properties()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.cumulus.StandardCumulusModel.calculate_cloud_layer_transmittance"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel.calculate_cloud_layer_transmittance()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.cumulus.StandardCumulusModel.calculate_co2_mass_flux"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel.calculate_co2_mass_flux()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.cumulus.StandardCumulusModel.calculate_mixed_layer_variance"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel.calculate_mixed_layer_variance()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.cumulus.StandardCumulusModel.calculate_cloud_layer_transmittance"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel.calculate_cloud_layer_transmittance()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.cumulus.StandardCumulusModel.run"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel.run()</span></code></a></li>
 </ul>
 </li>
@@ -413,6 +413,18 @@ to determine what fraction reaches saturation.</p>
 </dd>
 </dl>
 <dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.clouds.cumulus.StandardCumulusModel.calculate_mixed_layer_variance">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calculate_mixed_layer_variance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cc_qf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wthetav</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wqe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abl_height</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dz_h</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wstar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wCO2e</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wCO2M</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dCO2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/clouds/cumulus.html#StandardCumulusModel.calculate_mixed_layer_variance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.clouds.cumulus.StandardCumulusModel.calculate_mixed_layer_variance" title="Link to this definition">#</a></dt>
+<dd><p>Calculate mixed-layer top relative humidity variance and CO2 variance.
+Based on Neggers et. al 2006/7.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="abcmodel.clouds.cumulus.StandardCumulusModel.calculate_cloud_core_fraction">
 <em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calculate_cloud_core_fraction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_T</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q2_h</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/clouds/cumulus.html#StandardCumulusModel.calculate_cloud_core_fraction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.clouds.cumulus.StandardCumulusModel.calculate_cloud_core_fraction" title="Link to this definition">#</a></dt>
 <dd><p>Calculate cloud core fraction using the arctangent formulation.</p>
@@ -436,17 +448,6 @@ No return needed since we’re updating self attributes directly.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="abcmodel.clouds.cumulus.StandardCumulusModel.calculate_cloud_layer_transmittance">
-<span class="sig-name descname"><span class="pre">calculate_cloud_layer_transmittance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cc_frac</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/clouds/cumulus.html#StandardCumulusModel.calculate_cloud_layer_transmittance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.clouds.cumulus.StandardCumulusModel.calculate_cloud_layer_transmittance" title="Link to this definition">#</a></dt>
-<dd><p>Calculate cloud layer transmittance, with maximum total cloud cover equal to 1</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></span></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="abcmodel.clouds.cumulus.StandardCumulusModel.calculate_co2_mass_flux">
 <em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calculate_co2_mass_flux</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cc_mf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top_CO22</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dCO2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/clouds/cumulus.html#StandardCumulusModel.calculate_co2_mass_flux"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.clouds.cumulus.StandardCumulusModel.calculate_co2_mass_flux" title="Link to this definition">#</a></dt>
 <dd><p>Calculate CO2 mass flux, only if mixed-layer top jump is negative.</p>
@@ -458,13 +459,12 @@ No return needed since we’re updating self attributes directly.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="abcmodel.clouds.cumulus.StandardCumulusModel.calculate_mixed_layer_variance">
-<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calculate_mixed_layer_variance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cc_qf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wthetav</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wqe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abl_height</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dz_h</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wstar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wCO2e</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wCO2M</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dCO2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/clouds/cumulus.html#StandardCumulusModel.calculate_mixed_layer_variance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.clouds.cumulus.StandardCumulusModel.calculate_mixed_layer_variance" title="Link to this definition">#</a></dt>
-<dd><p>Calculate mixed-layer top relative humidity variance and CO2 variance.
-Based on Neggers et. al 2006/7.</p>
+<dt class="sig sig-object py" id="abcmodel.clouds.cumulus.StandardCumulusModel.calculate_cloud_layer_transmittance">
+<span class="sig-name descname"><span class="pre">calculate_cloud_layer_transmittance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cc_frac</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/clouds/cumulus.html#StandardCumulusModel.calculate_cloud_layer_transmittance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.clouds.cumulus.StandardCumulusModel.calculate_cloud_layer_transmittance" title="Link to this definition">#</a></dt>
+<dd><p>Calculate cloud layer transmittance, with maximum total cloud cover equal to 1</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code>]</span></p>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -532,11 +532,11 @@ Based on Neggers et. al 2006/7.</p>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.cumulus.StandardCumulusModel"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.cumulus.StandardCumulusModel.calculate_mixed_layer_variance"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel.calculate_mixed_layer_variance()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.cumulus.StandardCumulusModel.calculate_cloud_core_fraction"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel.calculate_cloud_core_fraction()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.cumulus.StandardCumulusModel.calculate_cloud_core_properties"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel.calculate_cloud_core_properties()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.cumulus.StandardCumulusModel.calculate_cloud_layer_transmittance"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel.calculate_cloud_layer_transmittance()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.cumulus.StandardCumulusModel.calculate_co2_mass_flux"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel.calculate_co2_mass_flux()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.cumulus.StandardCumulusModel.calculate_mixed_layer_variance"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel.calculate_mixed_layer_variance()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.cumulus.StandardCumulusModel.calculate_cloud_layer_transmittance"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel.calculate_cloud_layer_transmittance()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.clouds.cumulus.StandardCumulusModel.run"><code class="docutils literal notranslate"><span class="pre">StandardCumulusModel.run()</span></code></a></li>
 </ul>
 </li>
