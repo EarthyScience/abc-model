@@ -61,7 +61,7 @@ def warmup(state: PyTree, coupler: ABCoupler, t: int, dt: float) -> PyTree:
 
     state = coupler.mixed_layer.run(state, coupler.const)
 
-    print_nan_variables(state)
+    # print_nan_variables(state)
 
     return state
 
@@ -92,6 +92,7 @@ def timestep(state: PyTree, coupler: ABCoupler, t: int, dt: float) -> PyTree:
     state = coupler.mixed_layer.integrate(state, dt)
 
     return state
+
 
 def integrate(
     state: PyTree,
