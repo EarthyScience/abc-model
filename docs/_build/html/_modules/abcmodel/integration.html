@@ -365,7 +365,7 @@ document.write(`
 
     <span class="n">state</span> <span class="o">=</span> <span class="n">coupler</span><span class="o">.</span><span class="n">mixed_layer</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">coupler</span><span class="o">.</span><span class="n">const</span><span class="p">)</span>
 
-    <span class="n">print_nan_variables</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+    <span class="c1"># print_nan_variables(state)</span>
 
     <span class="k">return</span> <span class="n">state</span></div>
 
@@ -399,6 +399,7 @@ document.write(`
     <span class="n">state</span> <span class="o">=</span> <span class="n">coupler</span><span class="o">.</span><span class="n">mixed_layer</span><span class="o">.</span><span class="n">integrate</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">state</span></div>
+
 
 
 <div class="viewcode-block" id="integrate">

@@ -102,11 +102,9 @@ def get_psim(zeta: Array) -> Array:
                              - 2 \\arctan(x) + \\frac{\\pi}{2}
 
         **2. For Stable Conditions (ζ > 0):**
+
         This uses an empirical formula (e.g., Holtslag and De Bruin, 1988)
-        with constants:
-        * :math:`\\alpha = 0.35`
-        * :math:`\\beta = 5.0 / \\alpha`
-        * :math:`\\gamma = (10.0 / 3.0) / \\alpha`
+        with constants: :math:`\\alpha = 0.35`, :math:`\\beta = 5.0 / \\alpha`, :math:`\\gamma = (10.0 / 3.0) / \\alpha`.
 
         The stability function is:
 
