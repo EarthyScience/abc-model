@@ -153,7 +153,7 @@
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="abcmodel.html">ABC Model</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2 has-children"><a class="reference internal" href="abcmodel.radiation.html">Radiation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="abcmodel.radiation.standard.html">Standard</a></li>
-<li class="toctree-l3"><a class="reference internal" href="abcmodel.radiation.standard_w_clouds.html">Standard W Clouds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.radiation.standard_w_clouds.html">Standard With Clouds</a></li>
 </ul>
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="abcmodel.land_surface.html">Land Surface</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -344,8 +344,8 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.utils.get_esat"><code class="docutils literal notranslate"><span class="pre">get_esat()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.utils.get_qsat"><code class="docutils literal notranslate"><span class="pre">get_qsat()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.utils.compute_esat"><code class="docutils literal notranslate"><span class="pre">compute_esat()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.utils.compute_qsat"><code class="docutils literal notranslate"><span class="pre">compute_qsat()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.utils.get_psim"><code class="docutils literal notranslate"><span class="pre">get_psim()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.utils.get_psih"><code class="docutils literal notranslate"><span class="pre">get_psih()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.utils.PhysicalConstants"><code class="docutils literal notranslate"><span class="pre">PhysicalConstants</span></code></a><ul class="nav section-nav flex-column">
@@ -378,8 +378,8 @@ document.write(`
   <section id="module-abcmodel.utils">
 <span id="utils"></span><h1>Utils<a class="headerlink" href="#module-abcmodel.utils" title="Link to this heading">#</a></h1>
 <dl class="py function">
-<dt class="sig sig-object py" id="abcmodel.utils.get_esat">
-<span class="sig-prename descclassname"><span class="pre">abcmodel.utils.</span></span><span class="sig-name descname"><span class="pre">get_esat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">temp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/utils.html#get_esat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.utils.get_esat" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="abcmodel.utils.compute_esat">
+<span class="sig-prename descclassname"><span class="pre">abcmodel.utils.</span></span><span class="sig-name descname"><span class="pre">compute_esat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">temp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/utils.html#compute_esat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.utils.compute_esat" title="Link to this definition">#</a></dt>
 <dd><p>Calculate saturated vapor pressure using the August-Roche-Magnus formula.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -402,8 +402,8 @@ document.write(`
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="abcmodel.utils.get_qsat">
-<span class="sig-prename descclassname"><span class="pre">abcmodel.utils.</span></span><span class="sig-name descname"><span class="pre">get_qsat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">temp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pressure</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/utils.html#get_qsat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.utils.get_qsat" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="abcmodel.utils.compute_qsat">
+<span class="sig-prename descclassname"><span class="pre">abcmodel.utils.</span></span><span class="sig-name descname"><span class="pre">compute_qsat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">temp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pressure</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/utils.html#compute_qsat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.utils.compute_qsat" title="Link to this definition">#</a></dt>
 <dd><p>Calculate saturated specific humidity.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -423,7 +423,7 @@ a given temperature and pressure.</p>
 <p>The full formula for <span class="math notranslate nohighlight">\(q_{sat}\)</span> is</p>
 <div class="math notranslate nohighlight">
 \[q_{\text{sat}} = \frac{\epsilon \cdot e_{\text{sat}}}{p - (1-\epsilon)e_{\text{sat}}},\]</div>
-<p>where <span class="math notranslate nohighlight">\(e_{\text{sat}}\)</span> is the saturated vapor pressure [Pa] from <a class="reference internal" href="#abcmodel.utils.get_esat" title="abcmodel.utils.get_esat"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_esat()</span></code></a>,
+<p>where <span class="math notranslate nohighlight">\(e_{\text{sat}}\)</span> is the saturated vapor pressure [Pa] from <code class="xref py py-func docutils literal notranslate"><span class="pre">get_esat()</span></code>,
 <span class="math notranslate nohighlight">\(p\)</span> is the total atmospheric pressure [Pa] and
 <span class="math notranslate nohighlight">\(\epsilon \approx 0.622\)</span> is the ratio of the molar mass of water vapor to the molar mass of dry air.
 This formula can be derived from the definition of specific humidity (a ratio of vapour and total air mass),
@@ -641,8 +641,8 @@ adjust temperature and humidity profiles based on atmospheric stability.</p>
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.utils.get_esat"><code class="docutils literal notranslate"><span class="pre">get_esat()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.utils.get_qsat"><code class="docutils literal notranslate"><span class="pre">get_qsat()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.utils.compute_esat"><code class="docutils literal notranslate"><span class="pre">compute_esat()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.utils.compute_qsat"><code class="docutils literal notranslate"><span class="pre">compute_qsat()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.utils.get_psim"><code class="docutils literal notranslate"><span class="pre">get_psim()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.utils.get_psih"><code class="docutils literal notranslate"><span class="pre">get_psih()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.utils.PhysicalConstants"><code class="docutils literal notranslate"><span class="pre">PhysicalConstants</span></code></a><ul class="nav section-nav flex-column">

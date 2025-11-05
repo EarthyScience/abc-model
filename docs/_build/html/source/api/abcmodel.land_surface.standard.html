@@ -40,6 +40,7 @@
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'source/api/abcmodel.land_surface.standard';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -152,7 +153,7 @@
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="abcmodel.html">ABC Model</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2 has-children"><a class="reference internal" href="abcmodel.radiation.html">Radiation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="abcmodel.radiation.standard.html">Standard</a></li>
-<li class="toctree-l3"><a class="reference internal" href="abcmodel.radiation.standard_w_clouds.html">Standard W Clouds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.radiation.standard_w_clouds.html">Standard With Clouds</a></li>
 </ul>
 </details></li>
 <li class="toctree-l2 current active has-children"><a class="reference internal" href="abcmodel.land_surface.html">Land Surface</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
@@ -369,10 +370,28 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_surface_resistance"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.compute_surface_resistance()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_co2_flux"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.compute_co2_flux()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.run"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.run()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.integrate"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.integrate()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.run"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.run()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_dqsatdT"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.compute_dqsatdT()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_e"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.compute_e()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.update_surface_resistance"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.update_surface_resistance()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.update_co2_flux"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.update_co2_flux()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_soil_resistance"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.compute_soil_resistance()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_cliq"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.compute_cliq()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_skin_temperature"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.compute_skin_temperature()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_le_veg"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.compute_le_veg()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_le_liq"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.compute_le_liq()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_le_soil"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.compute_le_soil()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_wltend"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.compute_wltend()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_le"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.compute_le()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_hf"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.compute_hf()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_gf"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.compute_gf()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_le_pot"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.compute_le_pot()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_le_ref"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.compute_le_ref()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_temp_soil_tend"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.compute_temp_soil_tend()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_wgtend"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.compute_wgtend()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_wtheta"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.compute_wtheta()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_wq"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.compute_wq()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -538,42 +557,411 @@ document.write(`
 <li><p><strong>a</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Clapp and Hornberger (1978) retention curve parameter.</p></li>
 <li><p><strong>b</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Clapp and Hornberger (1978) retention curve parameter.</p></li>
 <li><p><strong>p</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Clapp and Hornberger (1978) retention curve parameter.</p></li>
-<li><p><strong>cgsat</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Saturated soil heat capacity [J m-3 K-1].</p></li>
-<li><p><strong>wsat</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Saturated soil moisture content [m3 m-3].</p></li>
-<li><p><strong>wfc</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Soil moisture content at field capacity [m3 m-3].</p></li>
-<li><p><strong>wwilt</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Soil moisture content at wilting point [m3 m-3].</p></li>
+<li><p><strong>cgsat</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – saturated soil heat capacity [J m-3 K-1].</p></li>
+<li><p><strong>wsat</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – saturated soil moisture content [m3 m-3].</p></li>
+<li><p><strong>wfc</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – soil moisture content at field capacity [m3 m-3].</p></li>
+<li><p><strong>wwilt</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – soil moisture content at wilting point [m3 m-3].</p></li>
 <li><p><strong>c1sat</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – saturated soil conductivity parameter [-].</p></li>
 <li><p><strong>c2ref</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – reference soil conductivity parameter [-].</p></li>
-<li><p><strong>lai</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Leaf area index [m2 m-2].</p></li>
-<li><p><strong>gD</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Canopy radiation extinction coefficient [-].</p></li>
-<li><p><strong>rsmin</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Minimum stomatal resistance [s m-1].</p></li>
-<li><p><strong>rssoilmin</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Minimum soil resistance [s m-1].</p></li>
-<li><p><strong>cveg</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Vegetation fraction [-].</p></li>
-<li><p><strong>wmax</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Maximum water storage capacity of the canopy [m].</p></li>
-<li><p><strong>lam</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Thermal diffusivity of the soil [W m-1 K-1].</p></li>
+<li><p><strong>lai</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – leaf area index [m2 m-2].</p></li>
+<li><p><strong>gD</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – canopy radiation extinction coefficient [-].</p></li>
+<li><p><strong>rsmin</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – minimum stomatal resistance [s m-1].</p></li>
+<li><p><strong>rssoilmin</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – minimum soil resistance [s m-1].</p></li>
+<li><p><strong>cveg</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – vegetation fraction [-].</p></li>
+<li><p><strong>wmax</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – maximum water storage capacity of the canopy [m].</p></li>
+<li><p><strong>lam</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – thermal diffusivity of the soil [W m-1 K-1].</p></li>
 </ul>
 </dd>
 </dl>
 <dl class="py method">
-<dt class="sig sig-object py" id="abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_surface_resistance">
-<em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">compute_surface_resistance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/standard.html#AbstractStandardLandSurfaceModel.compute_surface_resistance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_surface_resistance" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_co2_flux">
-<em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">compute_co2_flux</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/standard.html#AbstractStandardLandSurfaceModel.compute_co2_flux"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_co2_flux" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.integrate">
+<span class="sig-name descname"><span class="pre">integrate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/standard.html#AbstractStandardLandSurfaceModel.integrate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.integrate" title="Link to this definition">#</a></dt>
+<dd><p>Integrate model forward in time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>state</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyTree</span></code></span>) – the state object carrying all variables.</p></li>
+<li><p><strong>dt</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – the time step.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The updated state object.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.run">
 <span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surface_layer</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/standard.html#AbstractStandardLandSurfaceModel.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.run" title="Link to this definition">#</a></dt>
-<dd><p>Run the model.</p>
+<dd><p>Run the full land surface model for one time step.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>state</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyTree</span></code></span>) – the state object carrying all variables.</p></li>
+<li><p><strong>const</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="abcmodel.utils.html#abcmodel.utils.PhysicalConstants" title="abcmodel.utils.PhysicalConstants"><code class="xref py py-class docutils literal notranslate"><span class="pre">PhysicalConstants</span></code></a></span>) – the physical constants object.</p></li>
+<li><p><strong>surface_layer</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="abcmodel.models.html#abcmodel.models.AbstractSurfaceLayerModel" title="abcmodel.models.AbstractSurfaceLayerModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractSurfaceLayerModel</span></code></a></span>) – the surface layer model.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The updated state object.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.integrate">
-<span class="sig-name descname"><span class="pre">integrate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/standard.html#AbstractStandardLandSurfaceModel.integrate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.integrate" title="Link to this definition">#</a></dt>
-<dd><p>Integrate the model.</p>
+<dt class="sig sig-object py" id="abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_dqsatdT">
+<span class="sig-name descname"><span class="pre">compute_dqsatdT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/standard.html#AbstractStandardLandSurfaceModel.compute_dqsatdT"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_dqsatdT" title="Link to this definition">#</a></dt>
+<dd><p>Compute the derivative of saturation vapor pressure with respect to temperature <code class="docutils literal notranslate"><span class="pre">dqsatdT</span></code>.</p>
+<p class="rubric">Notes</p>
+<p>Using <a class="reference internal" href="abcmodel.utils.html#abcmodel.utils.compute_esat" title="abcmodel.utils.compute_esat"><code class="xref py py-meth docutils literal notranslate"><span class="pre">compute_esat()</span></code></a>, the derivative of the saturated vapor pressure
+<span class="math notranslate nohighlight">\(e_\text{sat}\)</span> with respect to temperature <span class="math notranslate nohighlight">\(T\)</span> is given by</p>
+<div class="math notranslate nohighlight">
+\[\frac{\text{d}e_\text{sat}}{\text{d} T} =
+e_\text{sat}\frac{17.2694(T-237.16)}{(T-35.86)^2},\]</div>
+<p>which combined with <a class="reference internal" href="abcmodel.utils.html#abcmodel.utils.compute_qsat" title="abcmodel.utils.compute_qsat"><code class="xref py py-meth docutils literal notranslate"><span class="pre">compute_qsat()</span></code></a> can be used to get</p>
+<div class="math notranslate nohighlight">
+\[\frac{\text{d}q_{\text{sat}}}{\text{d} T} \approx \epsilon \frac{\frac{\text{d}e_\text{sat}}{\text{d} T}}{p}.\]</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_e">
+<span class="sig-name descname"><span class="pre">compute_e</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/standard.html#AbstractStandardLandSurfaceModel.compute_e"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_e" title="Link to this definition">#</a></dt>
+<dd><p>Compute the vapor pressure <code class="docutils literal notranslate"><span class="pre">e</span></code>.</p>
+<p class="rubric">Notes</p>
+<p>This function uses the same formula used in <a class="reference internal" href="abcmodel.utils.html#abcmodel.utils.compute_esat" title="abcmodel.utils.compute_esat"><code class="xref py py-meth docutils literal notranslate"><span class="pre">compute_esat()</span></code></a>,
+but now factoring the vapor pressure <span class="math notranslate nohighlight">\(e\)</span> as a function of specific humidity <span class="math notranslate nohighlight">\(q\)</span>
+and surface pressure <span class="math notranslate nohighlight">\(p\)</span>, which give us</p>
+<div class="math notranslate nohighlight">
+\[e = q \cdot p / 0.622.\]</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.update_surface_resistance">
+<em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">update_surface_resistance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/standard.html#AbstractStandardLandSurfaceModel.update_surface_resistance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.update_surface_resistance" title="Link to this definition">#</a></dt>
+<dd><p>Abstract method to update surface resistance.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.update_co2_flux">
+<em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">update_co2_flux</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/standard.html#AbstractStandardLandSurfaceModel.update_co2_flux"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.update_co2_flux" title="Link to this definition">#</a></dt>
+<dd><p>Abstract method to update CO2 flux.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_soil_resistance">
+<span class="sig-name descname"><span class="pre">compute_soil_resistance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/standard.html#AbstractStandardLandSurfaceModel.compute_soil_resistance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_soil_resistance" title="Link to this definition">#</a></dt>
+<dd><p>Compute the soil resistance <code class="docutils literal notranslate"><span class="pre">rssoil</span></code>.</p>
+<p class="rubric">Notes</p>
+<p>The soil resistance is calculated as</p>
+<div class="math notranslate nohighlight">
+\[r_\text{soil} = r_\text{soil,min} \cdot f_2,\]</div>
+<p>where the parameter <span class="math notranslate nohighlight">\(r_\text{soil,min}\)</span> is the minimum surface resistance and
+the correction function <span class="math notranslate nohighlight">\(f_2\)</span> is given by</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}f_2 =
+    \begin{cases}
+        \frac{w_\text{fc} - w_\text{wilt}}{w_g - w_\text{wilt}}, &amp; \text{if } w_g &gt; w_\text{wilt} \\
+        10^8, &amp; \text{otherwise},
+    \end{cases}\end{split}\]</div>
+<p>where the model parameters <span class="math notranslate nohighlight">\(w_\text{fc}\)</span> and <span class="math notranslate nohighlight">\(w_\text{wilt}\)</span>
+are the field capacity and wilting point, respectively,
+and the variable <span class="math notranslate nohighlight">\(w_g\)</span> is the soil water content.</p>
+<p class="rubric">References</p>
+<p>Equations 9.28 and 9.31 from the CLASS book.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_cliq">
+<span class="sig-name descname"><span class="pre">compute_cliq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/standard.html#AbstractStandardLandSurfaceModel.compute_cliq"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_cliq" title="Link to this definition">#</a></dt>
+<dd><p>Compute the wet fraction <code class="docutils literal notranslate"><span class="pre">cliq</span></code>.</p>
+<p class="rubric">Notes</p>
+<p>The wet fraction is defined as</p>
+<div class="math notranslate nohighlight">
+\[c_{\text{liq}} = \frac{W_l}{\text{LAI}\cdot W_{\text{max}}},\]</div>
+<p>where <span class="math notranslate nohighlight">\(W_l\)</span> is the water layer depth,
+<span class="math notranslate nohighlight">\(\text{LAI}\)</span> is the leaf area index and
+<span class="math notranslate nohighlight">\(W_{\text{max}}\)</span> is the thickness of the water layer on wet vegetation.
+In case <span class="math notranslate nohighlight">\(W_l &gt; \text{LAI}\cdot W_{\text{max}}\)</span>, the wet fraction is set to 1.</p>
+<p class="rubric">References</p>
+<p>Equation 9.19 from the CLASS book.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_skin_temperature">
+<span class="sig-name descname"><span class="pre">compute_skin_temperature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/standard.html#AbstractStandardLandSurfaceModel.compute_skin_temperature"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_skin_temperature" title="Link to this definition">#</a></dt>
+<dd><p>Compute the skin temperature <code class="docutils literal notranslate"><span class="pre">surf_temp</span></code>.</p>
+<p class="rubric">Notes</p>
+<p>The skin temperature is obtained by solving the surface energy balance</p>
+<div class="math notranslate nohighlight">
+\[R_n = H + LE_{\text{veg}} + LE_{\text{liq}} + LE_{\text{soil}} + G\]</div>
+<p>where <span class="math notranslate nohighlight">\(R_n\)</span> is the net radiation,
+<span class="math notranslate nohighlight">\(H\)</span> is the sensible heat flux (see <a class="reference internal" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_hf" title="abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_hf"><code class="xref py py-meth docutils literal notranslate"><span class="pre">compute_hf()</span></code></a>),
+<span class="math notranslate nohighlight">\(LE_{\text{veg}}\)</span> is the latent heat flux from vegetation (see <a class="reference internal" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_le_veg" title="abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_le_veg"><code class="xref py py-meth docutils literal notranslate"><span class="pre">compute_le_veg()</span></code></a>),
+<span class="math notranslate nohighlight">\(LE_{\text{liq}}\)</span> is the latent heat flux from dew on leaves (see <a class="reference internal" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_le_liq" title="abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_le_liq"><code class="xref py py-meth docutils literal notranslate"><span class="pre">compute_le_liq()</span></code></a>),
+<span class="math notranslate nohighlight">\(LE_{\text{soil}}\)</span> is the latent heat flux from the soil (see <a class="reference internal" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_le_soil" title="abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_le_soil"><code class="xref py py-meth docutils literal notranslate"><span class="pre">compute_le_soil()</span></code></a>)
+and <span class="math notranslate nohighlight">\(G\)</span> is the ground heat flux (see <a class="reference internal" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_gf" title="abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_gf"><code class="xref py py-meth docutils literal notranslate"><span class="pre">compute_gf()</span></code></a>).</p>
+<p>The equation is solved for the skin temperature <span class="math notranslate nohighlight">\(T_s\)</span>
+by factoring out <span class="math notranslate nohighlight">\(T_s\)</span> from the above, giving us</p>
+<div class="math notranslate nohighlight">
+\[T_s = \frac{
+    R_n + \frac{\rho c_p}{r_a} \theta
+    + c_{\text{veg}} (1-c_{\text{liq}}) \frac{\rho L_v}{r_a + r_s} (\frac{\text{d}q_{\text{sat}}}{\text{d}T} \theta - q_{\text{sat}} + q)
+    + (1-c_{\text{veg}}) \frac{\rho L_v}{r_a + r_{s,\text{soil}}} (\frac{\text{d}q_{\text{sat}}}{\text{d}T} \theta - q_{\text{sat}} + q)
+    + c_{\text{veg}} c_{\text{liq}} \frac{\rho L_v}{r_a} (\frac{\text{d}q_{\text{sat}}}{\text{d}T} \theta - q_{\text{sat}} + q)
+    + \Lambda T_{\text{soil}}
+}{
+    \frac{\rho c_p}{r_a}
+    + c_{\text{veg}} (1-c_{\text{liq}}) \frac{\rho L_v}{r_a + r_s} \frac{\text{d}q_{\text{sat}}}{\text{d}T}
+    + (1-c_{\text{veg}}) \frac{\rho L_v}{r_a + r_{s,\text{soil}}} \frac{\text{d}q_{\text{sat}}}{\text{d}T}
+    + c_{\text{veg}} c_{\text{liq}} \frac{\rho L_v}{r_a} \frac{\text{d}q_{\text{sat}}}{\text{d}T}
+    + \Lambda
+}.\]</div>
+<p>The terms computed in the equation above in each related function energy flux related method.
+This approach ensures that the computed skin temperature is consistent with the partitioning of
+energy fluxes as calculated by the other methods in this class.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_le_veg">
+<span class="sig-name descname"><span class="pre">compute_le_veg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/standard.html#AbstractStandardLandSurfaceModel.compute_le_veg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_le_veg" title="Link to this definition">#</a></dt>
+<dd><p>Compute the latent heat flux (transpiration) from vegetation <code class="docutils literal notranslate"><span class="pre">le_veg</span></code>.</p>
+<p class="rubric">Notes</p>
+<p>The latent heat flux is given by</p>
+<div class="math notranslate nohighlight">
+\[LE_{\text{veg}} = \frac{\rho L_v}{r_a+r_s}(q_{\text{sat}}(T_s)-⟨q⟩),\]</div>
+<p>where <span class="math notranslate nohighlight">\(\rho\)</span> is the density of air, <span class="math notranslate nohighlight">\(L_v\)</span> is the latent heat of vaporization,
+<span class="math notranslate nohighlight">\(r_a\)</span> is the aerodynamic resistance, <span class="math notranslate nohighlight">\(r_s\)</span> is the soil resistance,
+<span class="math notranslate nohighlight">\(q_{\text{sat}}(T_s)\)</span> is the saturation specific humidity at surface temperature,
+<span class="math notranslate nohighlight">\(⟨q⟩\)</span> is the specific humidity at the surface.</p>
+<p><span class="math notranslate nohighlight">\(q_{\text{sat}}(T_s)\)</span> has very short time-scales because of the small heat capacity
+(excluding vegetation) of the surface layer and is hard to measure. Consequently,
+we get <span class="math notranslate nohighlight">\(q_{\text{sat}}(T_s)\)</span> implicitly using</p>
+<div class="math notranslate nohighlight">
+\[q_{\text{sat}}(T_s) = \frac{\text{d}q_{\text{sat}}}{\text{d}T}(\theta_s-\theta),\]</div>
+<p>where <span class="math notranslate nohighlight">\(\theta_s\)</span> and <span class="math notranslate nohighlight">\(\theta\)</span> are the potential temperature of the surface layer and mixed layer, respectively.</p>
+<p>In the end, we scale the latent heat flux by the vegetation cover fraction <span class="math notranslate nohighlight">\(c_{\text{veg}}\)</span>
+and the liquid water content <span class="math notranslate nohighlight">\(c_{\text{liq}}\)</span> and return</p>
+<div class="math notranslate nohighlight">
+\[c_{\text{veg}}(1-c_{\text{liq}})LE_{\text{veg}}.\]</div>
+<p class="rubric">References</p>
+<p>Equation 9.15 from the CLASS book.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_le_liq">
+<span class="sig-name descname"><span class="pre">compute_le_liq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/standard.html#AbstractStandardLandSurfaceModel.compute_le_liq"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_le_liq" title="Link to this definition">#</a></dt>
+<dd><p>Compute the latent heat flux on the leaf (dew) <code class="docutils literal notranslate"><span class="pre">le_liq</span></code>.</p>
+<p class="rubric">Notes</p>
+<p>We proceed just like in <a class="reference internal" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_le_veg" title="abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_le_veg"><code class="xref py py-meth docutils literal notranslate"><span class="pre">compute_le_veg()</span></code></a>, but omitting vegetation’s resistance <span class="math notranslate nohighlight">\(r_s\)</span>,
+with the assumption that water at the leaf is ready to be evaporated, giving us</p>
+<div class="math notranslate nohighlight">
+\[LE_{\text{liq}} = \frac{\rho L_v}{r_a}(q_{\text{sat}}(T_s)-⟨q⟩).\]</div>
+<p>In the end, we scale the result by the fraction of liquid water content <span class="math notranslate nohighlight">\(c_{\text{liq}}\)</span>
+and the fraction of vegetation <span class="math notranslate nohighlight">\(c_{\text{veg}}\)</span>.</p>
+<p class="rubric">References</p>
+<p>Equation 9.18 from the CLASS book.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_le_soil">
+<span class="sig-name descname"><span class="pre">compute_le_soil</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/standard.html#AbstractStandardLandSurfaceModel.compute_le_soil"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_le_soil" title="Link to this definition">#</a></dt>
+<dd><p>Compute the latent heat flux on the soil (evaporation) <code class="docutils literal notranslate"><span class="pre">le_soil</span></code>.</p>
+<p class="rubric">Notes</p>
+<p>We proceed just like in <a class="reference internal" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_le_veg" title="abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_le_veg"><code class="xref py py-meth docutils literal notranslate"><span class="pre">compute_le_veg()</span></code></a>, but instead of considering resistance from
+the vegetation, we consider the resistance from the soil <span class="math notranslate nohighlight">\(r_{soil}\)</span>, giving us</p>
+<div class="math notranslate nohighlight">
+\[LE_{\text{soil}} = \frac{\rho L_v}{r_a + r_{soil}}(q_{\text{sat}}(T_s)-⟨q⟩)\]</div>
+<p>In the end, we scale the result by the fraction of soil <span class="math notranslate nohighlight">\(c_{\text{soil}} = 1 - c_{\text{veg}}\)</span>.</p>
+<p class="rubric">References</p>
+<p>Equation 9.21 from the CLASS book.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_wltend">
+<span class="sig-name descname"><span class="pre">compute_wltend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/standard.html#AbstractStandardLandSurfaceModel.compute_wltend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_wltend" title="Link to this definition">#</a></dt>
+<dd><p>Compute the water layer depth tendency tendency <code class="docutils literal notranslate"><span class="pre">wltend</span></code>.</p>
+<p class="rubric">Notes</p>
+<p>The water layer depth tendency is the rate at which water is added to or taken from the vegetation,
+described by</p>
+<div class="math notranslate nohighlight">
+\[\frac{\text{d} w}{\text{d} t} = -\frac{LE_{\text{liq}}}{\rho_w L_v},\]</div>
+<p>where <span class="math notranslate nohighlight">\(LE_{\text{liq}}\)</span> is dew, <span class="math notranslate nohighlight">\(\rho_w\)</span> is water density and <span class="math notranslate nohighlight">\(L_v\)</span> is the latent heat of vaporization.</p>
+<p class="rubric">References</p>
+<p>Equation 9.20 from the CLASS book, with sign convention.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_le">
+<span class="sig-name descname"><span class="pre">compute_le</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/standard.html#AbstractStandardLandSurfaceModel.compute_le"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_le" title="Link to this definition">#</a></dt>
+<dd><p>Compute the evapotranspiration (latent heat flux) <code class="docutils literal notranslate"><span class="pre">le</span></code>.</p>
+<p class="rubric">Notes</p>
+<p>The sum of</p>
+<ul class="simple">
+<li><p>transpiration from vegetation in <a class="reference internal" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_le_veg" title="abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_le_veg"><code class="xref py py-meth docutils literal notranslate"><span class="pre">compute_le_veg()</span></code></a>;</p></li>
+<li><p>evaporation from bare soil in <a class="reference internal" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_le_soil" title="abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_le_soil"><code class="xref py py-meth docutils literal notranslate"><span class="pre">compute_le_soil()</span></code></a>;</p></li>
+<li><p>evaporation from wet leaves (dew) in <a class="reference internal" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_le_liq" title="abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_le_liq"><code class="xref py py-meth docutils literal notranslate"><span class="pre">compute_le_liq()</span></code></a>.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_hf">
+<span class="sig-name descname"><span class="pre">compute_hf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/standard.html#AbstractStandardLandSurfaceModel.compute_hf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_hf" title="Link to this definition">#</a></dt>
+<dd><p>Compute the sensible heat flux <code class="docutils literal notranslate"><span class="pre">hf</span></code>.</p>
+<p class="rubric">Notes</p>
+<p>The sensible heat flux is given by</p>
+<div class="math notranslate nohighlight">
+\[H = \frac{\rho c_p}{r_a} (T_s - \theta),\]</div>
+<p>where <span class="math notranslate nohighlight">\(\rho\)</span> is the air density, <span class="math notranslate nohighlight">\(c_p\)</span> is the specific heat capacity of air,
+<span class="math notranslate nohighlight">\(r_a\)</span> is the aerodynamic resistance, <span class="math notranslate nohighlight">\(T_s\)</span> is the surface temperature and
+<span class="math notranslate nohighlight">\(\theta\)</span> is the mixed layer air potential temperature.</p>
+<p class="rubric">References</p>
+<p>Equation 9.13 from the CLASS book, but why are we using <span class="math notranslate nohighlight">\(T_s\)</span> instead of <span class="math notranslate nohighlight">\(\theta_s\)</span>?
+Probably because the variations of pressure are not significant enough.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_gf">
+<span class="sig-name descname"><span class="pre">compute_gf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/standard.html#AbstractStandardLandSurfaceModel.compute_gf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_gf" title="Link to this definition">#</a></dt>
+<dd><p>Compute the ground heat flux <code class="docutils literal notranslate"><span class="pre">gf</span></code>.</p>
+<p class="rubric">Notes</p>
+<p>The ground heat flux is given by</p>
+<div class="math notranslate nohighlight">
+\[G = \Lambda (T_s - T_{soil}),\]</div>
+<p>where <span class="math notranslate nohighlight">\(\Lambda\)</span> is the conductivity of the skin layer,
+<span class="math notranslate nohighlight">\(T_s\)</span> is the surface temperature and
+<span class="math notranslate nohighlight">\(T_{soil}\)</span> is the soil temperature.</p>
+<p class="rubric">References</p>
+<p>Equation 9.33 from the CLASS book.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_le_pot">
+<span class="sig-name descname"><span class="pre">compute_le_pot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/standard.html#AbstractStandardLandSurfaceModel.compute_le_pot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_le_pot" title="Link to this definition">#</a></dt>
+<dd><p>Compute the potential latent heat flux <code class="docutils literal notranslate"><span class="pre">le_pot</span></code>.</p>
+<p class="rubric">Notes</p>
+<p>The potential latent heat flux is given by</p>
+<div class="math notranslate nohighlight">
+\[LE_{\text{pot}} = \frac{
+\frac{\text{d}q_{sat}}{\text{d} T} (R_n - G)
++ \frac{\rho c_p}{r_a} (q_{\text{sat}} - q)
+}{
+\frac{\text{d}q_{sat}}{\text{d} T} + \frac{\rho c_p}{L_v}
+},\]</div>
+<p>which is the Penman-Monteith equation assuming no soil resistance.</p>
+<p class="rubric">References</p>
+<p>Equation 9.16 from the CLASS book.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_le_ref">
+<span class="sig-name descname"><span class="pre">compute_le_ref</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/standard.html#AbstractStandardLandSurfaceModel.compute_le_ref"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_le_ref" title="Link to this definition">#</a></dt>
+<dd><p>Compute the reference latent heat flux <code class="docutils literal notranslate"><span class="pre">le_ref</span></code>.</p>
+<p class="rubric">Notes</p>
+<p>The reference latent heat flux is given by</p>
+<div class="math notranslate nohighlight">
+\[LE_{\text{ref}} = \frac{
+\frac{\text{d}q_{sat}}{\text{d} T} (R_n - G)
++ \frac{\rho c_p}{r_a} (q_{\text{sat}} - q)
+}{
+\frac{\text{d}q_{sat}}{\text{d} T} + \frac{\rho c_p}{L_v}(
+1 + \frac{r_{s,\text{min}}}{\text{LAI} \cdot r_a}
+)
+},\]</div>
+<p>which is the Penman-Monteith equation assuming that the soil resistance is given by
+<span class="math notranslate nohighlight">\(r_{s,\text{min}} / \text{LAI}\)</span>, i.e., no correction functions are applied.</p>
+<p class="rubric">References</p>
+<p>Equation 9.16 from the CLASS book.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_temp_soil_tend">
+<span class="sig-name descname"><span class="pre">compute_temp_soil_tend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/standard.html#AbstractStandardLandSurfaceModel.compute_temp_soil_tend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_temp_soil_tend" title="Link to this definition">#</a></dt>
+<dd><p>Compute the soil temperature tendency <code class="docutils literal notranslate"><span class="pre">temp_soil_tend</span></code>.</p>
+<p class="rubric">Notes</p>
+<p>The dynamics of heat transport in the soil is given by</p>
+<div class="math notranslate nohighlight">
+\[\frac{\text{d}T_s}{\text{d}t}
+=
+C_T G - \frac{2\pi}{\tau} (T_s - T_2),\]</div>
+<p><span class="math notranslate nohighlight">\(T_2\)</span> is the temperature of the second layer in the soil,
+<span class="math notranslate nohighlight">\(T_s\)</span> is the soil temperature,
+where <span class="math notranslate nohighlight">\(\tau\)</span> is the time constant of one day (86400s),
+<span class="math notranslate nohighlight">\(G\)</span> is the ground the heat flux and
+and <span class="math notranslate nohighlight">\(C_T\)</span> is the surface soil/vegetation heat capacity, which can be parametrized as</p>
+<div class="math notranslate nohighlight">
+\[C_T = C_{T,\text{sat}} \left(\frac{w_{\text{sat}}}{w_2}\right)^{\frac{b}{2\log(10)}}\]</div>
+<p>where <span class="math notranslate nohighlight">\(C_{T,\text{sat}}\)</span> is the saturated heat capacity,
+<span class="math notranslate nohighlight">\(w_{\text{sat}}\)</span> is the saturation water content,
+<span class="math notranslate nohighlight">\(w_2\)</span> is the water content at the second layer
+and <span class="math notranslate nohighlight">\(b\)</span> is a parameter from Clapp and Hornberger (1978).
+I have no idea where this log comes from.</p>
+<p class="rubric">References</p>
+<p>Equation 9.32 of the CLASS book.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_wgtend">
+<span class="sig-name descname"><span class="pre">compute_wgtend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/standard.html#AbstractStandardLandSurfaceModel.compute_wgtend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_wgtend" title="Link to this definition">#</a></dt>
+<dd><p>Compute the soil moisture tendency <code class="docutils literal notranslate"><span class="pre">wgtend</span></code>.</p>
+<p class="rubric">Notes</p>
+<p>The dynamics of soil moisture in the top soil layer is described by</p>
+<div class="math notranslate nohighlight" id="equation-dynamics">
+<span class="eqno">(1)<a class="headerlink" href="#equation-dynamics" title="Link to this equation">#</a></span>\[\frac{\mathrm{d}w_g}{\mathrm{d}t}
+=
+-\frac{C_1}{\rho_w d_1} \frac{LE_{\text{soil}}}{L_v}
+- \frac{C_2}{\tau} (w_g - w_{eq}),\]</div>
+<p>where the coefficients <span class="math notranslate nohighlight">\(C_1\)</span> and <span class="math notranslate nohighlight">\(C_2\)</span> are calculated as</p>
+<div class="math notranslate nohighlight">
+\[C_1 = C_{1,\text{sat}} \left(\frac{w_{sat}}{w_g}\right)^{b/2 + 1},\]</div>
+<div class="math notranslate nohighlight">
+\[C_2 = C_{2,\text{ref}} \left(\frac{w_2}{w_{sat} - w_2}\right),\]</div>
+<p>where <span class="math notranslate nohighlight">\(C_{1,\text{sat}}\)</span> and <span class="math notranslate nohighlight">\(C_{2,\text{sat}}\)</span> are parameters from Clapp-Hornberger (1978)
+and the equilibrium soil moisture is given by</p>
+<div class="math notranslate nohighlight">
+\[w_{eq} = w_2 - w_{sat} a \left(\left(\frac{w_2}{w_{sat}}\right)^p
+\left[1 - \left(\frac{w_2}{w_{sat}}\right)^{8p}\right]\right).\]</div>
+<p>In these equations, <span class="math notranslate nohighlight">\(w_g\)</span> is the volumetric soil moisture in the top layer,
+<span class="math notranslate nohighlight">\(LE_{\text{soil}}\)</span> is the latent heat flux from the soil,
+<span class="math notranslate nohighlight">\(L_v\)</span> is the latent heat of vaporization,
+<span class="math notranslate nohighlight">\(\rho_w\)</span> is the density of water,
+<span class="math notranslate nohighlight">\(d_1\)</span> is the depth of the first soil layer,
+<span class="math notranslate nohighlight">\(\tau\)</span> is a time constant (here, 86400 s = 1 day),
+<span class="math notranslate nohighlight">\(w_2\)</span> is the soil moisture in the second layer,
+<span class="math notranslate nohighlight">\(w_{sat}\)</span> is the saturated soil moisture, and
+<span class="math notranslate nohighlight">\(a\)</span>, <span class="math notranslate nohighlight">\(b\)</span> and <span class="math notranslate nohighlight">\(p\)</span> are parameters from Clapp-Hornberger (1978).</p>
+<p>In <a class="reference internal" href="#equation-dynamics">(1)</a>, the first term represents the loss of soil moisture due to evaporation,
+and the second term represents the relaxation of soil moisture toward equilibrium with the lower layer.</p>
+<p class="rubric">References</p>
+<ul class="simple">
+<li><p>(9.34)–(9.37) in the CLASS book.</p></li>
+<li><p>Clapp, R. B., &amp; Hornberger, G. M. (1978). Empirical equations for some soil hydraulic properties. Water resources research, 14(4), 601-604.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_wtheta">
+<span class="sig-name descname"><span class="pre">compute_wtheta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/standard.html#AbstractStandardLandSurfaceModel.compute_wtheta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_wtheta" title="Link to this definition">#</a></dt>
+<dd><p>Compute the kinematic heat flux <code class="docutils literal notranslate"><span class="pre">wtheta</span></code>.</p>
+<p class="rubric">Notes</p>
+<p>The kinematic heat flux <span class="math notranslate nohighlight">\(\overline{(w'\theta')}_s\)</span> is directly related to the
+sensible heat flux <span class="math notranslate nohighlight">\(H\)</span> through</p>
+<div class="math notranslate nohighlight">
+\[\overline{(w'\theta')}_s = \frac{H}{\rho c_p},\]</div>
+<p>where <span class="math notranslate nohighlight">\(\rho\)</span> is the density of air and
+<span class="math notranslate nohighlight">\(c_p\)</span> is the specific heat capacity of air at constant pressure.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_wq">
+<span class="sig-name descname"><span class="pre">compute_wq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/standard.html#AbstractStandardLandSurfaceModel.compute_wq"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_wq" title="Link to this definition">#</a></dt>
+<dd><p>Compute the kinematic moisture flux <code class="docutils literal notranslate"><span class="pre">wq</span></code>.</p>
+<p class="rubric">Notes</p>
+<p>The kinematic moisture flux <span class="math notranslate nohighlight">\(\overline{(w'q')}_s\)</span> is directly related to the
+latent heat flux <span class="math notranslate nohighlight">\(LE\)</span> through</p>
+<div class="math notranslate nohighlight">
+\[\overline{(w'q')}_s = \frac{LE}{\rho L_v},\]</div>
+<p>where <span class="math notranslate nohighlight">\(\rho\)</span> is the density of air and
+<span class="math notranslate nohighlight">\(L_v\)</span> is the latent heat of vaporization.</p>
 </dd></dl>
 
 </dd></dl>
@@ -651,10 +1039,28 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_surface_resistance"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.compute_surface_resistance()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_co2_flux"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.compute_co2_flux()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.run"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.run()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.integrate"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.integrate()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.run"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.run()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_dqsatdT"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.compute_dqsatdT()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_e"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.compute_e()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.update_surface_resistance"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.update_surface_resistance()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.update_co2_flux"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.update_co2_flux()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_soil_resistance"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.compute_soil_resistance()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_cliq"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.compute_cliq()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_skin_temperature"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.compute_skin_temperature()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_le_veg"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.compute_le_veg()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_le_liq"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.compute_le_liq()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_le_soil"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.compute_le_soil()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_wltend"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.compute_wltend()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_le"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.compute_le()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_hf"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.compute_hf()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_gf"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.compute_gf()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_le_pot"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.compute_le_pot()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_le_ref"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.compute_le_ref()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_temp_soil_tend"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.compute_temp_soil_tend()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_wgtend"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.compute_wgtend()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_wtheta"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.compute_wtheta()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel.compute_wq"><code class="docutils literal notranslate"><span class="pre">AbstractStandardLandSurfaceModel.compute_wq()</span></code></a></li>
 </ul>
 </li>
 </ul>

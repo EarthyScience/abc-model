@@ -29,7 +29,6 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=54e235e8" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
@@ -152,7 +151,7 @@
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../source/api/abcmodel.html">ABC Model</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../source/api/abcmodel.radiation.html">Radiation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../source/api/abcmodel.radiation.standard.html">Standard</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../source/api/abcmodel.radiation.standard_w_clouds.html">Standard W Clouds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../source/api/abcmodel.radiation.standard_w_clouds.html">Standard With Clouds</a></li>
 </ul>
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../source/api/abcmodel.land_surface.html">Land Surface</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -336,53 +335,158 @@ document.write(`
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-<div class="viewcode-block" id="JarvisStewartModel.get_f1">
-<a class="viewcode-back" href="../../../source/api/abcmodel.land_surface.jarvis_stewart.html#abcmodel.land_surface.jarvis_stewart.JarvisStewartModel.get_f1">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_f1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">PyTree</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate radiation-dependent scaling factor for surface processes.</span>
-
-<span class="sd">        Returns correction factor based on incoming solar radiation that typically</span>
-<span class="sd">        ranges from 1.0 to higher values, used to scale surface flux calculations.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">ratio</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.004</span> <span class="o">*</span> <span class="n">state</span><span class="o">.</span><span class="n">in_srad</span> <span class="o">+</span> <span class="mf">0.05</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mf">0.81</span> <span class="o">*</span> <span class="p">(</span><span class="mf">0.004</span> <span class="o">*</span> <span class="n">state</span><span class="o">.</span><span class="n">in_srad</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">))</span>
-        <span class="n">f1</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">jnp</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">ratio</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">f1</span></div>
-
-
-<div class="viewcode-block" id="JarvisStewartModel.compute_surface_resistance">
-<a class="viewcode-back" href="../../../source/api/abcmodel.land_surface.jarvis_stewart.html#abcmodel.land_surface.jarvis_stewart.JarvisStewartModel.compute_surface_resistance">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">compute_surface_resistance</span><span class="p">(</span>
+<div class="viewcode-block" id="JarvisStewartModel.update_surface_resistance">
+<a class="viewcode-back" href="../../../source/api/abcmodel.land_surface.jarvis_stewart.html#abcmodel.land_surface.jarvis_stewart.JarvisStewartModel.update_surface_resistance">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_surface_resistance</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">state</span><span class="p">:</span> <span class="n">PyTree</span><span class="p">,</span>
         <span class="n">const</span><span class="p">:</span> <span class="n">PhysicalConstants</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute surface resistance using Jarvis-Stewart approach.&quot;&quot;&quot;</span>
-        <span class="c1"># calculate surface resistances using Jarvis-Stewart model</span>
-        <span class="n">f1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_f1</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-        <span class="n">f2</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
-            <span class="n">state</span><span class="o">.</span><span class="n">w2</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">wwilt</span><span class="p">,</span>
-            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wfc</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">wwilt</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">w2</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">wwilt</span><span class="p">),</span>
-            <span class="mf">1.0e8</span><span class="p">,</span>
-        <span class="p">)</span>
-        <span class="c1"># limit f2 in case w2 &gt; wfc, where f2 &lt; 1</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">f2</span><span class="p">,</span> <span class="n">Array</span><span class="p">)</span>  <span class="c1"># limmau: this is not good</span>
-        <span class="n">f2</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">f2</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
-        <span class="n">f3</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">jnp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">gD</span> <span class="o">*</span> <span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">esat</span> <span class="o">-</span> <span class="n">state</span><span class="o">.</span><span class="n">e</span><span class="p">)</span> <span class="o">/</span> <span class="mf">100.0</span><span class="p">)</span>
-        <span class="n">f4</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="mf">0.0016</span> <span class="o">*</span> <span class="p">(</span><span class="mf">298.0</span> <span class="o">-</span> <span class="n">state</span><span class="o">.</span><span class="n">theta</span><span class="p">)</span> <span class="o">**</span> <span class="mf">2.0</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Update the surface resistance ``rs`` in the state using the Jarvis-Stewart model.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            The surface (stomatal) resistance is calculated as</span>
+
+<span class="sd">            .. math::</span>
+<span class="sd">                r_s = \\frac{r_{s,\\min}}{LAI} f_1 f_2 f_3 f_4</span>
+
+<span class="sd">            where :math:`r_{s,\\min}` is the minimum surface resistance,</span>
+<span class="sd">            :math:`LAI` is the leaf area index,</span>
+<span class="sd">            and :math:`f_1`, :math:`f_2`, :math:`f_3`, and :math:`f_4` are scaling factors that account for the effects of</span>
+
+<span class="sd">            - radiation (:meth:`compute_f1`),</span>
+<span class="sd">            - soil moisture (:meth:`compute_f2`),</span>
+<span class="sd">            - vapor pressure deficit (:meth:`compute_f3`), and</span>
+<span class="sd">            - temperature (:meth:`compute_f4`), respectively.</span>
+
+<span class="sd">            This approach follows the Jarvis-Stewart multiplicative model for stomatal conductance.</span>
+
+<span class="sd">        References:</span>
+<span class="sd">            Stewart, J.B. (1988). Modelling surface conductance of pine forest. Agricultural and Forest Meteorology, 43(1), 19-35.</span>
+
+<span class="sd">            Jarvis, P.G. (1976). The interpretation of the variations in leaf water potential and stomatal conductance found in</span>
+<span class="sd">            canopies in the field. Philosophical Transactions of the Royal Society of London. B, Biological Sciences, 273(927), 593-610.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">f1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_f1</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="n">f2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_f2</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="n">f3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_f3</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="n">f4</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_f4</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
 
         <span class="n">state</span><span class="o">.</span><span class="n">rs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rsmin</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">lai</span> <span class="o">*</span> <span class="n">f1</span> <span class="o">*</span> <span class="n">f2</span> <span class="o">*</span> <span class="n">f3</span> <span class="o">*</span> <span class="n">f4</span>
 
         <span class="k">return</span> <span class="n">state</span></div>
 
 
-<div class="viewcode-block" id="JarvisStewartModel.compute_co2_flux">
-<a class="viewcode-back" href="../../../source/api/abcmodel.land_surface.jarvis_stewart.html#abcmodel.land_surface.jarvis_stewart.JarvisStewartModel.compute_co2_flux">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">compute_co2_flux</span><span class="p">(</span>
+<div class="viewcode-block" id="JarvisStewartModel.compute_f1">
+<a class="viewcode-back" href="../../../source/api/abcmodel.land_surface.jarvis_stewart.html#abcmodel.land_surface.jarvis_stewart.JarvisStewartModel.compute_f1">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_f1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">PyTree</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate the radiation-dependent scaling factor ``f1`` for surface resistance.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            This factor accounts for the effect of incoming shortwave radiation on stomatal conductance,</span>
+<span class="sd">            given by</span>
+
+<span class="sd">            .. math::</span>
+<span class="sd">                f_1 = \\frac{1}{\\min\\left(1, \\frac{0.004 S + 0.05}{0.81 (0.004 S + 1)}\\right)},</span>
+
+<span class="sd">            where :math:`S` is the incoming shortwave radiation.</span>
+
+<span class="sd">        References:</span>
+<span class="sd">            Equation 9.27 in the CLASS book.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ratio</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.004</span> <span class="o">*</span> <span class="n">state</span><span class="o">.</span><span class="n">in_srad</span> <span class="o">+</span> <span class="mf">0.05</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mf">0.81</span> <span class="o">*</span> <span class="p">(</span><span class="mf">0.004</span> <span class="o">*</span> <span class="n">state</span><span class="o">.</span><span class="n">in_srad</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">))</span>
+        <span class="n">f1</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">jnp</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">ratio</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">f1</span></div>
+
+
+<div class="viewcode-block" id="JarvisStewartModel.compute_f2">
+<a class="viewcode-back" href="../../../source/api/abcmodel.land_surface.jarvis_stewart.html#abcmodel.land_surface.jarvis_stewart.JarvisStewartModel.compute_f2">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_f2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">PyTree</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate the soil moisture-dependent scaling factor ``f2`` for surface resistance.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            This factor accounts for the effect of soil moisture in the second layer on stomatal conductance,</span>
+<span class="sd">            given by</span>
+
+<span class="sd">            .. math::</span>
+<span class="sd">                f_2 =</span>
+<span class="sd">                    \\begin{cases}</span>
+<span class="sd">                        \\frac{w_{fc} - w_{wilt}}{w_2 - w_{wilt}}, &amp; \\text{if } w_2 &gt; w_{wilt} \\\\</span>
+<span class="sd">                        10^8, &amp; \\text{otherwise},</span>
+<span class="sd">                    \\end{cases}</span>
+
+<span class="sd">            where :math:`w_2` is the soil moisture in the second layer,</span>
+<span class="sd">            :math:`w_{fc}` is soil moisture at field capacity, and</span>
+<span class="sd">            :math:`w_{wilt}` is soil moisture at the wilting point.</span>
+
+<span class="sd">            To avoid unrealistically low values when :math:`w_2 &gt; w_{fc}`, the minimum value of :math:`f_2` is limited to 1.</span>
+
+<span class="sd">        References:</span>
+<span class="sd">            Equation 9.28 in the CLASS book.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">f2</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+            <span class="n">state</span><span class="o">.</span><span class="n">w2</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">wwilt</span><span class="p">,</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wfc</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">wwilt</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">w2</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">wwilt</span><span class="p">),</span>
+            <span class="mf">1.0e8</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">f2</span><span class="p">,</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span>
+        <span class="n">f2</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">f2</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">f2</span></div>
+
+
+<div class="viewcode-block" id="JarvisStewartModel.compute_f3">
+<a class="viewcode-back" href="../../../source/api/abcmodel.land_surface.jarvis_stewart.html#abcmodel.land_surface.jarvis_stewart.JarvisStewartModel.compute_f3">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_f3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">PyTree</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate the vapor pressure deficit-dependent scaling factor ``f3`` for surface resistance.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            This factor accounts for the effect of vapor pressure deficit (VPD) on stomatal conductance,</span>
+<span class="sd">            given by</span>
+
+<span class="sd">            .. math::</span>
+<span class="sd">                f_3 = \\exp\\left(\\gamma_D \\frac{e_{sat} - e}{100}\\right)^{-1},</span>
+
+<span class="sd">            where :math:`e_{sat}` is the saturation vapor pressure,</span>
+<span class="sd">            :math:`e` is the actual vapor pressure, and</span>
+<span class="sd">            :math:`\\gamma_D` is an empirical parameter.</span>
+
+<span class="sd">        References:</span>
+<span class="sd">            Equation 9.29 in the CLASS book.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">vpd</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">esat</span> <span class="o">-</span> <span class="n">state</span><span class="o">.</span><span class="n">e</span>
+        <span class="n">f3</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">jnp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">gD</span> <span class="o">*</span> <span class="n">vpd</span> <span class="o">/</span> <span class="mf">100.0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">f3</span></div>
+
+
+<div class="viewcode-block" id="JarvisStewartModel.compute_f4">
+<a class="viewcode-back" href="../../../source/api/abcmodel.land_surface.jarvis_stewart.html#abcmodel.land_surface.jarvis_stewart.JarvisStewartModel.compute_f4">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_f4</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">PyTree</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate the temperature-dependent scaling factor ``f4`` for surface resistance.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            This factor accounts for the effect of temperature on stomatal conductance,</span>
+<span class="sd">            given by</span>
+
+<span class="sd">            .. math::</span>
+<span class="sd">                f_4 = \\frac{1}{1 - 0.0016 (298 - \\theta)^2},</span>
+
+<span class="sd">            where :math:`\\theta` is the air temperature in Kelvin.</span>
+
+<span class="sd">        References:</span>
+<span class="sd">            Equation 9.30 in the CLASS book.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">f4</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="mf">0.0016</span> <span class="o">*</span> <span class="p">(</span><span class="mf">298.0</span> <span class="o">-</span> <span class="n">state</span><span class="o">.</span><span class="n">theta</span><span class="p">)</span> <span class="o">**</span> <span class="mf">2.0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">f4</span></div>
+
+
+<div class="viewcode-block" id="JarvisStewartModel.update_co2_flux">
+<a class="viewcode-back" href="../../../source/api/abcmodel.land_surface.jarvis_stewart.html#abcmodel.land_surface.jarvis_stewart.JarvisStewartModel.update_co2_flux">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_co2_flux</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">state</span><span class="p">:</span> <span class="n">PyTree</span><span class="p">,</span>
         <span class="n">const</span><span class="p">:</span> <span class="n">PhysicalConstants</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Pass.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;No CO2 flux is computed using this model. See :class:`~abcmodel.land_surface.aquacrop.AquaCropModel`.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">state</span></div>
 </div>
 

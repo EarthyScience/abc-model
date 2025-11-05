@@ -6,7 +6,7 @@ from ..models import (
     AbstractLandSurfaceModel,
     AbstractSurfaceLayerModel,
 )
-from ..utils import PhysicalConstants, get_esat, get_qsat
+from ..utils import PhysicalConstants, compute_esat, compute_qsat
 
 
 @dataclass
@@ -41,8 +41,8 @@ class MinimalLandSurfaceModel(AbstractLandSurfaceModel):
         state.ra = surface_layer.compute_ra(state)
 
         # (2) calculate essential thermodynamic variables
-        state.esat = get_esat(state.theta)
-        state.qsat = get_qsat(state.theta, state.surf_pressure)
+        state.esat = compute_esat(state.theta)
+        state.qsat = compute_qsat(state.theta, state.surf_pressure)
         desatdT = state.esat * (
             17.2694 / (state.theta - 35.86)
             - 17.2694 * (state.theta - 273.16) / (state.theta - 35.86) ** 2.0

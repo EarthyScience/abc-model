@@ -29,7 +29,6 @@
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=54e235e8" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
@@ -152,7 +151,7 @@
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../source/api/abcmodel.html">ABC Model</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../source/api/abcmodel.radiation.html">Radiation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../source/api/abcmodel.radiation.standard.html">Standard</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../source/api/abcmodel.radiation.standard_w_clouds.html">Standard W Clouds</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../source/api/abcmodel.radiation.standard_w_clouds.html">Standard With Clouds</a></li>
 </ul>
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../source/api/abcmodel.land_surface.html">Land Surface</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -305,7 +304,7 @@ document.write(`
 <span class="kn">from</span><span class="w"> </span><span class="nn">..models</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">AbstractMixedLayerModel</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">..utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">PhysicalConstants</span><span class="p">,</span> <span class="n">get_qsat</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">PhysicalConstants</span><span class="p">,</span> <span class="n">compute_qsat</span>
 
 
 <div class="viewcode-block" id="AbstractStandardStatsModel">
@@ -334,7 +333,7 @@ document.write(`
         <span class="c1"># mixed-layer top properties</span>
         <span class="n">state</span><span class="o">.</span><span class="n">top_p</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">surf_pressure</span> <span class="o">-</span> <span class="n">const</span><span class="o">.</span><span class="n">rho</span> <span class="o">*</span> <span class="n">const</span><span class="o">.</span><span class="n">g</span> <span class="o">*</span> <span class="n">state</span><span class="o">.</span><span class="n">abl_height</span>
         <span class="n">state</span><span class="o">.</span><span class="n">top_T</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">theta</span> <span class="o">-</span> <span class="n">const</span><span class="o">.</span><span class="n">g</span> <span class="o">/</span> <span class="n">const</span><span class="o">.</span><span class="n">cp</span> <span class="o">*</span> <span class="n">state</span><span class="o">.</span><span class="n">abl_height</span>
-        <span class="n">state</span><span class="o">.</span><span class="n">top_rh</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">q</span> <span class="o">/</span> <span class="n">get_qsat</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">top_T</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">top_p</span><span class="p">)</span>
+        <span class="n">state</span><span class="o">.</span><span class="n">top_rh</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">q</span> <span class="o">/</span> <span class="n">compute_qsat</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">top_T</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">top_p</span><span class="p">)</span>
 
         <span class="c1"># find lifting condensation level iteratively using JAX</span>
         <span class="c1"># initialize lcl and rhlcl based on timestep</span>
@@ -351,7 +350,7 @@ document.write(`
             <span class="c1"># calculate new relative humidity at updated lcl</span>
             <span class="n">p_lcl</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">surf_pressure</span> <span class="o">-</span> <span class="n">const</span><span class="o">.</span><span class="n">rho</span> <span class="o">*</span> <span class="n">const</span><span class="o">.</span><span class="n">g</span> <span class="o">*</span> <span class="n">new_lcl</span>
             <span class="n">temp_lcl</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">theta</span> <span class="o">-</span> <span class="n">const</span><span class="o">.</span><span class="n">g</span> <span class="o">/</span> <span class="n">const</span><span class="o">.</span><span class="n">cp</span> <span class="o">*</span> <span class="n">new_lcl</span>
-            <span class="n">new_rhlcl</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">q</span> <span class="o">/</span> <span class="n">get_qsat</span><span class="p">(</span><span class="n">temp_lcl</span><span class="p">,</span> <span class="n">p_lcl</span><span class="p">)</span>
+            <span class="n">new_rhlcl</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">q</span> <span class="o">/</span> <span class="n">compute_qsat</span><span class="p">(</span><span class="n">temp_lcl</span><span class="p">,</span> <span class="n">p_lcl</span><span class="p">)</span>
 
             <span class="k">return</span> <span class="n">new_lcl</span><span class="p">,</span> <span class="n">new_rhlcl</span><span class="p">,</span> <span class="n">iteration</span> <span class="o">+</span> <span class="mi">1</span>
 

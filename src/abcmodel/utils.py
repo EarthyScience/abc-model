@@ -4,7 +4,7 @@ import jax.numpy as jnp
 from jaxtyping import Array
 
 
-def get_esat(temp: Array) -> Array:
+def compute_esat(temp: Array) -> Array:
     """Calculate saturated vapor pressure using the August-Roche-Magnus formula.
 
     Args:
@@ -33,7 +33,7 @@ def get_esat(temp: Array) -> Array:
     return 0.611e3 * jnp.exp(17.2694 * temp_celsius / denominator)
 
 
-def get_qsat(temp: Array, pressure: Array) -> Array:
+def compute_qsat(temp: Array, pressure: Array) -> Array:
     """Calculate saturated specific humidity.
 
     Args:
@@ -66,7 +66,7 @@ def get_qsat(temp: Array, pressure: Array) -> Array:
         .. math::
             q_{\\text{sat}} \\approx \\epsilon \\frac{e_{\\text{sat}}}{p}.
     """
-    esat = get_esat(temp)
+    esat = compute_esat(temp)
     return 0.622 * esat / pressure
 
 
