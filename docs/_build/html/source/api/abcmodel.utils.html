@@ -346,8 +346,6 @@ document.write(`
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.utils.compute_esat"><code class="docutils literal notranslate"><span class="pre">compute_esat()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.utils.compute_qsat"><code class="docutils literal notranslate"><span class="pre">compute_qsat()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.utils.get_psim"><code class="docutils literal notranslate"><span class="pre">get_psim()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.utils.get_psih"><code class="docutils literal notranslate"><span class="pre">get_psih()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.utils.PhysicalConstants"><code class="docutils literal notranslate"><span class="pre">PhysicalConstants</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.utils.PhysicalConstants.lv"><code class="docutils literal notranslate"><span class="pre">PhysicalConstants.lv</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.utils.PhysicalConstants.cp"><code class="docutils literal notranslate"><span class="pre">PhysicalConstants.cp</span></code></a></li>
@@ -433,80 +431,6 @@ and then using the Ideal Gas Law and Dalton’s Law of Partial Pressures.</p>
 negligible compared to <span class="math notranslate nohighlight">\(p\)</span>, simplifying the formula to</p>
 <div class="math notranslate nohighlight">
 \[q_{\text{sat}} \approx \epsilon \frac{e_{\text{sat}}}{p}.\]</div>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="abcmodel.utils.get_psim">
-<span class="sig-prename descclassname"><span class="pre">abcmodel.utils.</span></span><span class="sig-name descname"><span class="pre">get_psim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">zeta</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/utils.html#get_psim"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.utils.get_psim" title="Link to this definition">#</a></dt>
-<dd><p>Calculate momentum stability function from Monin-Obukhov similarity theory.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>zeta</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></span>) – stability parameter z/L [-].</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Momentum stability correction [-].</p>
-</dd>
-</dl>
-<p class="rubric">Notes</p>
-<p>This function calculates the integrated stability correction function for
-momentum <span class="math notranslate nohighlight">\(\Psi_m\)</span>, which is used to adjust wind profiles based
-on atmospheric stability.</p>
-<p>The function is piecewise, depending on the stability parameter
-<span class="math notranslate nohighlight">\(\zeta = z/L\)</span>.</p>
-<p><strong>1. Unstable conditions (ζ ≤ 0):</strong></p>
-<p>Based on Businger-Dyer relations, an intermediate variable</p>
-<div class="math notranslate nohighlight">
-\[x = (1 - 16\zeta)^{1/4}\]</div>
-<p>is used to write the stability function as</p>
-<div class="math notranslate nohighlight">
-\[\Psi_m(\zeta) = \ln\left( \frac{(1+x)^2 (1+x^2)}{8} \right)
-                 - 2 \arctan(x) + \frac{\pi}{2}.\]</div>
-<p><strong>2. Stable conditions (ζ &gt; 0):</strong></p>
-<p>This uses an empirical formula (e.g., Holtslag and De Bruin, 1988)
-with constants:</p>
-<ul class="simple">
-<li><p><span class="math notranslate nohighlight">\(\alpha = 0.35\)</span>,</p></li>
-<li><p><span class="math notranslate nohighlight">\(\beta = 5.0 / \alpha\)</span>,</p></li>
-<li><p><span class="math notranslate nohighlight">\(\gamma = (10.0 / 3.0) / \alpha\)</span>.</p></li>
-</ul>
-<p>The stability function is then  given by</p>
-<div class="math notranslate nohighlight">
-\[\Psi_m(\zeta) = -\frac{2}{3}(\zeta - \beta)e^{-\alpha \zeta}
-                 - \zeta - \gamma.\]</div>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="abcmodel.utils.get_psih">
-<span class="sig-prename descclassname"><span class="pre">abcmodel.utils.</span></span><span class="sig-name descname"><span class="pre">get_psih</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">zeta</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/utils.html#get_psih"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.utils.get_psih" title="Link to this definition">#</a></dt>
-<dd><p>Calculate scalar stability function from Monin-Obukhov similarity theory.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>zeta</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></span>) – stability parameter z/L [-].</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Scalar stability correction [-].</p>
-</dd>
-</dl>
-<p class="rubric">Notes</p>
-<p>This function calculates the integrated stability correction function for
-scalars <span class="math notranslate nohighlight">\(\Psi_h\)</span>, like heat and humidity, which is used to
-adjust temperature and humidity profiles based on atmospheric stability.</p>
-<p>The function is piecewise, depending on the stability parameter
-<span class="math notranslate nohighlight">\(\zeta = z/L\)</span>.</p>
-<p><strong>1. Unstable conditions (ζ ≤ 0):</strong></p>
-<p>Based on Businger-Dyer relations, an intermediate variable (same as above)</p>
-<div class="math notranslate nohighlight">
-\[x = (1 - 16\zeta)^{1/4}\]</div>
-<p>is used to write the integrated stability function</p>
-<div class="math notranslate nohighlight">
-\[\Psi_h(\zeta) = 2 \ln\left( \frac{1+x^2}{2} \right).\]</div>
-<p><strong>2. Stable conditions (ζ &gt; 0):</strong></p>
-<p>This uses a corresponding empirical formula with the same constants
-(<span class="math notranslate nohighlight">\(\alpha\)</span>, <span class="math notranslate nohighlight">\(\beta\)</span>, <span class="math notranslate nohighlight">\(\gamma\)</span>) as above to write</p>
-<div class="math notranslate nohighlight">
-\[\Psi_h(\zeta) = -\frac{2}{3}(\zeta - \beta)e^{-\alpha \zeta}
-                - \left(1 + \frac{2}{3}\zeta\right)^{3/2}
-                - \gamma + 1.\]</div>
 </dd></dl>
 
 <dl class="py class">
@@ -643,8 +567,6 @@ adjust temperature and humidity profiles based on atmospheric stability.</p>
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.utils.compute_esat"><code class="docutils literal notranslate"><span class="pre">compute_esat()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.utils.compute_qsat"><code class="docutils literal notranslate"><span class="pre">compute_qsat()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.utils.get_psim"><code class="docutils literal notranslate"><span class="pre">get_psim()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.utils.get_psih"><code class="docutils literal notranslate"><span class="pre">get_psih()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.utils.PhysicalConstants"><code class="docutils literal notranslate"><span class="pre">PhysicalConstants</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.utils.PhysicalConstants.lv"><code class="docutils literal notranslate"><span class="pre">PhysicalConstants.lv</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.utils.PhysicalConstants.cp"><code class="docutils literal notranslate"><span class="pre">PhysicalConstants.cp</span></code></a></li>
