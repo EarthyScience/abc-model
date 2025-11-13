@@ -4,7 +4,7 @@ import jax.numpy as jnp
 from jaxtyping import Array
 
 
-def get_esat(temp: Array) -> Array:
+def compute_esat(temp: Array) -> Array:
     """Calculate saturated vapor pressure using the August-Roche-Magnus formula.
 
     Args:
@@ -33,7 +33,7 @@ def get_esat(temp: Array) -> Array:
     return 0.611e3 * jnp.exp(17.2694 * temp_celsius / denominator)
 
 
-def get_qsat(temp: Array, pressure: Array) -> Array:
+def compute_qsat(temp: Array, pressure: Array) -> Array:
     """Calculate saturated specific humidity.
 
     Args:
@@ -66,136 +66,8 @@ def get_qsat(temp: Array, pressure: Array) -> Array:
         .. math::
             q_{\\text{sat}} \\approx \\epsilon \\frac{e_{\\text{sat}}}{p}.
     """
-    esat = get_esat(temp)
+    esat = compute_esat(temp)
     return 0.622 * esat / pressure
-
-
-def get_psim(zeta: Array) -> Array:
-    """Calculate momentum stability function from Monin-Obukhov similarity theory.
-
-    Args:
-        zeta: stability parameter z/L [-].
-
-    Returns:
-        Momentum stability correction [-].
-
-    Notes:
-        This function calculates the integrated stability correction function for
-        momentum :math:`\\Psi_m`, which is used to adjust wind profiles based
-        on atmospheric stability.
-
-        The function is piecewise, depending on the stability parameter
-        :math:`\\zeta = z/L`.
-
-        **1. Unstable conditions (ζ ≤ 0):**
-
-        Based on Businger-Dyer relations, an intermediate variable
-
-        .. math::
-            x = (1 - 16\\zeta)^{1/4}
-
-        is used to write the stability function as
-
-        .. math::
-            \\Psi_m(\\zeta) = \\ln\\left( \\frac{(1+x)^2 (1+x^2)}{8} \\right)
-                             - 2 \\arctan(x) + \\frac{\\pi}{2}.
-
-        **2. Stable conditions (ζ > 0):**
-
-        This uses an empirical formula (e.g., Holtslag and De Bruin, 1988)
-        with constants:
-
-        - :math:`\\alpha = 0.35`,
-        - :math:`\\beta = 5.0 / \\alpha`,
-        - :math:`\\gamma = (10.0 / 3.0) / \\alpha`.
-
-        The stability function is then  given by
-
-        .. math::
-            \\Psi_m(\\zeta) = -\\frac{2}{3}(\\zeta - \\beta)e^{-\\alpha \\zeta}
-                             - \\zeta - \\gamma.
-    """
-    # constants for stable conditions
-    alpha = 0.35
-    beta = 5.0 / alpha
-    gamma = (10.0 / 3.0) / alpha
-    pi_half = jnp.pi / 2.0
-
-    # unstable conditions (zeta <= 0)
-    x = (1.0 - 16.0 * zeta) ** 0.25
-    arctan_term = 2.0 * jnp.arctan(x)
-    log_numerator = (1.0 + x) ** 2.0 * (1.0 + x**2.0)
-    log_term = jnp.log(log_numerator / 8.0)
-    psim_unstable = pi_half - arctan_term + log_term
-
-    # stable conditions (zeta > 0)
-    exponential_term = (zeta - beta) * jnp.exp(-alpha * zeta)
-    psim_stable = -2.0 / 3.0 * exponential_term - zeta - gamma
-
-    # select based on stability condition
-    psim = jnp.where(zeta <= 0, psim_unstable, psim_stable)
-
-    return psim
-
-
-def get_psih(zeta: Array) -> Array:
-    """Calculate scalar stability function from Monin-Obukhov similarity theory.
-
-    Args:
-        zeta: stability parameter z/L [-].
-
-    Returns:
-        Scalar stability correction [-].
-
-    Notes:
-        This function calculates the integrated stability correction function for
-        scalars :math:`\\Psi_h`, like heat and humidity, which is used to
-        adjust temperature and humidity profiles based on atmospheric stability.
-
-        The function is piecewise, depending on the stability parameter
-        :math:`\\zeta = z/L`.
-
-        **1. Unstable conditions (ζ ≤ 0):**
-
-        Based on Businger-Dyer relations, an intermediate variable (same as above)
-
-        .. math::
-            x = (1 - 16\\zeta)^{1/4}
-
-        is used to write the integrated stability function
-
-        .. math::
-            \\Psi_h(\\zeta) = 2 \\ln\\left( \\frac{1+x^2}{2} \\right).
-
-        **2. Stable conditions (ζ > 0):**
-
-        This uses a corresponding empirical formula with the same constants
-        (:math:`\\alpha`, :math:`\\beta`, :math:`\\gamma`) as above to write
-
-        .. math::
-            \\Psi_h(\\zeta) = -\\frac{2}{3}(\\zeta - \\beta)e^{-\\alpha \\zeta}
-                            - \\left(1 + \\frac{2}{3}\\zeta\\right)^{3/2}
-                            - \\gamma + 1.
-    """
-    # constants for stable conditions
-    alpha = 0.35
-    beta = 5.0 / alpha
-    gamma = (10.0 / 3.0) / alpha
-
-    # unstable conditions (zeta <= 0)
-    x = (1.0 - 16.0 * zeta) ** 0.25
-    log_argument = (1.0 + x * x) / 2.0
-    psih_unstable = 2.0 * jnp.log(log_argument)
-
-    # stable conditions (zeta > 0)
-    exponential_term = (zeta - beta) * jnp.exp(-alpha * zeta)
-    power_term = (1.0 + (2.0 / 3.0) * zeta) ** 1.5
-    psih_stable = -2.0 / 3.0 * exponential_term - power_term - gamma + 1.0
-
-    # select based on stability condition
-    psih = jnp.where(zeta <= 0, psih_unstable, psih_stable)
-
-    return psih
 
 
 @dataclass

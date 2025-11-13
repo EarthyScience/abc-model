@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 import abcconfigs.class_model as cm
 import abcmodel
-from abcmodel.utils import get_esat
+from abcmodel.utils import compute_esat
 
 N_PERTURB = 10
 SEED = 42
@@ -108,7 +108,7 @@ def main():
     plt.ylabel("thetasurf [K]")
 
     plt.subplot(233)
-    plt.plot(time, get_esat(control_traj.surf_temp) - control_traj.e, color="black")
+    plt.plot(time, compute_esat(control_traj.surf_temp) - control_traj.e, color="black")
     plt.xlabel("time [h]")
     plt.ylabel("VPD [Pa]")
 
@@ -196,14 +196,17 @@ def main():
     plt.ylabel("thetasurf [K]")
 
     plt.subplot(233)
-    plt.plot(time, get_esat(control_traj.surf_temp) - control_traj.e, color="black")
+    plt.plot(time, compute_esat(control_traj.surf_temp) - control_traj.e, color="black")
     for i in range(N_PERTURB):
         plt.plot(
-            time, get_esat(wg_traj.surf_temp[i]) - wg_traj.e[i], color="blue", alpha=0.1
+            time,
+            compute_esat(wg_traj.surf_temp[i]) - wg_traj.e[i],
+            color="blue",
+            alpha=0.1,
         )
         plt.plot(
             time,
-            get_esat(surf_temp_traj.surf_temp[i]) - surf_temp_traj.e[i],
+            compute_esat(surf_temp_traj.surf_temp[i]) - surf_temp_traj.e[i],
             color="red",
             alpha=0.1,
         )

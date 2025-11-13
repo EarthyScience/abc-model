@@ -5,7 +5,7 @@ from jaxtyping import PyTree
 from ..models import (
     AbstractMixedLayerModel,
 )
-from ..utils import PhysicalConstants, get_qsat
+from ..utils import PhysicalConstants, compute_qsat
 
 
 class AbstractStandardStatsModel(AbstractMixedLayerModel):
@@ -30,7 +30,7 @@ class AbstractStandardStatsModel(AbstractMixedLayerModel):
         # mixed-layer top properties
         state.top_p = state.surf_pressure - const.rho * const.g * state.abl_height
         state.top_T = state.theta - const.g / const.cp * state.abl_height
-        state.top_rh = state.q / get_qsat(state.top_T, state.top_p)
+        state.top_rh = state.q / compute_qsat(state.top_T, state.top_p)
 
         # find lifting condensation level iteratively using JAX
         # initialize lcl and rhlcl based on timestep
@@ -47,7 +47,7 @@ class AbstractStandardStatsModel(AbstractMixedLayerModel):
             # calculate new relative humidity at updated lcl
             p_lcl = state.surf_pressure - const.rho * const.g * new_lcl
             temp_lcl = state.theta - const.g / const.cp * new_lcl
-            new_rhlcl = state.q / get_qsat(temp_lcl, p_lcl)
+            new_rhlcl = state.q / compute_qsat(temp_lcl, p_lcl)
 
             return new_lcl, new_rhlcl, iteration + 1
 

@@ -351,15 +351,15 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.aquacrop.AquaCropModel"><code class="docutils literal notranslate"><span class="pre">AquaCropModel</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.aquacrop.AquaCropModel.calculate_co2_compensation_concentration"><code class="docutils literal notranslate"><span class="pre">AquaCropModel.calculate_co2_compensation_concentration()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.aquacrop.AquaCropModel.calculate_mesophyll_conductance"><code class="docutils literal notranslate"><span class="pre">AquaCropModel.calculate_mesophyll_conductance()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.aquacrop.AquaCropModel.compute_co2comp"><code class="docutils literal notranslate"><span class="pre">AquaCropModel.compute_co2comp()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.aquacrop.AquaCropModel.compute_gm"><code class="docutils literal notranslate"><span class="pre">AquaCropModel.compute_gm()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.aquacrop.AquaCropModel.calculate_internal_co2"><code class="docutils literal notranslate"><span class="pre">AquaCropModel.calculate_internal_co2()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.aquacrop.AquaCropModel.calculate_max_gross_primary_production"><code class="docutils literal notranslate"><span class="pre">AquaCropModel.calculate_max_gross_primary_production()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.aquacrop.AquaCropModel.calculate_soil_moisture_stress_factor"><code class="docutils literal notranslate"><span class="pre">AquaCropModel.calculate_soil_moisture_stress_factor()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.aquacrop.AquaCropModel.calculate_gross_assimilation_and_light_use"><code class="docutils literal notranslate"><span class="pre">AquaCropModel.calculate_gross_assimilation_and_light_use()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.aquacrop.AquaCropModel.calculate_canopy_co2_conductance"><code class="docutils literal notranslate"><span class="pre">AquaCropModel.calculate_canopy_co2_conductance()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.aquacrop.AquaCropModel.compute_surface_resistance"><code class="docutils literal notranslate"><span class="pre">AquaCropModel.compute_surface_resistance()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.aquacrop.AquaCropModel.compute_co2_flux"><code class="docutils literal notranslate"><span class="pre">AquaCropModel.compute_co2_flux()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.aquacrop.AquaCropModel.update_surface_resistance"><code class="docutils literal notranslate"><span class="pre">AquaCropModel.update_surface_resistance()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.aquacrop.AquaCropModel.update_co2_flux"><code class="docutils literal notranslate"><span class="pre">AquaCropModel.update_co2_flux()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -431,14 +431,14 @@ and explicit CO2 flux calculations.</p>
 </dd>
 </dl>
 <dl class="py method">
-<dt class="sig sig-object py" id="abcmodel.land_surface.aquacrop.AquaCropModel.calculate_co2_compensation_concentration">
-<span class="sig-name descname"><span class="pre">calculate_co2_compensation_concentration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">thetasurf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/aquacrop.html#AquaCropModel.calculate_co2_compensation_concentration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.aquacrop.AquaCropModel.calculate_co2_compensation_concentration" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="abcmodel.land_surface.aquacrop.AquaCropModel.compute_co2comp">
+<span class="sig-name descname"><span class="pre">compute_co2comp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">thetasurf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/aquacrop.html#AquaCropModel.compute_co2comp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.aquacrop.AquaCropModel.compute_co2comp" title="Link to this definition">#</a></dt>
 <dd><p>Calculate CO2 compensation concentration.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="abcmodel.land_surface.aquacrop.AquaCropModel.calculate_mesophyll_conductance">
-<span class="sig-name descname"><span class="pre">calculate_mesophyll_conductance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">thetasurf</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/aquacrop.html#AquaCropModel.calculate_mesophyll_conductance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.aquacrop.AquaCropModel.calculate_mesophyll_conductance" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="abcmodel.land_surface.aquacrop.AquaCropModel.compute_gm">
+<span class="sig-name descname"><span class="pre">compute_gm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">thetasurf</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/aquacrop.html#AquaCropModel.compute_gm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.aquacrop.AquaCropModel.compute_gm" title="Link to this definition">#</a></dt>
 <dd><p>Calculate mesophyll conductance.</p>
 </dd></dl>
 
@@ -473,14 +473,14 @@ and explicit CO2 flux calculations.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="abcmodel.land_surface.aquacrop.AquaCropModel.compute_surface_resistance">
-<span class="sig-name descname"><span class="pre">compute_surface_resistance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/aquacrop.html#AquaCropModel.compute_surface_resistance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.aquacrop.AquaCropModel.compute_surface_resistance" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="abcmodel.land_surface.aquacrop.AquaCropModel.update_surface_resistance">
+<span class="sig-name descname"><span class="pre">update_surface_resistance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/aquacrop.html#AquaCropModel.update_surface_resistance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.aquacrop.AquaCropModel.update_surface_resistance" title="Link to this definition">#</a></dt>
 <dd><p>Compute surface resistance using AquaCrop photosynthesis-conductance model.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="abcmodel.land_surface.aquacrop.AquaCropModel.compute_co2_flux">
-<span class="sig-name descname"><span class="pre">compute_co2_flux</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/aquacrop.html#AquaCropModel.compute_co2_flux"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.aquacrop.AquaCropModel.compute_co2_flux" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="abcmodel.land_surface.aquacrop.AquaCropModel.update_co2_flux">
+<span class="sig-name descname"><span class="pre">update_co2_flux</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/aquacrop.html#AquaCropModel.update_co2_flux"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.aquacrop.AquaCropModel.update_co2_flux" title="Link to this definition">#</a></dt>
 <dd><p>Compute the CO2 flux.</p>
 </dd></dl>
 
@@ -541,15 +541,15 @@ and explicit CO2 flux calculations.</p>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.aquacrop.AquaCropModel"><code class="docutils literal notranslate"><span class="pre">AquaCropModel</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.aquacrop.AquaCropModel.calculate_co2_compensation_concentration"><code class="docutils literal notranslate"><span class="pre">AquaCropModel.calculate_co2_compensation_concentration()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.aquacrop.AquaCropModel.calculate_mesophyll_conductance"><code class="docutils literal notranslate"><span class="pre">AquaCropModel.calculate_mesophyll_conductance()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.aquacrop.AquaCropModel.compute_co2comp"><code class="docutils literal notranslate"><span class="pre">AquaCropModel.compute_co2comp()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.aquacrop.AquaCropModel.compute_gm"><code class="docutils literal notranslate"><span class="pre">AquaCropModel.compute_gm()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.aquacrop.AquaCropModel.calculate_internal_co2"><code class="docutils literal notranslate"><span class="pre">AquaCropModel.calculate_internal_co2()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.aquacrop.AquaCropModel.calculate_max_gross_primary_production"><code class="docutils literal notranslate"><span class="pre">AquaCropModel.calculate_max_gross_primary_production()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.aquacrop.AquaCropModel.calculate_soil_moisture_stress_factor"><code class="docutils literal notranslate"><span class="pre">AquaCropModel.calculate_soil_moisture_stress_factor()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.aquacrop.AquaCropModel.calculate_gross_assimilation_and_light_use"><code class="docutils literal notranslate"><span class="pre">AquaCropModel.calculate_gross_assimilation_and_light_use()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.aquacrop.AquaCropModel.calculate_canopy_co2_conductance"><code class="docutils literal notranslate"><span class="pre">AquaCropModel.calculate_canopy_co2_conductance()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.aquacrop.AquaCropModel.compute_surface_resistance"><code class="docutils literal notranslate"><span class="pre">AquaCropModel.compute_surface_resistance()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.aquacrop.AquaCropModel.compute_co2_flux"><code class="docutils literal notranslate"><span class="pre">AquaCropModel.compute_co2_flux()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.aquacrop.AquaCropModel.update_surface_resistance"><code class="docutils literal notranslate"><span class="pre">AquaCropModel.update_surface_resistance()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.aquacrop.AquaCropModel.update_co2_flux"><code class="docutils literal notranslate"><span class="pre">AquaCropModel.update_co2_flux()</span></code></a></li>
 </ul>
 </li>
 </ul>

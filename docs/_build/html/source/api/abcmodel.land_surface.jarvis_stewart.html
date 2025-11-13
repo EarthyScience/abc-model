@@ -40,6 +40,7 @@
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'source/api/abcmodel.land_surface.jarvis_stewart';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -345,9 +346,12 @@ document.write(`
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.jarvis_stewart.JarvisStewartInitConds"><code class="docutils literal notranslate"><span class="pre">JarvisStewartInitConds</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.jarvis_stewart.JarvisStewartModel"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.jarvis_stewart.JarvisStewartModel.get_f1"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.get_f1()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.jarvis_stewart.JarvisStewartModel.compute_surface_resistance"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.compute_surface_resistance()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.jarvis_stewart.JarvisStewartModel.compute_co2_flux"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.compute_co2_flux()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.jarvis_stewart.JarvisStewartModel.update_surface_resistance"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.update_surface_resistance()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.jarvis_stewart.JarvisStewartModel.compute_f1"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.compute_f1()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.jarvis_stewart.JarvisStewartModel.compute_f2"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.compute_f2()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.jarvis_stewart.JarvisStewartModel.compute_f3"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.compute_f3()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.jarvis_stewart.JarvisStewartModel.compute_f4"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.compute_f4()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.jarvis_stewart.JarvisStewartModel.update_co2_flux"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.update_co2_flux()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -386,23 +390,98 @@ on stomatal conductance.</p>
 <li><p>No CO2 flux calculations (simple implementation).</p></li>
 </ol>
 <dl class="py method">
-<dt class="sig sig-object py" id="abcmodel.land_surface.jarvis_stewart.JarvisStewartModel.get_f1">
-<span class="sig-name descname"><span class="pre">get_f1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/jarvis_stewart.html#JarvisStewartModel.get_f1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.jarvis_stewart.JarvisStewartModel.get_f1" title="Link to this definition">#</a></dt>
-<dd><p>Calculate radiation-dependent scaling factor for surface processes.</p>
-<p>Returns correction factor based on incoming solar radiation that typically
-ranges from 1.0 to higher values, used to scale surface flux calculations.</p>
+<dt class="sig sig-object py" id="abcmodel.land_surface.jarvis_stewart.JarvisStewartModel.update_surface_resistance">
+<span class="sig-name descname"><span class="pre">update_surface_resistance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/jarvis_stewart.html#JarvisStewartModel.update_surface_resistance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.jarvis_stewart.JarvisStewartModel.update_surface_resistance" title="Link to this definition">#</a></dt>
+<dd><p>Update the surface resistance <code class="docutils literal notranslate"><span class="pre">rs</span></code> in the state using the Jarvis-Stewart model.</p>
+<p class="rubric">Notes</p>
+<p>The surface (stomatal) resistance is calculated as</p>
+<div class="math notranslate nohighlight">
+\[r_s = \frac{r_{s,\min}}{LAI} f_1 f_2 f_3 f_4\]</div>
+<p>where <span class="math notranslate nohighlight">\(r_{s,\min}\)</span> is the minimum surface resistance,
+<span class="math notranslate nohighlight">\(LAI\)</span> is the leaf area index,
+and <span class="math notranslate nohighlight">\(f_1\)</span>, <span class="math notranslate nohighlight">\(f_2\)</span>, <span class="math notranslate nohighlight">\(f_3\)</span>, and <span class="math notranslate nohighlight">\(f_4\)</span> are scaling factors that account for the effects of</p>
+<ul class="simple">
+<li><p>radiation (<a class="reference internal" href="#abcmodel.land_surface.jarvis_stewart.JarvisStewartModel.compute_f1" title="abcmodel.land_surface.jarvis_stewart.JarvisStewartModel.compute_f1"><code class="xref py py-meth docutils literal notranslate"><span class="pre">compute_f1()</span></code></a>),</p></li>
+<li><p>soil moisture (<a class="reference internal" href="#abcmodel.land_surface.jarvis_stewart.JarvisStewartModel.compute_f2" title="abcmodel.land_surface.jarvis_stewart.JarvisStewartModel.compute_f2"><code class="xref py py-meth docutils literal notranslate"><span class="pre">compute_f2()</span></code></a>),</p></li>
+<li><p>vapor pressure deficit (<a class="reference internal" href="#abcmodel.land_surface.jarvis_stewart.JarvisStewartModel.compute_f3" title="abcmodel.land_surface.jarvis_stewart.JarvisStewartModel.compute_f3"><code class="xref py py-meth docutils literal notranslate"><span class="pre">compute_f3()</span></code></a>), and</p></li>
+<li><p>temperature (<a class="reference internal" href="#abcmodel.land_surface.jarvis_stewart.JarvisStewartModel.compute_f4" title="abcmodel.land_surface.jarvis_stewart.JarvisStewartModel.compute_f4"><code class="xref py py-meth docutils literal notranslate"><span class="pre">compute_f4()</span></code></a>), respectively.</p></li>
+</ul>
+<p>This approach follows the Jarvis-Stewart multiplicative model for stomatal conductance.</p>
+<p class="rubric">References</p>
+<p>Stewart, J.B. (1988). Modelling surface conductance of pine forest. Agricultural and Forest Meteorology, 43(1), 19-35.</p>
+<p>Jarvis, P.G. (1976). The interpretation of the variations in leaf water potential and stomatal conductance found in
+canopies in the field. Philosophical Transactions of the Royal Society of London. B, Biological Sciences, 273(927), 593-610.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="abcmodel.land_surface.jarvis_stewart.JarvisStewartModel.compute_surface_resistance">
-<span class="sig-name descname"><span class="pre">compute_surface_resistance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/jarvis_stewart.html#JarvisStewartModel.compute_surface_resistance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.jarvis_stewart.JarvisStewartModel.compute_surface_resistance" title="Link to this definition">#</a></dt>
-<dd><p>Compute surface resistance using Jarvis-Stewart approach.</p>
+<dt class="sig sig-object py" id="abcmodel.land_surface.jarvis_stewart.JarvisStewartModel.compute_f1">
+<span class="sig-name descname"><span class="pre">compute_f1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/jarvis_stewart.html#JarvisStewartModel.compute_f1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.jarvis_stewart.JarvisStewartModel.compute_f1" title="Link to this definition">#</a></dt>
+<dd><p>Calculate the radiation-dependent scaling factor <code class="docutils literal notranslate"><span class="pre">f1</span></code> for surface resistance.</p>
+<p class="rubric">Notes</p>
+<p>This factor accounts for the effect of incoming shortwave radiation on stomatal conductance,
+given by</p>
+<div class="math notranslate nohighlight">
+\[f_1 = \frac{1}{\min\left(1, \frac{0.004 S + 0.05}{0.81 (0.004 S + 1)}\right)},\]</div>
+<p>where <span class="math notranslate nohighlight">\(S\)</span> is the incoming shortwave radiation.</p>
+<p class="rubric">References</p>
+<p>Equation 9.27 in the CLASS book.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="abcmodel.land_surface.jarvis_stewart.JarvisStewartModel.compute_co2_flux">
-<span class="sig-name descname"><span class="pre">compute_co2_flux</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/jarvis_stewart.html#JarvisStewartModel.compute_co2_flux"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.jarvis_stewart.JarvisStewartModel.compute_co2_flux" title="Link to this definition">#</a></dt>
-<dd><p>Pass.</p>
+<dt class="sig sig-object py" id="abcmodel.land_surface.jarvis_stewart.JarvisStewartModel.compute_f2">
+<span class="sig-name descname"><span class="pre">compute_f2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/jarvis_stewart.html#JarvisStewartModel.compute_f2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.jarvis_stewart.JarvisStewartModel.compute_f2" title="Link to this definition">#</a></dt>
+<dd><p>Calculate the soil moisture-dependent scaling factor <code class="docutils literal notranslate"><span class="pre">f2</span></code> for surface resistance.</p>
+<p class="rubric">Notes</p>
+<p>This factor accounts for the effect of soil moisture in the second layer on stomatal conductance,
+given by</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}f_2 =
+    \begin{cases}
+        \frac{w_{fc} - w_{wilt}}{w_2 - w_{wilt}}, &amp; \text{if } w_2 &gt; w_{wilt} \\
+        10^8, &amp; \text{otherwise},
+    \end{cases}\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(w_2\)</span> is the soil moisture in the second layer,
+<span class="math notranslate nohighlight">\(w_{fc}\)</span> is soil moisture at field capacity, and
+<span class="math notranslate nohighlight">\(w_{wilt}\)</span> is soil moisture at the wilting point.</p>
+<p>To avoid unrealistically low values when <span class="math notranslate nohighlight">\(w_2 &gt; w_{fc}\)</span>, the minimum value of <span class="math notranslate nohighlight">\(f_2\)</span> is limited to 1.</p>
+<p class="rubric">References</p>
+<p>Equation 9.28 in the CLASS book.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land_surface.jarvis_stewart.JarvisStewartModel.compute_f3">
+<span class="sig-name descname"><span class="pre">compute_f3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/jarvis_stewart.html#JarvisStewartModel.compute_f3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.jarvis_stewart.JarvisStewartModel.compute_f3" title="Link to this definition">#</a></dt>
+<dd><p>Calculate the vapor pressure deficit-dependent scaling factor <code class="docutils literal notranslate"><span class="pre">f3</span></code> for surface resistance.</p>
+<p class="rubric">Notes</p>
+<p>This factor accounts for the effect of vapor pressure deficit (VPD) on stomatal conductance,
+given by</p>
+<div class="math notranslate nohighlight">
+\[f_3 = \exp\left(\gamma_D \frac{e_{sat} - e}{100}\right)^{-1},\]</div>
+<p>where <span class="math notranslate nohighlight">\(e_{sat}\)</span> is the saturation vapor pressure,
+<span class="math notranslate nohighlight">\(e\)</span> is the actual vapor pressure, and
+<span class="math notranslate nohighlight">\(\gamma_D\)</span> is an empirical parameter.</p>
+<p class="rubric">References</p>
+<p>Equation 9.29 in the CLASS book.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land_surface.jarvis_stewart.JarvisStewartModel.compute_f4">
+<span class="sig-name descname"><span class="pre">compute_f4</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/jarvis_stewart.html#JarvisStewartModel.compute_f4"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.jarvis_stewart.JarvisStewartModel.compute_f4" title="Link to this definition">#</a></dt>
+<dd><p>Calculate the temperature-dependent scaling factor <code class="docutils literal notranslate"><span class="pre">f4</span></code> for surface resistance.</p>
+<p class="rubric">Notes</p>
+<p>This factor accounts for the effect of temperature on stomatal conductance,
+given by</p>
+<div class="math notranslate nohighlight">
+\[f_4 = \frac{1}{1 - 0.0016 (298 - \theta)^2},\]</div>
+<p>where <span class="math notranslate nohighlight">\(\theta\)</span> is the air temperature in Kelvin.</p>
+<p class="rubric">References</p>
+<p>Equation 9.30 in the CLASS book.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land_surface.jarvis_stewart.JarvisStewartModel.update_co2_flux">
+<span class="sig-name descname"><span class="pre">update_co2_flux</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/jarvis_stewart.html#JarvisStewartModel.update_co2_flux"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.jarvis_stewart.JarvisStewartModel.update_co2_flux" title="Link to this definition">#</a></dt>
+<dd><p>No CO2 flux is computed using this model. See <a class="reference internal" href="abcmodel.land_surface.aquacrop.html#abcmodel.land_surface.aquacrop.AquaCropModel" title="abcmodel.land_surface.aquacrop.AquaCropModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AquaCropModel</span></code></a>.</p>
 </dd></dl>
 
 </dd></dl>
@@ -456,9 +535,12 @@ ranges from 1.0 to higher values, used to scale surface flux calculations.</p>
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.jarvis_stewart.JarvisStewartInitConds"><code class="docutils literal notranslate"><span class="pre">JarvisStewartInitConds</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.jarvis_stewart.JarvisStewartModel"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.jarvis_stewart.JarvisStewartModel.get_f1"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.get_f1()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.jarvis_stewart.JarvisStewartModel.compute_surface_resistance"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.compute_surface_resistance()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.jarvis_stewart.JarvisStewartModel.compute_co2_flux"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.compute_co2_flux()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.jarvis_stewart.JarvisStewartModel.update_surface_resistance"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.update_surface_resistance()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.jarvis_stewart.JarvisStewartModel.compute_f1"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.compute_f1()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.jarvis_stewart.JarvisStewartModel.compute_f2"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.compute_f2()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.jarvis_stewart.JarvisStewartModel.compute_f3"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.compute_f3()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.jarvis_stewart.JarvisStewartModel.compute_f4"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.compute_f4()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land_surface.jarvis_stewart.JarvisStewartModel.update_co2_flux"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.update_co2_flux()</span></code></a></li>
 </ul>
 </li>
 </ul>

@@ -5,7 +5,7 @@ import jax.numpy as jnp
 from jax.scipy.special import exp1
 from jaxtyping import Array, PyTree
 
-from ..utils import PhysicalConstants, get_esat
+from ..utils import PhysicalConstants, compute_esat
 from .standard import AbstractStandardLandSurfaceModel, StandardLandSurfaceInitConds
 
 
@@ -75,7 +75,7 @@ class AquaCropModel(AbstractStandardLandSurfaceModel):
         self.r10 = 0.23
         self.e0 = 53.3e3
 
-    def calculate_co2_compensation_concentration(
+    def compute_co2comp(
         self,
         thetasurf: Array,
         const: PhysicalConstants,
@@ -85,7 +85,7 @@ class AquaCropModel(AbstractStandardLandSurfaceModel):
         exp_term = jnp.pow(self.net_rad10CO2[self.c3c4], temp_diff)
         return self.co2comp298[self.c3c4] * const.rho * exp_term
 
-    def calculate_mesophyll_conductance(
+    def compute_gm(
         self,
         thetasurf: Array,
     ) -> Array:
@@ -110,7 +110,7 @@ class AquaCropModel(AbstractStandardLandSurfaceModel):
         fmin0 = self.gmin[self.c3c4] / self.nuco2q - 1.0 / 9.0 * gm
         fmin_sq_term = jnp.pow(fmin0, 2.0) + 4 * self.gmin[self.c3c4] / self.nuco2q * gm
         fmin = -fmin0 + jnp.pow(fmin_sq_term, 0.5) / (2.0 * gm)
-        ds = (get_esat(surf_temp) - e) / 1000.0  # kPa
+        ds = (compute_esat(surf_temp) - e) / 1000.0  # kPa
 
         d0 = (self.f0[self.c3c4] - fmin) / self.ad[self.c3c4]
 
@@ -217,10 +217,10 @@ class AquaCropModel(AbstractStandardLandSurfaceModel):
         gcco2 = self.lai * (self.gmin[self.c3c4] / self.nuco2q + conductance_factor)
         return gcco2
 
-    def compute_surface_resistance(self, state: PyTree, const: PhysicalConstants):
+    def update_surface_resistance(self, state: PyTree, const: PhysicalConstants):
         """Compute surface resistance using AquaCrop photosynthesis-conductance model."""
-        co2comp = self.calculate_co2_compensation_concentration(state.thetasurf, const)
-        gm = self.calculate_mesophyll_conductance(state.thetasurf)
+        co2comp = self.compute_co2comp(state.thetasurf, const)
+        gm = self.compute_gm(state.thetasurf)
 
         state.ci, state.co2abs, fmin, ds, d0 = self.calculate_internal_co2(
             state.thetasurf, state.e, state.co2, co2comp, gm, const
@@ -246,7 +246,7 @@ class AquaCropModel(AbstractStandardLandSurfaceModel):
 
         return state
 
-    def compute_co2_flux(self, state: PyTree, const: PhysicalConstants):
+    def update_co2_flux(self, state: PyTree, const: PhysicalConstants):
         """Compute the CO2 flux."""
         state.rsCO2 = 1.0 / state.gcco2
         an = -(state.co2abs - state.ci) / (state.ra + state.rsCO2)

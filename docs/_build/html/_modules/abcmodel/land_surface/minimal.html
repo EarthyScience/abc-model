@@ -305,7 +305,7 @@ document.write(`
     <span class="n">AbstractLandSurfaceModel</span><span class="p">,</span>
     <span class="n">AbstractSurfaceLayerModel</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">..utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">PhysicalConstants</span><span class="p">,</span> <span class="n">get_esat</span><span class="p">,</span> <span class="n">get_qsat</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">PhysicalConstants</span><span class="p">,</span> <span class="n">compute_esat</span><span class="p">,</span> <span class="n">compute_qsat</span>
 
 
 <div class="viewcode-block" id="MinimalLandSurfaceInitConds">
@@ -347,8 +347,8 @@ document.write(`
         <span class="n">state</span><span class="o">.</span><span class="n">ra</span> <span class="o">=</span> <span class="n">surface_layer</span><span class="o">.</span><span class="n">compute_ra</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
 
         <span class="c1"># (2) calculate essential thermodynamic variables</span>
-        <span class="n">state</span><span class="o">.</span><span class="n">esat</span> <span class="o">=</span> <span class="n">get_esat</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">theta</span><span class="p">)</span>
-        <span class="n">state</span><span class="o">.</span><span class="n">qsat</span> <span class="o">=</span> <span class="n">get_qsat</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">surf_pressure</span><span class="p">)</span>
+        <span class="n">state</span><span class="o">.</span><span class="n">esat</span> <span class="o">=</span> <span class="n">compute_esat</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">theta</span><span class="p">)</span>
+        <span class="n">state</span><span class="o">.</span><span class="n">qsat</span> <span class="o">=</span> <span class="n">compute_qsat</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">surf_pressure</span><span class="p">)</span>
         <span class="n">desatdT</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">esat</span> <span class="o">*</span> <span class="p">(</span>
             <span class="mf">17.2694</span> <span class="o">/</span> <span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">theta</span> <span class="o">-</span> <span class="mf">35.86</span><span class="p">)</span>
             <span class="o">-</span> <span class="mf">17.2694</span> <span class="o">*</span> <span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">theta</span> <span class="o">-</span> <span class="mf">273.16</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">theta</span> <span class="o">-</span> <span class="mf">35.86</span><span class="p">)</span> <span class="o">**</span> <span class="mf">2.0</span>

@@ -303,9 +303,9 @@ document.write(`
 <span class="kn">from</span><span class="w"> </span><span class="nn">jaxtyping</span><span class="w"> </span><span class="kn">import</span> <span class="n">Array</span>
 
 
-<div class="viewcode-block" id="get_esat">
-<a class="viewcode-back" href="../../source/api/abcmodel.utils.html#abcmodel.utils.get_esat">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">get_esat</span><span class="p">(</span><span class="n">temp</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<div class="viewcode-block" id="compute_esat">
+<a class="viewcode-back" href="../../source/api/abcmodel.utils.html#abcmodel.utils.compute_esat">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_esat</span><span class="p">(</span><span class="n">temp</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate saturated vapor pressure using the August-Roche-Magnus formula.</span>
 
 <span class="sd">    Args:</span>
@@ -335,9 +335,9 @@ document.write(`
 
 
 
-<div class="viewcode-block" id="get_qsat">
-<a class="viewcode-back" href="../../source/api/abcmodel.utils.html#abcmodel.utils.get_qsat">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">get_qsat</span><span class="p">(</span><span class="n">temp</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">pressure</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<div class="viewcode-block" id="compute_qsat">
+<a class="viewcode-back" href="../../source/api/abcmodel.utils.html#abcmodel.utils.compute_qsat">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_qsat</span><span class="p">(</span><span class="n">temp</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">pressure</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate saturated specific humidity.</span>
 
 <span class="sd">    Args:</span>
@@ -370,142 +370,8 @@ document.write(`
 <span class="sd">        .. math::</span>
 <span class="sd">            q_{\\text{sat}} \\approx \\epsilon \\frac{e_{\\text{sat}}}{p}.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">esat</span> <span class="o">=</span> <span class="n">get_esat</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
+    <span class="n">esat</span> <span class="o">=</span> <span class="n">compute_esat</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
     <span class="k">return</span> <span class="mf">0.622</span> <span class="o">*</span> <span class="n">esat</span> <span class="o">/</span> <span class="n">pressure</span></div>
-
-
-
-<div class="viewcode-block" id="get_psim">
-<a class="viewcode-back" href="../../source/api/abcmodel.utils.html#abcmodel.utils.get_psim">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">get_psim</span><span class="p">(</span><span class="n">zeta</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate momentum stability function from Monin-Obukhov similarity theory.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        zeta: stability parameter z/L [-].</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        Momentum stability correction [-].</span>
-
-<span class="sd">    Notes:</span>
-<span class="sd">        This function calculates the integrated stability correction function for</span>
-<span class="sd">        momentum :math:`\\Psi_m`, which is used to adjust wind profiles based</span>
-<span class="sd">        on atmospheric stability.</span>
-
-<span class="sd">        The function is piecewise, depending on the stability parameter</span>
-<span class="sd">        :math:`\\zeta = z/L`.</span>
-
-<span class="sd">        **1. Unstable conditions (ζ ≤ 0):**</span>
-
-<span class="sd">        Based on Businger-Dyer relations, an intermediate variable</span>
-
-<span class="sd">        .. math::</span>
-<span class="sd">            x = (1 - 16\\zeta)^{1/4}</span>
-
-<span class="sd">        is used to write the stability function as</span>
-
-<span class="sd">        .. math::</span>
-<span class="sd">            \\Psi_m(\\zeta) = \\ln\\left( \\frac{(1+x)^2 (1+x^2)}{8} \\right)</span>
-<span class="sd">                             - 2 \\arctan(x) + \\frac{\\pi}{2}.</span>
-
-<span class="sd">        **2. Stable conditions (ζ &gt; 0):**</span>
-
-<span class="sd">        This uses an empirical formula (e.g., Holtslag and De Bruin, 1988)</span>
-<span class="sd">        with constants:</span>
-
-<span class="sd">        - :math:`\\alpha = 0.35`,</span>
-<span class="sd">        - :math:`\\beta = 5.0 / \\alpha`,</span>
-<span class="sd">        - :math:`\\gamma = (10.0 / 3.0) / \\alpha`.</span>
-
-<span class="sd">        The stability function is then  given by</span>
-
-<span class="sd">        .. math::</span>
-<span class="sd">            \\Psi_m(\\zeta) = -\\frac{2}{3}(\\zeta - \\beta)e^{-\\alpha \\zeta}</span>
-<span class="sd">                             - \\zeta - \\gamma.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># constants for stable conditions</span>
-    <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.35</span>
-    <span class="n">beta</span> <span class="o">=</span> <span class="mf">5.0</span> <span class="o">/</span> <span class="n">alpha</span>
-    <span class="n">gamma</span> <span class="o">=</span> <span class="p">(</span><span class="mf">10.0</span> <span class="o">/</span> <span class="mf">3.0</span><span class="p">)</span> <span class="o">/</span> <span class="n">alpha</span>
-    <span class="n">pi_half</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">2.0</span>
-
-    <span class="c1"># unstable conditions (zeta &lt;= 0)</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="mf">16.0</span> <span class="o">*</span> <span class="n">zeta</span><span class="p">)</span> <span class="o">**</span> <span class="mf">0.25</span>
-    <span class="n">arctan_term</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">arctan</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-    <span class="n">log_numerator</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">x</span><span class="p">)</span> <span class="o">**</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">x</span><span class="o">**</span><span class="mf">2.0</span><span class="p">)</span>
-    <span class="n">log_term</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">log_numerator</span> <span class="o">/</span> <span class="mf">8.0</span><span class="p">)</span>
-    <span class="n">psim_unstable</span> <span class="o">=</span> <span class="n">pi_half</span> <span class="o">-</span> <span class="n">arctan_term</span> <span class="o">+</span> <span class="n">log_term</span>
-
-    <span class="c1"># stable conditions (zeta &gt; 0)</span>
-    <span class="n">exponential_term</span> <span class="o">=</span> <span class="p">(</span><span class="n">zeta</span> <span class="o">-</span> <span class="n">beta</span><span class="p">)</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">alpha</span> <span class="o">*</span> <span class="n">zeta</span><span class="p">)</span>
-    <span class="n">psim_stable</span> <span class="o">=</span> <span class="o">-</span><span class="mf">2.0</span> <span class="o">/</span> <span class="mf">3.0</span> <span class="o">*</span> <span class="n">exponential_term</span> <span class="o">-</span> <span class="n">zeta</span> <span class="o">-</span> <span class="n">gamma</span>
-
-    <span class="c1"># select based on stability condition</span>
-    <span class="n">psim</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">zeta</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">psim_unstable</span><span class="p">,</span> <span class="n">psim_stable</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">psim</span></div>
-
-
-
-<div class="viewcode-block" id="get_psih">
-<a class="viewcode-back" href="../../source/api/abcmodel.utils.html#abcmodel.utils.get_psih">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">get_psih</span><span class="p">(</span><span class="n">zeta</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate scalar stability function from Monin-Obukhov similarity theory.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        zeta: stability parameter z/L [-].</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        Scalar stability correction [-].</span>
-
-<span class="sd">    Notes:</span>
-<span class="sd">        This function calculates the integrated stability correction function for</span>
-<span class="sd">        scalars :math:`\\Psi_h`, like heat and humidity, which is used to</span>
-<span class="sd">        adjust temperature and humidity profiles based on atmospheric stability.</span>
-
-<span class="sd">        The function is piecewise, depending on the stability parameter</span>
-<span class="sd">        :math:`\\zeta = z/L`.</span>
-
-<span class="sd">        **1. Unstable conditions (ζ ≤ 0):**</span>
-
-<span class="sd">        Based on Businger-Dyer relations, an intermediate variable (same as above)</span>
-
-<span class="sd">        .. math::</span>
-<span class="sd">            x = (1 - 16\\zeta)^{1/4}</span>
-
-<span class="sd">        is used to write the integrated stability function</span>
-
-<span class="sd">        .. math::</span>
-<span class="sd">            \\Psi_h(\\zeta) = 2 \\ln\\left( \\frac{1+x^2}{2} \\right).</span>
-
-<span class="sd">        **2. Stable conditions (ζ &gt; 0):**</span>
-
-<span class="sd">        This uses a corresponding empirical formula with the same constants</span>
-<span class="sd">        (:math:`\\alpha`, :math:`\\beta`, :math:`\\gamma`) as above to write</span>
-
-<span class="sd">        .. math::</span>
-<span class="sd">            \\Psi_h(\\zeta) = -\\frac{2}{3}(\\zeta - \\beta)e^{-\\alpha \\zeta}</span>
-<span class="sd">                            - \\left(1 + \\frac{2}{3}\\zeta\\right)^{3/2}</span>
-<span class="sd">                            - \\gamma + 1.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># constants for stable conditions</span>
-    <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.35</span>
-    <span class="n">beta</span> <span class="o">=</span> <span class="mf">5.0</span> <span class="o">/</span> <span class="n">alpha</span>
-    <span class="n">gamma</span> <span class="o">=</span> <span class="p">(</span><span class="mf">10.0</span> <span class="o">/</span> <span class="mf">3.0</span><span class="p">)</span> <span class="o">/</span> <span class="n">alpha</span>
-
-    <span class="c1"># unstable conditions (zeta &lt;= 0)</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="mf">16.0</span> <span class="o">*</span> <span class="n">zeta</span><span class="p">)</span> <span class="o">**</span> <span class="mf">0.25</span>
-    <span class="n">log_argument</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">x</span> <span class="o">*</span> <span class="n">x</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span>
-    <span class="n">psih_unstable</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">log_argument</span><span class="p">)</span>
-
-    <span class="c1"># stable conditions (zeta &gt; 0)</span>
-    <span class="n">exponential_term</span> <span class="o">=</span> <span class="p">(</span><span class="n">zeta</span> <span class="o">-</span> <span class="n">beta</span><span class="p">)</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">alpha</span> <span class="o">*</span> <span class="n">zeta</span><span class="p">)</span>
-    <span class="n">power_term</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">/</span> <span class="mf">3.0</span><span class="p">)</span> <span class="o">*</span> <span class="n">zeta</span><span class="p">)</span> <span class="o">**</span> <span class="mf">1.5</span>
-    <span class="n">psih_stable</span> <span class="o">=</span> <span class="o">-</span><span class="mf">2.0</span> <span class="o">/</span> <span class="mf">3.0</span> <span class="o">*</span> <span class="n">exponential_term</span> <span class="o">-</span> <span class="n">power_term</span> <span class="o">-</span> <span class="n">gamma</span> <span class="o">+</span> <span class="mf">1.0</span>
-
-    <span class="c1"># select based on stability condition</span>
-    <span class="n">psih</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">zeta</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">psih_unstable</span><span class="p">,</span> <span class="n">psih_stable</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">psih</span></div>
 
 
 

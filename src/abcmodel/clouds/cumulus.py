@@ -4,7 +4,7 @@ import jax.numpy as jnp
 from jaxtyping import Array, PyTree
 
 from ..models import AbstractCloudModel
-from ..utils import PhysicalConstants, get_qsat
+from ..utils import PhysicalConstants, compute_qsat
 
 
 @dataclass
@@ -77,7 +77,8 @@ class StandardCumulusModel(AbstractCloudModel):
             jnp.maximum(
                 0.0,
                 0.5
-                + 0.36 * jnp.arctan(1.55 * (q - get_qsat(top_T, top_p)) / (q2_h**0.5)),
+                + 0.36
+                * jnp.arctan(1.55 * (q - compute_qsat(top_T, top_p)) / (q2_h**0.5)),
             ),
         )
         return cc_frac
