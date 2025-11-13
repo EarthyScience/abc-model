@@ -48,7 +48,6 @@ def run_wrapper(wg, surf_temp):
 
     # mixed layer
     ml_kwargs = cm.bulk_mixed_layer.init_conds_kwargs
-    # ml_kwargs["q"] = q
     mixed_layer_init_conds = abcmodel.mixed_layer.BulkMixedLayerInitConds(
         **ml_kwargs,
     )
@@ -76,7 +75,6 @@ def run_wrapper(wg, surf_temp):
         cloud_init_conds,
     )
 
-    # run run run
     return abcmodel.integrate(state, abcoupler, dt=dt, runtime=runtime)
 
 
