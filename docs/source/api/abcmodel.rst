@@ -35,7 +35,7 @@ Functionalities
 .. toctree::
    :maxdepth: 1
 
+   abcmodel.abstracts
    abcmodel.coupling
    abcmodel.integration
-   abcmodel.models
    abcmodel.utils

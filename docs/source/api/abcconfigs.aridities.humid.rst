@@ -1,8 +1,8 @@
 
-Models
-======
+Humid
+=====
 
-.. automodule:: abcmodel.models
+.. automodule:: abcconfigs.aridities.humid
    :members:
    :show-inheritance:
    :undoc-members:

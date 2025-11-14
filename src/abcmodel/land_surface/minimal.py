@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 from jaxtyping import PyTree
 
-from ..models import (
+from ..abstracts import (
     AbstractLandSurfaceModel,
     AbstractSurfaceLayerModel,
 )

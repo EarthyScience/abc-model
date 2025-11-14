@@ -3,7 +3,7 @@ from dataclasses import dataclass
 import jax.numpy as jnp
 from jaxtyping import Array, PyTree
 
-from ..models import AbstractCloudModel
+from ..abstracts import AbstractCloudModel
 from ..utils import PhysicalConstants, compute_qsat
 
 

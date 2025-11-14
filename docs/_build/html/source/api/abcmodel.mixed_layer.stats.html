@@ -178,13 +178,19 @@
 <li class="toctree-l3"><a class="reference internal" href="abcmodel.clouds.no_clouds.html">No Clouds</a></li>
 </ul>
 </details></li>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.abstracts.html">Abstracts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="abcmodel.coupling.html">Coupling</a></li>
 <li class="toctree-l2"><a class="reference internal" href="abcmodel.integration.html">Integration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="abcmodel.models.html">Models</a></li>
 <li class="toctree-l2"><a class="reference internal" href="abcmodel.utils.html">Utils</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="abcconfigs.html">ABC Configs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="abcconfigs.aridities.html">Aridities</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcconfigs.aridities.arid.html">Arid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcconfigs.aridities.humid.html">Humid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcconfigs.aridities.standard.html">Standard</a></li>
+</ul>
+</details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="abcconfigs.class_model.html">Class Model</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="abcconfigs.class_model.aquacrop.html">Aquacrop</a></li>
 <li class="toctree-l3"><a class="reference internal" href="abcconfigs.class_model.bulk_mixed_layer.html">Bulk Mixed Layer</a></li>
@@ -364,7 +370,7 @@ document.write(`
 <dl class="py class">
 <dt class="sig sig-object py" id="abcmodel.mixed_layer.stats.AbstractStandardStatsModel">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">abcmodel.mixed_layer.stats.</span></span><span class="sig-name descname"><span class="pre">AbstractStandardStatsModel</span></span><a class="reference internal" href="../../_modules/abcmodel/mixed_layer/stats.html#AbstractStandardStatsModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.mixed_layer.stats.AbstractStandardStatsModel" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <a class="reference internal" href="abcmodel.models.html#abcmodel.models.AbstractMixedLayerModel" title="abcmodel.models.AbstractMixedLayerModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractMixedLayerModel</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="abcmodel.abstracts.html#abcmodel.abstracts.AbstractMixedLayerModel" title="abcmodel.abstracts.AbstractMixedLayerModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractMixedLayerModel</span></code></a></p>
 <p>Abstract base class for mixed layer models with standard meteorological statistics.</p>
 <p>Provides a common calculation method for virtual temperature, mixed-layer top
 properties, and lifting condensation level determination.</p>

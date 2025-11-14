@@ -2,7 +2,7 @@ import jax
 import jax.numpy as jnp
 from jaxtyping import PyTree
 
-from ..models import (
+from ..abstracts import (
     AbstractMixedLayerModel,
 )
 from ..utils import PhysicalConstants, compute_qsat

@@ -179,13 +179,19 @@
 <li class="toctree-l3"><a class="reference internal" href="abcmodel.clouds.no_clouds.html">No Clouds</a></li>
 </ul>
 </details></li>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.abstracts.html">Abstracts</a></li>
 <li class="toctree-l2"><a class="reference internal" href="abcmodel.coupling.html">Coupling</a></li>
 <li class="toctree-l2"><a class="reference internal" href="abcmodel.integration.html">Integration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="abcmodel.models.html">Models</a></li>
 <li class="toctree-l2"><a class="reference internal" href="abcmodel.utils.html">Utils</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="abcconfigs.html">ABC Configs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="abcconfigs.aridities.html">Aridities</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcconfigs.aridities.arid.html">Arid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcconfigs.aridities.humid.html">Humid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcconfigs.aridities.standard.html">Standard</a></li>
+</ul>
+</details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="abcconfigs.class_model.html">Class Model</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="abcconfigs.class_model.aquacrop.html">Aquacrop</a></li>
 <li class="toctree-l3"><a class="reference internal" href="abcconfigs.class_model.bulk_mixed_layer.html">Bulk Mixed Layer</a></li>
@@ -549,7 +555,7 @@ document.write(`
 <dl class="py class">
 <dt class="sig sig-object py" id="abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">abcmodel.land_surface.standard.</span></span><span class="sig-name descname"><span class="pre">AbstractStandardLandSurfaceModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cgsat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wsat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wfc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wwilt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c1sat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c2ref</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lai</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gD</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rsmin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rssoilmin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cveg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wmax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lam</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land_surface/standard.html#AbstractStandardLandSurfaceModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land_surface.standard.AbstractStandardLandSurfaceModel" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <a class="reference internal" href="abcmodel.models.html#abcmodel.models.AbstractLandSurfaceModel" title="abcmodel.models.AbstractLandSurfaceModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractLandSurfaceModel</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="abcmodel.abstracts.html#abcmodel.abstracts.AbstractLandSurfaceModel" title="abcmodel.abstracts.AbstractLandSurfaceModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractLandSurfaceModel</span></code></a></p>
 <p>Abstract standard land surface model with comprehensive soil-vegetation dynamics.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -599,7 +605,7 @@ document.write(`
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>state</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyTree</span></code></span>) – the state object carrying all variables.</p></li>
 <li><p><strong>const</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="abcmodel.utils.html#abcmodel.utils.PhysicalConstants" title="abcmodel.utils.PhysicalConstants"><code class="xref py py-class docutils literal notranslate"><span class="pre">PhysicalConstants</span></code></a></span>) – the physical constants object.</p></li>
-<li><p><strong>surface_layer</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="abcmodel.models.html#abcmodel.models.AbstractSurfaceLayerModel" title="abcmodel.models.AbstractSurfaceLayerModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractSurfaceLayerModel</span></code></a></span>) – the surface layer model.</p></li>
+<li><p><strong>surface_layer</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="abcmodel.abstracts.html#abcmodel.abstracts.AbstractSurfaceLayerModel" title="abcmodel.abstracts.AbstractSurfaceLayerModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractSurfaceLayerModel</span></code></a></span>) – the surface layer model.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>

@@ -3,7 +3,7 @@ from dataclasses import dataclass
 import jax.numpy as jnp
 from jaxtyping import Array, PyTree
 
-from ..models import AbstractSurfaceLayerModel
+from ..abstracts import AbstractSurfaceLayerModel
 from ..utils import PhysicalConstants
 
 

@@ -4,7 +4,7 @@ from typing import Any
 
 import jax
 
-from .models import (
+from .abstracts import (
     AbstractCloudModel,
     AbstractLandSurfaceModel,
     AbstractMixedLayerModel,
