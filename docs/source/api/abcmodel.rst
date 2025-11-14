@@ -15,7 +15,8 @@ methods are documented in the order that they are called. The goal is that a rea
 equations of each variable computation as they are done by our models and learn how things work from that.
 
 Somemtimes, the ``state`` is updated inside a more complicated method like ``update_something``. This is sometimes
-used for the modularity of our models (models within abstract models).
+used for the modularity of our models (models inheriting other models). In that case, the models follow the same order
+of updates of the parent model, but all methods of the child model overwrite the original ones.
 
 Components
 -----------

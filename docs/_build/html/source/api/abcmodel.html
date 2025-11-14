@@ -374,7 +374,8 @@ Inside <code class="docutils literal notranslate"><span class="pre">run</span></
 methods are documented in the order that they are called. The goal is that a reader can essentially read the
 equations of each variable computation as they are done by our models and learn how things work from that.</p>
 <p>Somemtimes, the <code class="docutils literal notranslate"><span class="pre">state</span></code> is updated inside a more complicated method like <code class="docutils literal notranslate"><span class="pre">update_something</span></code>. This is sometimes
-used for the modularity of our models (models within abstract models).</p>
+used for the modularity of our models (models inheriting other models). In that case, the models follow the same order
+of updates of the parent model, but all methods of the child model overwrite the original ones.</p>
 <section id="components">
 <h2>Components<a class="headerlink" href="#components" title="Link to this heading">#</a></h2>
 <div class="toctree-wrapper compound">
