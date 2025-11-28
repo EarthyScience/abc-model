@@ -40,6 +40,7 @@
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'source/api/abcmodel.mixed_layer.bulk';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -398,14 +399,29 @@ document.write(`
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.calculate_vertical_motions"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.calculate_vertical_motions()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.calculate_free_troposphere_compensation"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.calculate_free_troposphere_compensation()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.calculate_convective_velocity_scale"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.calculate_convective_velocity_scale()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.calculate_entrainment_velocity"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.calculate_entrainment_velocity()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.calculate_entrainment_fluxes"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.calculate_entrainment_fluxes()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.calculate_mixed_layer_tendencies"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.calculate_mixed_layer_tendencies()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.calculate_wind_tendencies"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.calculate_wind_tendencies()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.calculate_transition_layer_tendency"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.calculate_transition_layer_tendency()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_subsidence_velocity"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.compute_subsidence_velocity()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_radiative_growth_velocity"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.compute_radiative_growth_velocity()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_free_troposphere_theta_compensation"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.compute_free_troposphere_theta_compensation()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_free_troposphere_q_compensation"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.compute_free_troposphere_q_compensation()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_free_troposphere_co2_compensation"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.compute_free_troposphere_co2_compensation()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_convective_velocity_scale"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.compute_convective_velocity_scale()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_entrainment_virtual_heat_flux"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.compute_entrainment_virtual_heat_flux()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_entrainment_velocity"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.compute_entrainment_velocity()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_entrainment_heat_flux"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.compute_entrainment_heat_flux()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_entrainment_moisture_flux"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.compute_entrainment_moisture_flux()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_entrainment_co2_flux"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.compute_entrainment_co2_flux()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_abl_height_tendency"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.compute_abl_height_tendency()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_potential_temperature_tendency"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.compute_potential_temperature_tendency()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_potential_temperature_jump_tendency"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.compute_potential_temperature_jump_tendency()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_humidity_tendency"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.compute_humidity_tendency()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_humidity_jump_tendency"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.compute_humidity_jump_tendency()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_co2_tendency"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.compute_co2_tendency()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_co2_jump_tendency"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.compute_co2_jump_tendency()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_u_wind_tendency"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.compute_u_wind_tendency()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_v_wind_tendency"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.compute_v_wind_tendency()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_u_wind_jump_tendency"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.compute_u_wind_jump_tendency()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_v_wind_jump_tendency"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.compute_v_wind_jump_tendency()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_transition_layer_tendency"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.compute_transition_layer_tendency()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.run"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.run()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.integrate"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.integrate()</span></code></a></li>
 </ul>
@@ -737,57 +753,229 @@ including entrainment, subsidence, cloud effects, and wind dynamics.</p>
 </dd>
 </dl>
 <dl class="py method">
-<dt class="sig sig-object py" id="abcmodel.mixed_layer.bulk.BulkMixedLayerModel.calculate_vertical_motions">
-<span class="sig-name descname"><span class="pre">calculate_vertical_motions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">abl_height</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtheta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/mixed_layer/bulk.html#BulkMixedLayerModel.calculate_vertical_motions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.calculate_vertical_motions" title="Link to this definition">#</a></dt>
-<dd><p>Calculate large-scale subsidence and radiative divergence effects.</p>
+<dt class="sig sig-object py" id="abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_subsidence_velocity">
+<span class="sig-name descname"><span class="pre">compute_subsidence_velocity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">abl_height</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/mixed_layer/bulk.html#BulkMixedLayerModel.compute_subsidence_velocity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_subsidence_velocity" title="Link to this definition">#</a></dt>
+<dd><p>Compute large-scale subsidence velocity.</p>
+<p class="rubric">Notes</p>
+<p>The large-scale vertical velocity (subsidence) <span class="math notranslate nohighlight">\(w_s\)</span> is given by</p>
+<div class="math notranslate nohighlight">
+\[w_s = -\text{div}U \cdot h\]</div>
+<p>where <span class="math notranslate nohighlight">\(\text{div}U\)</span> is the horizontal large-scale divergence of wind and <span class="math notranslate nohighlight">\(h\)</span> is the ABL height.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="abcmodel.mixed_layer.bulk.BulkMixedLayerModel.calculate_free_troposphere_compensation">
-<span class="sig-name descname"><span class="pre">calculate_free_troposphere_compensation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ws</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/mixed_layer/bulk.html#BulkMixedLayerModel.calculate_free_troposphere_compensation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.calculate_free_troposphere_compensation" title="Link to this definition">#</a></dt>
-<dd><p>Calculate compensation terms to fix free troposphere values.</p>
+<dt class="sig sig-object py" id="abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_radiative_growth_velocity">
+<span class="sig-name descname"><span class="pre">compute_radiative_growth_velocity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dtheta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/mixed_layer/bulk.html#BulkMixedLayerModel.compute_radiative_growth_velocity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_radiative_growth_velocity" title="Link to this definition">#</a></dt>
+<dd><p>Compute mixed-layer growth due to cloud top radiative divergence.</p>
+<p class="rubric">Notes</p>
+<p>The mixed-layer growth due to cloud top radiative divergence <span class="math notranslate nohighlight">\(w_f\)</span> is given by</p>
+<div class="math notranslate nohighlight">
+\[w_f = \frac{\Delta F_z}{\rho c_p \Delta \theta}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\Delta F_z\)</span> is the cloud top radiative divergence, <span class="math notranslate nohighlight">\(\rho\)</span> is air density,
+<span class="math notranslate nohighlight">\(c_p\)</span> is specific heat capacity, and <span class="math notranslate nohighlight">\(\Delta \theta\)</span> is the temperature jump.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="abcmodel.mixed_layer.bulk.BulkMixedLayerModel.calculate_convective_velocity_scale">
-<span class="sig-name descname"><span class="pre">calculate_convective_velocity_scale</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">abl_height</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wthetav</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thetav</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/mixed_layer/bulk.html#BulkMixedLayerModel.calculate_convective_velocity_scale"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.calculate_convective_velocity_scale" title="Link to this definition">#</a></dt>
-<dd><p>Calculate convective velocity scale and entrainment parameters.</p>
+<dt class="sig sig-object py" id="abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_free_troposphere_theta_compensation">
+<span class="sig-name descname"><span class="pre">compute_free_troposphere_theta_compensation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ws</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/mixed_layer/bulk.html#BulkMixedLayerModel.compute_free_troposphere_theta_compensation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_free_troposphere_theta_compensation" title="Link to this definition">#</a></dt>
+<dd><p>Compute potential temperature compensation term to fix free troposphere values.</p>
+<p class="rubric">Notes</p>
+<div class="math notranslate nohighlight">
+\[w_{\theta,ft} = \gamma_\theta w_s\]</div>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="abcmodel.mixed_layer.bulk.BulkMixedLayerModel.calculate_entrainment_velocity">
-<span class="sig-name descname"><span class="pre">calculate_entrainment_velocity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">abl_height</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wthetave</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dthetav</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thetav</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ustar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/mixed_layer/bulk.html#BulkMixedLayerModel.calculate_entrainment_velocity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.calculate_entrainment_velocity" title="Link to this definition">#</a></dt>
-<dd><p>Calculate entrainment velocity with optional shear effects.</p>
+<dt class="sig sig-object py" id="abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_free_troposphere_q_compensation">
+<span class="sig-name descname"><span class="pre">compute_free_troposphere_q_compensation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ws</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/mixed_layer/bulk.html#BulkMixedLayerModel.compute_free_troposphere_q_compensation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_free_troposphere_q_compensation" title="Link to this definition">#</a></dt>
+<dd><p>Compute humidity compensation term to fix free troposphere values.</p>
+<p class="rubric">Notes</p>
+<div class="math notranslate nohighlight">
+\[w_{q,ft} = \gamma_q w_s\]</div>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="abcmodel.mixed_layer.bulk.BulkMixedLayerModel.calculate_entrainment_fluxes">
-<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calculate_entrainment_fluxes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">we</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtheta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dCO2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/mixed_layer/bulk.html#BulkMixedLayerModel.calculate_entrainment_fluxes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.calculate_entrainment_fluxes" title="Link to this definition">#</a></dt>
-<dd><p>Calculate all entrainment fluxes.</p>
+<dt class="sig sig-object py" id="abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_free_troposphere_co2_compensation">
+<span class="sig-name descname"><span class="pre">compute_free_troposphere_co2_compensation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ws</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/mixed_layer/bulk.html#BulkMixedLayerModel.compute_free_troposphere_co2_compensation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_free_troposphere_co2_compensation" title="Link to this definition">#</a></dt>
+<dd><p>Compute CO2 compensation term to fix free troposphere values.</p>
+<p class="rubric">Notes</p>
+<div class="math notranslate nohighlight">
+\[w_{CO2,ft} = \gamma_{CO2} w_s\]</div>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="abcmodel.mixed_layer.bulk.BulkMixedLayerModel.calculate_mixed_layer_tendencies">
-<span class="sig-name descname"><span class="pre">calculate_mixed_layer_tendencies</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ws</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wqe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">we</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cc_mf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cc_qf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wtheta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wthetae</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abl_height</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wCO2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wCO2e</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wCO2M</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w_th_ft</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w_q_ft</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w_CO2_ft</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/mixed_layer/bulk.html#BulkMixedLayerModel.calculate_mixed_layer_tendencies"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.calculate_mixed_layer_tendencies" title="Link to this definition">#</a></dt>
-<dd><p>Calculate tendency terms for mixed layer variables.</p>
+<dt class="sig sig-object py" id="abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_convective_velocity_scale">
+<span class="sig-name descname"><span class="pre">compute_convective_velocity_scale</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">abl_height</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wthetav</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thetav</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/mixed_layer/bulk.html#BulkMixedLayerModel.compute_convective_velocity_scale"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_convective_velocity_scale" title="Link to this definition">#</a></dt>
+<dd><p>Compute convective velocity scale.</p>
+<p class="rubric">Notes</p>
+<p>The convective velocity scale <span class="math notranslate nohighlight">\(w_*\)</span> is given by</p>
+<div class="math notranslate nohighlight">
+\[w_* = \left( \frac{g h \overline{w'\theta_v'}_s}{\theta_v} \right)^{1/3}\]</div>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="abcmodel.mixed_layer.bulk.BulkMixedLayerModel.calculate_wind_tendencies">
-<span class="sig-name descname"><span class="pre">calculate_wind_tendencies</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">we</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uw</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vw</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cc_mf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">du</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dv</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abl_height</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/mixed_layer/bulk.html#BulkMixedLayerModel.calculate_wind_tendencies"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.calculate_wind_tendencies" title="Link to this definition">#</a></dt>
-<dd><p>Calculate wind tendency terms if wind is prognostic.</p>
+<dt class="sig sig-object py" id="abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_entrainment_virtual_heat_flux">
+<span class="sig-name descname"><span class="pre">compute_entrainment_virtual_heat_flux</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wthetav</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/mixed_layer/bulk.html#BulkMixedLayerModel.compute_entrainment_virtual_heat_flux"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_entrainment_virtual_heat_flux" title="Link to this definition">#</a></dt>
+<dd><p>Compute entrainment virtual heat flux.</p>
+<p class="rubric">Notes</p>
+<p>The entrainment virtual heat flux <span class="math notranslate nohighlight">\(\overline{w'\theta_v'}_e\)</span> is parametrized as</p>
+<div class="math notranslate nohighlight">
+\[\overline{w'\theta_v'}_e = -\beta \overline{w'\theta_v'}_s\]</div>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="abcmodel.mixed_layer.bulk.BulkMixedLayerModel.calculate_transition_layer_tendency">
-<span class="sig-name descname"><span class="pre">calculate_transition_layer_tendency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lcl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abl_height</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cc_frac</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dz_h</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/mixed_layer/bulk.html#BulkMixedLayerModel.calculate_transition_layer_tendency"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.calculate_transition_layer_tendency" title="Link to this definition">#</a></dt>
-<dd><p>Calculate transition layer thickness tendency.</p>
+<dt class="sig sig-object py" id="abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_entrainment_velocity">
+<span class="sig-name descname"><span class="pre">compute_entrainment_velocity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">abl_height</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wthetave</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dthetav</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thetav</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ustar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/mixed_layer/bulk.html#BulkMixedLayerModel.compute_entrainment_velocity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_entrainment_velocity" title="Link to this definition">#</a></dt>
+<dd><p>Compute entrainment velocity with optional shear effects.</p>
+<p class="rubric">Notes</p>
+<p>The entrainment velocity <span class="math notranslate nohighlight">\(w_e\)</span> is given by</p>
+<div class="math notranslate nohighlight">
+\[w_e = -\frac{\overline{w'\theta_v'}_e}{\Delta \theta_v}\]</div>
+<p>If shear effects are included (<code class="docutils literal notranslate"><span class="pre">sw_shearwe</span></code> is True), an additional term is added:</p>
+<div class="math notranslate nohighlight">
+\[w_e = \frac{-\overline{w'\theta_v'}_e + 5 u_*^3 \theta_v / (g h)}{\Delta \theta_v}\]</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_entrainment_heat_flux">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">compute_entrainment_heat_flux</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">we</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtheta</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/mixed_layer/bulk.html#BulkMixedLayerModel.compute_entrainment_heat_flux"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_entrainment_heat_flux" title="Link to this definition">#</a></dt>
+<dd><p>Compute entrainment heat flux.</p>
+<p class="rubric">Notes</p>
+<div class="math notranslate nohighlight">
+\[\overline{w'\theta'}_e = -w_e \Delta \theta\]</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_entrainment_moisture_flux">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">compute_entrainment_moisture_flux</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">we</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dq</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/mixed_layer/bulk.html#BulkMixedLayerModel.compute_entrainment_moisture_flux"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_entrainment_moisture_flux" title="Link to this definition">#</a></dt>
+<dd><p>Compute entrainment moisture flux.</p>
+<p class="rubric">Notes</p>
+<div class="math notranslate nohighlight">
+\[\overline{w'q'}_e = -w_e \Delta q\]</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_entrainment_co2_flux">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">compute_entrainment_co2_flux</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">we</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dCO2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/mixed_layer/bulk.html#BulkMixedLayerModel.compute_entrainment_co2_flux"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_entrainment_co2_flux" title="Link to this definition">#</a></dt>
+<dd><p>Compute entrainment CO2 flux.</p>
+<p class="rubric">Notes</p>
+<div class="math notranslate nohighlight">
+\[\overline{w'CO_2'}_e = -w_e \Delta CO_2\]</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_abl_height_tendency">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">compute_abl_height_tendency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">we</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ws</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cc_mf</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/mixed_layer/bulk.html#BulkMixedLayerModel.compute_abl_height_tendency"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_abl_height_tendency" title="Link to this definition">#</a></dt>
+<dd><p>Compute boundary layer height tendency.</p>
+<p class="rubric">Notes</p>
+<div class="math notranslate nohighlight">
+\[\frac{dh}{dt} = w_e + w_s + w_f - \text{cc}_{mf}\]</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_potential_temperature_tendency">
+<span class="sig-name descname"><span class="pre">compute_potential_temperature_tendency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">abl_height</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wtheta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wthetae</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/mixed_layer/bulk.html#BulkMixedLayerModel.compute_potential_temperature_tendency"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_potential_temperature_tendency" title="Link to this definition">#</a></dt>
+<dd><p>Compute mixed-layer potential temperature tendency.</p>
+<p class="rubric">Notes</p>
+<div class="math notranslate nohighlight">
+\[\frac{d\theta}{dt} = \frac{\overline{w'\theta'}_s - \overline{w'\theta'}_e}{h} + \text{adv}_\theta\]</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_potential_temperature_jump_tendency">
+<span class="sig-name descname"><span class="pre">compute_potential_temperature_jump_tendency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">we</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cc_mf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thetatend</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w_th_ft</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/mixed_layer/bulk.html#BulkMixedLayerModel.compute_potential_temperature_jump_tendency"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_potential_temperature_jump_tendency" title="Link to this definition">#</a></dt>
+<dd><p>Compute potential temperature jump tendency.</p>
+<p class="rubric">Notes</p>
+<div class="math notranslate nohighlight">
+\[\frac{d\Delta \theta}{dt} = \gamma_\theta (w_e + w_f - \text{cc}_{mf}) - \frac{d\theta}{dt} + w_{\theta,ft}\]</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_humidity_tendency">
+<span class="sig-name descname"><span class="pre">compute_humidity_tendency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">abl_height</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wqe</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cc_qf</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/mixed_layer/bulk.html#BulkMixedLayerModel.compute_humidity_tendency"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_humidity_tendency" title="Link to this definition">#</a></dt>
+<dd><p>Compute mixed-layer specific humidity tendency.</p>
+<p class="rubric">Notes</p>
+<div class="math notranslate nohighlight">
+\[\frac{dq}{dt} = \frac{\overline{w'q'}_s - \overline{w'q'}_e - \text{cc}_{qf}}{h} + \text{adv}_q\]</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_humidity_jump_tendency">
+<span class="sig-name descname"><span class="pre">compute_humidity_jump_tendency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">we</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cc_mf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qtend</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w_q_ft</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/mixed_layer/bulk.html#BulkMixedLayerModel.compute_humidity_jump_tendency"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_humidity_jump_tendency" title="Link to this definition">#</a></dt>
+<dd><p>Compute specific humidity jump tendency.</p>
+<p class="rubric">Notes</p>
+<div class="math notranslate nohighlight">
+\[\frac{d\Delta q}{dt} = \gamma_q (w_e + w_f - \text{cc}_{mf}) - \frac{dq}{dt} + w_{q,ft}\]</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_co2_tendency">
+<span class="sig-name descname"><span class="pre">compute_co2_tendency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">abl_height</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wCO2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wCO2e</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wCO2M</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/mixed_layer/bulk.html#BulkMixedLayerModel.compute_co2_tendency"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_co2_tendency" title="Link to this definition">#</a></dt>
+<dd><p>Compute mixed-layer CO2 tendency.</p>
+<p class="rubric">Notes</p>
+<div class="math notranslate nohighlight">
+\[\frac{dCO_2}{dt} = \frac{\overline{w'CO_2'}_s - \overline{w'CO_2'}_e - \text{cc}_{CO2f}}{h} + \text{adv}_{CO2}\]</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_co2_jump_tendency">
+<span class="sig-name descname"><span class="pre">compute_co2_jump_tendency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">we</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cc_mf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">co2tend</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w_CO2_ft</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/mixed_layer/bulk.html#BulkMixedLayerModel.compute_co2_jump_tendency"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_co2_jump_tendency" title="Link to this definition">#</a></dt>
+<dd><p>Compute CO2 jump tendency.</p>
+<p class="rubric">Notes</p>
+<div class="math notranslate nohighlight">
+\[\frac{d\Delta CO_2}{dt} = \gamma_{CO2} (w_e + w_f - \text{cc}_{mf}) - \frac{dCO_2}{dt} + w_{CO2,ft}\]</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_u_wind_tendency">
+<span class="sig-name descname"><span class="pre">compute_u_wind_tendency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">abl_height</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">we</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uw</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">du</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dv</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/mixed_layer/bulk.html#BulkMixedLayerModel.compute_u_wind_tendency"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_u_wind_tendency" title="Link to this definition">#</a></dt>
+<dd><p>Compute u-wind tendency.</p>
+<p class="rubric">Notes</p>
+<div class="math notranslate nohighlight">
+\[\frac{du}{dt} = -f_c \Delta v + \frac{\overline{u'w'}_s + w_e \Delta u}{h} + \text{adv}_u\]</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_v_wind_tendency">
+<span class="sig-name descname"><span class="pre">compute_v_wind_tendency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">abl_height</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">we</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vw</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">du</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dv</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/mixed_layer/bulk.html#BulkMixedLayerModel.compute_v_wind_tendency"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_v_wind_tendency" title="Link to this definition">#</a></dt>
+<dd><p>Compute v-wind tendency.</p>
+<p class="rubric">Notes</p>
+<div class="math notranslate nohighlight">
+\[\frac{dv}{dt} = f_c \Delta u + \frac{\overline{v'w'}_s + w_e \Delta v}{h} + \text{adv}_v\]</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_u_wind_jump_tendency">
+<span class="sig-name descname"><span class="pre">compute_u_wind_jump_tendency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">we</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cc_mf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">utend</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/mixed_layer/bulk.html#BulkMixedLayerModel.compute_u_wind_jump_tendency"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_u_wind_jump_tendency" title="Link to this definition">#</a></dt>
+<dd><p>Compute u-wind jump tendency.</p>
+<p class="rubric">Notes</p>
+<div class="math notranslate nohighlight">
+\[\frac{d\Delta u}{dt} = \gamma_u (w_e + w_f - \text{cc}_{mf}) - \frac{du}{dt}\]</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_v_wind_jump_tendency">
+<span class="sig-name descname"><span class="pre">compute_v_wind_jump_tendency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">we</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cc_mf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vtend</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/mixed_layer/bulk.html#BulkMixedLayerModel.compute_v_wind_jump_tendency"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_v_wind_jump_tendency" title="Link to this definition">#</a></dt>
+<dd><p>Compute v-wind jump tendency.</p>
+<p class="rubric">Notes</p>
+<div class="math notranslate nohighlight">
+\[\frac{d\Delta v}{dt} = \gamma_v (w_e + w_f - \text{cc}_{mf}) - \frac{dv}{dt}\]</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_transition_layer_tendency">
+<span class="sig-name descname"><span class="pre">compute_transition_layer_tendency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lcl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abl_height</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cc_frac</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dz_h</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/mixed_layer/bulk.html#BulkMixedLayerModel.compute_transition_layer_tendency"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_transition_layer_tendency" title="Link to this definition">#</a></dt>
+<dd><p>Compute transition layer thickness tendency.</p>
+<p class="rubric">Notes</p>
+<p>Relaxation of the transition layer thickness <span class="math notranslate nohighlight">\(\delta z_h\)</span> towards a target value:</p>
+<div class="math notranslate nohighlight">
+\[\frac{d\delta z_h}{dt} = \frac{(LCL - h) - \delta z_h}{\tau}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\tau = 7200\)</span> s.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="abcmodel.mixed_layer.bulk.BulkMixedLayerModel.run">
 <span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/mixed_layer/bulk.html#BulkMixedLayerModel.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.run" title="Link to this definition">#</a></dt>
-<dd><p>Calculate mixed layer tendencies and update diagnostic variables.</p>
+<dd><p>Compute mixed layer tendencies and update diagnostic variables.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -894,14 +1082,29 @@ including entrainment, subsidence, cloud effects, and wind dynamics.</p>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.calculate_vertical_motions"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.calculate_vertical_motions()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.calculate_free_troposphere_compensation"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.calculate_free_troposphere_compensation()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.calculate_convective_velocity_scale"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.calculate_convective_velocity_scale()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.calculate_entrainment_velocity"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.calculate_entrainment_velocity()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.calculate_entrainment_fluxes"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.calculate_entrainment_fluxes()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.calculate_mixed_layer_tendencies"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.calculate_mixed_layer_tendencies()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.calculate_wind_tendencies"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.calculate_wind_tendencies()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.calculate_transition_layer_tendency"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.calculate_transition_layer_tendency()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_subsidence_velocity"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.compute_subsidence_velocity()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_radiative_growth_velocity"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.compute_radiative_growth_velocity()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_free_troposphere_theta_compensation"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.compute_free_troposphere_theta_compensation()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_free_troposphere_q_compensation"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.compute_free_troposphere_q_compensation()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_free_troposphere_co2_compensation"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.compute_free_troposphere_co2_compensation()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_convective_velocity_scale"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.compute_convective_velocity_scale()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_entrainment_virtual_heat_flux"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.compute_entrainment_virtual_heat_flux()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_entrainment_velocity"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.compute_entrainment_velocity()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_entrainment_heat_flux"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.compute_entrainment_heat_flux()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_entrainment_moisture_flux"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.compute_entrainment_moisture_flux()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_entrainment_co2_flux"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.compute_entrainment_co2_flux()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_abl_height_tendency"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.compute_abl_height_tendency()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_potential_temperature_tendency"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.compute_potential_temperature_tendency()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_potential_temperature_jump_tendency"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.compute_potential_temperature_jump_tendency()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_humidity_tendency"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.compute_humidity_tendency()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_humidity_jump_tendency"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.compute_humidity_jump_tendency()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_co2_tendency"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.compute_co2_tendency()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_co2_jump_tendency"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.compute_co2_jump_tendency()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_u_wind_tendency"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.compute_u_wind_tendency()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_v_wind_tendency"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.compute_v_wind_tendency()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_u_wind_jump_tendency"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.compute_u_wind_jump_tendency()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_v_wind_jump_tendency"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.compute_v_wind_jump_tendency()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_transition_layer_tendency"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.compute_transition_layer_tendency()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.run"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.run()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.integrate"><code class="docutils literal notranslate"><span class="pre">BulkMixedLayerModel.integrate()</span></code></a></li>
 </ul>

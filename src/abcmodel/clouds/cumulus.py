@@ -40,7 +40,7 @@ class StandardCumulusModel(AbstractCloudModel):
         self.tcc_trans = tcc_trans
 
     @staticmethod
-    def calculate_mixed_layer_variance(
+    def compute_humidity_variance(
         cc_qf: Array,
         wthetav: Array,
         wqe: Array,
@@ -48,28 +48,52 @@ class StandardCumulusModel(AbstractCloudModel):
         abl_height: Array,
         dz_h: Array,
         wstar: Array,
+    ) -> Array:
+        """Compute mixed-layer top relative humidity variance.
+
+        Notes:
+            Based on Neggers et al. (2006/7). The humidity variance :math:`\\sigma_{q,h}^2` is
+
+            .. math::
+                \\sigma_{q,h}^2 = -\\frac{(\\overline{w'q'}_e + \\overline{w'q'}_{cc}) \\Delta q h}{\\delta z_h w_*}
+        """
+        return jnp.where(
+            wthetav > 0.0, -(wqe + cc_qf) * dq * abl_height / (dz_h * wstar), 0.0
+        )
+
+    @staticmethod
+    def compute_co2_variance(
+        wthetav: Array,
+        abl_height: Array,
+        dz_h: Array,
+        wstar: Array,
         wCO2e: Array,
         wCO2M: Array,
         dCO2: Array,
-    ) -> tuple[Array, Array]:
+    ) -> Array:
+        """Compute mixed-layer top CO2 variance.
+
+        Notes:
+            Based on Neggers et al. (2006/7). The CO2 variance :math:`\\sigma_{CO2,h}^2` is
+
+            .. math::
+                \\sigma_{CO2,h}^2 = -\\frac{(\\overline{w'CO_2'}_e + \\overline{w'CO_2'}_{M}) \\Delta CO_2 h}{\\delta z_h w_*}
         """
-        Calculate mixed-layer top relative humidity variance and CO2 variance.
-        Based on Neggers et. al 2006/7.
-        """
-        q2_h = jnp.where(
-            wthetav > 0.0, -(wqe + cc_qf) * dq * abl_height / (dz_h * wstar), 0.0
-        )
-        top_CO22 = jnp.where(
+        return jnp.where(
             wthetav > 0.0, -(wCO2e + wCO2M) * dCO2 * abl_height / (dz_h * wstar), 0.0
         )
-        return q2_h, top_CO22
 
     @staticmethod
-    def calculate_cloud_core_fraction(
+    def compute_cloud_core_fraction(
         q: Array, top_T: Array, top_p: Array, q2_h: Array
     ) -> Array:
-        """
-        Calculate cloud core fraction using the arctangent formulation.
+        """Compute cloud core fraction using the arctangent formulation.
+
+        Notes:
+            The cloud core fraction :math:`a_{cc}` is given by
+
+            .. math::
+                a_{cc} = 0.5 + 0.36 \\arctan\\left( 1.55 \\frac{q - q_{sat}(T_{top}, p_{top})}{\\sigma_{q,h}} \\right)
         """
         cc_frac = jnp.where(
             q2_h <= 0.0,
@@ -84,21 +108,42 @@ class StandardCumulusModel(AbstractCloudModel):
         return cc_frac
 
     @staticmethod
-    def calculate_cloud_core_properties(
-        cc_frac: Array, wstar: Array, q2_h: Array
-    ) -> tuple[Array, Array]:
+    def compute_cloud_core_mass_flux(cc_frac: Array, wstar: Array) -> Array:
+        """Compute cloud core mass flux.
+
+        Notes:
+            The cloud core mass flux :math:`M_{cc}` is
+
+            .. math::
+                M_{cc} = a_{cc} w_*
         """
-        Calculate and update cloud core mass flux and moisture flux.
-        No return needed since we're updating self attributes directly.
-        """
-        cc_mf = cc_frac * wstar
-        cc_qf = jnp.where(q2_h > 0.0, cc_mf * (q2_h**0.5), 0.0)
-        return cc_mf, cc_qf
+        return cc_frac * wstar
 
     @staticmethod
-    def calculate_co2_mass_flux(cc_mf: Array, top_CO22: Array, dCO2: Array) -> Array:
+    def compute_cloud_core_moisture_flux(
+        cc_mf: Array, q2_h: Array
+    ) -> Array:
+        """Compute cloud core moisture flux.
+
+        Notes:
+            The cloud core moisture flux :math:`\\overline{w'q'}_{cc}` is
+
+            .. math::
+                \\overline{w'q'}_{cc} = M_{cc} \\sigma_{q,h}
         """
-        Calculate CO2 mass flux, only if mixed-layer top jump is negative.
+        return jnp.where(q2_h > 0.0, cc_mf * (q2_h**0.5), 0.0)
+
+    @staticmethod
+    def compute_co2_mass_flux(cc_mf: Array, top_CO22: Array, dCO2: Array) -> Array:
+        """Compute CO2 mass flux.
+
+        Notes:
+            The CO2 mass flux :math:`\\overline{w'CO_2'}_{M}` is
+
+            .. math::
+                \\overline{w'CO_2'}_{M} = M_{cc} \\sigma_{CO2,h}
+
+            This is only computed if the mixed-layer top jump is negative.
         """
         # flux value
         flux_value = cc_mf * (top_CO22**0.5)
@@ -108,8 +153,17 @@ class StandardCumulusModel(AbstractCloudModel):
 
         return jnp.where(condition, flux_value, 0.0)
 
-    def calculate_cloud_layer_transmittance(self, cc_frac: Array) -> Array:
-        """Calculate cloud layer transmittance, with maximum total cloud cover equal to 1"""
+    def compute_cloud_layer_transmittance(self, cc_frac: Array) -> Array:
+        """Compute cloud layer transmittance, with maximum total cloud cover equal to 1.
+
+        Notes:
+            The cloud layer transmittance :math:`\\tau_{cl}` is
+
+            .. math::
+                \\tau_{cl} = 1 - \\text{TCC} (1 - \\tau_{cloud})
+
+            where :math:`\\text{TCC} = \\min(a_{cc} \\cdot \\text{ratio}, 1)` is the total cloud cover.
+        """
         # get total cloud cover
         tcc = jnp.minimum(cc_frac * self.tcc_cc, 1.0)
         # return cloud layer transmittance
@@ -117,11 +171,17 @@ class StandardCumulusModel(AbstractCloudModel):
 
     def run(self, state: PyTree, const: PhysicalConstants):
         """Run the model."""
-        state.q2_h, state.top_CO22 = self.calculate_mixed_layer_variance(
+        state.q2_h = self.compute_humidity_variance(
             state.cc_qf,
             state.wthetav,
             state.wqe,
             state.dq,
+            state.abl_height,
+            state.dz_h,
+            state.wstar,
+        )
+        state.top_CO22 = self.compute_co2_variance(
+            state.wthetav,
             state.abl_height,
             state.dz_h,
             state.wstar,
@@ -130,25 +190,28 @@ class StandardCumulusModel(AbstractCloudModel):
             state.dCO2,
         )
 
-        state.cc_frac = self.calculate_cloud_core_fraction(
+        state.cc_frac = self.compute_cloud_core_fraction(
             state.q,
             state.top_T,
             state.top_p,
             state.q2_h,
         )
 
-        state.cc_mf, state.cc_qf = self.calculate_cloud_core_properties(
+        state.cc_mf = self.compute_cloud_core_mass_flux(
             state.cc_frac,
             state.wstar,
+        )
+        state.cc_qf = self.compute_cloud_core_moisture_flux(
+            state.cc_mf,
             state.q2_h,
         )
 
-        state.wCO2M = self.calculate_co2_mass_flux(
+        state.wCO2M = self.compute_co2_mass_flux(
             state.cc_mf,
             state.top_CO22,
             state.dCO2,
         )
-        state.cl_trans = self.calculate_cloud_layer_transmittance(
+        state.cl_trans = self.compute_cloud_layer_transmittance(
             state.cc_frac,
         )
 

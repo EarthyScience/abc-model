@@ -377,18 +377,18 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.surface_layer.standard.StandardSurfaceLayerModel.compute_ra"><code class="docutils literal notranslate"><span class="pre">StandardSurfaceLayerModel.compute_ra()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.surface_layer.standard.calculate_effective_wind_speed"><code class="docutils literal notranslate"><span class="pre">calculate_effective_wind_speed()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.surface_layer.standard.calculate_surface_properties"><code class="docutils literal notranslate"><span class="pre">calculate_surface_properties()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.surface_layer.standard.calculate_richardson_number"><code class="docutils literal notranslate"><span class="pre">calculate_richardson_number()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.surface_layer.standard.calculate_rib_function"><code class="docutils literal notranslate"><span class="pre">calculate_rib_function()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.surface_layer.standard.compute_effective_wind_speed"><code class="docutils literal notranslate"><span class="pre">compute_effective_wind_speed()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.surface_layer.standard.compute_surface_properties"><code class="docutils literal notranslate"><span class="pre">compute_surface_properties()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.surface_layer.standard.compute_richardson_number"><code class="docutils literal notranslate"><span class="pre">compute_richardson_number()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.surface_layer.standard.compute_rib_function"><code class="docutils literal notranslate"><span class="pre">compute_rib_function()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.surface_layer.standard.ribtol"><code class="docutils literal notranslate"><span class="pre">ribtol()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.surface_layer.standard.calculate_drag_coefficients"><code class="docutils literal notranslate"><span class="pre">calculate_drag_coefficients()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.surface_layer.standard.calculate_momentum_fluxes"><code class="docutils literal notranslate"><span class="pre">calculate_momentum_fluxes()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.surface_layer.standard.calculate_2m_variables"><code class="docutils literal notranslate"><span class="pre">calculate_2m_variables()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.surface_layer.standard.calculate_scalar_correction_term"><code class="docutils literal notranslate"><span class="pre">calculate_scalar_correction_term()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.surface_layer.standard.calculate_momentum_correction_term"><code class="docutils literal notranslate"><span class="pre">calculate_momentum_correction_term()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.surface_layer.standard.calculate_psim"><code class="docutils literal notranslate"><span class="pre">calculate_psim()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.surface_layer.standard.calculate_psih"><code class="docutils literal notranslate"><span class="pre">calculate_psih()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.surface_layer.standard.compute_drag_coefficients"><code class="docutils literal notranslate"><span class="pre">compute_drag_coefficients()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.surface_layer.standard.compute_momentum_fluxes"><code class="docutils literal notranslate"><span class="pre">compute_momentum_fluxes()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.surface_layer.standard.compute_2m_variables"><code class="docutils literal notranslate"><span class="pre">compute_2m_variables()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.surface_layer.standard.compute_scalar_correction_term"><code class="docutils literal notranslate"><span class="pre">compute_scalar_correction_term()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.surface_layer.standard.compute_momentum_correction_term"><code class="docutils literal notranslate"><span class="pre">compute_momentum_correction_term()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.surface_layer.standard.compute_psim"><code class="docutils literal notranslate"><span class="pre">compute_psim()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.surface_layer.standard.compute_psih"><code class="docutils literal notranslate"><span class="pre">compute_psih()</span></code></a></li>
 </ul>
             </nav>
         </div>
@@ -561,9 +561,9 @@ with stability functions and iterative solution for Obukhov length.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="abcmodel.surface_layer.standard.calculate_effective_wind_speed">
-<span class="sig-prename descclassname"><span class="pre">abcmodel.surface_layer.standard.</span></span><span class="sig-name descname"><span class="pre">calculate_effective_wind_speed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wstar</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/surface_layer/standard.html#calculate_effective_wind_speed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.surface_layer.standard.calculate_effective_wind_speed" title="Link to this definition">#</a></dt>
-<dd><p>Calculate effective wind speed <code class="docutils literal notranslate"><span class="pre">ueff</span></code>.</p>
+<dt class="sig sig-object py" id="abcmodel.surface_layer.standard.compute_effective_wind_speed">
+<span class="sig-prename descclassname"><span class="pre">abcmodel.surface_layer.standard.</span></span><span class="sig-name descname"><span class="pre">compute_effective_wind_speed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wstar</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/surface_layer/standard.html#compute_effective_wind_speed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.surface_layer.standard.compute_effective_wind_speed" title="Link to this definition">#</a></dt>
+<dd><p>Compute effective wind speed <code class="docutils literal notranslate"><span class="pre">ueff</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -584,9 +584,9 @@ with stability functions and iterative solution for Obukhov length.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="abcmodel.surface_layer.standard.calculate_surface_properties">
-<span class="sig-prename descclassname"><span class="pre">abcmodel.surface_layer.standard.</span></span><span class="sig-name descname"><span class="pre">calculate_surface_properties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ueff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wtheta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surf_pressure</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drag_s</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/surface_layer/standard.html#calculate_surface_properties"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.surface_layer.standard.calculate_surface_properties" title="Link to this definition">#</a></dt>
-<dd><p>Calculate surface temperature, specific humidity, and virtual potential temperature.</p>
+<dt class="sig sig-object py" id="abcmodel.surface_layer.standard.compute_surface_properties">
+<span class="sig-prename descclassname"><span class="pre">abcmodel.surface_layer.standard.</span></span><span class="sig-name descname"><span class="pre">compute_surface_properties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ueff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wtheta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surf_pressure</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drag_s</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/surface_layer/standard.html#compute_surface_properties"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.surface_layer.standard.compute_surface_properties" title="Link to this definition">#</a></dt>
+<dd><p>Compute surface temperature, specific humidity, and virtual potential temperature.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -614,9 +614,9 @@ with stability functions and iterative solution for Obukhov length.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="abcmodel.surface_layer.standard.calculate_richardson_number">
-<span class="sig-prename descclassname"><span class="pre">abcmodel.surface_layer.standard.</span></span><span class="sig-name descname"><span class="pre">calculate_richardson_number</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ueff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zsl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thetav</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thetavsurf</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/surface_layer/standard.html#calculate_richardson_number"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.surface_layer.standard.calculate_richardson_number" title="Link to this definition">#</a></dt>
-<dd><p>Calculate bulk Richardson number.</p>
+<dt class="sig sig-object py" id="abcmodel.surface_layer.standard.compute_richardson_number">
+<span class="sig-prename descclassname"><span class="pre">abcmodel.surface_layer.standard.</span></span><span class="sig-name descname"><span class="pre">compute_richardson_number</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ueff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zsl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thetav</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thetavsurf</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/surface_layer/standard.html#compute_richardson_number"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.surface_layer.standard.compute_richardson_number" title="Link to this definition">#</a></dt>
+<dd><p>Compute bulk Richardson number.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -636,9 +636,9 @@ with stability functions and iterative solution for Obukhov length.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="abcmodel.surface_layer.standard.calculate_rib_function">
-<span class="sig-prename descclassname"><span class="pre">abcmodel.surface_layer.standard.</span></span><span class="sig-name descname"><span class="pre">calculate_rib_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">zsl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">oblen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rib_number</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z0h</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z0m</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/surface_layer/standard.html#calculate_rib_function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.surface_layer.standard.calculate_rib_function" title="Link to this definition">#</a></dt>
-<dd><p>Calculate the Richardson number function for iterative solution of Obukhov length.</p>
+<dt class="sig sig-object py" id="abcmodel.surface_layer.standard.compute_rib_function">
+<span class="sig-prename descclassname"><span class="pre">abcmodel.surface_layer.standard.</span></span><span class="sig-name descname"><span class="pre">compute_rib_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">zsl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">oblen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rib_number</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z0h</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z0m</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/surface_layer/standard.html#compute_rib_function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.surface_layer.standard.compute_rib_function" title="Link to this definition">#</a></dt>
+<dd><p>Compute the Richardson number function for iterative solution of Obukhov length.</p>
 <p class="rubric">Notes</p>
 <p>This function computes the difference between the bulk Richardson number and its
 Monin-Obukhov similarity theory estimate, used in the Newton-Raphson iteration
@@ -667,9 +667,9 @@ similarity theory estimate matches the bulk Richardson number.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="abcmodel.surface_layer.standard.calculate_drag_coefficients">
-<span class="sig-prename descclassname"><span class="pre">abcmodel.surface_layer.standard.</span></span><span class="sig-name descname"><span class="pre">calculate_drag_coefficients</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">zsl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obukhov_length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z0h</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z0m</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/surface_layer/standard.html#calculate_drag_coefficients"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.surface_layer.standard.calculate_drag_coefficients" title="Link to this definition">#</a></dt>
-<dd><p>Calculate drag coefficients for momentum and scalars with stability corrections.</p>
+<dt class="sig sig-object py" id="abcmodel.surface_layer.standard.compute_drag_coefficients">
+<span class="sig-prename descclassname"><span class="pre">abcmodel.surface_layer.standard.</span></span><span class="sig-name descname"><span class="pre">compute_drag_coefficients</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">zsl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obukhov_length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z0h</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z0m</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/surface_layer/standard.html#compute_drag_coefficients"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.surface_layer.standard.compute_drag_coefficients" title="Link to this definition">#</a></dt>
+<dd><p>Compute drag coefficients for momentum and scalars with stability corrections.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -694,15 +694,15 @@ similarity theory estimate matches the bulk Richardson number.</p>
 + \ln(z_{sl}/z_{0m})] [\psi_h(z_{sl}/L)
 - \psi_h(z_{0h}/L)
 + \ln(z_{sl}/z_{0h})]}\end{aligned}\end{align} \]</div>
-<p>where <span class="math notranslate nohighlight">\(\psi_m\)</span> (see <a class="reference internal" href="#abcmodel.surface_layer.standard.calculate_momentum_correction_term" title="abcmodel.surface_layer.standard.calculate_momentum_correction_term"><code class="xref py py-meth docutils literal notranslate"><span class="pre">calculate_momentum_correction_term()</span></code></a>) and
-<span class="math notranslate nohighlight">\(\psi_h\)</span> (see <a class="reference internal" href="#abcmodel.surface_layer.standard.calculate_scalar_correction_term" title="abcmodel.surface_layer.standard.calculate_scalar_correction_term"><code class="xref py py-meth docutils literal notranslate"><span class="pre">calculate_scalar_correction_term()</span></code></a>)
+<p>where <span class="math notranslate nohighlight">\(\psi_m\)</span> (see <a class="reference internal" href="#abcmodel.surface_layer.standard.compute_momentum_correction_term" title="abcmodel.surface_layer.standard.compute_momentum_correction_term"><code class="xref py py-meth docutils literal notranslate"><span class="pre">compute_momentum_correction_term()</span></code></a>) and
+<span class="math notranslate nohighlight">\(\psi_h\)</span> (see <a class="reference internal" href="#abcmodel.surface_layer.standard.compute_scalar_correction_term" title="abcmodel.surface_layer.standard.compute_scalar_correction_term"><code class="xref py py-meth docutils literal notranslate"><span class="pre">compute_scalar_correction_term()</span></code></a>)
 are stability correction functions for momentum and scalars.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="abcmodel.surface_layer.standard.calculate_momentum_fluxes">
-<span class="sig-prename descclassname"><span class="pre">abcmodel.surface_layer.standard.</span></span><span class="sig-name descname"><span class="pre">calculate_momentum_fluxes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ueff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drag_m</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/surface_layer/standard.html#calculate_momentum_fluxes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.surface_layer.standard.calculate_momentum_fluxes" title="Link to this definition">#</a></dt>
-<dd><p>Calculate surface momentum fluxes and friction velocity.</p>
+<dt class="sig sig-object py" id="abcmodel.surface_layer.standard.compute_momentum_fluxes">
+<span class="sig-prename descclassname"><span class="pre">abcmodel.surface_layer.standard.</span></span><span class="sig-name descname"><span class="pre">compute_momentum_fluxes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ueff</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drag_m</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/surface_layer/standard.html#compute_momentum_fluxes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.surface_layer.standard.compute_momentum_fluxes" title="Link to this definition">#</a></dt>
+<dd><p>Compute surface momentum fluxes and friction velocity.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -726,9 +726,9 @@ are stability correction functions for momentum and scalars.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="abcmodel.surface_layer.standard.calculate_2m_variables">
-<span class="sig-prename descclassname"><span class="pre">abcmodel.surface_layer.standard.</span></span><span class="sig-name descname"><span class="pre">calculate_2m_variables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wtheta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surf_pressure</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z0h</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z0m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obukhov_length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thetasurf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qsurf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ustar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uw</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vw</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/surface_layer/standard.html#calculate_2m_variables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.surface_layer.standard.calculate_2m_variables" title="Link to this definition">#</a></dt>
-<dd><p>Calculate 2m diagnostic meteorological variables.</p>
+<dt class="sig sig-object py" id="abcmodel.surface_layer.standard.compute_2m_variables">
+<span class="sig-prename descclassname"><span class="pre">abcmodel.surface_layer.standard.</span></span><span class="sig-name descname"><span class="pre">compute_2m_variables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wtheta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surf_pressure</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z0h</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z0m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obukhov_length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thetasurf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qsurf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ustar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uw</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vw</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/surface_layer/standard.html#compute_2m_variables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.surface_layer.standard.compute_2m_variables" title="Link to this definition">#</a></dt>
+<dd><p>Compute 2m diagnostic meteorological variables.</p>
 <p class="rubric">Notes</p>
 <p>Computes temperature, humidity, wind, and vapor pressures at 2 meters above the surface,
 applying Monin-Obukhov similarity theory with stability corrections.</p>
@@ -736,9 +736,9 @@ applying Monin-Obukhov similarity theory with stability corrections.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="abcmodel.surface_layer.standard.calculate_scalar_correction_term">
-<span class="sig-prename descclassname"><span class="pre">abcmodel.surface_layer.standard.</span></span><span class="sig-name descname"><span class="pre">calculate_scalar_correction_term</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">oblen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z0h</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/surface_layer/standard.html#calculate_scalar_correction_term"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.surface_layer.standard.calculate_scalar_correction_term" title="Link to this definition">#</a></dt>
-<dd><p>Calculate scalar stability correction term.</p>
+<dt class="sig sig-object py" id="abcmodel.surface_layer.standard.compute_scalar_correction_term">
+<span class="sig-prename descclassname"><span class="pre">abcmodel.surface_layer.standard.</span></span><span class="sig-name descname"><span class="pre">compute_scalar_correction_term</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">oblen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z0h</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/surface_layer/standard.html#compute_scalar_correction_term"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.surface_layer.standard.compute_scalar_correction_term" title="Link to this definition">#</a></dt>
+<dd><p>Compute scalar stability correction term.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -757,13 +757,13 @@ applying Monin-Obukhov similarity theory with stability corrections.</p>
 \[\ln\left(\frac{z}{z_{0h}}\right)
 - \psi_h\left(\frac{z}{L}\right)
 + \psi_h\left(\frac{z_{0h}}{L}\right)\]</div>
-<p>where <span class="math notranslate nohighlight">\(\psi_h\)</span> is the stability correction function for scalars (see <a class="reference internal" href="#abcmodel.surface_layer.standard.calculate_psih" title="abcmodel.surface_layer.standard.calculate_psih"><code class="xref py py-func docutils literal notranslate"><span class="pre">calculate_psih()</span></code></a>).</p>
+<p>where <span class="math notranslate nohighlight">\(\psi_h\)</span> is the stability correction function for scalars (see <a class="reference internal" href="#abcmodel.surface_layer.standard.compute_psih" title="abcmodel.surface_layer.standard.compute_psih"><code class="xref py py-func docutils literal notranslate"><span class="pre">compute_psih()</span></code></a>).</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="abcmodel.surface_layer.standard.calculate_momentum_correction_term">
-<span class="sig-prename descclassname"><span class="pre">abcmodel.surface_layer.standard.</span></span><span class="sig-name descname"><span class="pre">calculate_momentum_correction_term</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">oblen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z0m</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/surface_layer/standard.html#calculate_momentum_correction_term"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.surface_layer.standard.calculate_momentum_correction_term" title="Link to this definition">#</a></dt>
-<dd><p>Calculate momentum stability correction term.</p>
+<dt class="sig sig-object py" id="abcmodel.surface_layer.standard.compute_momentum_correction_term">
+<span class="sig-prename descclassname"><span class="pre">abcmodel.surface_layer.standard.</span></span><span class="sig-name descname"><span class="pre">compute_momentum_correction_term</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">oblen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z0m</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/surface_layer/standard.html#compute_momentum_correction_term"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.surface_layer.standard.compute_momentum_correction_term" title="Link to this definition">#</a></dt>
+<dd><p>Compute momentum stability correction term.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -782,13 +782,13 @@ applying Monin-Obukhov similarity theory with stability corrections.</p>
 \[\ln\left(\frac{z}{z_{0m}}\right)
 - \psi_m\left(\frac{z}{L}\right)
 + \psi_m\left(\frac{z_{0m}}{L}\right)\]</div>
-<p>where <span class="math notranslate nohighlight">\(\psi_m\)</span> is the stability correction function for momentum (see <a class="reference internal" href="#abcmodel.surface_layer.standard.calculate_psim" title="abcmodel.surface_layer.standard.calculate_psim"><code class="xref py py-func docutils literal notranslate"><span class="pre">calculate_psim()</span></code></a>).</p>
+<p>where <span class="math notranslate nohighlight">\(\psi_m\)</span> is the stability correction function for momentum (see <a class="reference internal" href="#abcmodel.surface_layer.standard.compute_psim" title="abcmodel.surface_layer.standard.compute_psim"><code class="xref py py-func docutils literal notranslate"><span class="pre">compute_psim()</span></code></a>).</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="abcmodel.surface_layer.standard.calculate_psim">
-<span class="sig-prename descclassname"><span class="pre">abcmodel.surface_layer.standard.</span></span><span class="sig-name descname"><span class="pre">calculate_psim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">zeta</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/surface_layer/standard.html#calculate_psim"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.surface_layer.standard.calculate_psim" title="Link to this definition">#</a></dt>
-<dd><p>Calculate momentum stability function from Monin-Obukhov similarity theory.</p>
+<dt class="sig sig-object py" id="abcmodel.surface_layer.standard.compute_psim">
+<span class="sig-prename descclassname"><span class="pre">abcmodel.surface_layer.standard.</span></span><span class="sig-name descname"><span class="pre">compute_psim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">zeta</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/surface_layer/standard.html#compute_psim"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.surface_layer.standard.compute_psim" title="Link to this definition">#</a></dt>
+<dd><p>Compute momentum stability function from Monin-Obukhov similarity theory.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>zeta</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></span>) – stability parameter z/L <span class="math notranslate nohighlight">\(\zeta\)</span>.</p>
@@ -826,9 +826,9 @@ with constants:</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="abcmodel.surface_layer.standard.calculate_psih">
-<span class="sig-prename descclassname"><span class="pre">abcmodel.surface_layer.standard.</span></span><span class="sig-name descname"><span class="pre">calculate_psih</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">zeta</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/surface_layer/standard.html#calculate_psih"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.surface_layer.standard.calculate_psih" title="Link to this definition">#</a></dt>
-<dd><p>Calculate scalar stability function from Monin-Obukhov similarity theory.</p>
+<dt class="sig sig-object py" id="abcmodel.surface_layer.standard.compute_psih">
+<span class="sig-prename descclassname"><span class="pre">abcmodel.surface_layer.standard.</span></span><span class="sig-name descname"><span class="pre">compute_psih</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">zeta</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/surface_layer/standard.html#compute_psih"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.surface_layer.standard.compute_psih" title="Link to this definition">#</a></dt>
+<dd><p>Compute scalar stability function from Monin-Obukhov similarity theory.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>zeta</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></span>) – stability parameter z/L <span class="math notranslate nohighlight">\(\zeta\)</span>.</p>
@@ -933,18 +933,18 @@ adjust temperature and humidity profiles based on atmospheric stability.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.surface_layer.standard.StandardSurfaceLayerModel.compute_ra"><code class="docutils literal notranslate"><span class="pre">StandardSurfaceLayerModel.compute_ra()</span></code></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.surface_layer.standard.calculate_effective_wind_speed"><code class="docutils literal notranslate"><span class="pre">calculate_effective_wind_speed()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.surface_layer.standard.calculate_surface_properties"><code class="docutils literal notranslate"><span class="pre">calculate_surface_properties()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.surface_layer.standard.calculate_richardson_number"><code class="docutils literal notranslate"><span class="pre">calculate_richardson_number()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.surface_layer.standard.calculate_rib_function"><code class="docutils literal notranslate"><span class="pre">calculate_rib_function()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.surface_layer.standard.compute_effective_wind_speed"><code class="docutils literal notranslate"><span class="pre">compute_effective_wind_speed()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.surface_layer.standard.compute_surface_properties"><code class="docutils literal notranslate"><span class="pre">compute_surface_properties()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.surface_layer.standard.compute_richardson_number"><code class="docutils literal notranslate"><span class="pre">compute_richardson_number()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.surface_layer.standard.compute_rib_function"><code class="docutils literal notranslate"><span class="pre">compute_rib_function()</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.surface_layer.standard.ribtol"><code class="docutils literal notranslate"><span class="pre">ribtol()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.surface_layer.standard.calculate_drag_coefficients"><code class="docutils literal notranslate"><span class="pre">calculate_drag_coefficients()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.surface_layer.standard.calculate_momentum_fluxes"><code class="docutils literal notranslate"><span class="pre">calculate_momentum_fluxes()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.surface_layer.standard.calculate_2m_variables"><code class="docutils literal notranslate"><span class="pre">calculate_2m_variables()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.surface_layer.standard.calculate_scalar_correction_term"><code class="docutils literal notranslate"><span class="pre">calculate_scalar_correction_term()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.surface_layer.standard.calculate_momentum_correction_term"><code class="docutils literal notranslate"><span class="pre">calculate_momentum_correction_term()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.surface_layer.standard.calculate_psim"><code class="docutils literal notranslate"><span class="pre">calculate_psim()</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.surface_layer.standard.calculate_psih"><code class="docutils literal notranslate"><span class="pre">calculate_psih()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.surface_layer.standard.compute_drag_coefficients"><code class="docutils literal notranslate"><span class="pre">compute_drag_coefficients()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.surface_layer.standard.compute_momentum_fluxes"><code class="docutils literal notranslate"><span class="pre">compute_momentum_fluxes()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.surface_layer.standard.compute_2m_variables"><code class="docutils literal notranslate"><span class="pre">compute_2m_variables()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.surface_layer.standard.compute_scalar_correction_term"><code class="docutils literal notranslate"><span class="pre">compute_scalar_correction_term()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.surface_layer.standard.compute_momentum_correction_term"><code class="docutils literal notranslate"><span class="pre">compute_momentum_correction_term()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.surface_layer.standard.compute_psim"><code class="docutils literal notranslate"><span class="pre">compute_psim()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.surface_layer.standard.compute_psih"><code class="docutils literal notranslate"><span class="pre">compute_psih()</span></code></a></li>
 </ul>
   </nav></div>
 

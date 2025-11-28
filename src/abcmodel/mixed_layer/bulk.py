@@ -182,55 +182,98 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
         self.advv = advv
         self.dFz = dFz
 
-    def calculate_vertical_motions(
-        self,
-        abl_height: Array,
-        dtheta: Array,
-        const: PhysicalConstants,
-    ) -> tuple[Array, Array]:
-        """Calculate large-scale subsidence and radiative divergence effects."""
-        # calculate large-scale vertical velocity (subsidence)
-        ws = -self.divU * abl_height
+    def compute_subsidence_velocity(self, abl_height: Array) -> Array:
+        """Compute large-scale subsidence velocity.
 
-        # calculate mixed-layer growth due to cloud top radiative divergence
+        Notes:
+            The large-scale vertical velocity (subsidence) :math:`w_s` is given by
+
+            .. math::
+                w_s = -\\text{div}U \\cdot h
+
+            where :math:`\\text{div}U` is the horizontal large-scale divergence of wind and :math:`h` is the ABL height.
+        """
+        return -self.divU * abl_height
+
+    def compute_radiative_growth_velocity(
+        self, dtheta: Array, const: PhysicalConstants
+    ) -> Array:
+        """Compute mixed-layer growth due to cloud top radiative divergence.
+
+        Notes:
+            The mixed-layer growth due to cloud top radiative divergence :math:`w_f` is given by
+
+            .. math::
+                w_f = \\frac{\\Delta F_z}{\\rho c_p \\Delta \\theta}
+
+            where :math:`\\Delta F_z` is the cloud top radiative divergence, :math:`\\rho` is air density,
+            :math:`c_p` is specific heat capacity, and :math:`\\Delta \\theta` is the temperature jump.
+        """
         radiative_denominator = const.rho * const.cp * dtheta
-        wf = self.dFz / radiative_denominator
+        return self.dFz / radiative_denominator
 
-        return ws, wf
+    def compute_free_troposphere_theta_compensation(self, ws: Array) -> Array:
+        """Compute potential temperature compensation term to fix free troposphere values.
 
-    def calculate_free_troposphere_compensation(self, ws: Array):
-        """Calculate compensation terms to fix free troposphere values."""
-        # compensation terms
+        Notes:
+            .. math::
+                w_{\\theta,ft} = \\gamma_\\theta w_s
+        """
         w_th_ft_active = self.gammatheta * ws
+        return jnp.where(self.sw_fixft, w_th_ft_active, 0.0)
+
+    def compute_free_troposphere_q_compensation(self, ws: Array) -> Array:
+        """Compute humidity compensation term to fix free troposphere values.
+
+        Notes:
+            .. math::
+                w_{q,ft} = \\gamma_q w_s
+        """
         w_q_ft_active = self.gammaq * ws
+        return jnp.where(self.sw_fixft, w_q_ft_active, 0.0)
+
+    def compute_free_troposphere_co2_compensation(self, ws: Array) -> Array:
+        """Compute CO2 compensation term to fix free troposphere values.
+
+        Notes:
+            .. math::
+                w_{CO2,ft} = \\gamma_{CO2} w_s
+        """
         w_CO2_ft_active = self.gammaCO2 * ws
+        return jnp.where(self.sw_fixft, w_CO2_ft_active, 0.0)
 
-        # switch based on sw_fixft flag
-        w_th_ft = jnp.where(self.sw_fixft, w_th_ft_active, 0.0)
-        w_q_ft = jnp.where(self.sw_fixft, w_q_ft_active, 0.0)
-        w_CO2_ft = jnp.where(self.sw_fixft, w_CO2_ft_active, 0.0)
-
-        return w_th_ft, w_q_ft, w_CO2_ft
-
-    def calculate_convective_velocity_scale(
+    def compute_convective_velocity_scale(
         self,
         abl_height: Array,
         wthetav: Array,
         thetav: Array,
         g: float,
-    ):
-        """Calculate convective velocity scale and entrainment parameters."""
+    ) -> Array:
+        """Compute convective velocity scale.
+
+        Notes:
+            The convective velocity scale :math:`w_*` is given by
+
+            .. math::
+                w_* = \\left( \\frac{g h \\overline{w'\\theta_v'}_s}{\\theta_v} \\right)^{1/3}
+        """
         # calculate wstar for positive wthetav case
         buoyancy_term = g * abl_height * wthetav / thetav
         wstar_positive = buoyancy_term ** (1.0 / 3.0)
-        wstar = jnp.where(wthetav > 0.0, wstar_positive, 1e-6)
+        return jnp.where(wthetav > 0.0, wstar_positive, 1e-6)
 
-        # virtual heat entrainment flux
-        wthetave = -self.beta * wthetav
+    def compute_entrainment_virtual_heat_flux(self, wthetav: Array) -> Array:
+        """Compute entrainment virtual heat flux.
 
-        return wstar, wthetave
+        Notes:
+            The entrainment virtual heat flux :math:`\\overline{w'\\theta_v'}_e` is parametrized as
 
-    def calculate_entrainment_velocity(
+            .. math::
+                \\overline{w'\\theta_v'}_e = -\\beta \\overline{w'\\theta_v'}_s
+        """
+        return -self.beta * wthetav
+
+    def compute_entrainment_velocity(
         self,
         abl_height: Array,
         wthetave: Array,
@@ -239,7 +282,19 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
         ustar: Array,
         g: float,
     ):
-        """Calculate entrainment velocity with optional shear effects."""
+        """Compute entrainment velocity with optional shear effects.
+
+        Notes:
+            The entrainment velocity :math:`w_e` is given by
+
+            .. math::
+                w_e = -\\frac{\\overline{w'\\theta_v'}_e}{\\Delta \\theta_v}
+
+            If shear effects are included (``sw_shearwe`` is True), an additional term is added:
+
+            .. math::
+                w_e = \\frac{-\\overline{w'\\theta_v'}_e + 5 u_*^3 \\theta_v / (g h)}{\\Delta \\theta_v}
+        """
         # entrainment velocity with shear effects
         shear_term = 5.0 * ustar**3.0 * thetav / (g * abl_height)
         numerator = -wthetave + shear_term
@@ -258,97 +313,227 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
         return we_final
 
     @staticmethod
-    def calculate_entrainment_fluxes(we: Array, dtheta: Array, dq: Array, dCO2: Array):
-        """Calculate all entrainment fluxes."""
-        wthetae = -we * dtheta
-        wqe = -we * dq
-        wCO2e = -we * dCO2
-        return wthetae, wqe, wCO2e
+    def compute_entrainment_heat_flux(we: Array, dtheta: Array) -> Array:
+        """Compute entrainment heat flux.
 
-    def calculate_mixed_layer_tendencies(
+        Notes:
+            .. math::
+                \\overline{w'\\theta'}_e = -w_e \\Delta \\theta
+        """
+        return -we * dtheta
+
+    @staticmethod
+    def compute_entrainment_moisture_flux(we: Array, dq: Array) -> Array:
+        """Compute entrainment moisture flux.
+
+        Notes:
+            .. math::
+                \\overline{w'q'}_e = -w_e \\Delta q
+        """
+        return -we * dq
+
+    @staticmethod
+    def compute_entrainment_co2_flux(we: Array, dCO2: Array) -> Array:
+        """Compute entrainment CO2 flux.
+
+        Notes:
+            .. math::
+                \\overline{w'CO_2'}_e = -w_e \\Delta CO_2
+        """
+        return -we * dCO2
+
+    @staticmethod
+    def compute_abl_height_tendency(
+        we: Array, ws: Array, wf: Array, cc_mf: Array
+    ) -> Array:
+        """Compute boundary layer height tendency.
+
+        Notes:
+            .. math::
+                \\frac{dh}{dt} = w_e + w_s + w_f - \\text{cc}_{mf}
+        """
+        return we + ws + wf - cc_mf
+
+    def compute_potential_temperature_tendency(
+        self, abl_height: Array, wtheta: Array, wthetae: Array
+    ) -> Array:
+        """Compute mixed-layer potential temperature tendency.
+
+        Notes:
+            .. math::
+                \\frac{d\\theta}{dt} = \\frac{\\overline{w'\\theta'}_s - \\overline{w'\\theta'}_e}{h} + \\text{adv}_\\theta
+        """
+        surface_heat_flux = (wtheta - wthetae) / abl_height
+        return surface_heat_flux + self.advtheta
+
+    def compute_potential_temperature_jump_tendency(
         self,
-        ws: Array,
-        wf: Array,
-        wq: Array,
-        wqe: Array,
         we: Array,
+        wf: Array,
         cc_mf: Array,
-        cc_qf: Array,
-        wtheta: Array,
-        wthetae: Array,
+        thetatend: Array,
+        w_th_ft: Array,
+    ) -> Array:
+        """Compute potential temperature jump tendency.
+
+        Notes:
+            .. math::
+                \\frac{d\\Delta \\theta}{dt} = \\gamma_\\theta (w_e + w_f - \\text{cc}_{mf}) - \\frac{d\\theta}{dt} + w_{\\theta,ft}
+        """
+        egrowth = we + wf - cc_mf
+        return self.gammatheta * egrowth - thetatend + w_th_ft
+
+    def compute_humidity_tendency(
+        self, abl_height: Array, wq: Array, wqe: Array, cc_qf: Array
+    ) -> Array:
+        """Compute mixed-layer specific humidity tendency.
+
+        Notes:
+            .. math::
+                \\frac{dq}{dt} = \\frac{\\overline{w'q'}_s - \\overline{w'q'}_e - \\text{cc}_{qf}}{h} + \\text{adv}_q
+        """
+        surface_moisture_flux = (wq - wqe - cc_qf) / abl_height
+        return surface_moisture_flux + self.advq
+
+    def compute_humidity_jump_tendency(
+        self,
+        we: Array,
+        wf: Array,
+        cc_mf: Array,
+        qtend: Array,
+        w_q_ft: Array,
+    ) -> Array:
+        """Compute specific humidity jump tendency.
+
+        Notes:
+            .. math::
+                \\frac{d\\Delta q}{dt} = \\gamma_q (w_e + w_f - \\text{cc}_{mf}) - \\frac{dq}{dt} + w_{q,ft}
+        """
+        egrowth = we + wf - cc_mf
+        return self.gammaq * egrowth - qtend + w_q_ft
+
+    def compute_co2_tendency(
+        self,
         abl_height: Array,
         wCO2: Array,
         wCO2e: Array,
         wCO2M: Array,
-        w_th_ft: Array,
-        w_q_ft: Array,
-        w_CO2_ft: Array,
-    ):
-        """Calculate tendency terms for mixed layer variables."""
-        # boundary layer height tendency
-        htend = we + ws + wf - cc_mf
+    ) -> Array:
+        """Compute mixed-layer CO2 tendency.
 
-        # mixed layer scalar tendencies
-        surface_heat_flux = (wtheta - wthetae) / abl_height
-        thetatend = surface_heat_flux + self.advtheta
-
-        surface_moisture_flux = (wq - wqe - cc_qf) / abl_height
-        qtend = surface_moisture_flux + self.advq
-
+        Notes:
+            .. math::
+                \\frac{dCO_2}{dt} = \\frac{\\overline{w'CO_2'}_s - \\overline{w'CO_2'}_e - \\text{cc}_{CO2f}}{h} + \\text{adv}_{CO2}
+        """
         surface_co2_flux_term = (wCO2 - wCO2e - wCO2M) / abl_height
-        co2tend = surface_co2_flux_term + self.advCO2
+        return surface_co2_flux_term + self.advCO2
 
-        # jump tendencies at boundary layer top
-        # (entrainment growth term)
-        egrowth = we + wf - cc_mf
-
-        dthetatend = self.gammatheta * egrowth - thetatend + w_th_ft
-        dqtend = self.gammaq * egrowth - qtend + w_q_ft
-        dCO2tend = self.gammaCO2 * egrowth - co2tend + w_CO2_ft
-
-        return htend, thetatend, dthetatend, qtend, dqtend, co2tend, dCO2tend
-
-    def calculate_wind_tendencies(
+    def compute_co2_jump_tendency(
         self,
         we: Array,
         wf: Array,
-        uw: Array,
-        vw: Array,
         cc_mf: Array,
+        co2tend: Array,
+        w_CO2_ft: Array,
+    ) -> Array:
+        """Compute CO2 jump tendency.
+
+        Notes:
+            .. math::
+                \\frac{d\\Delta CO_2}{dt} = \\gamma_{CO2} (w_e + w_f - \\text{cc}_{mf}) - \\frac{dCO_2}{dt} + w_{CO2,ft}
+        """
+        egrowth = we + wf - cc_mf
+        return self.gammaCO2 * egrowth - co2tend + w_CO2_ft
+
+    def compute_u_wind_tendency(
+        self,
+        abl_height: Array,
+        we: Array,
+        uw: Array,
         du: Array,
         dv: Array,
-        abl_height: Array,
-    ) -> tuple[Array, Array, Array, Array]:
-        """Calculate wind tendency terms if wind is prognostic."""
-        # wind tendencies for sw_wind = True case
+    ) -> Array:
+        """Compute u-wind tendency.
+
+        Notes:
+            .. math::
+                \\frac{du}{dt} = -f_c \\Delta v + \\frac{\\overline{u'w'}_s + w_e \\Delta u}{h} + \\text{adv}_u
+        """
         coriolis_term_u = -self.coriolis_param * dv
         momentum_flux_term_u = (uw + we * du) / abl_height
         utend_active = coriolis_term_u + momentum_flux_term_u + self.advu
+        return jnp.where(self.sw_wind, utend_active, 0.0)
 
+    def compute_v_wind_tendency(
+        self,
+        abl_height: Array,
+        we: Array,
+        vw: Array,
+        du: Array,
+        dv: Array,
+    ) -> Array:
+        """Compute v-wind tendency.
+
+        Notes:
+            .. math::
+                \\frac{dv}{dt} = f_c \\Delta u + \\frac{\\overline{v'w'}_s + w_e \\Delta v}{h} + \\text{adv}_v
+        """
         coriolis_term_v = self.coriolis_param * du
         momentum_flux_term_v = (vw + we * dv) / abl_height
         vtend_active = coriolis_term_v + momentum_flux_term_v + self.advv
+        return jnp.where(self.sw_wind, vtend_active, 0.0)
 
+    def compute_u_wind_jump_tendency(
+        self,
+        we: Array,
+        wf: Array,
+        cc_mf: Array,
+        utend: Array,
+    ) -> Array:
+        """Compute u-wind jump tendency.
+
+        Notes:
+            .. math::
+                \\frac{d\\Delta u}{dt} = \\gamma_u (w_e + w_f - \\text{cc}_{mf}) - \\frac{du}{dt}
+        """
         entrainment_growth_term = we + wf - cc_mf
-        dutend_active = self.gammau * entrainment_growth_term - utend_active
-        dvtend_active = self.gammav * entrainment_growth_term - vtend_active
+        dutend_active = self.gammau * entrainment_growth_term - utend
+        return jnp.where(self.sw_wind, dutend_active, 0.0)
 
-        # select based on sw_wind flag
-        utend = jnp.where(self.sw_wind, utend_active, 0.0)
-        vtend = jnp.where(self.sw_wind, vtend_active, 0.0)
-        dutend = jnp.where(self.sw_wind, dutend_active, 0.0)
-        dvtend = jnp.where(self.sw_wind, dvtend_active, 0.0)
+    def compute_v_wind_jump_tendency(
+        self,
+        we: Array,
+        wf: Array,
+        cc_mf: Array,
+        vtend: Array,
+    ) -> Array:
+        """Compute v-wind jump tendency.
 
-        return utend, vtend, dutend, dvtend
+        Notes:
+            .. math::
+                \\frac{d\\Delta v}{dt} = \\gamma_v (w_e + w_f - \\text{cc}_{mf}) - \\frac{dv}{dt}
+        """
+        entrainment_growth_term = we + wf - cc_mf
+        dvtend_active = self.gammav * entrainment_growth_term - vtend
+        return jnp.where(self.sw_wind, dvtend_active, 0.0)
 
-    def calculate_transition_layer_tendency(
+    def compute_transition_layer_tendency(
         self,
         lcl: Array,
         abl_height: Array,
         cc_frac: Array,
         dz_h: Array,
     ):
-        """Calculate transition layer thickness tendency."""
+        """Compute transition layer thickness tendency.
+
+        Notes:
+            Relaxation of the transition layer thickness :math:`\\delta z_h` towards a target value:
+
+            .. math::
+                \\frac{d\\delta z_h}{dt} = \\frac{(LCL - h) - \\delta z_h}{\\tau}
+
+            where :math:`\\tau = 7200` s.
+        """
         lcl_distance = lcl - abl_height
 
         # tendency for active case
@@ -360,22 +545,21 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
         return dztend
 
     def run(self, state: PyTree, const: PhysicalConstants):
-        """Calculate mixed layer tendencies and update diagnostic variables."""
-        state.ws, state.wf = self.calculate_vertical_motions(
-            state.abl_height,
-            state.dtheta,
-            const,
-        )
-        w_th_ft, w_q_ft, w_CO2_ft = self.calculate_free_troposphere_compensation(
-            state.ws,
-        )
-        state.wstar, state.wthetave = self.calculate_convective_velocity_scale(
+        """Compute mixed layer tendencies and update diagnostic variables."""
+        state.ws = self.compute_subsidence_velocity(state.abl_height)
+        state.wf = self.compute_radiative_growth_velocity(state.dtheta, const)
+
+        w_th_ft = self.compute_free_troposphere_theta_compensation(state.ws)
+        w_q_ft = self.compute_free_troposphere_q_compensation(state.ws)
+        w_CO2_ft = self.compute_free_troposphere_co2_compensation(state.ws)
+        state.wstar = self.compute_convective_velocity_scale(
             state.abl_height,
             state.wthetav,
             state.thetav,
             const.g,
         )
-        state.we = self.calculate_entrainment_velocity(
+        state.wthetave = self.compute_entrainment_virtual_heat_flux(state.wthetav)
+        state.we = self.compute_entrainment_velocity(
             state.abl_height,
             state.wthetave,
             state.dthetav,
@@ -383,48 +567,43 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
             state.ustar,
             const.g,
         )
-        state.wthetae, state.wqe, state.wCO2e = self.calculate_entrainment_fluxes(
-            state.we, state.dtheta, state.dq, state.dCO2
+        state.wthetae = self.compute_entrainment_heat_flux(state.we, state.dtheta)
+        state.wqe = self.compute_entrainment_moisture_flux(state.we, state.dq)
+        state.wCO2e = self.compute_entrainment_co2_flux(state.we, state.dCO2)
+        state.htend = self.compute_abl_height_tendency(
+            state.we, state.ws, state.wf, state.cc_mf
         )
-        (
-            state.htend,
-            state.thetatend,
-            state.dthetatend,
-            state.qtend,
-            state.dqtend,
-            state.co2tend,
-            state.dCO2tend,
-        ) = self.calculate_mixed_layer_tendencies(
-            state.ws,
-            state.wf,
-            state.wq,
-            state.wqe,
-            state.we,
-            state.cc_mf,
-            state.cc_qf,
-            state.wtheta,
-            state.wthetae,
-            state.abl_height,
-            state.wCO2,
-            state.wCO2e,
-            state.wCO2M,
-            w_th_ft,
-            w_q_ft,
-            w_CO2_ft,
+        state.thetatend = self.compute_potential_temperature_tendency(
+            state.abl_height, state.wtheta, state.wthetae
         )
-        state.utend, state.vtend, state.dutend, state.dvtend = (
-            self.calculate_wind_tendencies(
-                state.we,
-                state.wf,
-                state.uw,
-                state.vw,
-                state.cc_mf,
-                state.du,
-                state.dv,
-                state.abl_height,
-            )
+        state.dthetatend = self.compute_potential_temperature_jump_tendency(
+            state.we, state.wf, state.cc_mf, state.thetatend, w_th_ft
         )
-        state.dztend = self.calculate_transition_layer_tendency(
+        state.qtend = self.compute_humidity_tendency(
+            state.abl_height, state.wq, state.wqe, state.cc_qf
+        )
+        state.dqtend = self.compute_humidity_jump_tendency(
+            state.we, state.wf, state.cc_mf, state.qtend, w_q_ft
+        )
+        state.co2tend = self.compute_co2_tendency(
+            state.abl_height, state.wCO2, state.wCO2e, state.wCO2M
+        )
+        state.dCO2tend = self.compute_co2_jump_tendency(
+            state.we, state.wf, state.cc_mf, state.co2tend, w_CO2_ft
+        )
+        state.utend = self.compute_u_wind_tendency(
+            state.abl_height, state.we, state.uw, state.du, state.dv
+        )
+        state.vtend = self.compute_v_wind_tendency(
+            state.abl_height, state.we, state.vw, state.du, state.dv
+        )
+        state.dutend = self.compute_u_wind_jump_tendency(
+            state.we, state.wf, state.cc_mf, state.utend
+        )
+        state.dvtend = self.compute_v_wind_jump_tendency(
+            state.we, state.wf, state.cc_mf, state.vtend
+        )
+        state.dztend = self.compute_transition_layer_tendency(
             state.lcl,
             state.abl_height,
             state.cc_frac,

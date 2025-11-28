@@ -134,7 +134,21 @@ class AquaCropModel(AbstractStandardLandSurfaceModel):
         self,
         gm: Array,
     ) -> Array:
-        """Compute minimum stomatal conductance factor (fmin)."""
+        """Compute minimum stomatal conductance factor (fmin).
+
+        Notes:
+            The minimum stomatal conductance factor is computed by solving the quadratic equation:
+
+            .. math::
+                f_{min}^2 + f_{min} \\left( \\frac{g_{min}}{\\nu_{CO2}} - \\frac{1}{9} g_m \\right) - \\frac{g_{min}}{\\nu_{CO2}} g_m = 0
+
+            which leads to
+
+            .. math::
+                f_{min} = -f_{min,0} + \\frac{\\sqrt{f_{min,0}^2 + 4 \\frac{g_{min}}{\\nu_{CO2}} g_m}}{2 g_m}
+
+            where :math:`f_{min,0} = \\frac{g_{min}}{\\nu_{CO2}} - \\frac{1}{9} g_m`.
+        """
         fmin0 = self.gmin[self.c3c4] / self.nuco2q - 1.0 / 9.0 * gm
         fmin_sq_term = (
             jnp.power(fmin0, 2.0) + 4 * self.gmin[self.c3c4] / self.nuco2q * gm
@@ -147,7 +161,17 @@ class AquaCropModel(AbstractStandardLandSurfaceModel):
         surf_temp: Array,
         e: Array,
     ) -> Array:
-        """Compute vapor pressure deficit (ds) in kPa."""
+        """Compute vapor pressure deficit (ds) in kPa.
+
+        Notes:
+            The vapor pressure deficit is given by
+
+            .. math::
+                d_s = \\frac{e_{sat}(T_s) - e}{1000}
+
+            where :math:`e_{sat}(T_s)` is the saturation vapor pressure at surface temperature
+            and :math:`e` is the actual vapor pressure.
+        """
         ds = (compute_esat(surf_temp) - e) / 1000.0  # kPa
         return ds
 
@@ -155,7 +179,16 @@ class AquaCropModel(AbstractStandardLandSurfaceModel):
         self,
         fmin: Array,
     ) -> Array:
-        """Compute reference vapor pressure deficit (d0) in kPa."""
+        """Compute reference vapor pressure deficit (d0) in kPa.
+
+        Notes:
+            The reference vapor pressure deficit is given by
+
+            .. math::
+                d_0 = \\frac{f_0 - f_{min}}{a_d}
+
+            where :math:`f_0` and :math:`a_d` are empirical parameters.
+        """
         d0 = (self.f0[self.c3c4] - fmin) / self.ad[self.c3c4]
         return d0
 
@@ -169,14 +202,49 @@ class AquaCropModel(AbstractStandardLandSurfaceModel):
         gm: Array,
         const: PhysicalConstants,
     ) -> tuple[Array, Array]:
-        """Compute cfrac, co2abs, and ci (internal CO2 concentration)."""
+        """Compute cfrac, co2abs, and ci (internal CO2 concentration).
+
+        Notes:
+            The fraction of internal to ambient CO2 concentration :math:`c_{frac}` is given by
+
+            .. math::
+                c_{frac} = f_0 (1 - d_s/d_0) + f_{min} (d_s/d_0)
+
+            The ambient CO2 concentration in partial pressure units :math:`C_a` is
+
+            .. math::
+                C_a = [CO_2] \\frac{M_{CO2}}{M_{air}} \\rho
+
+            The internal CO2 concentration :math:`C_i` is then
+
+            .. math::
+                C_i = c_{frac} (C_a - \\Gamma) + \\Gamma
+
+            where :math:`\\Gamma` is the CO2 compensation point.
+        """
         cfrac = self.f0[self.c3c4] * (1.0 - (ds / d0)) + fmin * (ds / d0)
         co2abs = co2 * (const.mco2 / const.mair) * const.rho
         ci = cfrac * (co2abs - co2comp) + co2comp
         return ci, co2abs
 
-    def calculate_max_gross_primary_production(self, thetasurf: Array) -> Array:
-        """Calculate maximal gross primary production in high light conditions (Ag)."""
+    def compute_max_gross_primary_production(self, thetasurf: Array) -> Array:
+        """Compute maximal gross primary production in high light conditions ``ammax``.
+
+        Notes:
+            The maximal gross primary production is given by
+
+            .. math::
+                A_{m,max} = A_{m,max,298} Q_{10} e^{(T_s-298)/10} f_Q(T_s),
+
+            where :math:`A_{m,max,298}` is the value at 298 K, :math:`Q_{10}` is the temperature coefficient,
+            and :math:`f_Q(T_s)` is a temperature correction function given by
+
+            .. math::
+                f_Q(T_s) = \\frac{1}{[1 + \\exp(0.3(T_{1Am}-T_s))] [1 + \\exp(0.3(T_s-T_{2Am}))]}.
+
+        References:
+            Equation E.3 from the CLASS book.
+        """
         temp_diff = 0.1 * (thetasurf - 298.0)
         exp_term = jnp.power(self.net_rad10Am[self.c3c4], temp_diff)
         temp_factor1 = 1.0 + jnp.exp(0.3 * (self.temp1Am[self.c3c4] - thetasurf))
@@ -184,8 +252,21 @@ class AquaCropModel(AbstractStandardLandSurfaceModel):
         ammax = self.ammax298[self.c3c4] * exp_term / (temp_factor1 * temp_factor2)
         return ammax
 
-    def calculate_soil_moisture_stress_factor(self, w2: Array) -> Array:
-        """Calculate effect of soil moisture stress on gross assimilation rate."""
+    def compute_soil_moisture_stress_factor(self, w2: Array) -> Array:
+        """Compute effect of soil moisture stress on gross assimilation rate ``fstr``.
+
+        Notes:
+            The soil moisture stress factor is calculated based on the relative soil moisture content
+            and the parameter :math:`c_{\\beta}`.
+
+            .. math::
+                f_{str} = \\frac{1 - e^{-p \\beta_w}}{1 - e^{-p}}
+
+            where :math:`\\beta_w` is the relative soil moisture and :math:`p` depends on :math:`c_{\\beta}`.
+
+        References:
+            Equation E.19 from the CLASS book.
+        """
         # soil moisture ratio
         soil_moisture_ratio = (w2 - self.wwilt) / (self.wfc - self.wwilt)
         betaw = jnp.clip(soil_moisture_ratio, 1e-3, 1.0)
@@ -237,13 +318,27 @@ class AquaCropModel(AbstractStandardLandSurfaceModel):
         ci: Array,
         co2comp: Array,
     ) -> Array:
-        """Compute gross assimilation rate (am)."""
+        """Compute gross assimilation rate (am).
+
+        Notes:
+            The gross assimilation rate is given by
+
+            .. math::
+                A_m = A_{m,max} \\left[ 1 - \\exp\\left( -\\frac{g_m(C_i - \\Gamma)}{A_{m,max}} \\right) \\right]
+        """
         assimilation_factor = -(gm * (ci - co2comp) / ammax)
         am = ammax * (1.0 - jnp.exp(assimilation_factor))
         return am
 
     def compute_dark_respiration(self, am: Array) -> Array:
-        """Compute dark respiration (rdark) as a fraction of gross assimilation."""
+        """Compute dark respiration (rdark) as a fraction of gross assimilation.
+
+        Notes:
+            Dark respiration is assumed to be proportional to gross assimilation:
+
+            .. math::
+                R_{dark} = \\frac{1}{9} A_m
+        """
         rdark = (1.0 / 9.0) * am
         return rdark
 
@@ -251,7 +346,14 @@ class AquaCropModel(AbstractStandardLandSurfaceModel):
         self,
         in_srad: Array,
     ) -> Array:
-        """Compute absorbed photosynthetically active radiation (PAR)."""
+        """Compute absorbed photosynthetically active radiation (PAR).
+
+        Notes:
+            Absorbed PAR is estimated as 50% of the incoming shortwave radiation scaled by vegetation cover:
+
+            .. math::
+                PAR = 0.5 \\cdot S_{\\downarrow} \\cdot c_{veg}
+        """
         par = 0.5 * jnp.maximum(1e-1, in_srad * self.cveg)
         return par
 
@@ -260,12 +362,19 @@ class AquaCropModel(AbstractStandardLandSurfaceModel):
         co2abs: Array,
         co2comp: Array,
     ) -> Array:
-        """Compute light use efficiency (alphac)."""
+        """Compute light use efficiency (alphac).
+
+        Notes:
+            The light use efficiency is given by
+
+            .. math::
+                \\alpha_c = \\alpha_0 \\frac{C_a - \\Gamma}{C_a + 2\\Gamma}
+        """
         co2_ratio = (co2abs - co2comp) / (co2abs + 2.0 * co2comp)
         alphac = self.alpha0[self.c3c4] * co2_ratio
         return alphac
 
-    def calculate_canopy_co2_conductance(
+    def compute_canopy_co2_conductance(
         self,
         alphac: Array,
         par: Array,
@@ -278,7 +387,15 @@ class AquaCropModel(AbstractStandardLandSurfaceModel):
         d0: Array,
         fmin: Array,
     ) -> Array:
-        """Calculate upscaling from leaf to canopy and CO2 conductance at canopy level."""
+        """Compute upscaling from leaf to canopy and CO2 conductance at canopy level ``gcco2``.
+
+        Notes:
+            The canopy conductance is obtained by integrating the leaf conductance over the canopy depth,
+            assuming an exponential decay of radiation and photosynthetic capacity.
+
+        References:
+            Equations E.13, E.14, E.15 from the CLASS book.
+        """
         y = alphac * self.kx[self.c3c4] * par / (am + rdark)
         exp1_arg1 = y * jnp.exp(-self.kx[self.c3c4] * self.lai)
         exp1_arg2 = y
@@ -291,6 +408,16 @@ class AquaCropModel(AbstractStandardLandSurfaceModel):
         return gcco2
 
     def compute_rs(self, gcco2: Array):
+        """Compute surface resistance from canopy CO2 conductance.
+
+        Notes:
+            The surface resistance is related to the canopy CO2 conductance by
+
+            .. math::
+                r_s = \\frac{1}{1.6 g_{c,CO2}}
+
+            where the factor 1.6 accounts for the ratio of diffusivities of water vapor and CO2.
+        """
         return 1.0 / (1.6 * gcco2)
 
     def update_surface_resistance(self, state: PyTree, const: PhysicalConstants):
@@ -309,13 +436,13 @@ class AquaCropModel(AbstractStandardLandSurfaceModel):
             gm,
             const,
         )
-        ammax = self.calculate_max_gross_primary_production(state.thetasurf)
-        fstr = self.calculate_soil_moisture_stress_factor(state.w2)
+        ammax = self.compute_max_gross_primary_production(state.thetasurf)
+        fstr = self.compute_soil_moisture_stress_factor(state.w2)
         am = self.compute_gross_assimilation(ammax, gm, state.ci, co2comp)
         rdark = self.compute_dark_respiration(am)
         par = self.compute_absorbed_par(state.in_srad)
         alphac = self.compute_light_use_efficiency(state.co2abs, co2comp)
-        state.gcco2 = self.calculate_canopy_co2_conductance(
+        state.gcco2 = self.compute_canopy_co2_conductance(
             alphac,
             par,
             am,
@@ -331,17 +458,34 @@ class AquaCropModel(AbstractStandardLandSurfaceModel):
         return state
 
     def compute_surface_co2_resistance(self, gcco2: Array) -> Array:
-        """Compute surface resistance to CO₂ (rsCO2) from canopy conductance."""
+        """Compute surface resistance to CO₂ (rsCO2) from canopy conductance.
+
+        Notes:
+            .. math::
+                r_{s,CO2} = \\frac{1}{g_{c,CO2}}
+        """
         return 1.0 / gcco2
 
     def compute_net_assimilation(
         self, co2abs: Array, ci: Array, ra: Array, rsCO2: Array
     ) -> Array:
-        """Compute net CO₂ assimilation rate (an)."""
+        """Compute net CO₂ assimilation rate (an).
+
+        Notes:
+            The net assimilation rate is given by the diffusion equation:
+
+            .. math::
+                A_n = -\\frac{C_a - C_i}{r_a + r_{s,CO2}}
+        """
         return -(co2abs - ci) / (ra + rsCO2)
 
     def compute_soil_water_fraction(self, wg: Array) -> Array:
-        """Compute soil water fraction (fw) for respiration scaling."""
+        """Compute soil water fraction (fw) for respiration scaling.
+
+        Notes:
+            .. math::
+                f_w = \\frac{c_w W_{max}}{w_g + w_{min}}
+        """
         return self.cw * self.wmax / (wg + self.wmin)
 
     def compute_respiration(
@@ -349,7 +493,17 @@ class AquaCropModel(AbstractStandardLandSurfaceModel):
         temp_soil: Array,
         fw: Array,
     ) -> Array:
-        """Compute soil respiration (resp) as a function of temperature and soil water."""
+        """Compute soil respiration (resp) as a function of temperature and soil water.
+
+        Notes:
+            Soil respiration is given by
+
+            .. math::
+                R_{soil} = R_{10} (1 - f_w) \\exp\\left( \\frac{E_0}{R T_{ref}} (1 - T_{ref}/T_{soil}) \\right)
+
+            where :math:`R_{10}` is the reference respiration at 10°C, :math:`E_0` is the activation energy,
+            and :math:`T_{ref} = 283.15` K.
+        """
         temp_ratio = 1.0 - 283.15 / temp_soil
         resp_factor = jnp.exp(self.e0 / (283.15 * 8.314) * temp_ratio)
         resp = self.r10 * (1.0 - fw) * resp_factor
@@ -360,11 +514,26 @@ class AquaCropModel(AbstractStandardLandSurfaceModel):
         flux: Array,
         const: PhysicalConstants,
     ) -> Array:
-        """Scale a flux to mol m⁻² s⁻¹ using physical constants."""
+        """Scale a flux to mol m⁻² s⁻¹ using physical constants.
+
+        Notes:
+            The scaling is given by
+
+            .. math::
+                F_{mol} = F \\frac{M_{air}}{\\rho M_{CO2}}
+        """
         return flux * (const.mair / (const.rho * const.mco2))
 
     def update_co2_flux(self, state: PyTree, const: PhysicalConstants):
-        """Compute the CO₂ flux and update the state."""
+        """Compute the CO₂ flux and update the state.
+
+        Notes:
+            This method updates the CO2 flux variables in the state:
+            - ``rsCO2``: Surface resistance to CO2
+            - ``wCO2A``: Net assimilation flux (scaled to mol)
+            - ``wCO2R``: Respiration flux (scaled to mol)
+            - ``wCO2``: Total CO2 flux
+        """
         state.rsCO2 = self.compute_surface_co2_resistance(state.gcco2)
         an = self.compute_net_assimilation(
             state.co2abs, state.ci, state.ra, state.rsCO2

@@ -353,7 +353,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.radiation.standard_w_clouds.StandardRadiationwCloudsInitConds"><code class="docutils literal notranslate"><span class="pre">StandardRadiationwCloudsInitConds</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.radiation.standard_w_clouds.StandardRadiationwCloudsModel"><code class="docutils literal notranslate"><span class="pre">StandardRadiationwCloudsModel</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.radiation.standard_w_clouds.StandardRadiationwCloudsModel.run"><code class="docutils literal notranslate"><span class="pre">StandardRadiationwCloudsModel.run()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.radiation.standard_w_clouds.StandardRadiationwCloudsModel.calculate_atmospheric_transmission_w_clouds"><code class="docutils literal notranslate"><span class="pre">StandardRadiationwCloudsModel.calculate_atmospheric_transmission_w_clouds()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.radiation.standard_w_clouds.StandardRadiationwCloudsModel.compute_atmospheric_transmission_w_clouds"><code class="docutils literal notranslate"><span class="pre">StandardRadiationwCloudsModel.compute_atmospheric_transmission_w_clouds()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -414,20 +414,20 @@ radiation components.</p>
 <p class="rubric">Notes</p>
 <ol class="arabic simple">
 <li><p>Calculates solar position with
-<a class="reference internal" href="abcmodel.radiation.standard.html#abcmodel.radiation.standard.StandardRadiationModel.calculate_solar_declination" title="abcmodel.radiation.standard.StandardRadiationModel.calculate_solar_declination"><code class="xref py py-meth docutils literal notranslate"><span class="pre">calculate_solar_declination()</span></code></a> and
-<a class="reference internal" href="abcmodel.radiation.standard.html#abcmodel.radiation.standard.StandardRadiationModel.calculate_solar_elevation" title="abcmodel.radiation.standard.StandardRadiationModel.calculate_solar_elevation"><code class="xref py py-meth docutils literal notranslate"><span class="pre">calculate_solar_elevation()</span></code></a>.</p></li>
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">calculate_solar_declination()</span></code> and
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">calculate_solar_elevation()</span></code>.</p></li>
 <li><p>Determines atmospheric properties with
-<a class="reference internal" href="abcmodel.radiation.standard.html#abcmodel.radiation.standard.StandardRadiationModel.calculate_air_temperature" title="abcmodel.radiation.standard.StandardRadiationModel.calculate_air_temperature"><code class="xref py py-meth docutils literal notranslate"><span class="pre">calculate_air_temperature()</span></code></a> and
-<a class="reference internal" href="#abcmodel.radiation.standard_w_clouds.StandardRadiationwCloudsModel.calculate_atmospheric_transmission_w_clouds" title="abcmodel.radiation.standard_w_clouds.StandardRadiationwCloudsModel.calculate_atmospheric_transmission_w_clouds"><code class="xref py py-meth docutils literal notranslate"><span class="pre">calculate_atmospheric_transmission_w_clouds()</span></code></a>.</p></li>
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">calculate_air_temperature()</span></code> and
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">calculate_atmospheric_transmission_w_clouds()</span></code>.</p></li>
 <li><p>Computes all radiation components and the final
-net radiation with <a class="reference internal" href="abcmodel.radiation.standard.html#abcmodel.radiation.standard.StandardRadiationModel.calculate_radiation_components" title="abcmodel.radiation.standard.StandardRadiationModel.calculate_radiation_components"><code class="xref py py-meth docutils literal notranslate"><span class="pre">calculate_radiation_components()</span></code></a>,
+net radiation with <code class="xref py py-meth docutils literal notranslate"><span class="pre">calculate_radiation_components()</span></code>,
 then updates the state object with the results.</p></li>
 </ol>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="abcmodel.radiation.standard_w_clouds.StandardRadiationwCloudsModel.calculate_atmospheric_transmission_w_clouds">
-<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calculate_atmospheric_transmission_w_clouds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">solar_elevation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cl_trans</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/radiation/standard_w_clouds.html#StandardRadiationwCloudsModel.calculate_atmospheric_transmission_w_clouds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.radiation.standard_w_clouds.StandardRadiationwCloudsModel.calculate_atmospheric_transmission_w_clouds" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="abcmodel.radiation.standard_w_clouds.StandardRadiationwCloudsModel.compute_atmospheric_transmission_w_clouds">
+<em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">compute_atmospheric_transmission_w_clouds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">solar_elevation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cl_trans</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/radiation/standard_w_clouds.html#StandardRadiationwCloudsModel.compute_atmospheric_transmission_w_clouds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.radiation.standard_w_clouds.StandardRadiationwCloudsModel.compute_atmospheric_transmission_w_clouds" title="Link to this definition">#</a></dt>
 <dd><p>Calculate atmospheric transmission coefficient for solar radiation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -510,7 +510,7 @@ is provided directly by the model state (<code class="docutils literal notransla
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.radiation.standard_w_clouds.StandardRadiationwCloudsInitConds"><code class="docutils literal notranslate"><span class="pre">StandardRadiationwCloudsInitConds</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.radiation.standard_w_clouds.StandardRadiationwCloudsModel"><code class="docutils literal notranslate"><span class="pre">StandardRadiationwCloudsModel</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.radiation.standard_w_clouds.StandardRadiationwCloudsModel.run"><code class="docutils literal notranslate"><span class="pre">StandardRadiationwCloudsModel.run()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.radiation.standard_w_clouds.StandardRadiationwCloudsModel.calculate_atmospheric_transmission_w_clouds"><code class="docutils literal notranslate"><span class="pre">StandardRadiationwCloudsModel.calculate_atmospheric_transmission_w_clouds()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.radiation.standard_w_clouds.StandardRadiationwCloudsModel.compute_atmospheric_transmission_w_clouds"><code class="docutils literal notranslate"><span class="pre">StandardRadiationwCloudsModel.compute_atmospheric_transmission_w_clouds()</span></code></a></li>
 </ul>
 </li>
 </ul>

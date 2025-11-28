@@ -40,6 +40,7 @@
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'source/api/abcmodel.mixed_layer.stats';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -352,6 +353,9 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.stats.AbstractStandardStatsModel"><code class="docutils literal notranslate"><span class="pre">AbstractStandardStatsModel</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.stats.AbstractStandardStatsModel.surf_pressure"><code class="docutils literal notranslate"><span class="pre">AbstractStandardStatsModel.surf_pressure</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.stats.AbstractStandardStatsModel.statistics"><code class="docutils literal notranslate"><span class="pre">AbstractStandardStatsModel.statistics()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.stats.AbstractStandardStatsModel.compute_virtual_temperatures"><code class="docutils literal notranslate"><span class="pre">AbstractStandardStatsModel.compute_virtual_temperatures()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.stats.AbstractStandardStatsModel.compute_mixed_layer_top_properties"><code class="docutils literal notranslate"><span class="pre">AbstractStandardStatsModel.compute_mixed_layer_top_properties()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.stats.AbstractStandardStatsModel.compute_lifting_condensation_level"><code class="docutils literal notranslate"><span class="pre">AbstractStandardStatsModel.compute_lifting_condensation_level()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -382,7 +386,44 @@ properties, and lifting condensation level determination.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="abcmodel.mixed_layer.stats.AbstractStandardStatsModel.statistics">
 <span class="sig-name descname"><span class="pre">statistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/mixed_layer/stats.html#AbstractStandardStatsModel.statistics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.mixed_layer.stats.AbstractStandardStatsModel.statistics" title="Link to this definition">#</a></dt>
-<dd><p>Calculate standard meteorological statistics and diagnostics.</p>
+<dd><p>Compute standard meteorological statistics and diagnostics.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.mixed_layer.stats.AbstractStandardStatsModel.compute_virtual_temperatures">
+<span class="sig-name descname"><span class="pre">compute_virtual_temperatures</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/mixed_layer/stats.html#AbstractStandardStatsModel.compute_virtual_temperatures"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.mixed_layer.stats.AbstractStandardStatsModel.compute_virtual_temperatures" title="Link to this definition">#</a></dt>
+<dd><p>Compute virtual temperatures and fluxes.</p>
+<p class="rubric">Notes</p>
+<p>The virtual potential temperature <span class="math notranslate nohighlight">\(\theta_v\)</span> is given by</p>
+<div class="math notranslate nohighlight">
+\[\theta_v = \theta (1 + 0.61 q)\]</div>
+<p>The virtual heat flux <span class="math notranslate nohighlight">\(\overline{w'\theta_v'}\)</span> is</p>
+<div class="math notranslate nohighlight">
+\[\overline{w'\theta_v'} = \overline{w'\theta'} + 0.61 \theta \overline{w'q'}\]</div>
+<p>The virtual potential temperature jump <span class="math notranslate nohighlight">\(\Delta \theta_v\)</span> is</p>
+<div class="math notranslate nohighlight">
+\[\Delta \theta_v = (\theta + \Delta \theta)(1 + 0.61(q + \Delta q)) - \theta(1 + 0.61q)\]</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.mixed_layer.stats.AbstractStandardStatsModel.compute_mixed_layer_top_properties">
+<span class="sig-name descname"><span class="pre">compute_mixed_layer_top_properties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/mixed_layer/stats.html#AbstractStandardStatsModel.compute_mixed_layer_top_properties"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.mixed_layer.stats.AbstractStandardStatsModel.compute_mixed_layer_top_properties" title="Link to this definition">#</a></dt>
+<dd><p>Compute properties at the top of the mixed layer.</p>
+<p class="rubric">Notes</p>
+<p>The pressure at the top of the mixed layer <span class="math notranslate nohighlight">\(p_{top}\)</span> is</p>
+<div class="math notranslate nohighlight">
+\[p_{top} = p_{surf} - \rho g h\]</div>
+<p>The temperature at the top of the mixed layer <span class="math notranslate nohighlight">\(T_{top}\)</span> is</p>
+<div class="math notranslate nohighlight">
+\[T_{top} = \theta - \frac{g}{c_p} h\]</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.mixed_layer.stats.AbstractStandardStatsModel.compute_lifting_condensation_level">
+<span class="sig-name descname"><span class="pre">compute_lifting_condensation_level</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/mixed_layer/stats.html#AbstractStandardStatsModel.compute_lifting_condensation_level"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.mixed_layer.stats.AbstractStandardStatsModel.compute_lifting_condensation_level" title="Link to this definition">#</a></dt>
+<dd><p>Compute the lifting condensation level (LCL).</p>
+<p class="rubric">Notes</p>
+<p>The LCL is found iteratively by finding the height where the relative humidity is 100%.</p>
 </dd></dl>
 
 </dd></dl>
@@ -437,6 +478,9 @@ properties, and lifting condensation level determination.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.stats.AbstractStandardStatsModel"><code class="docutils literal notranslate"><span class="pre">AbstractStandardStatsModel</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.stats.AbstractStandardStatsModel.surf_pressure"><code class="docutils literal notranslate"><span class="pre">AbstractStandardStatsModel.surf_pressure</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.stats.AbstractStandardStatsModel.statistics"><code class="docutils literal notranslate"><span class="pre">AbstractStandardStatsModel.statistics()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.stats.AbstractStandardStatsModel.compute_virtual_temperatures"><code class="docutils literal notranslate"><span class="pre">AbstractStandardStatsModel.compute_virtual_temperatures()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.stats.AbstractStandardStatsModel.compute_mixed_layer_top_properties"><code class="docutils literal notranslate"><span class="pre">AbstractStandardStatsModel.compute_mixed_layer_top_properties()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.mixed_layer.stats.AbstractStandardStatsModel.compute_lifting_condensation_level"><code class="docutils literal notranslate"><span class="pre">AbstractStandardStatsModel.compute_lifting_condensation_level()</span></code></a></li>
 </ul>
 </li>
 </ul>

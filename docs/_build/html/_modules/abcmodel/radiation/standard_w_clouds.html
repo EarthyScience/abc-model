@@ -379,17 +379,17 @@ document.write(`
 <span class="sd">                then updates the state object with the results.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># solar position</span>
-        <span class="n">solar_declination</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_solar_declination</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">doy</span><span class="p">)</span>
-        <span class="n">solar_elevation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_solar_elevation</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">solar_declination</span><span class="p">)</span>
+        <span class="n">solar_declination</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_solar_declination</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">doy</span><span class="p">)</span>
+        <span class="n">solar_elevation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_solar_elevation</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">solar_declination</span><span class="p">)</span>
 
         <span class="c1"># atmospheric properties</span>
-        <span class="n">air_temp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_air_temperature</span><span class="p">(</span>
+        <span class="n">air_temp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_air_temperature</span><span class="p">(</span>
             <span class="n">state</span><span class="o">.</span><span class="n">surf_pressure</span><span class="p">,</span>
             <span class="n">state</span><span class="o">.</span><span class="n">abl_height</span><span class="p">,</span>
             <span class="n">state</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span>
             <span class="n">const</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="n">atmospheric_transmission</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_atmospheric_transmission_w_clouds</span><span class="p">(</span>
+        <span class="n">atmospheric_transmission</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_atmospheric_transmission_w_clouds</span><span class="p">(</span>
             <span class="n">solar_elevation</span><span class="p">,</span>
             <span class="n">state</span><span class="o">.</span><span class="n">cl_trans</span><span class="p">,</span>
         <span class="p">)</span>
@@ -400,8 +400,8 @@ document.write(`
             <span class="n">state</span><span class="o">.</span><span class="n">in_srad</span><span class="p">,</span>
             <span class="n">state</span><span class="o">.</span><span class="n">out_srad</span><span class="p">,</span>
             <span class="n">state</span><span class="o">.</span><span class="n">in_lrad</span><span class="p">,</span>
-            <span class="n">state</span><span class="o">.</span><span class="n">out_lrad</span><span class="p">,</span>
-        <span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_radiation_components</span><span class="p">(</span>
+            <span class="n">state</span><span class="o">.</span><span class="n">out_lrad</span><span class="p">,</span> 
+        <span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_radiation_components</span><span class="p">(</span>
             <span class="n">solar_elevation</span><span class="p">,</span>
             <span class="n">atmospheric_transmission</span><span class="p">,</span>
             <span class="n">air_temp</span><span class="p">,</span>
@@ -413,10 +413,10 @@ document.write(`
         <span class="k">return</span> <span class="n">state</span></div>
 
 
-<div class="viewcode-block" id="StandardRadiationwCloudsModel.calculate_atmospheric_transmission_w_clouds">
-<a class="viewcode-back" href="../../../source/api/abcmodel.radiation.standard_w_clouds.html#abcmodel.radiation.standard_w_clouds.StandardRadiationwCloudsModel.calculate_atmospheric_transmission_w_clouds">[docs]</a>
+<div class="viewcode-block" id="StandardRadiationwCloudsModel.compute_atmospheric_transmission_w_clouds">
+<a class="viewcode-back" href="../../../source/api/abcmodel.radiation.standard_w_clouds.html#abcmodel.radiation.standard_w_clouds.StandardRadiationwCloudsModel.compute_atmospheric_transmission_w_clouds">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">calculate_atmospheric_transmission_w_clouds</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_atmospheric_transmission_w_clouds</span><span class="p">(</span>
         <span class="n">solar_elevation</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">cl_trans</span><span class="p">:</span> <span class="n">Array</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate atmospheric transmission coefficient for solar radiation.</span>

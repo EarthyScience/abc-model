@@ -71,7 +71,7 @@ class JarvisStewartModel(AbstractStandardLandSurfaceModel):
         return state
 
     def compute_f1(self, state: PyTree) -> Array:
-        """Calculate the radiation-dependent scaling factor ``f1`` for surface resistance.
+        """Compute the radiation-dependent scaling factor ``f1`` for surface resistance.
 
         Notes:
             This factor accounts for the effect of incoming shortwave radiation on stomatal conductance,
@@ -90,7 +90,7 @@ class JarvisStewartModel(AbstractStandardLandSurfaceModel):
         return f1
 
     def compute_f2(self, state: PyTree) -> Array:
-        """Calculate the soil moisture-dependent scaling factor ``f2`` for surface resistance.
+        """Compute the soil moisture-dependent scaling factor ``f2`` for surface resistance.
 
         Notes:
             This factor accounts for the effect of soil moisture in the second layer on stomatal conductance,
@@ -122,7 +122,7 @@ class JarvisStewartModel(AbstractStandardLandSurfaceModel):
         return f2
 
     def compute_f3(self, state: PyTree) -> Array:
-        """Calculate the vapor pressure deficit-dependent scaling factor ``f3`` for surface resistance.
+        """Compute the vapor pressure deficit-dependent scaling factor ``f3`` for surface resistance.
 
         Notes:
             This factor accounts for the effect of vapor pressure deficit (VPD) on stomatal conductance,
@@ -143,7 +143,7 @@ class JarvisStewartModel(AbstractStandardLandSurfaceModel):
         return f3
 
     def compute_f4(self, state: PyTree) -> Array:
-        """Calculate the temperature-dependent scaling factor ``f4`` for surface resistance.
+        """Compute the temperature-dependent scaling factor ``f4`` for surface resistance.
 
         Notes:
             This factor accounts for the effect of temperature on stomatal conductance,

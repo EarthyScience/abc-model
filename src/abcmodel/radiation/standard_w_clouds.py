@@ -67,17 +67,17 @@ class StandardRadiationwCloudsModel(StandardRadiationModel):
                 then updates the state object with the results.
         """
         # solar position
-        solar_declination = self.calculate_solar_declination(self.doy)
-        solar_elevation = self.calculate_solar_elevation(t, dt, solar_declination)
+        solar_declination = self.compute_solar_declination(self.doy)
+        solar_elevation = self.compute_solar_elevation(t, dt, solar_declination)
 
         # atmospheric properties
-        air_temp = self.calculate_air_temperature(
+        air_temp = self.compute_air_temperature(
             state.surf_pressure,
             state.abl_height,
             state.theta,
             const,
         )
-        atmospheric_transmission = self.calculate_atmospheric_transmission_w_clouds(
+        atmospheric_transmission = self.compute_atmospheric_transmission_w_clouds(
             solar_elevation,
             state.cl_trans,
         )
@@ -88,8 +88,8 @@ class StandardRadiationwCloudsModel(StandardRadiationModel):
             state.in_srad,
             state.out_srad,
             state.in_lrad,
-            state.out_lrad,
-        ) = self.calculate_radiation_components(
+            state.out_lrad, 
+        ) = self.compute_radiation_components(
             solar_elevation,
             atmospheric_transmission,
             air_temp,
@@ -101,7 +101,7 @@ class StandardRadiationwCloudsModel(StandardRadiationModel):
         return state
 
     @staticmethod
-    def calculate_atmospheric_transmission_w_clouds(
+    def compute_atmospheric_transmission_w_clouds(
         solar_elevation: Array, cl_trans: Array
     ) -> Array:
         """Calculate atmospheric transmission coefficient for solar radiation.

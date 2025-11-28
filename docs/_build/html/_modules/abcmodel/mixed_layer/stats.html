@@ -305,7 +305,7 @@ document.write(`
   <h1>Source code for abcmodel.mixed_layer.stats</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span><span class="w"> </span><span class="nn">jax</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">jax.numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">jnp</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">jaxtyping</span><span class="w"> </span><span class="kn">import</span> <span class="n">PyTree</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jaxtyping</span><span class="w"> </span><span class="kn">import</span> <span class="n">Array</span><span class="p">,</span> <span class="n">PyTree</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">..abstracts</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">AbstractMixedLayerModel</span><span class="p">,</span>
@@ -328,19 +328,78 @@ document.write(`
 <div class="viewcode-block" id="AbstractStandardStatsModel.statistics">
 <a class="viewcode-back" href="../../../source/api/abcmodel.mixed_layer.stats.html#abcmodel.mixed_layer.stats.AbstractStandardStatsModel.statistics">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">statistics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">PyTree</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">const</span><span class="p">:</span> <span class="n">PhysicalConstants</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate standard meteorological statistics and diagnostics.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute standard meteorological statistics and diagnostics.&quot;&quot;&quot;</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_virtual_temperatures</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_mixed_layer_top_properties</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">const</span><span class="p">)</span>
+        <span class="n">state</span><span class="o">.</span><span class="n">lcl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_lifting_condensation_level</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">const</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">state</span></div>
+
+
+<div class="viewcode-block" id="AbstractStandardStatsModel.compute_virtual_temperatures">
+<a class="viewcode-back" href="../../../source/api/abcmodel.mixed_layer.stats.html#abcmodel.mixed_layer.stats.AbstractStandardStatsModel.compute_virtual_temperatures">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_virtual_temperatures</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">PyTree</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyTree</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute virtual temperatures and fluxes.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            The virtual potential temperature :math:`\\theta_v` is given by</span>
+
+<span class="sd">            .. math::</span>
+<span class="sd">                \\theta_v = \\theta (1 + 0.61 q)</span>
+
+<span class="sd">            The virtual heat flux :math:`\\overline{w&#39;\\theta_v&#39;}` is</span>
+
+<span class="sd">            .. math::</span>
+<span class="sd">                \\overline{w&#39;\\theta_v&#39;} = \\overline{w&#39;\\theta&#39;} + 0.61 \\theta \\overline{w&#39;q&#39;}</span>
+
+<span class="sd">            The virtual potential temperature jump :math:`\\Delta \\theta_v` is</span>
+
+<span class="sd">            .. math::</span>
+<span class="sd">                \\Delta \\theta_v = (\\theta + \\Delta \\theta)(1 + 0.61(q + \\Delta q)) - \\theta(1 + 0.61q)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># calculate virtual temperatures</span>
         <span class="n">state</span><span class="o">.</span><span class="n">thetav</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">theta</span> <span class="o">+</span> <span class="mf">0.61</span> <span class="o">*</span> <span class="n">state</span><span class="o">.</span><span class="n">theta</span> <span class="o">*</span> <span class="n">state</span><span class="o">.</span><span class="n">q</span>
         <span class="n">state</span><span class="o">.</span><span class="n">wthetav</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">wtheta</span> <span class="o">+</span> <span class="mf">0.61</span> <span class="o">*</span> <span class="n">state</span><span class="o">.</span><span class="n">theta</span> <span class="o">*</span> <span class="n">state</span><span class="o">.</span><span class="n">wq</span>
         <span class="n">state</span><span class="o">.</span><span class="n">dthetav</span> <span class="o">=</span> <span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">theta</span> <span class="o">+</span> <span class="n">state</span><span class="o">.</span><span class="n">dtheta</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span>
             <span class="mf">1.0</span> <span class="o">+</span> <span class="mf">0.61</span> <span class="o">*</span> <span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">q</span> <span class="o">+</span> <span class="n">state</span><span class="o">.</span><span class="n">dq</span><span class="p">)</span>
         <span class="p">)</span> <span class="o">-</span> <span class="n">state</span><span class="o">.</span><span class="n">theta</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="mf">0.61</span> <span class="o">*</span> <span class="n">state</span><span class="o">.</span><span class="n">q</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">state</span></div>
 
+
+<div class="viewcode-block" id="AbstractStandardStatsModel.compute_mixed_layer_top_properties">
+<a class="viewcode-back" href="../../../source/api/abcmodel.mixed_layer.stats.html#abcmodel.mixed_layer.stats.AbstractStandardStatsModel.compute_mixed_layer_top_properties">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_mixed_layer_top_properties</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">PyTree</span><span class="p">,</span> <span class="n">const</span><span class="p">:</span> <span class="n">PhysicalConstants</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PyTree</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute properties at the top of the mixed layer.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            The pressure at the top of the mixed layer :math:`p_{top}` is</span>
+
+<span class="sd">            .. math::</span>
+<span class="sd">                p_{top} = p_{surf} - \\rho g h</span>
+
+<span class="sd">            The temperature at the top of the mixed layer :math:`T_{top}` is</span>
+
+<span class="sd">            .. math::</span>
+<span class="sd">                T_{top} = \\theta - \\frac{g}{c_p} h</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># mixed-layer top properties</span>
         <span class="n">state</span><span class="o">.</span><span class="n">top_p</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">surf_pressure</span> <span class="o">-</span> <span class="n">const</span><span class="o">.</span><span class="n">rho</span> <span class="o">*</span> <span class="n">const</span><span class="o">.</span><span class="n">g</span> <span class="o">*</span> <span class="n">state</span><span class="o">.</span><span class="n">abl_height</span>
         <span class="n">state</span><span class="o">.</span><span class="n">top_T</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">theta</span> <span class="o">-</span> <span class="n">const</span><span class="o">.</span><span class="n">g</span> <span class="o">/</span> <span class="n">const</span><span class="o">.</span><span class="n">cp</span> <span class="o">*</span> <span class="n">state</span><span class="o">.</span><span class="n">abl_height</span>
         <span class="n">state</span><span class="o">.</span><span class="n">top_rh</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">q</span> <span class="o">/</span> <span class="n">compute_qsat</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">top_T</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">top_p</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">state</span></div>
 
+
+<div class="viewcode-block" id="AbstractStandardStatsModel.compute_lifting_condensation_level">
+<a class="viewcode-back" href="../../../source/api/abcmodel.mixed_layer.stats.html#abcmodel.mixed_layer.stats.AbstractStandardStatsModel.compute_lifting_condensation_level">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_lifting_condensation_level</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">PyTree</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">const</span><span class="p">:</span> <span class="n">PhysicalConstants</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the lifting condensation level (LCL).</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            The LCL is found iteratively by finding the height where the relative humidity is 100%.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># find lifting condensation level iteratively using JAX</span>
         <span class="c1"># initialize lcl and rhlcl based on timestep</span>
         <span class="n">initial_lcl</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">t</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">abl_height</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">lcl</span><span class="p">)</span>
@@ -371,9 +430,7 @@ document.write(`
             <span class="n">lcl_iteration_cond</span><span class="p">,</span> <span class="n">lcl_iteration_body</span><span class="p">,</span> <span class="p">(</span><span class="n">initial_lcl</span><span class="p">,</span> <span class="n">initial_rhlcl</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
         <span class="p">)</span>
 
-        <span class="n">state</span><span class="o">.</span><span class="n">lcl</span> <span class="o">=</span> <span class="n">final_lcl</span>
-
-        <span class="k">return</span> <span class="n">state</span></div>
+        <span class="k">return</span> <span class="n">final_lcl</span></div>
 </div>
 
 </pre></div>

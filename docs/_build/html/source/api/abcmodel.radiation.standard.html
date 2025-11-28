@@ -360,11 +360,11 @@ document.write(`
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.radiation.standard.StandardRadiationModel"><code class="docutils literal notranslate"><span class="pre">StandardRadiationModel</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.radiation.standard.StandardRadiationModel.run"><code class="docutils literal notranslate"><span class="pre">StandardRadiationModel.run()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.radiation.standard.StandardRadiationModel.calculate_solar_declination"><code class="docutils literal notranslate"><span class="pre">StandardRadiationModel.calculate_solar_declination()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.radiation.standard.StandardRadiationModel.calculate_solar_elevation"><code class="docutils literal notranslate"><span class="pre">StandardRadiationModel.calculate_solar_elevation()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.radiation.standard.StandardRadiationModel.calculate_air_temperature"><code class="docutils literal notranslate"><span class="pre">StandardRadiationModel.calculate_air_temperature()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.radiation.standard.StandardRadiationModel.calculate_atmospheric_transmission"><code class="docutils literal notranslate"><span class="pre">StandardRadiationModel.calculate_atmospheric_transmission()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.radiation.standard.StandardRadiationModel.calculate_radiation_components"><code class="docutils literal notranslate"><span class="pre">StandardRadiationModel.calculate_radiation_components()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.radiation.standard.StandardRadiationModel.compute_solar_declination"><code class="docutils literal notranslate"><span class="pre">StandardRadiationModel.compute_solar_declination()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.radiation.standard.StandardRadiationModel.compute_solar_elevation"><code class="docutils literal notranslate"><span class="pre">StandardRadiationModel.compute_solar_elevation()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.radiation.standard.StandardRadiationModel.compute_air_temperature"><code class="docutils literal notranslate"><span class="pre">StandardRadiationModel.compute_air_temperature()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.radiation.standard.StandardRadiationModel.compute_atmospheric_transmission"><code class="docutils literal notranslate"><span class="pre">StandardRadiationModel.compute_atmospheric_transmission()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.radiation.standard.StandardRadiationModel.compute_radiation_components"><code class="docutils literal notranslate"><span class="pre">StandardRadiationModel.compute_radiation_components()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -456,21 +456,21 @@ radiation components.</p>
 <p class="rubric">Notes</p>
 <ol class="arabic simple">
 <li><p>Calculates solar position with
-<a class="reference internal" href="#abcmodel.radiation.standard.StandardRadiationModel.calculate_solar_declination" title="abcmodel.radiation.standard.StandardRadiationModel.calculate_solar_declination"><code class="xref py py-meth docutils literal notranslate"><span class="pre">calculate_solar_declination()</span></code></a> and
-<a class="reference internal" href="#abcmodel.radiation.standard.StandardRadiationModel.calculate_solar_elevation" title="abcmodel.radiation.standard.StandardRadiationModel.calculate_solar_elevation"><code class="xref py py-meth docutils literal notranslate"><span class="pre">calculate_solar_elevation()</span></code></a>.</p></li>
+<a class="reference internal" href="#abcmodel.radiation.standard.StandardRadiationModel.compute_solar_declination" title="abcmodel.radiation.standard.StandardRadiationModel.compute_solar_declination"><code class="xref py py-meth docutils literal notranslate"><span class="pre">compute_solar_declination()</span></code></a> and
+<a class="reference internal" href="#abcmodel.radiation.standard.StandardRadiationModel.compute_solar_elevation" title="abcmodel.radiation.standard.StandardRadiationModel.compute_solar_elevation"><code class="xref py py-meth docutils literal notranslate"><span class="pre">compute_solar_elevation()</span></code></a>.</p></li>
 <li><p>Determines atmospheric properties with
-<a class="reference internal" href="#abcmodel.radiation.standard.StandardRadiationModel.calculate_air_temperature" title="abcmodel.radiation.standard.StandardRadiationModel.calculate_air_temperature"><code class="xref py py-meth docutils literal notranslate"><span class="pre">calculate_air_temperature()</span></code></a> and
-<a class="reference internal" href="#abcmodel.radiation.standard.StandardRadiationModel.calculate_atmospheric_transmission" title="abcmodel.radiation.standard.StandardRadiationModel.calculate_atmospheric_transmission"><code class="xref py py-meth docutils literal notranslate"><span class="pre">calculate_atmospheric_transmission()</span></code></a>.</p></li>
+<a class="reference internal" href="#abcmodel.radiation.standard.StandardRadiationModel.compute_air_temperature" title="abcmodel.radiation.standard.StandardRadiationModel.compute_air_temperature"><code class="xref py py-meth docutils literal notranslate"><span class="pre">compute_air_temperature()</span></code></a> and
+<a class="reference internal" href="#abcmodel.radiation.standard.StandardRadiationModel.compute_atmospheric_transmission" title="abcmodel.radiation.standard.StandardRadiationModel.compute_atmospheric_transmission"><code class="xref py py-meth docutils literal notranslate"><span class="pre">compute_atmospheric_transmission()</span></code></a>.</p></li>
 <li><p>Computes all radiation components and the final
-net radiation with <a class="reference internal" href="#abcmodel.radiation.standard.StandardRadiationModel.calculate_radiation_components" title="abcmodel.radiation.standard.StandardRadiationModel.calculate_radiation_components"><code class="xref py py-meth docutils literal notranslate"><span class="pre">calculate_radiation_components()</span></code></a>,
+net radiation with <a class="reference internal" href="#abcmodel.radiation.standard.StandardRadiationModel.compute_radiation_components" title="abcmodel.radiation.standard.StandardRadiationModel.compute_radiation_components"><code class="xref py py-meth docutils literal notranslate"><span class="pre">compute_radiation_components()</span></code></a>,
 then updates the state object with the results.</p></li>
 </ol>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="abcmodel.radiation.standard.StandardRadiationModel.calculate_solar_declination">
-<span class="sig-name descname"><span class="pre">calculate_solar_declination</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">doy</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/radiation/standard.html#StandardRadiationModel.calculate_solar_declination"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.radiation.standard.StandardRadiationModel.calculate_solar_declination" title="Link to this definition">#</a></dt>
-<dd><p>Calculate solar declination angle based on day of year.</p>
+<dt class="sig sig-object py" id="abcmodel.radiation.standard.StandardRadiationModel.compute_solar_declination">
+<span class="sig-name descname"><span class="pre">compute_solar_declination</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">doy</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/radiation/standard.html#StandardRadiationModel.compute_solar_declination"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.radiation.standard.StandardRadiationModel.compute_solar_declination" title="Link to this definition">#</a></dt>
+<dd><p>Compute solar declination angle based on day of year.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>doy</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Day of year [-], range 1 to 365.</p>
@@ -492,15 +492,15 @@ phase shift for the cosine wave.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="abcmodel.radiation.standard.StandardRadiationModel.calculate_solar_elevation">
-<span class="sig-name descname"><span class="pre">calculate_solar_elevation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solar_declination</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/radiation/standard.html#StandardRadiationModel.calculate_solar_elevation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.radiation.standard.StandardRadiationModel.calculate_solar_elevation" title="Link to this definition">#</a></dt>
-<dd><p>Calculate solar elevation angle (sine of elevation).</p>
+<dt class="sig sig-object py" id="abcmodel.radiation.standard.StandardRadiationModel.compute_solar_elevation">
+<span class="sig-name descname"><span class="pre">compute_solar_elevation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solar_declination</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/radiation/standard.html#StandardRadiationModel.compute_solar_elevation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.radiation.standard.StandardRadiationModel.compute_solar_elevation" title="Link to this definition">#</a></dt>
+<dd><p>Compute solar elevation angle (sine of elevation).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>t</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>) – current time step index [-].</p></li>
 <li><p><strong>dt</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – time step duration [s].</p></li>
-<li><p><strong>solar_declination</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></span>) – solar declination angle [radians] from <a class="reference internal" href="#abcmodel.radiation.standard.StandardRadiationModel.calculate_solar_declination" title="abcmodel.radiation.standard.StandardRadiationModel.calculate_solar_declination"><code class="xref py py-meth docutils literal notranslate"><span class="pre">calculate_solar_declination()</span></code></a>.</p></li>
+<li><p><strong>solar_declination</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></span>) – solar declination angle [radians] from <a class="reference internal" href="#abcmodel.radiation.standard.StandardRadiationModel.compute_solar_declination" title="abcmodel.radiation.standard.StandardRadiationModel.compute_solar_declination"><code class="xref py py-meth docutils literal notranslate"><span class="pre">compute_solar_declination()</span></code></a>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -527,9 +527,9 @@ mathematical instability in subsequent calculations.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="abcmodel.radiation.standard.StandardRadiationModel.calculate_air_temperature">
-<span class="sig-name descname"><span class="pre">calculate_air_temperature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">surf_pressure</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abl_height</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/radiation/standard.html#StandardRadiationModel.calculate_air_temperature"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.radiation.standard.StandardRadiationModel.calculate_air_temperature" title="Link to this definition">#</a></dt>
-<dd><p>Calculate air temperature at reference level using potential temperature.</p>
+<dt class="sig sig-object py" id="abcmodel.radiation.standard.StandardRadiationModel.compute_air_temperature">
+<span class="sig-name descname"><span class="pre">compute_air_temperature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">surf_pressure</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abl_height</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/radiation/standard.html#StandardRadiationModel.compute_air_temperature"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.radiation.standard.StandardRadiationModel.compute_air_temperature" title="Link to this definition">#</a></dt>
+<dd><p>Compute air temperature at reference level using potential temperature.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -569,9 +569,9 @@ capacity of air <span class="math notranslate nohighlight">\(c_p\)</span>.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="abcmodel.radiation.standard.StandardRadiationModel.calculate_atmospheric_transmission">
-<span class="sig-name descname"><span class="pre">calculate_atmospheric_transmission</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">solar_elevation</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/radiation/standard.html#StandardRadiationModel.calculate_atmospheric_transmission"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.radiation.standard.StandardRadiationModel.calculate_atmospheric_transmission" title="Link to this definition">#</a></dt>
-<dd><p>Calculate atmospheric transmission coefficient for solar radiation.</p>
+<dt class="sig sig-object py" id="abcmodel.radiation.standard.StandardRadiationModel.compute_atmospheric_transmission">
+<span class="sig-name descname"><span class="pre">compute_atmospheric_transmission</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">solar_elevation</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/radiation/standard.html#StandardRadiationModel.compute_atmospheric_transmission"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.radiation.standard.StandardRadiationModel.compute_atmospheric_transmission" title="Link to this definition">#</a></dt>
+<dd><p>Compute atmospheric transmission coefficient for solar radiation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>solar_elevation</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></span>) – sine of the solar elevation angle [-].</p>
@@ -602,9 +602,9 @@ calculated based on the cloud cover <span class="math notranslate nohighlight">\
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="abcmodel.radiation.standard.StandardRadiationModel.calculate_radiation_components">
-<span class="sig-name descname"><span class="pre">calculate_radiation_components</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">solar_elevation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atmospheric_transmission</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">air_temp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surf_temp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/radiation/standard.html#StandardRadiationModel.calculate_radiation_components"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.radiation.standard.StandardRadiationModel.calculate_radiation_components" title="Link to this definition">#</a></dt>
-<dd><p>Calculate all radiation components and update attributes.</p>
+<dt class="sig sig-object py" id="abcmodel.radiation.standard.StandardRadiationModel.compute_radiation_components">
+<span class="sig-name descname"><span class="pre">compute_radiation_components</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">solar_elevation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atmospheric_transmission</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">air_temp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surf_temp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/radiation/standard.html#StandardRadiationModel.compute_radiation_components"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.radiation.standard.StandardRadiationModel.compute_radiation_components" title="Link to this definition">#</a></dt>
+<dd><p>Compute all radiation components and update attributes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -723,11 +723,11 @@ surface, assuming an emissivity of 1.0, given by</p>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.radiation.standard.StandardRadiationModel"><code class="docutils literal notranslate"><span class="pre">StandardRadiationModel</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.radiation.standard.StandardRadiationModel.run"><code class="docutils literal notranslate"><span class="pre">StandardRadiationModel.run()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.radiation.standard.StandardRadiationModel.calculate_solar_declination"><code class="docutils literal notranslate"><span class="pre">StandardRadiationModel.calculate_solar_declination()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.radiation.standard.StandardRadiationModel.calculate_solar_elevation"><code class="docutils literal notranslate"><span class="pre">StandardRadiationModel.calculate_solar_elevation()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.radiation.standard.StandardRadiationModel.calculate_air_temperature"><code class="docutils literal notranslate"><span class="pre">StandardRadiationModel.calculate_air_temperature()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.radiation.standard.StandardRadiationModel.calculate_atmospheric_transmission"><code class="docutils literal notranslate"><span class="pre">StandardRadiationModel.calculate_atmospheric_transmission()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.radiation.standard.StandardRadiationModel.calculate_radiation_components"><code class="docutils literal notranslate"><span class="pre">StandardRadiationModel.calculate_radiation_components()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.radiation.standard.StandardRadiationModel.compute_solar_declination"><code class="docutils literal notranslate"><span class="pre">StandardRadiationModel.compute_solar_declination()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.radiation.standard.StandardRadiationModel.compute_solar_elevation"><code class="docutils literal notranslate"><span class="pre">StandardRadiationModel.compute_solar_elevation()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.radiation.standard.StandardRadiationModel.compute_air_temperature"><code class="docutils literal notranslate"><span class="pre">StandardRadiationModel.compute_air_temperature()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.radiation.standard.StandardRadiationModel.compute_atmospheric_transmission"><code class="docutils literal notranslate"><span class="pre">StandardRadiationModel.compute_atmospheric_transmission()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.radiation.standard.StandardRadiationModel.compute_radiation_components"><code class="docutils literal notranslate"><span class="pre">StandardRadiationModel.compute_radiation_components()</span></code></a></li>
 </ul>
 </li>
 </ul>

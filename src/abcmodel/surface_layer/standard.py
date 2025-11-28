@@ -79,14 +79,14 @@ class StandardSurfaceLayerModel(AbstractSurfaceLayerModel):
         Returns:
             The updated state.
         """
-        ueff = calculate_effective_wind_speed(state.u, state.v, state.wstar)
+        ueff = compute_effective_wind_speed(state.u, state.v, state.wstar)
 
         # limamau: this can be broken down into three different methods
         (
             state.thetasurf,
             state.qsurf,
             state.thetavsurf,
-        ) = calculate_surface_properties(
+        ) = compute_surface_properties(
             ueff,
             state.theta,
             state.wtheta,
@@ -98,17 +98,17 @@ class StandardSurfaceLayerModel(AbstractSurfaceLayerModel):
 
         # this should be a method
         zsl = 0.1 * state.abl_height
-        state.rib_number = calculate_richardson_number(
+        state.rib_number = compute_richardson_number(
             ueff, zsl, const.g, state.thetav, state.thetavsurf
         )
 
         state.obukhov_length = ribtol(zsl, state.rib_number, state.z0h, state.z0m)
 
-        state.drag_m, state.drag_s = calculate_drag_coefficients(
+        state.drag_m, state.drag_s = compute_drag_coefficients(
             zsl, const.k, state.obukhov_length, state.z0h, state.z0m
         )
 
-        state.ustar, state.uw, state.vw = calculate_momentum_fluxes(
+        state.ustar, state.uw, state.vw = compute_momentum_fluxes(
             ueff, state.u, state.v, state.drag_m
         )
 
@@ -119,7 +119,7 @@ class StandardSurfaceLayerModel(AbstractSurfaceLayerModel):
             state.v2m,
             state.e2m,
             state.esat2m,
-        ) = calculate_2m_variables(
+        ) = compute_2m_variables(
             state.wtheta,
             state.wq,
             state.surf_pressure,
@@ -152,8 +152,8 @@ class StandardSurfaceLayerModel(AbstractSurfaceLayerModel):
         return 1.0 / (state.drag_s * ueff)
 
 
-def calculate_effective_wind_speed(u: Array, v: Array, wstar: Array) -> Array:
-    """Calculate effective wind speed ``ueff``.
+def compute_effective_wind_speed(u: Array, v: Array, wstar: Array) -> Array:
+    """Compute effective wind speed ``ueff``.
 
     Args:
         u: zonal wind speed :math:`u`.
@@ -174,7 +174,7 @@ def calculate_effective_wind_speed(u: Array, v: Array, wstar: Array) -> Array:
     return jnp.maximum(0.01, jnp.sqrt(u**2.0 + v**2.0 + wstar**2.0))
 
 
-def calculate_surface_properties(
+def compute_surface_properties(
     ueff: Array,
     theta: Array,
     wtheta: Array,
@@ -183,7 +183,7 @@ def calculate_surface_properties(
     rs: Array,
     drag_s: Array,
 ) -> tuple[Array, Array, Array]:
-    """Calculate surface temperature, specific humidity, and virtual potential temperature.
+    """Compute surface temperature, specific humidity, and virtual potential temperature.
 
     Args:
         ueff: effective wind speed :math:`u_{\\text{eff}}`.
@@ -220,10 +220,10 @@ def calculate_surface_properties(
     return thetasurf, qsurf, thetavsurf
 
 
-def calculate_richardson_number(
+def compute_richardson_number(
     ueff: Array, zsl: Array, g: float, thetav: Array, thetavsurf: Array
 ) -> Array:
-    """Calculate bulk Richardson number.
+    """Compute bulk Richardson number.
 
     Args:
         ueff: effective wind speed :math:`u_{\\text{eff}}`.
@@ -244,14 +244,14 @@ def calculate_richardson_number(
     return jnp.minimum(rib_number, 0.2)
 
 
-def calculate_rib_function(
+def compute_rib_function(
     zsl: Array,
     oblen: Array,
     rib_number: Array,
     z0h: Array,
     z0m: Array,
 ) -> Array:
-    """Calculate the Richardson number function for iterative solution of Obukhov length.
+    """Compute the Richardson number function for iterative solution of Obukhov length.
 
     Notes:
         This function computes the difference between the bulk Richardson number and its
@@ -272,8 +272,8 @@ def calculate_rib_function(
         :math:`L` is the Obukhov length, :math:`z_{0h}` and :math:`z_{0m}` are roughness lengths for scalars and momentum,
         and :math:`\\psi_h`, :math:`\\psi_m` are stability correction functions.
     """
-    scalar_term = calculate_scalar_correction_term(zsl, oblen, z0h)
-    momentum_term = calculate_momentum_correction_term(zsl, oblen, z0m)
+    scalar_term = compute_scalar_correction_term(zsl, oblen, z0h)
+    momentum_term = compute_momentum_correction_term(zsl, oblen, z0m)
 
     return rib_number - zsl / oblen * scalar_term / momentum_term**2.0
 
@@ -311,14 +311,14 @@ def ribtol(zsl: Array, rib_number: Array, z0h: Array, z0m: Array):
         oblen0 = oblen
 
         # calculate function value at current estimate
-        fx = calculate_rib_function(zsl, oblen, rib_number, z0h, z0m)
+        fx = compute_rib_function(zsl, oblen, rib_number, z0h, z0m)
 
         # finite difference derivative
         oblen_start = oblen - perturbation * oblen
         oblen_end = oblen + perturbation * oblen
 
-        fx_start = calculate_rib_function(zsl, oblen_start, rib_number, z0h, z0m)
-        fx_end = calculate_rib_function(zsl, oblen_end, rib_number, z0h, z0m)
+        fx_start = compute_rib_function(zsl, oblen_start, rib_number, z0h, z0m)
+        fx_end = compute_rib_function(zsl, oblen_end, rib_number, z0h, z0m)
 
         fxdif = (fx_start - fx_end) / (oblen_start - oblen_end)
 
@@ -333,14 +333,14 @@ def ribtol(zsl: Array, rib_number: Array, z0h: Array, z0m: Array):
 
 
 # limamau: this should also be breaken down into two methods
-def calculate_drag_coefficients(
+def compute_drag_coefficients(
     zsl: Array,
     k: float,
     obukhov_length: Array,
     z0h: Array,
     z0m: Array,
 ) -> tuple[Array, Array]:
-    """Calculate drag coefficients for momentum and scalars with stability corrections.
+    """Compute drag coefficients for momentum and scalars with stability corrections.
 
     Args:
         zsl: surface layer height :math:`z_{sl}`.
@@ -366,15 +366,15 @@ def calculate_drag_coefficients(
             - \\psi_h(z_{0h}/L)
             + \\ln(z_{sl}/z_{0h})]}
 
-        where :math:`\\psi_m` (see :meth:`calculate_momentum_correction_term`) and
-        :math:`\\psi_h` (see :meth:`calculate_scalar_correction_term`)
+        where :math:`\\psi_m` (see :meth:`compute_momentum_correction_term`) and
+        :math:`\\psi_h` (see :meth:`compute_scalar_correction_term`)
         are stability correction functions for momentum and scalars.
     """
     # momentum stability correction
-    momentum_correction = calculate_momentum_correction_term(zsl, obukhov_length, z0m)
+    momentum_correction = compute_momentum_correction_term(zsl, obukhov_length, z0m)
 
     # scalar stability correction
-    scalar_correction = calculate_scalar_correction_term(zsl, obukhov_length, z0h)
+    scalar_correction = compute_scalar_correction_term(zsl, obukhov_length, z0h)
 
     # drag coefficients
     drag_m = k**2.0 / momentum_correction**2.0
@@ -383,13 +383,13 @@ def calculate_drag_coefficients(
 
 
 # limamau: this should be broken down into three methods
-def calculate_momentum_fluxes(
+def compute_momentum_fluxes(
     ueff: Array,
     u: Array,
     v: Array,
     drag_m: Array,
 ) -> tuple[Array, Array, Array]:
-    """Calculate surface momentum fluxes and friction velocity.
+    """Compute surface momentum fluxes and friction velocity.
 
     Args:
         ueff: effective wind speed :math:`u_{\\text{eff}}`.
@@ -420,7 +420,7 @@ def calculate_momentum_fluxes(
 
 
 # limamau: this should be six or three different methods
-def calculate_2m_variables(
+def compute_2m_variables(
     wtheta: Array,
     wq: Array,
     surf_pressure: Array,
@@ -434,7 +434,7 @@ def calculate_2m_variables(
     uw: Array,
     vw: Array,
 ) -> tuple[Array, Array, Array, Array, Array, Array]:
-    """Calculate 2m diagnostic meteorological variables.
+    """Compute 2m diagnostic meteorological variables.
 
     Notes:
         Computes temperature, humidity, wind, and vapor pressures at 2 meters above the surface,
@@ -446,14 +446,14 @@ def calculate_2m_variables(
     # limamau: this should call the method for scalar correction
     scalar_correction = (
         jnp.log(2.0 / z0h)
-        - calculate_psih(2.0 / obukhov_length)
-        + calculate_psih(z0h / obukhov_length)
+        - compute_psih(2.0 / obukhov_length)
+        + compute_psih(z0h / obukhov_length)
     )
     # limamau: this should call the method for momentum correction
     momentum_correction = (
         jnp.log(2.0 / z0m)
-        - calculate_psim(2.0 / obukhov_length)
-        + calculate_psim(z0m / obukhov_length)
+        - compute_psim(2.0 / obukhov_length)
+        + compute_psim(z0m / obukhov_length)
     )
 
     # scaling factor for scalar fluxes
@@ -474,8 +474,8 @@ def calculate_2m_variables(
     return temp_2m, q2m, u2m, v2m, e2m, esat2m
 
 
-def calculate_scalar_correction_term(z: Array, oblen: Array, z0h: Array) -> Array:
-    """Calculate scalar stability correction term.
+def compute_scalar_correction_term(z: Array, oblen: Array, z0h: Array) -> Array:
+    """Compute scalar stability correction term.
 
     Args:
         z: height above ground level :math:`z`.
@@ -493,16 +493,16 @@ def calculate_scalar_correction_term(z: Array, oblen: Array, z0h: Array) -> Arra
             - \\psi_h\\left(\\frac{z}{L}\\right)
             + \\psi_h\\left(\\frac{z_{0h}}{L}\\right)
 
-        where :math:`\\psi_h` is the stability correction function for scalars (see :func:`calculate_psih`).
+        where :math:`\\psi_h` is the stability correction function for scalars (see :func:`compute_psih`).
     """
     log_term = jnp.log(z / z0h)
-    upper_stability = calculate_psih(z / oblen)
-    surface_stability = calculate_psih(z0h / oblen)
+    upper_stability = compute_psih(z / oblen)
+    surface_stability = compute_psih(z0h / oblen)
     return log_term - upper_stability + surface_stability
 
 
-def calculate_momentum_correction_term(z: Array, oblen: Array, z0m: Array) -> Array:
-    """Calculate momentum stability correction term.
+def compute_momentum_correction_term(z: Array, oblen: Array, z0m: Array) -> Array:
+    """Compute momentum stability correction term.
 
     Args:
         z: height above ground level :math:`z`.
@@ -520,16 +520,16 @@ def calculate_momentum_correction_term(z: Array, oblen: Array, z0m: Array) -> Ar
             - \\psi_m\\left(\\frac{z}{L}\\right)
             + \\psi_m\\left(\\frac{z_{0m}}{L}\\right)
 
-        where :math:`\\psi_m` is the stability correction function for momentum (see :func:`calculate_psim`).
+        where :math:`\\psi_m` is the stability correction function for momentum (see :func:`compute_psim`).
     """
     log_term = jnp.log(z / z0m)
-    upper_stability = calculate_psim(z / oblen)
-    surface_stability = calculate_psim(z0m / oblen)
+    upper_stability = compute_psim(z / oblen)
+    surface_stability = compute_psim(z0m / oblen)
     return log_term - upper_stability + surface_stability
 
 
-def calculate_psim(zeta: Array) -> Array:
-    """Calculate momentum stability function from Monin-Obukhov similarity theory.
+def compute_psim(zeta: Array) -> Array:
+    """Compute momentum stability function from Monin-Obukhov similarity theory.
 
     Args:
         zeta: stability parameter z/L :math:`\\zeta`.
@@ -596,8 +596,8 @@ def calculate_psim(zeta: Array) -> Array:
     return psim
 
 
-def calculate_psih(zeta: Array) -> Array:
-    """Calculate scalar stability function from Monin-Obukhov similarity theory.
+def compute_psih(zeta: Array) -> Array:
+    """Compute scalar stability function from Monin-Obukhov similarity theory.
 
     Args:
         zeta: stability parameter z/L :math:`\\zeta`.

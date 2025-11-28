@@ -492,66 +492,121 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">advv</span> <span class="o">=</span> <span class="n">advv</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dFz</span> <span class="o">=</span> <span class="n">dFz</span>
 
-<div class="viewcode-block" id="BulkMixedLayerModel.calculate_vertical_motions">
-<a class="viewcode-back" href="../../../source/api/abcmodel.mixed_layer.bulk.html#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.calculate_vertical_motions">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">calculate_vertical_motions</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">abl_height</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-        <span class="n">dtheta</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-        <span class="n">const</span><span class="p">:</span> <span class="n">PhysicalConstants</span><span class="p">,</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Array</span><span class="p">,</span> <span class="n">Array</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate large-scale subsidence and radiative divergence effects.&quot;&quot;&quot;</span>
-        <span class="c1"># calculate large-scale vertical velocity (subsidence)</span>
-        <span class="n">ws</span> <span class="o">=</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">divU</span> <span class="o">*</span> <span class="n">abl_height</span>
+<div class="viewcode-block" id="BulkMixedLayerModel.compute_subsidence_velocity">
+<a class="viewcode-back" href="../../../source/api/abcmodel.mixed_layer.bulk.html#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_subsidence_velocity">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_subsidence_velocity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">abl_height</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute large-scale subsidence velocity.</span>
 
-        <span class="c1"># calculate mixed-layer growth due to cloud top radiative divergence</span>
+<span class="sd">        Notes:</span>
+<span class="sd">            The large-scale vertical velocity (subsidence) :math:`w_s` is given by</span>
+
+<span class="sd">            .. math::</span>
+<span class="sd">                w_s = -\\text{div}U \\cdot h</span>
+
+<span class="sd">            where :math:`\\text{div}U` is the horizontal large-scale divergence of wind and :math:`h` is the ABL height.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">divU</span> <span class="o">*</span> <span class="n">abl_height</span></div>
+
+
+<div class="viewcode-block" id="BulkMixedLayerModel.compute_radiative_growth_velocity">
+<a class="viewcode-back" href="../../../source/api/abcmodel.mixed_layer.bulk.html#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_radiative_growth_velocity">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_radiative_growth_velocity</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">dtheta</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">const</span><span class="p">:</span> <span class="n">PhysicalConstants</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute mixed-layer growth due to cloud top radiative divergence.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            The mixed-layer growth due to cloud top radiative divergence :math:`w_f` is given by</span>
+
+<span class="sd">            .. math::</span>
+<span class="sd">                w_f = \\frac{\\Delta F_z}{\\rho c_p \\Delta \\theta}</span>
+
+<span class="sd">            where :math:`\\Delta F_z` is the cloud top radiative divergence, :math:`\\rho` is air density,</span>
+<span class="sd">            :math:`c_p` is specific heat capacity, and :math:`\\Delta \\theta` is the temperature jump.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">radiative_denominator</span> <span class="o">=</span> <span class="n">const</span><span class="o">.</span><span class="n">rho</span> <span class="o">*</span> <span class="n">const</span><span class="o">.</span><span class="n">cp</span> <span class="o">*</span> <span class="n">dtheta</span>
-        <span class="n">wf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dFz</span> <span class="o">/</span> <span class="n">radiative_denominator</span>
-
-        <span class="k">return</span> <span class="n">ws</span><span class="p">,</span> <span class="n">wf</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dFz</span> <span class="o">/</span> <span class="n">radiative_denominator</span></div>
 
 
-<div class="viewcode-block" id="BulkMixedLayerModel.calculate_free_troposphere_compensation">
-<a class="viewcode-back" href="../../../source/api/abcmodel.mixed_layer.bulk.html#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.calculate_free_troposphere_compensation">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">calculate_free_troposphere_compensation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ws</span><span class="p">:</span> <span class="n">Array</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate compensation terms to fix free troposphere values.&quot;&quot;&quot;</span>
-        <span class="c1"># compensation terms</span>
+<div class="viewcode-block" id="BulkMixedLayerModel.compute_free_troposphere_theta_compensation">
+<a class="viewcode-back" href="../../../source/api/abcmodel.mixed_layer.bulk.html#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_free_troposphere_theta_compensation">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_free_troposphere_theta_compensation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ws</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute potential temperature compensation term to fix free troposphere values.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            .. math::</span>
+<span class="sd">                w_{\\theta,ft} = \\gamma_\\theta w_s</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">w_th_ft_active</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gammatheta</span> <span class="o">*</span> <span class="n">ws</span>
+        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sw_fixft</span><span class="p">,</span> <span class="n">w_th_ft_active</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BulkMixedLayerModel.compute_free_troposphere_q_compensation">
+<a class="viewcode-back" href="../../../source/api/abcmodel.mixed_layer.bulk.html#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_free_troposphere_q_compensation">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_free_troposphere_q_compensation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ws</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute humidity compensation term to fix free troposphere values.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            .. math::</span>
+<span class="sd">                w_{q,ft} = \\gamma_q w_s</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">w_q_ft_active</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gammaq</span> <span class="o">*</span> <span class="n">ws</span>
+        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sw_fixft</span><span class="p">,</span> <span class="n">w_q_ft_active</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BulkMixedLayerModel.compute_free_troposphere_co2_compensation">
+<a class="viewcode-back" href="../../../source/api/abcmodel.mixed_layer.bulk.html#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_free_troposphere_co2_compensation">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_free_troposphere_co2_compensation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ws</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute CO2 compensation term to fix free troposphere values.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            .. math::</span>
+<span class="sd">                w_{CO2,ft} = \\gamma_{CO2} w_s</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">w_CO2_ft_active</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gammaCO2</span> <span class="o">*</span> <span class="n">ws</span>
-
-        <span class="c1"># switch based on sw_fixft flag</span>
-        <span class="n">w_th_ft</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sw_fixft</span><span class="p">,</span> <span class="n">w_th_ft_active</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
-        <span class="n">w_q_ft</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sw_fixft</span><span class="p">,</span> <span class="n">w_q_ft_active</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
-        <span class="n">w_CO2_ft</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sw_fixft</span><span class="p">,</span> <span class="n">w_CO2_ft_active</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">w_th_ft</span><span class="p">,</span> <span class="n">w_q_ft</span><span class="p">,</span> <span class="n">w_CO2_ft</span></div>
+        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sw_fixft</span><span class="p">,</span> <span class="n">w_CO2_ft_active</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="BulkMixedLayerModel.calculate_convective_velocity_scale">
-<a class="viewcode-back" href="../../../source/api/abcmodel.mixed_layer.bulk.html#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.calculate_convective_velocity_scale">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">calculate_convective_velocity_scale</span><span class="p">(</span>
+<div class="viewcode-block" id="BulkMixedLayerModel.compute_convective_velocity_scale">
+<a class="viewcode-back" href="../../../source/api/abcmodel.mixed_layer.bulk.html#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_convective_velocity_scale">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_convective_velocity_scale</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">abl_height</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
         <span class="n">wthetav</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
         <span class="n">thetav</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
         <span class="n">g</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-    <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate convective velocity scale and entrainment parameters.&quot;&quot;&quot;</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute convective velocity scale.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            The convective velocity scale :math:`w_*` is given by</span>
+
+<span class="sd">            .. math::</span>
+<span class="sd">                w_* = \\left( \\frac{g h \\overline{w&#39;\\theta_v&#39;}_s}{\\theta_v} \\right)^{1/3}</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># calculate wstar for positive wthetav case</span>
         <span class="n">buoyancy_term</span> <span class="o">=</span> <span class="n">g</span> <span class="o">*</span> <span class="n">abl_height</span> <span class="o">*</span> <span class="n">wthetav</span> <span class="o">/</span> <span class="n">thetav</span>
         <span class="n">wstar_positive</span> <span class="o">=</span> <span class="n">buoyancy_term</span> <span class="o">**</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="mf">3.0</span><span class="p">)</span>
-        <span class="n">wstar</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">wthetav</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">wstar_positive</span><span class="p">,</span> <span class="mf">1e-6</span><span class="p">)</span>
-
-        <span class="c1"># virtual heat entrainment flux</span>
-        <span class="n">wthetave</span> <span class="o">=</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">beta</span> <span class="o">*</span> <span class="n">wthetav</span>
-
-        <span class="k">return</span> <span class="n">wstar</span><span class="p">,</span> <span class="n">wthetave</span></div>
+        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">wthetav</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">wstar_positive</span><span class="p">,</span> <span class="mf">1e-6</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="BulkMixedLayerModel.calculate_entrainment_velocity">
-<a class="viewcode-back" href="../../../source/api/abcmodel.mixed_layer.bulk.html#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.calculate_entrainment_velocity">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">calculate_entrainment_velocity</span><span class="p">(</span>
+<div class="viewcode-block" id="BulkMixedLayerModel.compute_entrainment_virtual_heat_flux">
+<a class="viewcode-back" href="../../../source/api/abcmodel.mixed_layer.bulk.html#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_entrainment_virtual_heat_flux">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_entrainment_virtual_heat_flux</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wthetav</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute entrainment virtual heat flux.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            The entrainment virtual heat flux :math:`\\overline{w&#39;\\theta_v&#39;}_e` is parametrized as</span>
+
+<span class="sd">            .. math::</span>
+<span class="sd">                \\overline{w&#39;\\theta_v&#39;}_e = -\\beta \\overline{w&#39;\\theta_v&#39;}_s</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">beta</span> <span class="o">*</span> <span class="n">wthetav</span></div>
+
+
+<div class="viewcode-block" id="BulkMixedLayerModel.compute_entrainment_velocity">
+<a class="viewcode-back" href="../../../source/api/abcmodel.mixed_layer.bulk.html#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_entrainment_velocity">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_entrainment_velocity</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">abl_height</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
         <span class="n">wthetave</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
@@ -560,7 +615,19 @@ document.write(`
         <span class="n">ustar</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
         <span class="n">g</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate entrainment velocity with optional shear effects.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute entrainment velocity with optional shear effects.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            The entrainment velocity :math:`w_e` is given by</span>
+
+<span class="sd">            .. math::</span>
+<span class="sd">                w_e = -\\frac{\\overline{w&#39;\\theta_v&#39;}_e}{\\Delta \\theta_v}</span>
+
+<span class="sd">            If shear effects are included (``sw_shearwe`` is True), an additional term is added:</span>
+
+<span class="sd">            .. math::</span>
+<span class="sd">                w_e = \\frac{-\\overline{w&#39;\\theta_v&#39;}_e + 5 u_*^3 \\theta_v / (g h)}{\\Delta \\theta_v}</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># entrainment velocity with shear effects</span>
         <span class="n">shear_term</span> <span class="o">=</span> <span class="mf">5.0</span> <span class="o">*</span> <span class="n">ustar</span><span class="o">**</span><span class="mf">3.0</span> <span class="o">*</span> <span class="n">thetav</span> <span class="o">/</span> <span class="p">(</span><span class="n">g</span> <span class="o">*</span> <span class="n">abl_height</span><span class="p">)</span>
         <span class="n">numerator</span> <span class="o">=</span> <span class="o">-</span><span class="n">wthetave</span> <span class="o">+</span> <span class="n">shear_term</span>
@@ -579,109 +646,272 @@ document.write(`
         <span class="k">return</span> <span class="n">we_final</span></div>
 
 
-<div class="viewcode-block" id="BulkMixedLayerModel.calculate_entrainment_fluxes">
-<a class="viewcode-back" href="../../../source/api/abcmodel.mixed_layer.bulk.html#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.calculate_entrainment_fluxes">[docs]</a>
+<div class="viewcode-block" id="BulkMixedLayerModel.compute_entrainment_heat_flux">
+<a class="viewcode-back" href="../../../source/api/abcmodel.mixed_layer.bulk.html#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_entrainment_heat_flux">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">calculate_entrainment_fluxes</span><span class="p">(</span><span class="n">we</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">dtheta</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">dq</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">dCO2</span><span class="p">:</span> <span class="n">Array</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate all entrainment fluxes.&quot;&quot;&quot;</span>
-        <span class="n">wthetae</span> <span class="o">=</span> <span class="o">-</span><span class="n">we</span> <span class="o">*</span> <span class="n">dtheta</span>
-        <span class="n">wqe</span> <span class="o">=</span> <span class="o">-</span><span class="n">we</span> <span class="o">*</span> <span class="n">dq</span>
-        <span class="n">wCO2e</span> <span class="o">=</span> <span class="o">-</span><span class="n">we</span> <span class="o">*</span> <span class="n">dCO2</span>
-        <span class="k">return</span> <span class="n">wthetae</span><span class="p">,</span> <span class="n">wqe</span><span class="p">,</span> <span class="n">wCO2e</span></div>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_entrainment_heat_flux</span><span class="p">(</span><span class="n">we</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">dtheta</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute entrainment heat flux.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            .. math::</span>
+<span class="sd">                \\overline{w&#39;\\theta&#39;}_e = -w_e \\Delta \\theta</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="o">-</span><span class="n">we</span> <span class="o">*</span> <span class="n">dtheta</span></div>
 
 
-<div class="viewcode-block" id="BulkMixedLayerModel.calculate_mixed_layer_tendencies">
-<a class="viewcode-back" href="../../../source/api/abcmodel.mixed_layer.bulk.html#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.calculate_mixed_layer_tendencies">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">calculate_mixed_layer_tendencies</span><span class="p">(</span>
+<div class="viewcode-block" id="BulkMixedLayerModel.compute_entrainment_moisture_flux">
+<a class="viewcode-back" href="../../../source/api/abcmodel.mixed_layer.bulk.html#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_entrainment_moisture_flux">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_entrainment_moisture_flux</span><span class="p">(</span><span class="n">we</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">dq</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute entrainment moisture flux.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            .. math::</span>
+<span class="sd">                \\overline{w&#39;q&#39;}_e = -w_e \\Delta q</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="o">-</span><span class="n">we</span> <span class="o">*</span> <span class="n">dq</span></div>
+
+
+<div class="viewcode-block" id="BulkMixedLayerModel.compute_entrainment_co2_flux">
+<a class="viewcode-back" href="../../../source/api/abcmodel.mixed_layer.bulk.html#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_entrainment_co2_flux">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_entrainment_co2_flux</span><span class="p">(</span><span class="n">we</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">dCO2</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute entrainment CO2 flux.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            .. math::</span>
+<span class="sd">                \\overline{w&#39;CO_2&#39;}_e = -w_e \\Delta CO_2</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="o">-</span><span class="n">we</span> <span class="o">*</span> <span class="n">dCO2</span></div>
+
+
+<div class="viewcode-block" id="BulkMixedLayerModel.compute_abl_height_tendency">
+<a class="viewcode-back" href="../../../source/api/abcmodel.mixed_layer.bulk.html#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_abl_height_tendency">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_abl_height_tendency</span><span class="p">(</span>
+        <span class="n">we</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">ws</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">wf</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">cc_mf</span><span class="p">:</span> <span class="n">Array</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute boundary layer height tendency.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            .. math::</span>
+<span class="sd">                \\frac{dh}{dt} = w_e + w_s + w_f - \\text{cc}_{mf}</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">we</span> <span class="o">+</span> <span class="n">ws</span> <span class="o">+</span> <span class="n">wf</span> <span class="o">-</span> <span class="n">cc_mf</span></div>
+
+
+<div class="viewcode-block" id="BulkMixedLayerModel.compute_potential_temperature_tendency">
+<a class="viewcode-back" href="../../../source/api/abcmodel.mixed_layer.bulk.html#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_potential_temperature_tendency">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_potential_temperature_tendency</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">abl_height</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">wtheta</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">wthetae</span><span class="p">:</span> <span class="n">Array</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute mixed-layer potential temperature tendency.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            .. math::</span>
+<span class="sd">                \\frac{d\\theta}{dt} = \\frac{\\overline{w&#39;\\theta&#39;}_s - \\overline{w&#39;\\theta&#39;}_e}{h} + \\text{adv}_\\theta</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">surface_heat_flux</span> <span class="o">=</span> <span class="p">(</span><span class="n">wtheta</span> <span class="o">-</span> <span class="n">wthetae</span><span class="p">)</span> <span class="o">/</span> <span class="n">abl_height</span>
+        <span class="k">return</span> <span class="n">surface_heat_flux</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">advtheta</span></div>
+
+
+<div class="viewcode-block" id="BulkMixedLayerModel.compute_potential_temperature_jump_tendency">
+<a class="viewcode-back" href="../../../source/api/abcmodel.mixed_layer.bulk.html#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_potential_temperature_jump_tendency">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_potential_temperature_jump_tendency</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
-        <span class="n">ws</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-        <span class="n">wf</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-        <span class="n">wq</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-        <span class="n">wqe</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
         <span class="n">we</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">wf</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
         <span class="n">cc_mf</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-        <span class="n">cc_qf</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-        <span class="n">wtheta</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-        <span class="n">wthetae</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">thetatend</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">w_th_ft</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute potential temperature jump tendency.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            .. math::</span>
+<span class="sd">                \\frac{d\\Delta \\theta}{dt} = \\gamma_\\theta (w_e + w_f - \\text{cc}_{mf}) - \\frac{d\\theta}{dt} + w_{\\theta,ft}</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">egrowth</span> <span class="o">=</span> <span class="n">we</span> <span class="o">+</span> <span class="n">wf</span> <span class="o">-</span> <span class="n">cc_mf</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gammatheta</span> <span class="o">*</span> <span class="n">egrowth</span> <span class="o">-</span> <span class="n">thetatend</span> <span class="o">+</span> <span class="n">w_th_ft</span></div>
+
+
+<div class="viewcode-block" id="BulkMixedLayerModel.compute_humidity_tendency">
+<a class="viewcode-back" href="../../../source/api/abcmodel.mixed_layer.bulk.html#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_humidity_tendency">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_humidity_tendency</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">abl_height</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">wq</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">wqe</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">cc_qf</span><span class="p">:</span> <span class="n">Array</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute mixed-layer specific humidity tendency.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            .. math::</span>
+<span class="sd">                \\frac{dq}{dt} = \\frac{\\overline{w&#39;q&#39;}_s - \\overline{w&#39;q&#39;}_e - \\text{cc}_{qf}}{h} + \\text{adv}_q</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">surface_moisture_flux</span> <span class="o">=</span> <span class="p">(</span><span class="n">wq</span> <span class="o">-</span> <span class="n">wqe</span> <span class="o">-</span> <span class="n">cc_qf</span><span class="p">)</span> <span class="o">/</span> <span class="n">abl_height</span>
+        <span class="k">return</span> <span class="n">surface_moisture_flux</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">advq</span></div>
+
+
+<div class="viewcode-block" id="BulkMixedLayerModel.compute_humidity_jump_tendency">
+<a class="viewcode-back" href="../../../source/api/abcmodel.mixed_layer.bulk.html#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_humidity_jump_tendency">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_humidity_jump_tendency</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">we</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">wf</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">cc_mf</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">qtend</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">w_q_ft</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute specific humidity jump tendency.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            .. math::</span>
+<span class="sd">                \\frac{d\\Delta q}{dt} = \\gamma_q (w_e + w_f - \\text{cc}_{mf}) - \\frac{dq}{dt} + w_{q,ft}</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">egrowth</span> <span class="o">=</span> <span class="n">we</span> <span class="o">+</span> <span class="n">wf</span> <span class="o">-</span> <span class="n">cc_mf</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gammaq</span> <span class="o">*</span> <span class="n">egrowth</span> <span class="o">-</span> <span class="n">qtend</span> <span class="o">+</span> <span class="n">w_q_ft</span></div>
+
+
+<div class="viewcode-block" id="BulkMixedLayerModel.compute_co2_tendency">
+<a class="viewcode-back" href="../../../source/api/abcmodel.mixed_layer.bulk.html#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_co2_tendency">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_co2_tendency</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
         <span class="n">abl_height</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
         <span class="n">wCO2</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
         <span class="n">wCO2e</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
         <span class="n">wCO2M</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-        <span class="n">w_th_ft</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-        <span class="n">w_q_ft</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-        <span class="n">w_CO2_ft</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-    <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate tendency terms for mixed layer variables.&quot;&quot;&quot;</span>
-        <span class="c1"># boundary layer height tendency</span>
-        <span class="n">htend</span> <span class="o">=</span> <span class="n">we</span> <span class="o">+</span> <span class="n">ws</span> <span class="o">+</span> <span class="n">wf</span> <span class="o">-</span> <span class="n">cc_mf</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute mixed-layer CO2 tendency.</span>
 
-        <span class="c1"># mixed layer scalar tendencies</span>
-        <span class="n">surface_heat_flux</span> <span class="o">=</span> <span class="p">(</span><span class="n">wtheta</span> <span class="o">-</span> <span class="n">wthetae</span><span class="p">)</span> <span class="o">/</span> <span class="n">abl_height</span>
-        <span class="n">thetatend</span> <span class="o">=</span> <span class="n">surface_heat_flux</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">advtheta</span>
-
-        <span class="n">surface_moisture_flux</span> <span class="o">=</span> <span class="p">(</span><span class="n">wq</span> <span class="o">-</span> <span class="n">wqe</span> <span class="o">-</span> <span class="n">cc_qf</span><span class="p">)</span> <span class="o">/</span> <span class="n">abl_height</span>
-        <span class="n">qtend</span> <span class="o">=</span> <span class="n">surface_moisture_flux</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">advq</span>
-
+<span class="sd">        Notes:</span>
+<span class="sd">            .. math::</span>
+<span class="sd">                \\frac{dCO_2}{dt} = \\frac{\\overline{w&#39;CO_2&#39;}_s - \\overline{w&#39;CO_2&#39;}_e - \\text{cc}_{CO2f}}{h} + \\text{adv}_{CO2}</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">surface_co2_flux_term</span> <span class="o">=</span> <span class="p">(</span><span class="n">wCO2</span> <span class="o">-</span> <span class="n">wCO2e</span> <span class="o">-</span> <span class="n">wCO2M</span><span class="p">)</span> <span class="o">/</span> <span class="n">abl_height</span>
-        <span class="n">co2tend</span> <span class="o">=</span> <span class="n">surface_co2_flux_term</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">advCO2</span>
-
-        <span class="c1"># jump tendencies at boundary layer top</span>
-        <span class="c1"># (entrainment growth term)</span>
-        <span class="n">egrowth</span> <span class="o">=</span> <span class="n">we</span> <span class="o">+</span> <span class="n">wf</span> <span class="o">-</span> <span class="n">cc_mf</span>
-
-        <span class="n">dthetatend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gammatheta</span> <span class="o">*</span> <span class="n">egrowth</span> <span class="o">-</span> <span class="n">thetatend</span> <span class="o">+</span> <span class="n">w_th_ft</span>
-        <span class="n">dqtend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gammaq</span> <span class="o">*</span> <span class="n">egrowth</span> <span class="o">-</span> <span class="n">qtend</span> <span class="o">+</span> <span class="n">w_q_ft</span>
-        <span class="n">dCO2tend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gammaCO2</span> <span class="o">*</span> <span class="n">egrowth</span> <span class="o">-</span> <span class="n">co2tend</span> <span class="o">+</span> <span class="n">w_CO2_ft</span>
-
-        <span class="k">return</span> <span class="n">htend</span><span class="p">,</span> <span class="n">thetatend</span><span class="p">,</span> <span class="n">dthetatend</span><span class="p">,</span> <span class="n">qtend</span><span class="p">,</span> <span class="n">dqtend</span><span class="p">,</span> <span class="n">co2tend</span><span class="p">,</span> <span class="n">dCO2tend</span></div>
+        <span class="k">return</span> <span class="n">surface_co2_flux_term</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">advCO2</span></div>
 
 
-<div class="viewcode-block" id="BulkMixedLayerModel.calculate_wind_tendencies">
-<a class="viewcode-back" href="../../../source/api/abcmodel.mixed_layer.bulk.html#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.calculate_wind_tendencies">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">calculate_wind_tendencies</span><span class="p">(</span>
+<div class="viewcode-block" id="BulkMixedLayerModel.compute_co2_jump_tendency">
+<a class="viewcode-back" href="../../../source/api/abcmodel.mixed_layer.bulk.html#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_co2_jump_tendency">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_co2_jump_tendency</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">we</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
         <span class="n">wf</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-        <span class="n">uw</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-        <span class="n">vw</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
         <span class="n">cc_mf</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">co2tend</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">w_CO2_ft</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute CO2 jump tendency.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            .. math::</span>
+<span class="sd">                \\frac{d\\Delta CO_2}{dt} = \\gamma_{CO2} (w_e + w_f - \\text{cc}_{mf}) - \\frac{dCO_2}{dt} + w_{CO2,ft}</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">egrowth</span> <span class="o">=</span> <span class="n">we</span> <span class="o">+</span> <span class="n">wf</span> <span class="o">-</span> <span class="n">cc_mf</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gammaCO2</span> <span class="o">*</span> <span class="n">egrowth</span> <span class="o">-</span> <span class="n">co2tend</span> <span class="o">+</span> <span class="n">w_CO2_ft</span></div>
+
+
+<div class="viewcode-block" id="BulkMixedLayerModel.compute_u_wind_tendency">
+<a class="viewcode-back" href="../../../source/api/abcmodel.mixed_layer.bulk.html#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_u_wind_tendency">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_u_wind_tendency</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">abl_height</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">we</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">uw</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
         <span class="n">du</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
         <span class="n">dv</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-        <span class="n">abl_height</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Array</span><span class="p">,</span> <span class="n">Array</span><span class="p">,</span> <span class="n">Array</span><span class="p">,</span> <span class="n">Array</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate wind tendency terms if wind is prognostic.&quot;&quot;&quot;</span>
-        <span class="c1"># wind tendencies for sw_wind = True case</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute u-wind tendency.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            .. math::</span>
+<span class="sd">                \\frac{du}{dt} = -f_c \\Delta v + \\frac{\\overline{u&#39;w&#39;}_s + w_e \\Delta u}{h} + \\text{adv}_u</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">coriolis_term_u</span> <span class="o">=</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">coriolis_param</span> <span class="o">*</span> <span class="n">dv</span>
         <span class="n">momentum_flux_term_u</span> <span class="o">=</span> <span class="p">(</span><span class="n">uw</span> <span class="o">+</span> <span class="n">we</span> <span class="o">*</span> <span class="n">du</span><span class="p">)</span> <span class="o">/</span> <span class="n">abl_height</span>
         <span class="n">utend_active</span> <span class="o">=</span> <span class="n">coriolis_term_u</span> <span class="o">+</span> <span class="n">momentum_flux_term_u</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">advu</span>
+        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sw_wind</span><span class="p">,</span> <span class="n">utend_active</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="BulkMixedLayerModel.compute_v_wind_tendency">
+<a class="viewcode-back" href="../../../source/api/abcmodel.mixed_layer.bulk.html#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_v_wind_tendency">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_v_wind_tendency</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">abl_height</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">we</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">vw</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">du</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">dv</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute v-wind tendency.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            .. math::</span>
+<span class="sd">                \\frac{dv}{dt} = f_c \\Delta u + \\frac{\\overline{v&#39;w&#39;}_s + w_e \\Delta v}{h} + \\text{adv}_v</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">coriolis_term_v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coriolis_param</span> <span class="o">*</span> <span class="n">du</span>
         <span class="n">momentum_flux_term_v</span> <span class="o">=</span> <span class="p">(</span><span class="n">vw</span> <span class="o">+</span> <span class="n">we</span> <span class="o">*</span> <span class="n">dv</span><span class="p">)</span> <span class="o">/</span> <span class="n">abl_height</span>
         <span class="n">vtend_active</span> <span class="o">=</span> <span class="n">coriolis_term_v</span> <span class="o">+</span> <span class="n">momentum_flux_term_v</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">advv</span>
+        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sw_wind</span><span class="p">,</span> <span class="n">vtend_active</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="BulkMixedLayerModel.compute_u_wind_jump_tendency">
+<a class="viewcode-back" href="../../../source/api/abcmodel.mixed_layer.bulk.html#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_u_wind_jump_tendency">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_u_wind_jump_tendency</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">we</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">wf</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">cc_mf</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">utend</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute u-wind jump tendency.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            .. math::</span>
+<span class="sd">                \\frac{d\\Delta u}{dt} = \\gamma_u (w_e + w_f - \\text{cc}_{mf}) - \\frac{du}{dt}</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">entrainment_growth_term</span> <span class="o">=</span> <span class="n">we</span> <span class="o">+</span> <span class="n">wf</span> <span class="o">-</span> <span class="n">cc_mf</span>
-        <span class="n">dutend_active</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gammau</span> <span class="o">*</span> <span class="n">entrainment_growth_term</span> <span class="o">-</span> <span class="n">utend_active</span>
-        <span class="n">dvtend_active</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gammav</span> <span class="o">*</span> <span class="n">entrainment_growth_term</span> <span class="o">-</span> <span class="n">vtend_active</span>
-
-        <span class="c1"># select based on sw_wind flag</span>
-        <span class="n">utend</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sw_wind</span><span class="p">,</span> <span class="n">utend_active</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
-        <span class="n">vtend</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sw_wind</span><span class="p">,</span> <span class="n">vtend_active</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
-        <span class="n">dutend</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sw_wind</span><span class="p">,</span> <span class="n">dutend_active</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
-        <span class="n">dvtend</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sw_wind</span><span class="p">,</span> <span class="n">dvtend_active</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">utend</span><span class="p">,</span> <span class="n">vtend</span><span class="p">,</span> <span class="n">dutend</span><span class="p">,</span> <span class="n">dvtend</span></div>
+        <span class="n">dutend_active</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gammau</span> <span class="o">*</span> <span class="n">entrainment_growth_term</span> <span class="o">-</span> <span class="n">utend</span>
+        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sw_wind</span><span class="p">,</span> <span class="n">dutend_active</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="BulkMixedLayerModel.calculate_transition_layer_tendency">
-<a class="viewcode-back" href="../../../source/api/abcmodel.mixed_layer.bulk.html#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.calculate_transition_layer_tendency">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">calculate_transition_layer_tendency</span><span class="p">(</span>
+<div class="viewcode-block" id="BulkMixedLayerModel.compute_v_wind_jump_tendency">
+<a class="viewcode-back" href="../../../source/api/abcmodel.mixed_layer.bulk.html#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_v_wind_jump_tendency">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_v_wind_jump_tendency</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">we</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">wf</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">cc_mf</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">vtend</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute v-wind jump tendency.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            .. math::</span>
+<span class="sd">                \\frac{d\\Delta v}{dt} = \\gamma_v (w_e + w_f - \\text{cc}_{mf}) - \\frac{dv}{dt}</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">entrainment_growth_term</span> <span class="o">=</span> <span class="n">we</span> <span class="o">+</span> <span class="n">wf</span> <span class="o">-</span> <span class="n">cc_mf</span>
+        <span class="n">dvtend_active</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gammav</span> <span class="o">*</span> <span class="n">entrainment_growth_term</span> <span class="o">-</span> <span class="n">vtend</span>
+        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sw_wind</span><span class="p">,</span> <span class="n">dvtend_active</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BulkMixedLayerModel.compute_transition_layer_tendency">
+<a class="viewcode-back" href="../../../source/api/abcmodel.mixed_layer.bulk.html#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.compute_transition_layer_tendency">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_transition_layer_tendency</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">lcl</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
         <span class="n">abl_height</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
         <span class="n">cc_frac</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
         <span class="n">dz_h</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate transition layer thickness tendency.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute transition layer thickness tendency.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            Relaxation of the transition layer thickness :math:`\\delta z_h` towards a target value:</span>
+
+<span class="sd">            .. math::</span>
+<span class="sd">                \\frac{d\\delta z_h}{dt} = \\frac{(LCL - h) - \\delta z_h}{\\tau}</span>
+
+<span class="sd">            where :math:`\\tau = 7200` s.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">lcl_distance</span> <span class="o">=</span> <span class="n">lcl</span> <span class="o">-</span> <span class="n">abl_height</span>
 
         <span class="c1"># tendency for active case</span>
@@ -696,22 +926,21 @@ document.write(`
 <div class="viewcode-block" id="BulkMixedLayerModel.run">
 <a class="viewcode-back" href="../../../source/api/abcmodel.mixed_layer.bulk.html#abcmodel.mixed_layer.bulk.BulkMixedLayerModel.run">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">PyTree</span><span class="p">,</span> <span class="n">const</span><span class="p">:</span> <span class="n">PhysicalConstants</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate mixed layer tendencies and update diagnostic variables.&quot;&quot;&quot;</span>
-        <span class="n">state</span><span class="o">.</span><span class="n">ws</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">wf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_vertical_motions</span><span class="p">(</span>
-            <span class="n">state</span><span class="o">.</span><span class="n">abl_height</span><span class="p">,</span>
-            <span class="n">state</span><span class="o">.</span><span class="n">dtheta</span><span class="p">,</span>
-            <span class="n">const</span><span class="p">,</span>
-        <span class="p">)</span>
-        <span class="n">w_th_ft</span><span class="p">,</span> <span class="n">w_q_ft</span><span class="p">,</span> <span class="n">w_CO2_ft</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_free_troposphere_compensation</span><span class="p">(</span>
-            <span class="n">state</span><span class="o">.</span><span class="n">ws</span><span class="p">,</span>
-        <span class="p">)</span>
-        <span class="n">state</span><span class="o">.</span><span class="n">wstar</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">wthetave</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_convective_velocity_scale</span><span class="p">(</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute mixed layer tendencies and update diagnostic variables.&quot;&quot;&quot;</span>
+        <span class="n">state</span><span class="o">.</span><span class="n">ws</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_subsidence_velocity</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">abl_height</span><span class="p">)</span>
+        <span class="n">state</span><span class="o">.</span><span class="n">wf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_radiative_growth_velocity</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">dtheta</span><span class="p">,</span> <span class="n">const</span><span class="p">)</span>
+
+        <span class="n">w_th_ft</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_free_troposphere_theta_compensation</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">ws</span><span class="p">)</span>
+        <span class="n">w_q_ft</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_free_troposphere_q_compensation</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">ws</span><span class="p">)</span>
+        <span class="n">w_CO2_ft</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_free_troposphere_co2_compensation</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">ws</span><span class="p">)</span>
+        <span class="n">state</span><span class="o">.</span><span class="n">wstar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_convective_velocity_scale</span><span class="p">(</span>
             <span class="n">state</span><span class="o">.</span><span class="n">abl_height</span><span class="p">,</span>
             <span class="n">state</span><span class="o">.</span><span class="n">wthetav</span><span class="p">,</span>
             <span class="n">state</span><span class="o">.</span><span class="n">thetav</span><span class="p">,</span>
             <span class="n">const</span><span class="o">.</span><span class="n">g</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="n">state</span><span class="o">.</span><span class="n">we</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_entrainment_velocity</span><span class="p">(</span>
+        <span class="n">state</span><span class="o">.</span><span class="n">wthetave</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_entrainment_virtual_heat_flux</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">wthetav</span><span class="p">)</span>
+        <span class="n">state</span><span class="o">.</span><span class="n">we</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_entrainment_velocity</span><span class="p">(</span>
             <span class="n">state</span><span class="o">.</span><span class="n">abl_height</span><span class="p">,</span>
             <span class="n">state</span><span class="o">.</span><span class="n">wthetave</span><span class="p">,</span>
             <span class="n">state</span><span class="o">.</span><span class="n">dthetav</span><span class="p">,</span>
@@ -719,48 +948,43 @@ document.write(`
             <span class="n">state</span><span class="o">.</span><span class="n">ustar</span><span class="p">,</span>
             <span class="n">const</span><span class="o">.</span><span class="n">g</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="n">state</span><span class="o">.</span><span class="n">wthetae</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">wqe</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">wCO2e</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_entrainment_fluxes</span><span class="p">(</span>
-            <span class="n">state</span><span class="o">.</span><span class="n">we</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">dtheta</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">dq</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">dCO2</span>
+        <span class="n">state</span><span class="o">.</span><span class="n">wthetae</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_entrainment_heat_flux</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">we</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">dtheta</span><span class="p">)</span>
+        <span class="n">state</span><span class="o">.</span><span class="n">wqe</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_entrainment_moisture_flux</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">we</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">dq</span><span class="p">)</span>
+        <span class="n">state</span><span class="o">.</span><span class="n">wCO2e</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_entrainment_co2_flux</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">we</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">dCO2</span><span class="p">)</span>
+        <span class="n">state</span><span class="o">.</span><span class="n">htend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_abl_height_tendency</span><span class="p">(</span>
+            <span class="n">state</span><span class="o">.</span><span class="n">we</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">ws</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">wf</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">cc_mf</span>
         <span class="p">)</span>
-        <span class="p">(</span>
-            <span class="n">state</span><span class="o">.</span><span class="n">htend</span><span class="p">,</span>
-            <span class="n">state</span><span class="o">.</span><span class="n">thetatend</span><span class="p">,</span>
-            <span class="n">state</span><span class="o">.</span><span class="n">dthetatend</span><span class="p">,</span>
-            <span class="n">state</span><span class="o">.</span><span class="n">qtend</span><span class="p">,</span>
-            <span class="n">state</span><span class="o">.</span><span class="n">dqtend</span><span class="p">,</span>
-            <span class="n">state</span><span class="o">.</span><span class="n">co2tend</span><span class="p">,</span>
-            <span class="n">state</span><span class="o">.</span><span class="n">dCO2tend</span><span class="p">,</span>
-        <span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_mixed_layer_tendencies</span><span class="p">(</span>
-            <span class="n">state</span><span class="o">.</span><span class="n">ws</span><span class="p">,</span>
-            <span class="n">state</span><span class="o">.</span><span class="n">wf</span><span class="p">,</span>
-            <span class="n">state</span><span class="o">.</span><span class="n">wq</span><span class="p">,</span>
-            <span class="n">state</span><span class="o">.</span><span class="n">wqe</span><span class="p">,</span>
-            <span class="n">state</span><span class="o">.</span><span class="n">we</span><span class="p">,</span>
-            <span class="n">state</span><span class="o">.</span><span class="n">cc_mf</span><span class="p">,</span>
-            <span class="n">state</span><span class="o">.</span><span class="n">cc_qf</span><span class="p">,</span>
-            <span class="n">state</span><span class="o">.</span><span class="n">wtheta</span><span class="p">,</span>
-            <span class="n">state</span><span class="o">.</span><span class="n">wthetae</span><span class="p">,</span>
-            <span class="n">state</span><span class="o">.</span><span class="n">abl_height</span><span class="p">,</span>
-            <span class="n">state</span><span class="o">.</span><span class="n">wCO2</span><span class="p">,</span>
-            <span class="n">state</span><span class="o">.</span><span class="n">wCO2e</span><span class="p">,</span>
-            <span class="n">state</span><span class="o">.</span><span class="n">wCO2M</span><span class="p">,</span>
-            <span class="n">w_th_ft</span><span class="p">,</span>
-            <span class="n">w_q_ft</span><span class="p">,</span>
-            <span class="n">w_CO2_ft</span><span class="p">,</span>
+        <span class="n">state</span><span class="o">.</span><span class="n">thetatend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_potential_temperature_tendency</span><span class="p">(</span>
+            <span class="n">state</span><span class="o">.</span><span class="n">abl_height</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">wtheta</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">wthetae</span>
         <span class="p">)</span>
-        <span class="n">state</span><span class="o">.</span><span class="n">utend</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">vtend</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">dutend</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">dvtend</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">calculate_wind_tendencies</span><span class="p">(</span>
-                <span class="n">state</span><span class="o">.</span><span class="n">we</span><span class="p">,</span>
-                <span class="n">state</span><span class="o">.</span><span class="n">wf</span><span class="p">,</span>
-                <span class="n">state</span><span class="o">.</span><span class="n">uw</span><span class="p">,</span>
-                <span class="n">state</span><span class="o">.</span><span class="n">vw</span><span class="p">,</span>
-                <span class="n">state</span><span class="o">.</span><span class="n">cc_mf</span><span class="p">,</span>
-                <span class="n">state</span><span class="o">.</span><span class="n">du</span><span class="p">,</span>
-                <span class="n">state</span><span class="o">.</span><span class="n">dv</span><span class="p">,</span>
-                <span class="n">state</span><span class="o">.</span><span class="n">abl_height</span><span class="p">,</span>
-            <span class="p">)</span>
+        <span class="n">state</span><span class="o">.</span><span class="n">dthetatend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_potential_temperature_jump_tendency</span><span class="p">(</span>
+            <span class="n">state</span><span class="o">.</span><span class="n">we</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">wf</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">cc_mf</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">thetatend</span><span class="p">,</span> <span class="n">w_th_ft</span>
         <span class="p">)</span>
-        <span class="n">state</span><span class="o">.</span><span class="n">dztend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_transition_layer_tendency</span><span class="p">(</span>
+        <span class="n">state</span><span class="o">.</span><span class="n">qtend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_humidity_tendency</span><span class="p">(</span>
+            <span class="n">state</span><span class="o">.</span><span class="n">abl_height</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">wq</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">wqe</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">cc_qf</span>
+        <span class="p">)</span>
+        <span class="n">state</span><span class="o">.</span><span class="n">dqtend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_humidity_jump_tendency</span><span class="p">(</span>
+            <span class="n">state</span><span class="o">.</span><span class="n">we</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">wf</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">cc_mf</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">qtend</span><span class="p">,</span> <span class="n">w_q_ft</span>
+        <span class="p">)</span>
+        <span class="n">state</span><span class="o">.</span><span class="n">co2tend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_co2_tendency</span><span class="p">(</span>
+            <span class="n">state</span><span class="o">.</span><span class="n">abl_height</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">wCO2</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">wCO2e</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">wCO2M</span>
+        <span class="p">)</span>
+        <span class="n">state</span><span class="o">.</span><span class="n">dCO2tend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_co2_jump_tendency</span><span class="p">(</span>
+            <span class="n">state</span><span class="o">.</span><span class="n">we</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">wf</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">cc_mf</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">co2tend</span><span class="p">,</span> <span class="n">w_CO2_ft</span>
+        <span class="p">)</span>
+        <span class="n">state</span><span class="o">.</span><span class="n">utend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_u_wind_tendency</span><span class="p">(</span>
+            <span class="n">state</span><span class="o">.</span><span class="n">abl_height</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">we</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">uw</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">du</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">dv</span>
+        <span class="p">)</span>
+        <span class="n">state</span><span class="o">.</span><span class="n">vtend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_v_wind_tendency</span><span class="p">(</span>
+            <span class="n">state</span><span class="o">.</span><span class="n">abl_height</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">we</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">vw</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">du</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">dv</span>
+        <span class="p">)</span>
+        <span class="n">state</span><span class="o">.</span><span class="n">dutend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_u_wind_jump_tendency</span><span class="p">(</span>
+            <span class="n">state</span><span class="o">.</span><span class="n">we</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">wf</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">cc_mf</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">utend</span>
+        <span class="p">)</span>
+        <span class="n">state</span><span class="o">.</span><span class="n">dvtend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_v_wind_jump_tendency</span><span class="p">(</span>
+            <span class="n">state</span><span class="o">.</span><span class="n">we</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">wf</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">cc_mf</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">vtend</span>
+        <span class="p">)</span>
+        <span class="n">state</span><span class="o">.</span><span class="n">dztend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_transition_layer_tendency</span><span class="p">(</span>
             <span class="n">state</span><span class="o">.</span><span class="n">lcl</span><span class="p">,</span>
             <span class="n">state</span><span class="o">.</span><span class="n">abl_height</span><span class="p">,</span>
             <span class="n">state</span><span class="o">.</span><span class="n">cc_frac</span><span class="p">,</span>

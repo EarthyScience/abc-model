@@ -305,7 +305,7 @@ document.write(`
   <h1>Source code for abcmodel.land_surface.minimal</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">jaxtyping</span><span class="w"> </span><span class="kn">import</span> <span class="n">PyTree</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jaxtyping</span><span class="w"> </span><span class="kn">import</span> <span class="n">Array</span><span class="p">,</span> <span class="n">PyTree</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">..abstracts</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">AbstractLandSurfaceModel</span><span class="p">,</span>
@@ -345,30 +345,81 @@ document.write(`
         <span class="n">const</span><span class="p">:</span> <span class="n">PhysicalConstants</span><span class="p">,</span>
         <span class="n">surface_layer</span><span class="p">:</span> <span class="n">AbstractSurfaceLayerModel</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Run the model.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Run the model.</span>
 
-        <span class="c1"># limamau: the following two blocks are also computed by</span>
-        <span class="c1"># the standard class - should we refactor some things here?</span>
+<span class="sd">        Args:</span>
+<span class="sd">            state: the state object carrying all variables.</span>
+<span class="sd">            const: the physical constants object.</span>
+<span class="sd">            surface_layer: the surface layer model.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The updated state object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># (1) compute aerodynamic resistance</span>
         <span class="n">state</span><span class="o">.</span><span class="n">ra</span> <span class="o">=</span> <span class="n">surface_layer</span><span class="o">.</span><span class="n">compute_ra</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
 
         <span class="c1"># (2) calculate essential thermodynamic variables</span>
         <span class="n">state</span><span class="o">.</span><span class="n">esat</span> <span class="o">=</span> <span class="n">compute_esat</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">theta</span><span class="p">)</span>
         <span class="n">state</span><span class="o">.</span><span class="n">qsat</span> <span class="o">=</span> <span class="n">compute_qsat</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">surf_pressure</span><span class="p">)</span>
-        <span class="n">desatdT</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">esat</span> <span class="o">*</span> <span class="p">(</span>
-            <span class="mf">17.2694</span> <span class="o">/</span> <span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">theta</span> <span class="o">-</span> <span class="mf">35.86</span><span class="p">)</span>
-            <span class="o">-</span> <span class="mf">17.2694</span> <span class="o">*</span> <span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">theta</span> <span class="o">-</span> <span class="mf">273.16</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">theta</span> <span class="o">-</span> <span class="mf">35.86</span><span class="p">)</span> <span class="o">**</span> <span class="mf">2.0</span>
-        <span class="p">)</span>
-        <span class="n">state</span><span class="o">.</span><span class="n">dqsatdT</span> <span class="o">=</span> <span class="mf">0.622</span> <span class="o">*</span> <span class="n">desatdT</span> <span class="o">/</span> <span class="n">state</span><span class="o">.</span><span class="n">surf_pressure</span>
-        <span class="n">state</span><span class="o">.</span><span class="n">e</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">q</span> <span class="o">*</span> <span class="n">state</span><span class="o">.</span><span class="n">surf_pressure</span> <span class="o">/</span> <span class="mf">0.622</span>
+        <span class="n">state</span><span class="o">.</span><span class="n">dqsatdT</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_dqsatdT</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="n">state</span><span class="o">.</span><span class="n">e</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_e</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">state</span></div>
+
+
+<div class="viewcode-block" id="MinimalLandSurfaceModel.compute_dqsatdT">
+<a class="viewcode-back" href="../../../source/api/abcmodel.land_surface.minimal.html#abcmodel.land_surface.minimal.MinimalLandSurfaceModel.compute_dqsatdT">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_dqsatdT</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">PyTree</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the derivative of saturation vapor pressure with respect to temperature ``dqsatdT``.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            Using :meth:`~abcmodel.utils.compute_esat`, the derivative of the saturated vapor pressure</span>
+<span class="sd">            :math:`e_\\text{sat}` with respect to temperature :math:`T` is given by</span>
+
+<span class="sd">            .. math::</span>
+<span class="sd">                \\frac{\\text{d}e_\\text{sat}}{\\text{d} T} =</span>
+<span class="sd">                e_\\text{sat}\\frac{17.2694(T-237.16)}{(T-35.86)^2},</span>
+
+<span class="sd">            which combined with :meth:`~abcmodel.utils.compute_qsat` can be used to get</span>
+
+<span class="sd">            .. math::</span>
+<span class="sd">                \\frac{\\text{d}q_{\\text{sat}}}{\\text{d} T} \\approx \\epsilon \\frac{\\frac{\\text{d}e_\\text{sat}}{\\text{d} T}}{p}.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">num</span> <span class="o">=</span> <span class="mf">17.2694</span> <span class="o">*</span> <span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">theta</span> <span class="o">-</span> <span class="mf">273.16</span><span class="p">)</span>
+        <span class="n">den</span> <span class="o">=</span> <span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">theta</span> <span class="o">-</span> <span class="mf">35.86</span><span class="p">)</span> <span class="o">**</span> <span class="mf">2.0</span>
+        <span class="n">mult</span> <span class="o">=</span> <span class="n">num</span> <span class="o">/</span> <span class="n">den</span>
+        <span class="n">desatdT</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">esat</span> <span class="o">*</span> <span class="n">mult</span>
+        <span class="k">return</span> <span class="mf">0.622</span> <span class="o">*</span> <span class="n">desatdT</span> <span class="o">/</span> <span class="n">state</span><span class="o">.</span><span class="n">surf_pressure</span></div>
+
+
+<div class="viewcode-block" id="MinimalLandSurfaceModel.compute_e">
+<a class="viewcode-back" href="../../../source/api/abcmodel.land_surface.minimal.html#abcmodel.land_surface.minimal.MinimalLandSurfaceModel.compute_e">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_e</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">PyTree</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the vapor pressure ``e``.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            This function uses the same formula used in :meth:`~abcmodel.utils.compute_esat`,</span>
+<span class="sd">            but now factoring the vapor pressure :math:`e` as a function of specific humidity :math:`q`</span>
+<span class="sd">            and surface pressure :math:`p`, which give us</span>
+
+<span class="sd">            .. math::</span>
+<span class="sd">                e = q \\cdot p / 0.622.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">state</span><span class="o">.</span><span class="n">q</span> <span class="o">*</span> <span class="n">state</span><span class="o">.</span><span class="n">surf_pressure</span> <span class="o">/</span> <span class="mf">0.622</span></div>
 
 
 <div class="viewcode-block" id="MinimalLandSurfaceModel.integrate">
 <a class="viewcode-back" href="../../../source/api/abcmodel.land_surface.minimal.html#abcmodel.land_surface.minimal.MinimalLandSurfaceModel.integrate">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">integrate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">PyTree</span><span class="p">,</span> <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Integrate the model.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Integrate the model forward in time.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            state: the state object carrying all variables.</span>
+<span class="sd">            dt: the time step.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The updated state object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">state</span></div>
 </div>
 

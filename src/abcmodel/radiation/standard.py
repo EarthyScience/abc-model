@@ -72,27 +72,27 @@ class StandardRadiationModel(AbstractRadiationModel):
 
         Notes:
             1.  Calculates solar position with
-                :meth:`~calculate_solar_declination` and
-                :meth:`~calculate_solar_elevation`.
+                :meth:`~compute_solar_declination` and
+                :meth:`~compute_solar_elevation`.
             2.  Determines atmospheric properties with
-                :meth:`~calculate_air_temperature` and
-                :meth:`~calculate_atmospheric_transmission`.
+                :meth:`~compute_air_temperature` and
+                :meth:`~compute_atmospheric_transmission`.
             3.  Computes all radiation components and the final
-                net radiation with :meth:`~calculate_radiation_components`,
+                net radiation with :meth:`~compute_radiation_components`,
                 then updates the state object with the results.
         """
         # solar position
-        solar_declination = self.calculate_solar_declination(self.doy)
-        solar_elevation = self.calculate_solar_elevation(t, dt, solar_declination)
+        solar_declination = self.compute_solar_declination(self.doy)
+        solar_elevation = self.compute_solar_elevation(t, dt, solar_declination)
 
         # atmospheric properties
-        air_temp = self.calculate_air_temperature(
+        air_temp = self.compute_air_temperature(
             state.surf_pressure,
             state.abl_height,
             state.theta,
             const,
         )
-        atmospheric_transmission = self.calculate_atmospheric_transmission(
+        atmospheric_transmission = self.compute_atmospheric_transmission(
             solar_elevation
         )
 
@@ -103,7 +103,7 @@ class StandardRadiationModel(AbstractRadiationModel):
             state.out_srad,
             state.in_lrad,
             state.out_lrad,
-        ) = self.calculate_radiation_components(
+        ) = self.compute_radiation_components(
             solar_elevation,
             atmospheric_transmission,
             air_temp,
@@ -114,8 +114,8 @@ class StandardRadiationModel(AbstractRadiationModel):
 
         return state
 
-    def calculate_solar_declination(self, doy: float) -> Array:
-        """Calculate solar declination angle based on day of year.
+    def compute_solar_declination(self, doy: float) -> Array:
+        """Compute solar declination angle based on day of year.
 
         Args:
             doy: Day of year [-], range 1 to 365.
@@ -138,15 +138,15 @@ class StandardRadiationModel(AbstractRadiationModel):
         """
         return 0.409 * jnp.cos(2.0 * jnp.pi * (doy - 173.0) / 365.0)
 
-    def calculate_solar_elevation(
+    def compute_solar_elevation(
         self, t: int, dt: float, solar_declination: Array
     ) -> Array:
-        """Calculate solar elevation angle (sine of elevation).
+        """Compute solar elevation angle (sine of elevation).
 
         Args:
             t: current time step index [-].
             dt: time step duration [s].
-            solar_declination: solar declination angle [radians] from :meth:`~calculate_solar_declination`.
+            solar_declination: solar declination angle [radians] from :meth:`~compute_solar_declination`.
 
         Returns:
             Sine of the solar elevation angle [-].
@@ -183,14 +183,14 @@ class StandardRadiationModel(AbstractRadiationModel):
 
         return jnp.maximum(sinlea, 0.0001)
 
-    def calculate_air_temperature(
+    def compute_air_temperature(
         self,
         surf_pressure: float,
         abl_height: float,
         theta: float,
         const: PhysicalConstants,
     ) -> float:
-        """Calculate air temperature at reference level using potential temperature.
+        """Compute air temperature at reference level using potential temperature.
 
         Args:
             surf_pressure: surface pressure [Pa].
@@ -236,8 +236,8 @@ class StandardRadiationModel(AbstractRadiationModel):
 
         return air_temp
 
-    def calculate_atmospheric_transmission(self, solar_elevation: Array) -> Array:
-        """Calculate atmospheric transmission coefficient for solar radiation.
+    def compute_atmospheric_transmission(self, solar_elevation: Array) -> Array:
+        """Compute atmospheric transmission coefficient for solar radiation.
 
         Args:
             solar_elevation: sine of the solar elevation angle [-].
@@ -274,7 +274,7 @@ class StandardRadiationModel(AbstractRadiationModel):
 
         return clear_sky_trans * cloud_reduction
 
-    def calculate_radiation_components(
+    def compute_radiation_components(
         self,
         solar_elevation: Array,
         atmospheric_transmission: Array,
@@ -283,7 +283,7 @@ class StandardRadiationModel(AbstractRadiationModel):
         surf_temp: Array,
         const: PhysicalConstants,
     ) -> tuple[Array, Array, Array, Array, Array]:
-        """Calculate all radiation components and update attributes.
+        """Compute all radiation components and update attributes.
 
         Args:
             solar_elevation: sine of the solar elevation angle [-].

@@ -1,6 +1,6 @@
 import jax
 import jax.numpy as jnp
-from jaxtyping import PyTree
+from jaxtyping import Array, PyTree
 
 from ..abstracts import (
     AbstractMixedLayerModel,
@@ -19,19 +19,69 @@ class AbstractStandardStatsModel(AbstractMixedLayerModel):
     surf_pressure: float
 
     def statistics(self, state: PyTree, t: int, const: PhysicalConstants):
-        """Calculate standard meteorological statistics and diagnostics."""
+        """Compute standard meteorological statistics and diagnostics."""
+        state = self.compute_virtual_temperatures(state)
+        state = self.compute_mixed_layer_top_properties(state, const)
+        state.lcl = self.compute_lifting_condensation_level(state, t, const)
+        return state
+
+    def compute_virtual_temperatures(self, state: PyTree) -> PyTree:
+        """Compute virtual temperatures and fluxes.
+
+        Notes:
+            The virtual potential temperature :math:`\\theta_v` is given by
+
+            .. math::
+                \\theta_v = \\theta (1 + 0.61 q)
+
+            The virtual heat flux :math:`\\overline{w'\\theta_v'}` is
+
+            .. math::
+                \\overline{w'\\theta_v'} = \\overline{w'\\theta'} + 0.61 \\theta \\overline{w'q'}
+
+            The virtual potential temperature jump :math:`\\Delta \\theta_v` is
+
+            .. math::
+                \\Delta \\theta_v = (\\theta + \\Delta \\theta)(1 + 0.61(q + \\Delta q)) - \\theta(1 + 0.61q)
+        """
         # calculate virtual temperatures
         state.thetav = state.theta + 0.61 * state.theta * state.q
         state.wthetav = state.wtheta + 0.61 * state.theta * state.wq
         state.dthetav = (state.theta + state.dtheta) * (
             1.0 + 0.61 * (state.q + state.dq)
         ) - state.theta * (1.0 + 0.61 * state.q)
+        return state
 
+    def compute_mixed_layer_top_properties(
+        self, state: PyTree, const: PhysicalConstants
+    ) -> PyTree:
+        """Compute properties at the top of the mixed layer.
+
+        Notes:
+            The pressure at the top of the mixed layer :math:`p_{top}` is
+
+            .. math::
+                p_{top} = p_{surf} - \\rho g h
+
+            The temperature at the top of the mixed layer :math:`T_{top}` is
+
+            .. math::
+                T_{top} = \\theta - \\frac{g}{c_p} h
+        """
         # mixed-layer top properties
         state.top_p = state.surf_pressure - const.rho * const.g * state.abl_height
         state.top_T = state.theta - const.g / const.cp * state.abl_height
         state.top_rh = state.q / compute_qsat(state.top_T, state.top_p)
+        return state
 
+    def compute_lifting_condensation_level(
+        self, state: PyTree, t: int, const: PhysicalConstants
+    ) -> Array:
+        """Compute the lifting condensation level (LCL).
+
+        Notes:
+            The LCL is found iteratively by finding the height where the relative humidity is 100%.
+        """
         # find lifting condensation level iteratively using JAX
         # initialize lcl and rhlcl based on timestep
         initial_lcl = jnp.where(t == 0, state.abl_height, state.lcl)
@@ -62,6 +112,4 @@ class AbstractStandardStatsModel(AbstractMixedLayerModel):
             lcl_iteration_cond, lcl_iteration_body, (initial_lcl, initial_rhlcl, 0)
         )
 
-        state.lcl = final_lcl
-
-        return state
+        return final_lcl
