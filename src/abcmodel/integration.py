@@ -91,20 +91,30 @@ def timestep(state: PyTree, coupler: ABCoupler, t: int, dt: float) -> PyTree:
     # time integrate mixed-layer model
     state = coupler.mixed_layer.integrate(state, dt)
 
+    # compute diagnostics
+    state = coupler.compute_diagnostics(state)
+
     return state
 
 
-def integrate(
-    state: PyTree,
-    coupler: ABCoupler,
-    dt: float,
-    runtime: float,
-):
-    """Integrate the coupler forward in time."""
+def integrate(state: PyTree, coupler: ABCoupler, dt: float, runtime: float):
+    """Integrate the coupler forward in time.
+    
+    Args:
+        state: Initial coupled state.
+        coupler: ABCoupler instance.
+        dt: Time step [s].
+        runtime: Total runtime [s].
+    
+    Returns:
+        times: Array of time values [h].
+        trajectory: PyTree containing the full state trajectory.
+    """
     tsteps = int(np.floor(runtime / dt))
 
     # warmup
     state = warmup(state, coupler, 0, dt)
+    state = coupler.compute_diagnostics(state)
 
     def iter_fn(state, t):
         state = timestep(state, coupler, t, dt)

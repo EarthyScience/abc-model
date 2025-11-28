@@ -383,7 +383,40 @@ document.write(`
         <span class="n">state_dict</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">asdict</span><span class="p">(</span><span class="n">surface_layer_init_conds</span><span class="p">))</span>
         <span class="n">state_dict</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">asdict</span><span class="p">(</span><span class="n">mixed_layer_init_conds</span><span class="p">))</span>
         <span class="n">state_dict</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">asdict</span><span class="p">(</span><span class="n">clouds_init_conds</span><span class="p">))</span>
+
+        <span class="c1"># diagnostic variables for water and energy budgets</span>
+        <span class="n">state_dict</span><span class="p">[</span><span class="s2">&quot;total_water_mass&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="n">state_dict</span><span class="p">[</span><span class="s2">&quot;total_energy&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+
         <span class="n">state</span> <span class="o">=</span> <span class="n">CoupledState</span><span class="p">(</span><span class="o">**</span><span class="n">state_dict</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">state</span></div>
+
+
+<div class="viewcode-block" id="ABCoupler.compute_diagnostics">
+<a class="viewcode-back" href="../../source/api/abcmodel.coupling.html#abcmodel.coupling.ABCoupler.compute_diagnostics">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_diagnostics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">CoupledState</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CoupledState</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute diagnostic variables for total water budget.</span>
+
+<span class="sd">        In the future it would be nice to include the energy budget, although</span>
+<span class="sd">        this is significantly more complicated.</span>
+
+<span class="sd">        Notes:</span>
+<span class="sd">            Total water mass (kg/m²):</span>
+
+<span class="sd">            - water vapor in the mixed layer: :math:`q \\rho h`;</span>
+<span class="sd">            - soil moisture in layer 1: :math:`w_g \\rho_w`;</span>
+<span class="sd">            - soil moisture in layer 2: :math:`w_2 \\rho_w`.</span>
+<span class="sd">            - canopy moisture: :math:`w_l \\rho_w`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># total water mass (kg/m²)</span>
+        <span class="n">vap_w</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">q</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">const</span><span class="o">.</span><span class="n">rho</span> <span class="o">*</span> <span class="n">state</span><span class="o">.</span><span class="n">abl_height</span>
+        <span class="n">d1</span> <span class="o">=</span> <span class="mf">0.1</span>  <span class="c1"># limamau: this needs to be a parameter!</span>
+        <span class="n">s1_w</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">wg</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">const</span><span class="o">.</span><span class="n">rhow</span> <span class="o">*</span> <span class="n">d1</span>
+        <span class="c1"># d2 = infinity!</span>
+        <span class="c1"># s2_w = state.w2 * self.const.rhow * d2</span>
+        <span class="n">can_w</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">wl</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">const</span><span class="o">.</span><span class="n">rhow</span>
+        <span class="n">state</span><span class="o">.</span><span class="n">total_water_mass</span> <span class="o">=</span> <span class="n">vap_w</span> <span class="o">+</span> <span class="n">s1_w</span> <span class="o">+</span> <span class="n">can_w</span>
+
         <span class="k">return</span> <span class="n">state</span></div>
 </div>
 

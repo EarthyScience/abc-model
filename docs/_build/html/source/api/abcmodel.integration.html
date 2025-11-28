@@ -388,6 +388,23 @@ document.write(`
 <dt class="sig sig-object py" id="abcmodel.integration.integrate">
 <span class="sig-prename descclassname"><span class="pre">abcmodel.integration.</span></span><span class="sig-name descname"><span class="pre">integrate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coupler</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">runtime</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/integration.html#integrate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.integration.integrate" title="Link to this definition">#</a></dt>
 <dd><p>Integrate the coupler forward in time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>state</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyTree</span></code></span>) – Initial coupled state.</p></li>
+<li><p><strong>coupler</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="abcmodel.coupling.html#abcmodel.coupling.ABCoupler" title="abcmodel.coupling.ABCoupler"><code class="xref py py-class docutils literal notranslate"><span class="pre">ABCoupler</span></code></a></span>) – ABCoupler instance.</p></li>
+<li><p><strong>dt</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Time step [s].</p></li>
+<li><p><strong>runtime</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Total runtime [s].</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Array of time values [h].
+trajectory: PyTree containing the full state trajectory.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>times</p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>

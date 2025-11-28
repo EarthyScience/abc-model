@@ -404,23 +404,33 @@ document.write(`
     <span class="c1"># time integrate mixed-layer model</span>
     <span class="n">state</span> <span class="o">=</span> <span class="n">coupler</span><span class="o">.</span><span class="n">mixed_layer</span><span class="o">.</span><span class="n">integrate</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
 
+    <span class="c1"># compute diagnostics</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">coupler</span><span class="o">.</span><span class="n">compute_diagnostics</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+
     <span class="k">return</span> <span class="n">state</span></div>
 
 
 
 <div class="viewcode-block" id="integrate">
 <a class="viewcode-back" href="../../source/api/abcmodel.integration.html#abcmodel.integration.integrate">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">integrate</span><span class="p">(</span>
-    <span class="n">state</span><span class="p">:</span> <span class="n">PyTree</span><span class="p">,</span>
-    <span class="n">coupler</span><span class="p">:</span> <span class="n">ABCoupler</span><span class="p">,</span>
-    <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-    <span class="n">runtime</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-<span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Integrate the coupler forward in time.&quot;&quot;&quot;</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">integrate</span><span class="p">(</span><span class="n">state</span><span class="p">:</span> <span class="n">PyTree</span><span class="p">,</span> <span class="n">coupler</span><span class="p">:</span> <span class="n">ABCoupler</span><span class="p">,</span> <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">runtime</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Integrate the coupler forward in time.</span>
+<span class="sd">    </span>
+<span class="sd">    Args:</span>
+<span class="sd">        state: Initial coupled state.</span>
+<span class="sd">        coupler: ABCoupler instance.</span>
+<span class="sd">        dt: Time step [s].</span>
+<span class="sd">        runtime: Total runtime [s].</span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">        times: Array of time values [h].</span>
+<span class="sd">        trajectory: PyTree containing the full state trajectory.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">tsteps</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">runtime</span> <span class="o">/</span> <span class="n">dt</span><span class="p">))</span>
 
     <span class="c1"># warmup</span>
     <span class="n">state</span> <span class="o">=</span> <span class="n">warmup</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">coupler</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">coupler</span><span class="o">.</span><span class="n">compute_diagnostics</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">iter_fn</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
         <span class="n">state</span> <span class="o">=</span> <span class="n">timestep</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">coupler</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>

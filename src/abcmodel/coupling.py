@@ -71,5 +71,35 @@ class ABCoupler:
         state_dict.update(asdict(surface_layer_init_conds))
         state_dict.update(asdict(mixed_layer_init_conds))
         state_dict.update(asdict(clouds_init_conds))
+
+        # diagnostic variables for water and energy budgets
+        state_dict["total_water_mass"] = 0.0
+        state_dict["total_energy"] = 0.0
+
         state = CoupledState(**state_dict)
+        return state
+
+    def compute_diagnostics(self, state: CoupledState) -> CoupledState:
+        """Compute diagnostic variables for total water budget.
+
+        In the future it would be nice to include the energy budget, although
+        this is significantly more complicated.
+
+        Notes:
+            Total water mass (kg/m²):
+
+            - water vapor in the mixed layer: :math:`q \\rho h`;
+            - soil moisture in layer 1: :math:`w_g \\rho_w`;
+            - soil moisture in layer 2: :math:`w_2 \\rho_w`.
+            - canopy moisture: :math:`w_l \\rho_w`.
+        """
+        # total water mass (kg/m²)
+        vap_w = state.q * self.const.rho * state.abl_height
+        d1 = 0.1  # limamau: this needs to be a parameter!
+        s1_w = state.wg * self.const.rhow * d1
+        # d2 = infinity!
+        # s2_w = state.w2 * self.const.rhow * d2
+        can_w = state.wl * self.const.rhow
+        state.total_water_mass = vap_w + s1_w + can_w
+
         return state

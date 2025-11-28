@@ -40,6 +40,7 @@
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'source/api/abcmodel.coupling';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -352,6 +353,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.coupling.CoupledState"><code class="docutils literal notranslate"><span class="pre">CoupledState</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.coupling.ABCoupler"><code class="docutils literal notranslate"><span class="pre">ABCoupler</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.coupling.ABCoupler.init_state"><code class="docutils literal notranslate"><span class="pre">ABCoupler.init_state()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.coupling.ABCoupler.compute_diagnostics"><code class="docutils literal notranslate"><span class="pre">ABCoupler.compute_diagnostics()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -383,6 +385,22 @@ document.write(`
 <dt class="sig sig-object py" id="abcmodel.coupling.ABCoupler.init_state">
 <em class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">init_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radiation_init_conds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">land_surface_init_conds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surface_layer_init_conds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mixed_layer_init_conds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clouds_init_conds</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/coupling.html#ABCoupler.init_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.coupling.ABCoupler.init_state" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.coupling.ABCoupler.compute_diagnostics">
+<span class="sig-name descname"><span class="pre">compute_diagnostics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/coupling.html#ABCoupler.compute_diagnostics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.coupling.ABCoupler.compute_diagnostics" title="Link to this definition">#</a></dt>
+<dd><p>Compute diagnostic variables for total water budget.</p>
+<p>In the future it would be nice to include the energy budget, although
+this is significantly more complicated.</p>
+<p class="rubric">Notes</p>
+<p>Total water mass (kg/m²):</p>
+<ul class="simple">
+<li><p>water vapor in the mixed layer: <span class="math notranslate nohighlight">\(q \rho h\)</span>;</p></li>
+<li><p>soil moisture in layer 1: <span class="math notranslate nohighlight">\(w_g \rho_w\)</span>;</p></li>
+<li><p>soil moisture in layer 2: <span class="math notranslate nohighlight">\(w_2 \rho_w\)</span>.</p></li>
+<li><p>canopy moisture: <span class="math notranslate nohighlight">\(w_l \rho_w\)</span>.</p></li>
+</ul>
+</dd></dl>
 
 </dd></dl>
 
@@ -436,6 +454,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.coupling.CoupledState"><code class="docutils literal notranslate"><span class="pre">CoupledState</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.coupling.ABCoupler"><code class="docutils literal notranslate"><span class="pre">ABCoupler</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.coupling.ABCoupler.init_state"><code class="docutils literal notranslate"><span class="pre">ABCoupler.init_state()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.coupling.ABCoupler.compute_diagnostics"><code class="docutils literal notranslate"><span class="pre">ABCoupler.compute_diagnostics()</span></code></a></li>
 </ul>
 </li>
 </ul>
