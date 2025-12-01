@@ -41,7 +41,7 @@ def run_model(theta0: float) -> float:
     cloud_init_conds = abcmodel.atmosphere.clouds.StandardCumulusInitConds()
     cloud_model = abcmodel.atmosphere.clouds.StandardCumulusModel()
 
-    atmosphere_model = abcmodel.atmosphere.AtmosphereModel(
+    atmosphere_model = abcmodel.atmosphere.DayOnlyAtmosphereModel(
         surface_layer=surface_layer_model,
         mixed_layer=mixed_layer_model,
         clouds=cloud_model,

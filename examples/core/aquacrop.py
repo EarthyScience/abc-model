@@ -46,7 +46,7 @@ def main():
 
     # define coupler and coupled state
     # define atmosphere model
-    atmosphere_model = abcmodel.atmosphere.AtmosphereModel(
+    atmosphere_model = abcmodel.atmosphere.DayOnlyAtmosphereModel(
         surface_layer=surface_layer_model,
         mixed_layer=mixed_layer_model,
         clouds=cloud_model,

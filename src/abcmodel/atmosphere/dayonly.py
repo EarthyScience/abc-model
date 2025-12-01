@@ -1,5 +1,3 @@
-from typing import Any
-
 from jaxtyping import PyTree
 
 from ..abstracts import AbstractAtmosphereModel
@@ -11,8 +9,8 @@ from .abstracts import (
 )
 
 
-class AtmosphereModel(AbstractAtmosphereModel):
-    """Atmosphere model aggregating surface layer, mixed layer, and clouds."""
+class DayOnlyAtmosphereModel(AbstractAtmosphereModel):
+    """Atmosphere model aggregating surface layer, mixed layer, and clouds during the day-time."""
 
     def __init__(
         self,
@@ -29,15 +27,9 @@ class AtmosphereModel(AbstractAtmosphereModel):
         state: PyTree,
         const: PhysicalConstants,
     ) -> PyTree:
-        # 1. Surface Layer
         state = self.surface_layer.run(state, const)
-
-        # 2. Clouds
         state = self.clouds.run(state, const)
-
-        # 3. Mixed Layer
         state = self.mixed_layer.run(state, const)
-
         return state
 
     def statistics(self, state: PyTree, t: int, const: PhysicalConstants) -> PyTree:

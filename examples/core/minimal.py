@@ -27,8 +27,10 @@ def main():
     land_surface_model = abcmodel.land.MinimalLandSurfaceModel()
 
     # surface layer
-    surface_layer_init_conds = abcmodel.atmosphere.surface_layer.StandardSurfaceLayerInitConds(
-        **cm.standard_surface_layer.init_conds_kwargs
+    surface_layer_init_conds = (
+        abcmodel.atmosphere.surface_layer.StandardSurfaceLayerInitConds(
+            **cm.standard_surface_layer.init_conds_kwargs
+        )
     )
     surface_layer_model = abcmodel.atmosphere.surface_layer.StandardSurfaceLayerModel()
 
@@ -45,7 +47,7 @@ def main():
     cloud_model = abcmodel.atmosphere.clouds.StandardCumulusModel()
 
     # define atmosphere model
-    atmosphere_model = abcmodel.atmosphere.AtmosphereModel(
+    atmosphere_model = abcmodel.atmosphere.DayOnlyAtmosphereModel(
         surface_layer=surface_layer_model,
         mixed_layer=mixed_layer_model,
         clouds=cloud_model,

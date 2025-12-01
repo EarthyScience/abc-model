@@ -1,4 +1,4 @@
 from . import clouds, mixed_layer, surface_layer
-from .model import AtmosphereModel
+from .dayonly import DayOnlyAtmosphereModel
 
-__all__ = ["AtmosphereModel", "clouds", "mixed_layer", "surface_layer"]
+__all__ = ["DayOnlyAtmosphereModel", "clouds", "mixed_layer", "surface_layer"]

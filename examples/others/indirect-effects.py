@@ -31,8 +31,10 @@ def run_wrapper(wg: float, q: float, config):
     )
 
     # surface layer
-    surface_layer_init_conds = abcmodel.atmosphere.surface_layer.StandardSurfaceLayerInitConds(
-        **config.std_sl_init_conds_kwargs
+    surface_layer_init_conds = (
+        abcmodel.atmosphere.surface_layer.StandardSurfaceLayerInitConds(
+            **config.std_sl_init_conds_kwargs
+        )
     )
     surface_layer_model = abcmodel.atmosphere.surface_layer.StandardSurfaceLayerModel()
 
@@ -52,7 +54,7 @@ def run_wrapper(wg: float, q: float, config):
 
     # define coupler and coupled state
     # define atmosphere model
-    atmosphere_model = abcmodel.atmosphere.AtmosphereModel(
+    atmosphere_model = abcmodel.atmosphere.DayOnlyAtmosphereModel(
         surface_layer=surface_layer_model,
         mixed_layer=mixed_layer_model,
         clouds=cloud_model,

@@ -3,8 +3,8 @@ from dataclasses import dataclass
 import jax.numpy as jnp
 from jaxtyping import Array, PyTree
 
-from ..abstracts import AbstractSurfaceLayerModel
 from ...utils import PhysicalConstants
+from ..abstracts import AbstractSurfaceLayerModel
 
 
 @dataclass
