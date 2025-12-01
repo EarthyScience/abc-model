@@ -5,7 +5,6 @@ import jax.numpy as jnp
 import numpy as np
 from jaxtyping import PyTree
 
-from .atmosphere.clouds import NoCloudModel
 from .coupling import ABCoupler
 
 
@@ -50,18 +49,9 @@ def warmup(state: PyTree, coupler: ABCoupler, t: int, dt: float) -> PyTree:
     # calculate initial diagnostic variables
     state = coupler.radiation.run(state, t, dt, coupler.const)
 
-    for _ in range(10):
-        state = coupler.atmosphere.surface_layer.run(state, coupler.const)
-
-    state = coupler.land.run(state, coupler.const)
-
-    if not isinstance(coupler.atmosphere.clouds, NoCloudModel):
-        state = coupler.atmosphere.mixed_layer.run(state, coupler.const)
-        state = coupler.atmosphere.clouds.run(state, coupler.const)
-
-    state = coupler.atmosphere.mixed_layer.run(state, coupler.const)
-
-    # print_nan_variables(state)
+    # warmup atmosphere and land
+    # limamau: would it be possible to warmup land then atmosphere?
+    state = coupler.atmosphere.warmup(state, coupler.const, coupler.land)
 
     return state
 

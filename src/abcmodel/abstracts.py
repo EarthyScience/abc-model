@@ -45,6 +45,10 @@ class AbstractAtmosphereModel(AbstractModel):
     """Abstract atmosphere model class to define the interface for all atmosphere models."""
 
     @abstractmethod
+    def warmup(self, state: PyTree, const: PhysicalConstants, land) -> PyTree:
+        raise NotImplementedError
+
+    @abstractmethod
     def run(
         self,
         state: PyTree,
