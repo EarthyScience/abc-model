@@ -5,11 +5,9 @@ from typing import Any
 import jax
 
 from .abstracts import (
-    AbstractCloudModel,
-    AbstractLandSurfaceModel,
-    AbstractMixedLayerModel,
+    AbstractAtmosphereModel,
+    AbstractLandModel,
     AbstractRadiationModel,
-    AbstractSurfaceLayerModel,
 )
 from .utils import PhysicalConstants
 
@@ -42,20 +40,16 @@ class ABCoupler:
     def __init__(
         self,
         radiation: AbstractRadiationModel,
-        land_surface: AbstractLandSurfaceModel,
-        surface_layer: AbstractSurfaceLayerModel,
-        mixed_layer: AbstractMixedLayerModel,
-        clouds: AbstractCloudModel,
+        land: AbstractLandModel,
+        atmosphere: AbstractAtmosphereModel,
     ):
         # constants
         self.const = PhysicalConstants()
 
         # models
         self.radiation = radiation
-        self.land_surface = land_surface
-        self.surface_layer = surface_layer
-        self.mixed_layer = mixed_layer
-        self.clouds = clouds
+        self.land = land
+        self.atmosphere = atmosphere
 
     @staticmethod
     def init_state(
@@ -95,7 +89,7 @@ class ABCoupler:
         """
         # total water mass (kg/m²)
         vap_w = state.q * self.const.rho * state.abl_height
-        s1_w = state.wg * self.const.rhow * self.land_surface.d1
+        s1_w = state.wg * self.const.rhow * self.land.d1
         can_w = state.wl * self.const.rhow
         state.total_water_mass = vap_w + s1_w + can_w
 

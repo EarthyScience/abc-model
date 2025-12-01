@@ -23,40 +23,46 @@ def run_wrapper(wg: float, q: float, config):
     # land surface
     ags_kwargs = config.ags_init_conds_kwargs
     ags_kwargs["wg"] = wg
-    land_surface_init_conds = abcmodel.land_surface.AquaCropInitConds(
+    land_surface_init_conds = abcmodel.land.AquaCropInitConds(
         **ags_kwargs,
     )
-    land_surface_model = abcmodel.land_surface.AquaCropModel(
+    land_surface_model = abcmodel.land.AquaCropModel(
         **config.ags_model_kwargs,
     )
 
     # surface layer
-    surface_layer_init_conds = abcmodel.surface_layer.StandardSurfaceLayerInitConds(
+    surface_layer_init_conds = abcmodel.atmosphere.surface_layer.StandardSurfaceLayerInitConds(
         **config.std_sl_init_conds_kwargs
     )
-    surface_layer_model = abcmodel.surface_layer.StandardSurfaceLayerModel()
+    surface_layer_model = abcmodel.atmosphere.surface_layer.StandardSurfaceLayerModel()
 
     # mixed layer
     ml_kwargs = config.bulk_ml_init_conds_kwargs
     ml_kwargs["q"] = q
-    mixed_layer_init_conds = abcmodel.mixed_layer.BulkMixedLayerInitConds(
+    mixed_layer_init_conds = abcmodel.atmosphere.mixed_layer.BulkMixedLayerInitConds(
         **ml_kwargs,
     )
-    mixed_layer_model = abcmodel.mixed_layer.BulkMixedLayerModel(
+    mixed_layer_model = abcmodel.atmosphere.mixed_layer.BulkMixedLayerModel(
         **config.bulk_ml_model_kwargs,
     )
 
     # clouds
-    cloud_init_conds = abcmodel.clouds.StandardCumulusInitConds()
-    cloud_model = abcmodel.clouds.StandardCumulusModel()
+    cloud_init_conds = abcmodel.atmosphere.clouds.StandardCumulusInitConds()
+    cloud_model = abcmodel.atmosphere.clouds.StandardCumulusModel()
+
+    # define coupler and coupled state
+    # define atmosphere model
+    atmosphere_model = abcmodel.atmosphere.AtmosphereModel(
+        surface_layer=surface_layer_model,
+        mixed_layer=mixed_layer_model,
+        clouds=cloud_model,
+    )
 
     # define coupler and coupled state
     abcoupler = abcmodel.ABCoupler(
         radiation=radiation_model,
-        land_surface=land_surface_model,
-        surface_layer=surface_layer_model,
-        mixed_layer=mixed_layer_model,
-        clouds=cloud_model,
+        land=land_surface_model,
+        atmosphere=atmosphere_model,
     )
     state = abcoupler.init_state(
         radiation_init_conds,

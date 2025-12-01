@@ -2,8 +2,8 @@ from dataclasses import dataclass
 
 from jaxtyping import PyTree
 
+from ...utils import PhysicalConstants
 from ..abstracts import AbstractCloudModel
-from ..utils import PhysicalConstants
 
 
 @dataclass

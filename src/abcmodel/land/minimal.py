@@ -1,11 +1,9 @@
 from dataclasses import dataclass
 
+import jax.numpy as jnp
 from jaxtyping import Array, PyTree
 
-from ..abstracts import (
-    AbstractLandSurfaceModel,
-    AbstractSurfaceLayerModel,
-)
+from ..abstracts import AbstractLandModel
 from ..utils import PhysicalConstants, compute_esat, compute_qsat
 
 
@@ -25,7 +23,7 @@ class MinimalLandSurfaceInitConds:
     """No water content in the canopy [m]."""
 
 
-class MinimalLandSurfaceModel(AbstractLandSurfaceModel):
+class MinimalLandSurfaceModel(AbstractLandModel):
     """Minimal land surface model with fixed surface properties."""
 
     def __init__(self):
@@ -35,20 +33,19 @@ class MinimalLandSurfaceModel(AbstractLandSurfaceModel):
         self,
         state: PyTree,
         const: PhysicalConstants,
-        surface_layer: AbstractSurfaceLayerModel,
     ):
         """Run the model.
 
         Args:
             state: the state object carrying all variables.
             const: the physical constants object.
-            surface_layer: the surface layer model.
 
         Returns:
             The updated state object.
         """
-        # (1) compute aerodynamic resistance
-        state.ra = surface_layer.compute_ra(state)
+        # (1) compute aerodynamic resistance from state
+        ueff = jnp.sqrt(state.u**2.0 + state.v**2.0 + state.wstar**2.0)
+        state.ra = ueff / jnp.maximum(1.0e-3, state.ustar) ** 2.0
 
         # (2) calculate essential thermodynamic variables
         state.esat = compute_esat(state.theta)

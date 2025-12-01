@@ -2,10 +2,10 @@ import jax
 import jax.numpy as jnp
 from jaxtyping import Array, PyTree
 
+from ...utils import PhysicalConstants, compute_qsat
 from ..abstracts import (
     AbstractMixedLayerModel,
 )
-from ..utils import PhysicalConstants, compute_qsat
 
 
 class AbstractStandardStatsModel(AbstractMixedLayerModel):

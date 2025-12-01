@@ -5,7 +5,7 @@ import jax.numpy as jnp
 import numpy as np
 from jaxtyping import PyTree
 
-from .clouds import NoCloudModel
+from .atmosphere.clouds import NoCloudModel
 from .coupling import ABCoupler
 
 
@@ -45,21 +45,21 @@ def print_nan_variables(state: PyTree):
 
 def warmup(state: PyTree, coupler: ABCoupler, t: int, dt: float) -> PyTree:
     """Warmup the model by running it for a few timesteps."""
-    state = coupler.mixed_layer.statistics(state, t, coupler.const)
+    state = coupler.atmosphere.statistics(state, t, coupler.const)
 
     # calculate initial diagnostic variables
     state = coupler.radiation.run(state, t, dt, coupler.const)
 
     for _ in range(10):
-        state = coupler.surface_layer.run(state, coupler.const)
+        state = coupler.atmosphere.surface_layer.run(state, coupler.const)
 
-    state = coupler.land_surface.run(state, coupler.const, coupler.surface_layer)
+    state = coupler.land.run(state, coupler.const)
 
-    if not isinstance(coupler.clouds, NoCloudModel):
-        state = coupler.mixed_layer.run(state, coupler.const)
-        state = coupler.clouds.run(state, coupler.const)
+    if not isinstance(coupler.atmosphere.clouds, NoCloudModel):
+        state = coupler.atmosphere.mixed_layer.run(state, coupler.const)
+        state = coupler.atmosphere.clouds.run(state, coupler.const)
 
-    state = coupler.mixed_layer.run(state, coupler.const)
+    state = coupler.atmosphere.mixed_layer.run(state, coupler.const)
 
     # print_nan_variables(state)
 
@@ -68,44 +68,25 @@ def warmup(state: PyTree, coupler: ABCoupler, t: int, dt: float) -> PyTree:
 
 def timestep(state: PyTree, coupler: ABCoupler, t: int, dt: float) -> PyTree:
     """Run a single timestep of the model."""
-    state = coupler.mixed_layer.statistics(state, t, coupler.const)
-
-    # run radiation model
+    state = coupler.atmosphere.statistics(state, t, coupler.const)
     state = coupler.radiation.run(state, t, dt, coupler.const)
-
-    # run surface layer model
-    state = coupler.surface_layer.run(state, coupler.const)
-
-    # run land surface model
-    state = coupler.land_surface.run(state, coupler.const, coupler.surface_layer)
-
-    # run cumulus parameterization
-    state = coupler.clouds.run(state, coupler.const)
-
-    # run mixed-layer model
-    state = coupler.mixed_layer.run(state, coupler.const)
-
-    # time integrate land surface model
-    state = coupler.land_surface.integrate(state, dt)
-
-    # time integrate mixed-layer model
-    state = coupler.mixed_layer.integrate(state, dt)
-
-    # compute diagnostics
+    state = coupler.land.run(state, coupler.const)
+    state = coupler.atmosphere.run(state, coupler.const)
+    state = coupler.land.integrate(state, dt)
+    state = coupler.atmosphere.integrate(state, dt)
     state = coupler.compute_diagnostics(state)
-
     return state
 
 
 def integrate(state: PyTree, coupler: ABCoupler, dt: float, runtime: float):
     """Integrate the coupler forward in time.
-    
+
     Args:
         state: Initial coupled state.
         coupler: ABCoupler instance.
         dt: Time step [s].
         runtime: Total runtime [s].
-    
+
     Returns:
         times: Array of time values [h].
         trajectory: PyTree containing the full state trajectory.

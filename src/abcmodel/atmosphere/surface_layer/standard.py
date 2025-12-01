@@ -4,8 +4,8 @@ import jax
 import jax.numpy as jnp
 from jaxtyping import Array, PyTree
 
+from ...utils import PhysicalConstants, compute_qsat
 from ..abstracts import AbstractSurfaceLayerModel
-from ..utils import PhysicalConstants, compute_qsat
 
 
 @dataclass

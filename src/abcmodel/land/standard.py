@@ -4,7 +4,7 @@ from dataclasses import dataclass
 import jax.numpy as jnp
 from jaxtyping import Array, PyTree
 
-from ..abstracts import AbstractLandSurfaceModel, AbstractSurfaceLayerModel
+from ..abstracts import AbstractLandModel
 from ..utils import PhysicalConstants, compute_esat, compute_qsat
 
 
@@ -58,7 +58,7 @@ class StandardLandSurfaceInitConds:
     """Aerodynamic resistance [s m-1]."""
 
 
-class AbstractStandardLandSurfaceModel(AbstractLandSurfaceModel):
+class AbstractStandardLandSurfaceModel(AbstractLandModel):
     """Abstract standard land surface model with comprehensive soil-vegetation dynamics.
 
     Args:
@@ -143,19 +143,20 @@ class AbstractStandardLandSurfaceModel(AbstractLandSurfaceModel):
         self,
         state: PyTree,
         const: PhysicalConstants,
-        surface_layer: AbstractSurfaceLayerModel,
     ):
         """Run the full land surface model for one time step.
 
         Args:
             state: the state object carrying all variables.
             const: the physical constants object.
-            surface_layer: the surface layer model.
 
         Returns:
             The updated state object.
         """
-        state.ra = surface_layer.compute_ra(state)
+        # compute aerodynamic resistance from state
+        ueff = jnp.sqrt(state.u**2.0 + state.v**2.0 + state.wstar**2.0)
+        state.ra = ueff / jnp.maximum(1.0e-3, state.ustar) ** 2.0
+        
         state.esat = compute_esat(state.theta)
         state.qsat = compute_qsat(state.theta, state.surf_pressure)
         state.dqsatdT = self.compute_dqsatdT(state)

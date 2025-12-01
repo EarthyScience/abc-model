@@ -3,7 +3,7 @@ from dataclasses import dataclass
 import jax.numpy as jnp
 from jaxtyping import Array, PyTree
 
-from ..utils import PhysicalConstants
+from ...utils import PhysicalConstants
 from .stats import AbstractStandardStatsModel
 
 # conversion factor mgC m-2 s-1 to ppm m s-1

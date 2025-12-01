@@ -4,7 +4,7 @@ import jax.numpy as jnp
 from jaxtyping import Array, PyTree
 
 from ..abstracts import AbstractSurfaceLayerModel
-from ..utils import PhysicalConstants
+from ...utils import PhysicalConstants
 
 
 @dataclass

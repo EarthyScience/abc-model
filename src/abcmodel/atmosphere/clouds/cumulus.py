@@ -4,7 +4,7 @@ import jax.numpy as jnp
 from jaxtyping import Array, PyTree
 
 from ..abstracts import AbstractCloudModel
-from ..utils import PhysicalConstants, compute_qsat
+from ...utils import PhysicalConstants, compute_qsat
 
 
 @dataclass
@@ -120,9 +120,7 @@ class StandardCumulusModel(AbstractCloudModel):
         return cc_frac * wstar
 
     @staticmethod
-    def compute_cloud_core_moisture_flux(
-        cc_mf: Array, q2_h: Array
-    ) -> Array:
+    def compute_cloud_core_moisture_flux(cc_mf: Array, q2_h: Array) -> Array:
         """Compute cloud core moisture flux.
 
         Notes:

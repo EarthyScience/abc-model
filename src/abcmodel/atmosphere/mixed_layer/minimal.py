@@ -3,7 +3,7 @@ from dataclasses import dataclass
 import jax.numpy as jnp
 from jaxtyping import PyTree
 
-from ..utils import PhysicalConstants
+from ...utils import PhysicalConstants
 from .stats import AbstractStandardStatsModel
 
 

@@ -2,7 +2,7 @@
 
 from abc import abstractmethod
 
-from jaxtyping import Array, PyTree
+from jaxtyping import PyTree
 
 from .utils import PhysicalConstants
 
@@ -22,8 +22,8 @@ class AbstractRadiationModel(AbstractModel):
         raise NotImplementedError
 
 
-class AbstractLandSurfaceModel(AbstractModel):
-    """Abstract land surface model class to define the interface for all land surface models."""
+class AbstractLandModel(AbstractModel):
+    """Abstract land model class to define the interface for all land models."""
 
     # limamau: this could be better coded...
     d1: float
@@ -33,7 +33,6 @@ class AbstractLandSurfaceModel(AbstractModel):
         self,
         state: PyTree,
         const: PhysicalConstants,
-        surface_layer: "AbstractSurfaceLayerModel",
     ) -> PyTree:
         raise NotImplementedError
 
@@ -42,24 +41,15 @@ class AbstractLandSurfaceModel(AbstractModel):
         raise NotImplementedError
 
 
-class AbstractSurfaceLayerModel(AbstractModel):
-    """Abstract surface layer model class to define the interface for all surface layer models."""
+class AbstractAtmosphereModel(AbstractModel):
+    """Abstract atmosphere model class to define the interface for all atmosphere models."""
 
     @abstractmethod
-    def run(self, state: PyTree, const: PhysicalConstants) -> PyTree:
-        raise NotImplementedError
-
-    @staticmethod
-    @abstractmethod
-    def compute_ra(state: PyTree) -> Array:
-        raise NotImplementedError
-
-
-class AbstractMixedLayerModel(AbstractModel):
-    """Abstract mixed layer model class to define the interface for all mixed layer models."""
-
-    @abstractmethod
-    def run(self, state: PyTree, const: PhysicalConstants) -> PyTree:
+    def run(
+        self,
+        state: PyTree,
+        const: PhysicalConstants,
+    ) -> PyTree:
         raise NotImplementedError
 
     @abstractmethod
@@ -68,12 +58,4 @@ class AbstractMixedLayerModel(AbstractModel):
 
     @abstractmethod
     def integrate(self, state: PyTree, dt: float) -> PyTree:
-        raise NotImplementedError
-
-
-class AbstractCloudModel(AbstractModel):
-    """Abstract cloud model class to define the interface for all cloud models."""
-
-    @abstractmethod
-    def run(self, state: PyTree, const: PhysicalConstants) -> PyTree:
         raise NotImplementedError
