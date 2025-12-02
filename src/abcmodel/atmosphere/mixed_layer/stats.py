@@ -69,8 +69,8 @@ class AbstractStandardStatsModel(AbstractMixedLayerModel):
                 T_{top} = \\theta - \\frac{g}{c_p} h
         """
         # mixed-layer top properties
-        state.top_p = state.surf_pressure - const.rho * const.g * state.abl_height
-        state.top_T = state.theta - const.g / const.cp * state.abl_height
+        state.top_p = state.surf_pressure - const.rho * const.g * state.h_abl
+        state.top_T = state.theta - const.g / const.cp * state.h_abl
         state.top_rh = state.q / compute_qsat(state.top_T, state.top_p)
         return state
 
@@ -84,7 +84,7 @@ class AbstractStandardStatsModel(AbstractMixedLayerModel):
         """
         # find lifting condensation level iteratively using JAX
         # initialize lcl and rhlcl based on timestep
-        initial_lcl = jnp.where(t == 0, state.abl_height, state.lcl)
+        initial_lcl = jnp.where(t == 0, state.h_abl, state.lcl)
         initial_rhlcl = jnp.where(t == 0, 0.5, 0.9998)
 
         def lcl_iteration_body(carry):

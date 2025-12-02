@@ -27,8 +27,8 @@ def main():
     )
 
     # surface layer
-    surface_layer_init_conds = abcmodel.atmosphere.surface_layer.MinimalSurfaceLayerInitConds(
-        ustar=0.3
+    surface_layer_init_conds = (
+        abcmodel.atmosphere.surface_layer.MinimalSurfaceLayerInitConds(ustar=0.3)
     )
     surface_layer_model = abcmodel.atmosphere.surface_layer.MinimalSurfaceLayerModel()
 
@@ -73,7 +73,7 @@ def main():
     plt.figure(figsize=(12, 8))
 
     plt.subplot(231)
-    plt.plot(time, trajectory.abl_height)
+    plt.plot(time, trajectory.h_abl)
     plt.xlabel("time [h]")
     plt.ylabel("h [m]")
 

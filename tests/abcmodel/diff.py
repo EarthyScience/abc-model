@@ -24,8 +24,10 @@ def run_model(theta0: float) -> float:
         **cm.jarvis_stewart.model_kwargs
     )
 
-    surface_layer_init_conds = abcmodel.atmosphere.surface_layer.StandardSurfaceLayerInitConds(
-        **cm.standard_surface_layer.init_conds_kwargs
+    surface_layer_init_conds = (
+        abcmodel.atmosphere.surface_layer.StandardSurfaceLayerInitConds(
+            **cm.standard_surface_layer.init_conds_kwargs
+        )
     )
     surface_layer_model = abcmodel.atmosphere.surface_layer.StandardSurfaceLayerModel()
 
@@ -63,7 +65,7 @@ def run_model(theta0: float) -> float:
     _, trajectory = abcmodel.integrate(state, abcoupler, dt=dt, runtime=runtime)
 
     # return final boundary layer height as scalar
-    return trajectory.abl_height[-1]
+    return trajectory.h_abl[-1]
 
 
 def main():

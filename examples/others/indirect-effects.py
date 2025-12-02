@@ -89,7 +89,7 @@ def make_fancy_plot(
     # mixed layer
     axes[0, 0].plot(
         time[::factor],
-        traj.abl_height[::factor],
+        traj.h_abl[::factor],
         color=color,
         marker=marker,
         linestyle="None",

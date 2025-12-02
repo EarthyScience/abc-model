@@ -55,7 +55,7 @@ std_sl_init_conds_kwargs = {
 
 # mixed layer #
 bulk_ml_init_conds_kwargs = {
-    "abl_height": 200.0,
+    "h_abl": 200.0,
     "theta": 288.0,
     "dtheta": 1.0,
     "wtheta": 0.1,

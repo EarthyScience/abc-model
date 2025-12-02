@@ -12,7 +12,7 @@ class MinimalMixedLayerInitConds:
     """Minimal mixed layer model initial state."""
 
     # the following variables are expected to be initialized by the user
-    abl_height: float
+    h_abl: float
     """Initial ABL height [m]."""
     surf_pressure: float
     """Surface pressure [Pa]."""

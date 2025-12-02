@@ -78,7 +78,7 @@ class ABCoupler:
             - canopy moisture: :math:`w_l \\rho_w`.
         """
         # total water mass (kg/m²)
-        vap_w = state.q * self.const.rho * state.abl_height
+        vap_w = state.q * self.const.rho * state.h_abl
         s1_w = state.wg * self.const.rhow * self.land.d1
         can_w = state.wl * self.const.rhow
         state.total_water_mass = vap_w + s1_w + can_w

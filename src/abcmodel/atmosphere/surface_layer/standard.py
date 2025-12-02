@@ -95,7 +95,7 @@ class StandardSurfaceLayerModel(AbstractSurfaceLayerModel):
         )
 
         # this should be a method
-        zsl = 0.1 * state.abl_height
+        zsl = 0.1 * state.h_abl
         state.rib_number = compute_richardson_number(
             ueff, zsl, const.g, state.thetav, state.thetavsurf
         )

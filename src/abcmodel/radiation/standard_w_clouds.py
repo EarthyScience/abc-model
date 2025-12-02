@@ -73,7 +73,7 @@ class StandardRadiationwCloudsModel(StandardRadiationModel):
         # atmospheric properties
         air_temp = self.compute_air_temperature(
             state.surf_pressure,
-            state.abl_height,
+            state.h_abl,
             state.theta,
             const,
         )
@@ -88,7 +88,7 @@ class StandardRadiationwCloudsModel(StandardRadiationModel):
             state.in_srad,
             state.out_srad,
             state.in_lrad,
-            state.out_lrad, 
+            state.out_lrad,
         ) = self.compute_radiation_components(
             solar_elevation,
             atmospheric_transmission,

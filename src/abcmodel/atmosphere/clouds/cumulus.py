@@ -52,13 +52,13 @@ class StandardCumulusModel(AbstractCloudModel):
             state.wthetav,
             state.wqe,
             state.dq,
-            state.abl_height,
+            state.h_abl,
             state.dz_h,
             state.wstar,
         )
         state.top_CO22 = self.compute_top_CO22(
             state.wthetav,
-            state.abl_height,
+            state.h_abl,
             state.dz_h,
             state.wstar,
             state.wCO2e,
@@ -81,7 +81,7 @@ class StandardCumulusModel(AbstractCloudModel):
         wthetav: Array,
         wqe: Array,
         dq: Array,
-        abl_height: Array,
+        h_abl: Array,
         dz_h: Array,
         wstar: Array,
     ) -> Array:
@@ -94,13 +94,13 @@ class StandardCumulusModel(AbstractCloudModel):
                 \\sigma_{q,h}^2 = -\\frac{(\\overline{w'q'}_e + \\overline{w'q'}_{cc}) \\Delta q h}{\\delta z_h w_*}
         """
         return jnp.where(
-            wthetav > 0.0, -(wqe + cc_qf) * dq * abl_height / (dz_h * wstar), 0.0
+            wthetav > 0.0, -(wqe + cc_qf) * dq * h_abl / (dz_h * wstar), 0.0
         )
 
     @staticmethod
     def compute_top_CO22(
         wthetav: Array,
-        abl_height: Array,
+        h_abl: Array,
         dz_h: Array,
         wstar: Array,
         wCO2e: Array,
@@ -116,7 +116,7 @@ class StandardCumulusModel(AbstractCloudModel):
                 \\sigma_{CO2,h}^2 = -\\frac{(\\overline{w'CO_2'}_e + \\overline{w'CO_2'}_{M}) \\Delta CO_2 h}{\\delta z_h w_*}
         """
         return jnp.where(
-            wthetav > 0.0, -(wCO2e + wCO2M) * dCO2 * abl_height / (dz_h * wstar), 0.0
+            wthetav > 0.0, -(wCO2e + wCO2M) * dCO2 * h_abl / (dz_h * wstar), 0.0
         )
 
     @staticmethod

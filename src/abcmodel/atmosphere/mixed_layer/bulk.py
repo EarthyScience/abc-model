@@ -17,7 +17,7 @@ class BulkMixedLayerInitConds:
     """Data class for bulk mixed layer model initial state."""
 
     # initialized by the user
-    abl_height: float
+    h_abl: float
     """Initial ABL height [m]."""
     theta: float
     """Initial mixed-layer potential temperature [K]."""
@@ -127,11 +127,6 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
     Complete mixed layer model that simulates atmospheric boundary layer evolution
     including entrainment, subsidence, cloud effects, and wind dynamics.
 
-    1. Calculate large-scale vertical motions and compensating effects.
-    2. Determine convective velocity scale and entrainment parameters.
-    3. Compute all tendency terms for mixed layer variables.
-    4. Integrate prognostic equations forward in time.
-
     Args:
         divU: horizontal large-scale divergence of wind [s-1].
         coriolis_param: Coriolis parameter [s-1].
@@ -192,21 +187,20 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
 
     def run(self, state: PyTree, const: PhysicalConstants):
         """Run the model."""
-        state.ws = self.compute_subsidence_velocity(state.abl_height)
+        state.ws = self.compute_subsidence_velocity(state.h_abl)
         state.wf = self.compute_radiative_growth_velocity(state.dtheta, const)
-
         w_th_ft = self.compute_free_troposphere_theta_compensation(state.ws)
         w_q_ft = self.compute_free_troposphere_q_compensation(state.ws)
         w_CO2_ft = self.compute_free_troposphere_co2_compensation(state.ws)
         state.wstar = self.compute_convective_velocity_scale(
-            state.abl_height,
+            state.h_abl,
             state.wthetav,
             state.thetav,
             const.g,
         )
         state.wthetave = self.compute_entrainment_virtual_heat_flux(state.wthetav)
         state.we = self.compute_entrainment_velocity(
-            state.abl_height,
+            state.h_abl,
             state.wthetave,
             state.dthetav,
             state.thetav,
@@ -216,32 +210,32 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
         state.wthetae = self.compute_entrainment_heat_flux(state.we, state.dtheta)
         state.wqe = self.compute_entrainment_moisture_flux(state.we, state.dq)
         state.wCO2e = self.compute_entrainment_co2_flux(state.we, state.dCO2)
-        state.htend = self.compute_abl_height_tendency(
+        state.htend = self.compute_h_abl_tendency(
             state.we, state.ws, state.wf, state.cc_mf
         )
         state.thetatend = self.compute_potential_temperature_tendency(
-            state.abl_height, state.wtheta, state.wthetae
+            state.h_abl, state.wtheta, state.wthetae
         )
         state.dthetatend = self.compute_potential_temperature_jump_tendency(
             state.we, state.wf, state.cc_mf, state.thetatend, w_th_ft
         )
         state.qtend = self.compute_humidity_tendency(
-            state.abl_height, state.wq, state.wqe, state.cc_qf
+            state.h_abl, state.wq, state.wqe, state.cc_qf
         )
         state.dqtend = self.compute_humidity_jump_tendency(
             state.we, state.wf, state.cc_mf, state.qtend, w_q_ft
         )
         state.co2tend = self.compute_co2_tendency(
-            state.abl_height, state.wCO2, state.wCO2e, state.wCO2M
+            state.h_abl, state.wCO2, state.wCO2e, state.wCO2M
         )
         state.dCO2tend = self.compute_co2_jump_tendency(
             state.we, state.wf, state.cc_mf, state.co2tend, w_CO2_ft
         )
         state.utend = self.compute_u_wind_tendency(
-            state.abl_height, state.we, state.uw, state.du, state.dv
+            state.h_abl, state.we, state.uw, state.du, state.dv
         )
         state.vtend = self.compute_v_wind_tendency(
-            state.abl_height, state.we, state.vw, state.du, state.dv
+            state.h_abl, state.we, state.vw, state.du, state.dv
         )
         state.dutend = self.compute_u_wind_jump_tendency(
             state.we, state.wf, state.cc_mf, state.utend
@@ -251,16 +245,15 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
         )
         state.dztend = self.compute_transition_layer_tendency(
             state.lcl,
-            state.abl_height,
+            state.h_abl,
             state.cc_frac,
             state.dz_h,
         )
-
         return state
 
     def integrate(self, state: PyTree, dt: float) -> PyTree:
         """Integrate mixed layer forward in time."""
-        state.abl_height += dt * state.htend
+        state.h_abl += dt * state.htend
         state.theta += dt * state.thetatend
         state.dtheta += dt * state.dthetatend
         state.q += dt * state.qtend
@@ -279,7 +272,7 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
 
         return state
 
-    def compute_subsidence_velocity(self, abl_height: Array) -> Array:
+    def compute_subsidence_velocity(self, h_abl: Array) -> Array:
         """Compute large-scale subsidence velocity.
 
         Notes:
@@ -290,7 +283,7 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
 
             where :math:`\\text{div}U` is the horizontal large-scale divergence of wind and :math:`h` is the ABL height.
         """
-        return -self.divU * abl_height
+        return -self.divU * h_abl
 
     def compute_radiative_growth_velocity(
         self, dtheta: Array, const: PhysicalConstants
@@ -341,7 +334,7 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
 
     def compute_convective_velocity_scale(
         self,
-        abl_height: Array,
+        h_abl: Array,
         wthetav: Array,
         thetav: Array,
         g: float,
@@ -355,7 +348,7 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
                 w_* = \\left( \\frac{g h \\overline{w'\\theta_v'}_s}{\\theta_v} \\right)^{1/3}
         """
         # calculate wstar for positive wthetav case
-        buoyancy_term = g * abl_height * wthetav / thetav
+        buoyancy_term = g * h_abl * wthetav / thetav
         wstar_positive = buoyancy_term ** (1.0 / 3.0)
         return jnp.where(wthetav > 0.0, wstar_positive, 1e-6)
 
@@ -372,7 +365,7 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
 
     def compute_entrainment_velocity(
         self,
-        abl_height: Array,
+        h_abl: Array,
         wthetave: Array,
         dthetav: Array,
         thetav: Array,
@@ -393,7 +386,7 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
                 w_e = \\frac{-\\overline{w'\\theta_v'}_e + 5 u_*^3 \\theta_v / (g h)}{\\Delta \\theta_v}
         """
         # entrainment velocity with shear effects
-        shear_term = 5.0 * ustar**3.0 * thetav / (g * abl_height)
+        shear_term = 5.0 * ustar**3.0 * thetav / (g * h_abl)
         numerator = -wthetave + shear_term
         we_with_shear = numerator / dthetav
 
@@ -440,9 +433,7 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
         return -we * dCO2
 
     @staticmethod
-    def compute_abl_height_tendency(
-        we: Array, ws: Array, wf: Array, cc_mf: Array
-    ) -> Array:
+    def compute_h_abl_tendency(we: Array, ws: Array, wf: Array, cc_mf: Array) -> Array:
         """Compute boundary layer height tendency.
 
         Notes:
@@ -452,7 +443,7 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
         return we + ws + wf - cc_mf
 
     def compute_potential_temperature_tendency(
-        self, abl_height: Array, wtheta: Array, wthetae: Array
+        self, h_abl: Array, wtheta: Array, wthetae: Array
     ) -> Array:
         """Compute mixed-layer potential temperature tendency.
 
@@ -460,7 +451,7 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
             .. math::
                 \\frac{d\\theta}{dt} = \\frac{\\overline{w'\\theta'}_s - \\overline{w'\\theta'}_e}{h} + \\text{adv}_\\theta
         """
-        surface_heat_flux = (wtheta - wthetae) / abl_height
+        surface_heat_flux = (wtheta - wthetae) / h_abl
         return surface_heat_flux + self.advtheta
 
     def compute_potential_temperature_jump_tendency(
@@ -481,7 +472,7 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
         return self.gammatheta * egrowth - thetatend + w_th_ft
 
     def compute_humidity_tendency(
-        self, abl_height: Array, wq: Array, wqe: Array, cc_qf: Array
+        self, h_abl: Array, wq: Array, wqe: Array, cc_qf: Array
     ) -> Array:
         """Compute mixed-layer specific humidity tendency.
 
@@ -489,7 +480,7 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
             .. math::
                 \\frac{dq}{dt} = \\frac{\\overline{w'q'}_s - \\overline{w'q'}_e - \\text{cc}_{qf}}{h} + \\text{adv}_q
         """
-        surface_moisture_flux = (wq - wqe - cc_qf) / abl_height
+        surface_moisture_flux = (wq - wqe - cc_qf) / h_abl
         return surface_moisture_flux + self.advq
 
     def compute_humidity_jump_tendency(
@@ -511,7 +502,7 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
 
     def compute_co2_tendency(
         self,
-        abl_height: Array,
+        h_abl: Array,
         wCO2: Array,
         wCO2e: Array,
         wCO2M: Array,
@@ -522,7 +513,7 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
             .. math::
                 \\frac{dCO_2}{dt} = \\frac{\\overline{w'CO_2'}_s - \\overline{w'CO_2'}_e - \\text{cc}_{CO2f}}{h} + \\text{adv}_{CO2}
         """
-        surface_co2_flux_term = (wCO2 - wCO2e - wCO2M) / abl_height
+        surface_co2_flux_term = (wCO2 - wCO2e - wCO2M) / h_abl
         return surface_co2_flux_term + self.advCO2
 
     def compute_co2_jump_tendency(
@@ -544,7 +535,7 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
 
     def compute_u_wind_tendency(
         self,
-        abl_height: Array,
+        h_abl: Array,
         we: Array,
         uw: Array,
         du: Array,
@@ -557,13 +548,13 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
                 \\frac{du}{dt} = -f_c \\Delta v + \\frac{\\overline{u'w'}_s + w_e \\Delta u}{h} + \\text{adv}_u
         """
         coriolis_term_u = -self.coriolis_param * dv
-        momentum_flux_term_u = (uw + we * du) / abl_height
+        momentum_flux_term_u = (uw + we * du) / h_abl
         utend_active = coriolis_term_u + momentum_flux_term_u + self.advu
         return jnp.where(self.is_wind_prog, utend_active, 0.0)
 
     def compute_v_wind_tendency(
         self,
-        abl_height: Array,
+        h_abl: Array,
         we: Array,
         vw: Array,
         du: Array,
@@ -576,7 +567,7 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
                 \\frac{dv}{dt} = f_c \\Delta u + \\frac{\\overline{v'w'}_s + w_e \\Delta v}{h} + \\text{adv}_v
         """
         coriolis_term_v = self.coriolis_param * du
-        momentum_flux_term_v = (vw + we * dv) / abl_height
+        momentum_flux_term_v = (vw + we * dv) / h_abl
         vtend_active = coriolis_term_v + momentum_flux_term_v + self.advv
         return jnp.where(self.is_wind_prog, vtend_active, 0.0)
 
@@ -617,7 +608,7 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
     def compute_transition_layer_tendency(
         self,
         lcl: Array,
-        abl_height: Array,
+        h_abl: Array,
         cc_frac: Array,
         dz_h: Array,
     ):
@@ -631,7 +622,7 @@ class BulkMixedLayerModel(AbstractStandardStatsModel):
 
             where :math:`\\tau = 7200` s.
         """
-        lcl_distance = lcl - abl_height
+        lcl_distance = lcl - h_abl
 
         # tendency for active case
         target_thickness = lcl_distance - dz_h

@@ -75,7 +75,7 @@ def main():
     plt.figure(figsize=(12, 8))
 
     plt.subplot(231)
-    plt.plot(time, trajectory.abl_height)
+    plt.plot(time, trajectory.h_abl)
     plt.xlabel("time [h]")
     plt.ylabel("h [m]")
 

@@ -81,7 +81,7 @@ def main():
     axes[0].set_xlabel("time [h]")
     axes[0].set_ylabel("Total water mass [kg m-2]")
     axes[0].grid(True, alpha=0.3)
-    axes[1].plot(time, trajectory.q * trajectory.abl_height * const.rho, label="Vapor")
+    axes[1].plot(time, trajectory.q * trajectory.h_abl * const.rho, label="Vapor")
     axes[1].plot(time, trajectory.wg * const.rhow * 0.1, label="Soil layer 1")
     axes[1].plot(time, trajectory.wl * const.rhow, label="Canopy")
     axes[1].set_xlabel("time [h]")
