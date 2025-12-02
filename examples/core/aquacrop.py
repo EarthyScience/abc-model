@@ -27,8 +27,10 @@ def main():
     )
 
     # surface layer
-    surface_layer_init_conds = abcmodel.atmosphere.surface_layer.StandardSurfaceLayerInitConds(
-        **cm.standard_surface_layer.init_conds_kwargs
+    surface_layer_init_conds = (
+        abcmodel.atmosphere.surface_layer.StandardSurfaceLayerInitConds(
+            **cm.standard_surface_layer.init_conds_kwargs
+        )
     )
     surface_layer_model = abcmodel.atmosphere.surface_layer.StandardSurfaceLayerModel()
 
@@ -44,7 +46,6 @@ def main():
     cloud_init_conds = abcmodel.atmosphere.clouds.StandardCumulusInitConds()
     cloud_model = abcmodel.atmosphere.clouds.StandardCumulusModel()
 
-    # define coupler and coupled state
     # define atmosphere model
     atmosphere_model = abcmodel.atmosphere.DayOnlyAtmosphereModel(
         surface_layer=surface_layer_model,

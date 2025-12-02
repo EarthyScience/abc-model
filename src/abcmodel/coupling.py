@@ -1,6 +1,5 @@
 from dataclasses import asdict
 from types import SimpleNamespace
-from typing import Any
 
 import jax
 
@@ -52,19 +51,10 @@ class ABCoupler:
         self.atmosphere = atmosphere
 
     @staticmethod
-    def init_state(
-        radiation_init_conds: Any,
-        land_surface_init_conds: Any,
-        surface_layer_init_conds: Any,
-        mixed_layer_init_conds: Any,
-        clouds_init_conds: Any,
-    ):
+    def init_state(*args):
         state_dict = {}
-        state_dict.update(asdict(radiation_init_conds))
-        state_dict.update(asdict(land_surface_init_conds))
-        state_dict.update(asdict(surface_layer_init_conds))
-        state_dict.update(asdict(mixed_layer_init_conds))
-        state_dict.update(asdict(clouds_init_conds))
+        for arg in args:
+            state_dict.update(asdict(arg))
 
         # diagnostic variables for water and energy budgets
         state_dict["total_water_mass"] = 0.0
