@@ -80,8 +80,6 @@ class StandardSurfaceLayerModel(AbstractSurfaceLayerModel):
             The updated state.
         """
         ueff = compute_effective_wind_speed(state.u, state.v, state.wstar)
-
-        # limamau: this can be broken down into three different methods
         (
             state.thetasurf,
             state.qsurf,
@@ -101,17 +99,13 @@ class StandardSurfaceLayerModel(AbstractSurfaceLayerModel):
         state.rib_number = compute_richardson_number(
             ueff, zsl, const.g, state.thetav, state.thetavsurf
         )
-
         state.obukhov_length = ribtol(zsl, state.rib_number, state.z0h, state.z0m)
-
         state.drag_m, state.drag_s = compute_drag_coefficients(
             zsl, const.k, state.obukhov_length, state.z0h, state.z0m
         )
-
         state.ustar, state.uw, state.vw = compute_momentum_fluxes(
             ueff, state.u, state.v, state.drag_m
         )
-
         (
             state.temp_2m,
             state.q2m,
@@ -133,7 +127,6 @@ class StandardSurfaceLayerModel(AbstractSurfaceLayerModel):
             state.uw,
             state.vw,
         )
-
         return state
 
     @staticmethod
