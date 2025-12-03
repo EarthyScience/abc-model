@@ -1,20 +1,22 @@
 from dataclasses import dataclass
 
 import jax
-from jaxtyping import Array, PyTree
 
 from ..abstracts import AbstractCoupledState
 from ..utils import PhysicalConstants
-from .standard import StandardRadiationState, StandardRadiationModel
+from .standard import StandardRadiationModel, StandardRadiationState
+
+Array = jax.Array
 
 
 @jax.tree_util.register_pytree_node_class
 @dataclass
 class StandardRadiationwCloudsState(StandardRadiationState):
     """Standard radiation model with clouds state."""
+
     pass
 
-# Alias for backward compatibility
+
 StandardRadiationwCloudsInitConds = StandardRadiationwCloudsState
 
 
@@ -62,25 +64,15 @@ class StandardRadiationwCloudsModel(StandardRadiationModel):
         Returns:
             The updated radiation state object.
         """
-        # Access components
+        # needed components
         rad_state = state.radiation
         ml_state = state.atmosphere.mixed_layer
         land_state = state.land
-        # Cloud transmittance is in clouds state?
-        # `cl_trans` was accessed as `state.cl_trans`.
-        # Where is `cl_trans`?
-        # In `StandardCumulusState`, there is `cl_trans`.
-        # So we need `state.atmosphere.clouds.cl_trans`.
-        # But `NoCloudModel` might not have it?
-        # `NoCloudModel` has `cl_trans`?
-        # Let's assume `state.atmosphere.clouds` has it.
         cloud_state = state.atmosphere.clouds
 
-        # solar position
+        # computations
         solar_declination = self.compute_solar_declination(self.doy)
         solar_elevation = self.compute_solar_elevation(t, dt, solar_declination)
-
-        # atmospheric properties
         air_temp = self.compute_air_temperature(
             ml_state.surf_pressure,
             ml_state.h_abl,
@@ -91,8 +83,6 @@ class StandardRadiationwCloudsModel(StandardRadiationModel):
             solar_elevation,
             cloud_state.cl_trans,
         )
-
-        # all radiation components
         (
             rad_state.net_rad,
             rad_state.in_srad,

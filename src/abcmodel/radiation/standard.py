@@ -2,10 +2,13 @@ from dataclasses import dataclass
 
 import jax
 import jax.numpy as jnp
-from jaxtyping import Array, PyTree
 
-from ..abstracts import AbstractCoupledState, AbstractRadiationModel, AbstractRadiationState
-from ..utils import PhysicalConstants
+from ..abstracts import (
+    AbstractCoupledState,
+    AbstractRadiationModel,
+    AbstractRadiationState,
+)
+from ..utils import Array, PhysicalConstants, nan_as_array
 
 
 @jax.tree_util.register_pytree_node_class
@@ -13,29 +16,36 @@ from ..utils import PhysicalConstants
 class StandardRadiationState(AbstractRadiationState):
     """Standard radiation model state."""
 
-    net_rad: float
+    net_rad: Array
     """Net surface radiation [W m-2]."""
-    in_srad: float = jnp.nan
+    in_srad: Array = nan_as_array
     """Incoming solar radiation [W m-2]."""
-    out_srad: float = jnp.nan
+    out_srad: Array = nan_as_array
     """Outgoing solar radiation [W m-2]."""
-    in_lrad: float = jnp.nan
+    in_lrad: Array = nan_as_array
     """Incoming longwave radiation [W m-2]."""
-    out_lrad: float = jnp.nan
+    out_lrad: Array = nan_as_array
     """Outgoing longwave radiation [W m-2]."""
 
     def tree_flatten(self):
-        return (self.net_rad, self.in_srad, self.out_srad, self.in_lrad, self.out_lrad), None
+        return (
+            self.net_rad,
+            self.in_srad,
+            self.out_srad,
+            self.in_lrad,
+            self.out_lrad,
+        ), None
 
     @classmethod
     def tree_unflatten(cls, aux, children):
         return cls(*children)
 
-# Alias for backward compatibility
+
+# alias
 StandardRadiationInitConds = StandardRadiationState
 
 
-class StandardRadiationModel(AbstractRadiationModel):
+class StandardRadiationModel(AbstractRadiationModel[StandardRadiationState]):
     """Standard radiation model with solar position and atmospheric effects.
 
     Calculates time-varying solar radiation based on geographic location and
@@ -82,16 +92,14 @@ class StandardRadiationModel(AbstractRadiationModel):
         Returns:
             The updated radiation state object.
         """
-        # Access components
+        # needed components
         rad_state = state.radiation
         ml_state = state.atmosphere.mixed_layer
         land_state = state.land
 
-        # solar position
+        # computations
         solar_declination = self.compute_solar_declination(self.doy)
         solar_elevation = self.compute_solar_elevation(t, dt, solar_declination)
-
-        # atmospheric properties
         air_temp = self.compute_air_temperature(
             ml_state.surf_pressure,
             ml_state.h_abl,
@@ -101,8 +109,6 @@ class StandardRadiationModel(AbstractRadiationModel):
         atmospheric_transmission = self.compute_atmospheric_transmission(
             solar_elevation
         )
-
-        # all radiation components
         (
             rad_state.net_rad,
             rad_state.in_srad,
@@ -117,7 +123,6 @@ class StandardRadiationModel(AbstractRadiationModel):
             land_state.surf_temp,
             const,
         )
-
         return rad_state
 
     def compute_solar_declination(self, doy: float) -> Array:

@@ -2,10 +2,9 @@ from dataclasses import dataclass
 
 import jax
 import jax.numpy as jnp
-from jaxtyping import Array, PyTree
 
 from ...abstracts import AbstractCoupledState
-from ...utils import PhysicalConstants
+from ...utils import Array, PhysicalConstants
 from ..abstracts import AbstractMixedLayerModel, AbstractMixedLayerState
 from .stats import AbstractStandardStatsModel
 
@@ -126,19 +125,61 @@ class BulkMixedLayerState(AbstractMixedLayerState):
 
     def tree_flatten(self):
         return (
-            self.h_abl, self.theta, self.deltatheta, self.wtheta, self.q, self.dq, self.wq,
-            self.co2, self.deltaCO2, self.wCO2, self.u, self.du, self.v, self.dv, self.dz_h, self.surf_pressure,
-            self.wstar, self.we, self.wCO2A, self.wCO2R, self.wCO2M,
-            self.thetav, self.deltathetav, self.wthetav, self.wqe, self.qsat, self.e, self.esat,
-            self.wCO2e, self.wthetae, self.wthetave, self.lcl, self.top_rh, self.top_p, self.top_T,
-            self.utend, self.dutend, self.vtend, self.dvtend, self.h_abl_tend,
-            self.thetatend, self.deltathetatend, self.qtend, self.dqtend, self.co2tend, self.deltaCO2tend,
-            self.dztend, self.ws, self.wf
+            self.h_abl,
+            self.theta,
+            self.deltatheta,
+            self.wtheta,
+            self.q,
+            self.dq,
+            self.wq,
+            self.co2,
+            self.deltaCO2,
+            self.wCO2,
+            self.u,
+            self.du,
+            self.v,
+            self.dv,
+            self.dz_h,
+            self.surf_pressure,
+            self.wstar,
+            self.we,
+            self.wCO2A,
+            self.wCO2R,
+            self.wCO2M,
+            self.thetav,
+            self.deltathetav,
+            self.wthetav,
+            self.wqe,
+            self.qsat,
+            self.e,
+            self.esat,
+            self.wCO2e,
+            self.wthetae,
+            self.wthetave,
+            self.lcl,
+            self.top_rh,
+            self.top_p,
+            self.top_T,
+            self.utend,
+            self.dutend,
+            self.vtend,
+            self.dvtend,
+            self.h_abl_tend,
+            self.thetatend,
+            self.deltathetatend,
+            self.qtend,
+            self.dqtend,
+            self.co2tend,
+            self.deltaCO2tend,
+            self.dztend,
+            self.ws,
+            self.wf,
         ), None
 
     @classmethod
     def tree_unflatten(cls, aux, children):
         return cls(*children)
+
 
 # Alias for backward compatibility
 BulkMixedLayerInitConds = BulkMixedLayerState
@@ -208,14 +249,16 @@ class BulkMixedLayerModel(AbstractStandardStatsModel, AbstractMixedLayerModel):
         self.is_fix_free_trop = is_fix_free_trop
         self.is_wind_prog = is_wind_prog
 
-    def run(self, state: AbstractCoupledState, const: PhysicalConstants) -> BulkMixedLayerState:
+    def run(
+        self, state: AbstractCoupledState, const: PhysicalConstants
+    ) -> BulkMixedLayerState:
         """Run the model."""
         # Access components
         ml_state = state.atmosphere.mixed_layer
         sl_state = state.atmosphere.surface_layer
         cloud_state = state.atmosphere.clouds
         land_state = state.land
-        
+
         # Read surface fluxes from land state if available
         # We check if land_state has wtheta, wq, wCO2
         # StandardLandSurfaceState has wtheta, wq.
@@ -232,16 +275,18 @@ class BulkMixedLayerModel(AbstractStandardStatsModel, AbstractMixedLayerModel):
         # So `wtheta` would be constant?
         # In `minimal.py` example, `wtheta` is initialized in `ml_state`.
         # So if `LandModel` doesn't update it, we use `ml_state.wtheta`.
-        
+
         # Check if land_state has wtheta and it is not NaN
         wtheta = ml_state.wtheta
         if hasattr(land_state, "wtheta"):
-            wtheta = jnp.where(jnp.isnan(land_state.wtheta), ml_state.wtheta, land_state.wtheta)
-            
+            wtheta = jnp.where(
+                jnp.isnan(land_state.wtheta), ml_state.wtheta, land_state.wtheta
+            )
+
         wq = ml_state.wq
         if hasattr(land_state, "wq"):
             wq = jnp.where(jnp.isnan(land_state.wq), ml_state.wq, land_state.wq)
-            
+
         wCO2 = ml_state.wCO2
         if hasattr(land_state, "wCO2"):
             wCO2 = jnp.where(jnp.isnan(land_state.wCO2), ml_state.wCO2, land_state.wCO2)
@@ -278,7 +323,9 @@ class BulkMixedLayerModel(AbstractStandardStatsModel, AbstractMixedLayerModel):
         ml_state.deltathetatend = self.compute_deltathetatend(
             ml_state.we, ml_state.wf, cloud_state.cc_mf, ml_state.thetatend, w_th_ft
         )
-        ml_state.qtend = self.compute_qtend(ml_state.h_abl, wq, ml_state.wqe, cloud_state.cc_qf)
+        ml_state.qtend = self.compute_qtend(
+            ml_state.h_abl, wq, ml_state.wqe, cloud_state.cc_qf
+        )
         ml_state.dqtend = self.compute_dqtend(
             ml_state.we, ml_state.wf, cloud_state.cc_mf, ml_state.qtend, w_q_ft
         )
@@ -294,8 +341,12 @@ class BulkMixedLayerModel(AbstractStandardStatsModel, AbstractMixedLayerModel):
         ml_state.vtend = self.compute_vtend(
             ml_state.h_abl, ml_state.we, sl_state.vw, ml_state.du, ml_state.dv
         )
-        ml_state.dutend = self.compute_dutend(ml_state.we, ml_state.wf, cloud_state.cc_mf, ml_state.utend)
-        ml_state.dvtend = self.compute_dvtend(ml_state.we, ml_state.wf, cloud_state.cc_mf, ml_state.vtend)
+        ml_state.dutend = self.compute_dutend(
+            ml_state.we, ml_state.wf, cloud_state.cc_mf, ml_state.utend
+        )
+        ml_state.dvtend = self.compute_dvtend(
+            ml_state.we, ml_state.wf, cloud_state.cc_mf, ml_state.vtend
+        )
         ml_state.dztend = self.compute_dztend(
             ml_state.lcl,
             ml_state.h_abl,
@@ -306,7 +357,7 @@ class BulkMixedLayerModel(AbstractStandardStatsModel, AbstractMixedLayerModel):
 
     def integrate(self, state: BulkMixedLayerState, dt: float) -> BulkMixedLayerState:
         """Integrate mixed layer forward in time.
-        
+
         Args:
             state: BulkMixedLayerState (component state, not CoupledState).
             dt: Time step.

@@ -1,7 +1,12 @@
 from dataclasses import dataclass
 
+import jax
 import jax.numpy as jnp
-from jaxtyping import Array
+
+Array = jax.Array
+zero_as_array = jnp.zeros((1,))
+one_as_array = jnp.ones((1,))
+nan_as_array = jnp.full_like(one_as_array, jnp.nan)
 
 
 def compute_esat(temp: Array) -> Array:
