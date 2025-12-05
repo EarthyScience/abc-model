@@ -1,3 +1,4 @@
+from dataclasses import replace
 import jax
 import jax.numpy as jnp
 from jaxtyping import Array, PyTree
@@ -15,15 +16,12 @@ class AbstractStandardStatsModel(AbstractMixedLayerModel):
     properties, and lifting condensation level determination.
     """
 
-    """Surface pressure, which is actually not updated (not a state), it's only here for simplicity [Pa]."""
-    surf_pressure: float
-
     def statistics(self, state: PyTree, t: int, const: PhysicalConstants):
         """Compute standard meteorological statistics and diagnostics."""
         state = self.compute_virtual_temperatures(state)
         state = self.compute_mixed_layer_top_properties(state, const)
-        state.lcl = self.compute_lcl(state, t, const)
-        return state
+        lcl = self.compute_lcl(state, t, const)
+        return replace(state, lcl=lcl)
 
     def compute_virtual_temperatures(self, state: PyTree) -> PyTree:
         """Compute virtual temperatures and fluxes.
@@ -45,12 +43,14 @@ class AbstractStandardStatsModel(AbstractMixedLayerModel):
                 \\Delta \\theta_v = (\\theta + \\Delta \\theta)(1 + 0.61(q + \\Delta q)) - \\theta(1 + 0.61q)
         """
         # calculate virtual temperatures
-        state.thetav = state.theta + 0.61 * state.theta * state.q
-        state.wthetav = state.wtheta + 0.61 * state.theta * state.wq
-        state.deltathetav = (state.theta + state.deltatheta) * (
+        thetav = state.theta + 0.61 * state.theta * state.q
+        wthetav = state.wtheta + 0.61 * state.theta * state.wq
+        deltathetav = (state.theta + state.deltatheta) * (
             1.0 + 0.61 * (state.q + state.dq)
         ) - state.theta * (1.0 + 0.61 * state.q)
-        return state
+        return replace(
+            state, thetav=thetav, wthetav=wthetav, deltathetav=deltathetav
+        )
 
     def compute_mixed_layer_top_properties(
         self, state: PyTree, const: PhysicalConstants
@@ -69,10 +69,10 @@ class AbstractStandardStatsModel(AbstractMixedLayerModel):
                 T_{top} = \\theta - \\frac{g}{c_p} h
         """
         # mixed-layer top properties
-        state.top_p = state.surf_pressure - const.rho * const.g * state.h_abl
-        state.top_T = state.theta - const.g / const.cp * state.h_abl
-        state.top_rh = state.q / compute_qsat(state.top_T, state.top_p)
-        return state
+        top_p = state.surf_pressure - const.rho * const.g * state.h_abl
+        top_T = state.theta - const.g / const.cp * state.h_abl
+        top_rh = state.q / compute_qsat(top_T, top_p)
+        return replace(state, top_p=top_p, top_T=top_T, top_rh=top_rh)
 
     def compute_lcl(self, state: PyTree, t: int, const: PhysicalConstants) -> Array:
         """Compute the lifting condensation level (LCL).

@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from dataclasses import dataclass
+
 import jax
 import jax.numpy as jnp
 from jaxtyping import Array, PyTree
@@ -13,7 +13,6 @@ from .standard import (
 )
 
 
-@jax.tree_util.register_pytree_node_class
 @dataclass
 class JarvisStewartState(StandardLandSurfaceState):
     """Jarvis-Stewart model state."""

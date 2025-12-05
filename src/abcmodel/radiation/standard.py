@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 import jax
 import jax.numpy as jnp
@@ -11,9 +11,11 @@ from ..abstracts import (
 from ..utils import Array, PhysicalConstants
 
 
-@jax.tree_util.register_pytree_node_class
+from simple_pytree import Pytree
+
+
 @dataclass
-class StandardRadiationState(AbstractRadiationState):
+class StandardRadiationState(AbstractRadiationState, Pytree):
     """Standard radiation model state."""
 
     net_rad: Array | float
@@ -26,19 +28,6 @@ class StandardRadiationState(AbstractRadiationState):
     """Incoming longwave radiation [W m-2]."""
     out_lrad: Array | float = jnp.nan
     """Outgoing longwave radiation [W m-2]."""
-
-    def tree_flatten(self):
-        return (
-            self.net_rad,
-            self.in_srad,
-            self.out_srad,
-            self.in_lrad,
-            self.out_lrad,
-        ), None
-
-    @classmethod
-    def tree_unflatten(cls, aux, children):
-        return cls(*children)
 
 
 # alias
@@ -110,11 +99,11 @@ class StandardRadiationModel(AbstractRadiationModel[StandardRadiationState]):
             solar_elevation
         )
         (
-            rad_state.net_rad,
-            rad_state.in_srad,
-            rad_state.out_srad,
-            rad_state.in_lrad,
-            rad_state.out_lrad,
+            net_rad,
+            in_srad,
+            out_srad,
+            in_lrad,
+            out_lrad,
         ) = self.compute_radiation_components(
             solar_elevation,
             atmospheric_transmission,
@@ -123,7 +112,14 @@ class StandardRadiationModel(AbstractRadiationModel[StandardRadiationState]):
             land_state.surf_temp,
             const,
         )
-        return rad_state
+        return replace(
+            rad_state,
+            net_rad=net_rad,
+            in_srad=in_srad,
+            out_srad=out_srad,
+            in_lrad=in_lrad,
+            out_lrad=out_lrad,
+        )
 
     def compute_solar_declination(self, doy: float) -> Array:
         """Compute solar declination angle based on day of year.

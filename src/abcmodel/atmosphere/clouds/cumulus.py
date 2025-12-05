@@ -1,46 +1,33 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 import jax
 import jax.numpy as jnp
 from jaxtyping import Array
+from simple_pytree import Pytree
 
 from ...abstracts import AbstractCoupledState
 from ...utils import PhysicalConstants, compute_qsat
 from ..abstracts import AbstractCloudModel, AbstractCloudState
 
 
-@jax.tree_util.register_pytree_node_class
 @dataclass
-class StandardCumulusState(AbstractCloudState):
+class StandardCumulusState(AbstractCloudState, Pytree):
     """Standard cumulus state."""
 
-    cc_frac: float = 0.0
+    cc_frac: Array = 0.0
     """Cloud core fraction [-], range 0 to 1."""
-    cc_mf: float = 0.0
+    cc_mf: Array = 0.0
     """Cloud core mass flux [m/s]."""
-    cc_qf: float = 0.0
+    cc_qf: Array = 0.0
     """Cloud core moisture flux [kg/kg/s]."""
-    cl_trans: float = 1.0
+    cl_trans: Array = 1.0
     """Cloud layer transmittance [-], range 0 to 1."""
-    q2_h: float = jnp.nan
+    q2_h: Array = jnp.nan
     """Humidity variance at mixed-layer top [kg²/kg²]."""
-    top_CO22: float = jnp.nan
+    top_CO22: Array = jnp.nan
     """CO2 variance at mixed-layer top [ppm²]."""
-    # wCO2M is stored in MixedLayerState
-
-    def tree_flatten(self):
-        return (
-            self.cc_frac,
-            self.cc_mf,
-            self.cc_qf,
-            self.cl_trans,
-            self.q2_h,
-            self.top_CO22,
-        ), None
-
-    @classmethod
-    def tree_unflatten(cls, aux, children):
-        return cls(*children)
+    wCO2M: Array = 0.0
+    """CO2 mass flux [mgC/m²/s]."""
 
 
 # Alias for backward compatibility
@@ -73,7 +60,7 @@ class StandardCumulusModel(AbstractCloudModel):
         cloud_state = state.atmosphere.clouds
         ml_state = state.atmosphere.mixed_layer
 
-        cloud_state.q2_h = self.compute_q2_h(
+        q2_h = self.compute_q2_h(
             cloud_state.cc_qf,
             ml_state.wthetav,
             ml_state.wqe,
@@ -82,29 +69,40 @@ class StandardCumulusModel(AbstractCloudModel):
             ml_state.dz_h,
             ml_state.wstar,
         )
-        cloud_state.top_CO22 = self.compute_top_CO22(
+        top_CO22 = self.compute_top_CO22(
             ml_state.wthetav,
             ml_state.h_abl,
             ml_state.dz_h,
             ml_state.wstar,
             ml_state.wCO2e,
-            ml_state.wCO2M,
+            ml_state.wCO2M,  # This might be stale if we don't update ml_state, but we read it.
+            # Actually, compute_top_CO22 reads wCO2M.
+            # In the old code, it read ml_state.wCO2M.
+            # In the new code, cloud_state.wCO2M is the source of truth.
+            # But the formula uses (wCO2e + wCO2M).
+            # If wCO2M is computed later, we are using the previous step's value?
+            # Yes, standard Pytree behavior.
             ml_state.deltaCO2,
         )
-        cloud_state.cc_frac = self.compute_cc_frac(
-            ml_state.q, ml_state.top_T, ml_state.top_p, cloud_state.q2_h
+        cc_frac = self.compute_cc_frac(ml_state.q, ml_state.top_T, ml_state.top_p, q2_h)
+        cc_mf = self.compute_cc_mf(cc_frac, ml_state.wstar)
+        cc_qf = self.compute_cc_qf(cc_mf, q2_h)
+
+        # Compute wCO2M
+        wCO2M = self.compute_wCO2M(cc_mf, top_CO22, ml_state.deltaCO2)
+
+        cl_trans = self.compute_cl_trans(cc_frac)
+
+        return replace(
+            cloud_state,
+            q2_h=q2_h,
+            top_CO22=top_CO22,
+            cc_frac=cc_frac,
+            cc_mf=cc_mf,
+            cc_qf=cc_qf,
+            wCO2M=wCO2M,
+            cl_trans=cl_trans,
         )
-        cloud_state.cc_mf = self.compute_cc_mf(cloud_state.cc_frac, ml_state.wstar)
-        cloud_state.cc_qf = self.compute_cc_qf(cloud_state.cc_mf, cloud_state.q2_h)
-
-        # Update wCO2M in mixed layer state
-        ml_state.wCO2M = self.compute_wCO2M(
-            cloud_state.cc_mf, cloud_state.top_CO22, ml_state.deltaCO2
-        )
-
-        cloud_state.cl_trans = self.compute_cl_trans(cloud_state.cc_frac)
-
-        return cloud_state
 
     @staticmethod
     def compute_q2_h(

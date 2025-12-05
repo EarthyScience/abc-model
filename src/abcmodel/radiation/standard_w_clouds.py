@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 import jax
 
@@ -9,7 +9,6 @@ from .standard import StandardRadiationModel, StandardRadiationState
 Array = jax.Array
 
 
-@jax.tree_util.register_pytree_node_class
 @dataclass
 class StandardRadiationwCloudsState(StandardRadiationState):
     """Standard radiation model with clouds state."""
@@ -84,11 +83,11 @@ class StandardRadiationwCloudsModel(StandardRadiationModel):
             cloud_state.cl_trans,
         )
         (
-            rad_state.net_rad,
-            rad_state.in_srad,
-            rad_state.out_srad,
-            rad_state.in_lrad,
-            rad_state.out_lrad,
+            net_rad,
+            in_srad,
+            out_srad,
+            in_lrad,
+            out_lrad,
         ) = self.compute_radiation_components(
             solar_elevation,
             atmospheric_transmission,
@@ -98,7 +97,14 @@ class StandardRadiationwCloudsModel(StandardRadiationModel):
             const,
         )
 
-        return rad_state
+        return replace(
+            rad_state,
+            net_rad=net_rad,
+            in_srad=in_srad,
+            out_srad=out_srad,
+            in_lrad=in_lrad,
+            out_lrad=out_lrad,
+        )
 
     @staticmethod
     def compute_atmospheric_transmission_w_clouds(

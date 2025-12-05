@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 import jax
 import jax.numpy as jnp
@@ -14,171 +14,116 @@ from .stats import AbstractStandardStatsModel
 # FAC = const.mair / (const.rho * const.mco2)
 
 
-@jax.tree_util.register_pytree_node_class
+from simple_pytree import Pytree
+
+
 @dataclass
-class BulkMixedLayerState(AbstractMixedLayerState):
+class BulkMixedLayerState(AbstractMixedLayerState, Pytree):
     """Data class for bulk mixed layer model state."""
 
     # initialized by the user
-    h_abl: float
+    h_abl: Array
     """Initial atmospheric boundary layer (ABL) height [m]."""
-    theta: float
+    theta: Array
     """Initial mixed-layer potential temperature [K]."""
-    deltatheta: float
+    deltatheta: Array
     """Initial temperature jump at the top of the ABL [K]."""
-    wtheta: float
+    wtheta: Array
     """Surface kinematic heat flux [K m/s]."""
-    q: float
+    q: Array
     """Initial mixed-layer specific humidity [kg/kg]."""
-    dq: float
+    dq: Array
     """Initial specific humidity jump at h [kg/kg]."""
-    wq: float
+    wq: Array
     """Surface kinematic moisture flux [kg/kg m/s]."""
-    co2: float
+    co2: Array
     """Initial mixed-layer CO2 [ppm]."""
-    deltaCO2: float
+    deltaCO2: Array
     """Initial CO2 jump at the top of the ABL [ppm]."""
-    wCO2: float
+    wCO2: Array
     """Surface kinematic CO2 flux [mgC/m²/s]."""
-    u: float
+    u: Array
     """Initial mixed-layer u-wind speed [m/s]."""
-    du: float
+    du: Array
     """Initial u-wind jump at the top of the ABL [m/s]."""
-    v: float
+    v: Array
     """Initial mixed-layer v-wind speed [m/s]."""
-    dv: float
+    dv: Array
     """Initial v-wind jump at the top of the ABL [m/s]."""
-    dz_h: float
+    dz_h: Array
     """Transition layer thickness [m]."""
-    surf_pressure: float
+    surf_pressure: Array
     """Surface pressure, which is actually not updated (not a state), it's only here for simplicity [Pa]."""
 
     # initialized to zero by default
-    wstar: float = 0.0
+    wstar: Array = 0.0
     """Convective velocity scale [m s-1]."""
-    we: float = -1.0
+    we: Array = -1.0
     """Entrainment velocity [m s-1]."""
-    wCO2A: float = 0.0
+    wCO2A: Array = 0.0
     """Surface assimulation CO2 flux [mgC/m²/s]."""
-    wCO2R: float = 0.0
+    wCO2R: Array = 0.0
     """Surface respiration CO2 flux [mgC/m²/s]."""
-    wCO2M: float = 0.0
+    wCO2M: Array = 0.0
     """CO2 mass flux [mgC/m²/s]."""
 
     # should be initialized during warmup
-    thetav: float = jnp.nan
+    thetav: Array = jnp.nan
     """Mixed-layer potential temperature [K]."""
-    deltathetav: float = jnp.nan
+    deltathetav: Array = jnp.nan
     """Virtual temperature jump at the top of the ABL [K]."""
-    wthetav: float = jnp.nan
+    wthetav: Array = jnp.nan
     """Surface kinematic virtual heat flux [K m s-1]."""
-    wqe: float = jnp.nan
+    wqe: Array = jnp.nan
     """Entrainment moisture flux [kg kg-1 m s-1]."""
-    qsat: float = jnp.nan
+    qsat: Array = jnp.nan
     """Saturation specific humidity [kg/kg]."""
-    e: float = jnp.nan
+    e: Array = jnp.nan
     """Vapor pressure [Pa]."""
-    esat: float = jnp.nan
+    esat: Array = jnp.nan
     """Saturation vapor pressure [Pa]."""
-    wCO2e: float = jnp.nan
+    wCO2e: Array = jnp.nan
     """Entrainment CO2 flux [mgC/m²/s]."""
-    wthetae: float = jnp.nan
+    wthetae: Array = jnp.nan
     """Entrainment potential temperature flux [K m s-1]."""
-    wthetave: float = jnp.nan
+    wthetave: Array = jnp.nan
     """Entrainment virtual heat flux [K m s-1]."""
-    lcl: float = jnp.nan
+    lcl: Array = jnp.nan
     """Lifting condensation level [m]."""
-    top_rh: float = jnp.nan
+    top_rh: Array = jnp.nan
     """Top of mixed layer relative humidity [%]."""
-    top_p: float = jnp.nan
+    top_p: Array = jnp.nan
     """Pressure at top of mixed layer [Pa]."""
-    top_T: float = jnp.nan
+    top_T: Array = jnp.nan
     """Temperature at top of mixed layer [K]."""
-    utend: float = jnp.nan
+    utend: Array = jnp.nan
     """Zonal wind velocity tendency [m s-2]."""
-    dutend: float = jnp.nan
+    dutend: Array = jnp.nan
     """Zonal wind velocity tendency at the ABL height [m s-2]."""
-    vtend: float = jnp.nan
+    vtend: Array = jnp.nan
     """Meridional wind velocity tendency [m s-2]."""
-    dvtend: float = jnp.nan
+    dvtend: Array = jnp.nan
     """Meridional wind velocity tendency at the ABL height [m/s²]."""
-    h_abl_tend: float = jnp.nan
+    h_abl_tend: Array = jnp.nan
     """Tendency of CBL [m s-1]."""
-    thetatend: float = jnp.nan
+    thetatend: Array = jnp.nan
     """Tendency of mixed-layer potential temperature [K s-1]."""
-    deltathetatend: float = jnp.nan
+    deltathetatend: Array = jnp.nan
     """Tendency of mixed-layer potential temperature at the ABL height [K s-1]."""
-    qtend: float = jnp.nan
+    qtend: Array = jnp.nan
     """Tendency of mixed-layer specific humidity [kg/kg s-1]."""
-    dqtend: float = jnp.nan
+    dqtend: Array = jnp.nan
     """Tendency of mixed-layer specific humidity at the ABL height [kg/kg s-1]."""
-    co2tend: float = jnp.nan
+    co2tend: Array = jnp.nan
     """Tendency of CO2 concentration [ppm s-1]."""
-    deltaCO2tend: float = jnp.nan
+    deltaCO2tend: Array = jnp.nan
     """Tendency of CO2 concentration at the ABL height [ppm s-1]."""
-    dztend: float = jnp.nan
+    dztend: Array = jnp.nan
     """Tendency of transition layer thickness [m s-1]."""
-    ws: float = jnp.nan
+    ws: Array = jnp.nan
     """Large-scale vertical velocity (subsidence) [m s-1]."""
-    wf: float = jnp.nan
+    wf: Array = jnp.nan
     """Mixed-layer growth due to cloud top radiative divergence [m s-1]."""
-
-    def tree_flatten(self):
-        return (
-            self.h_abl,
-            self.theta,
-            self.deltatheta,
-            self.wtheta,
-            self.q,
-            self.dq,
-            self.wq,
-            self.co2,
-            self.deltaCO2,
-            self.wCO2,
-            self.u,
-            self.du,
-            self.v,
-            self.dv,
-            self.dz_h,
-            self.surf_pressure,
-            self.wstar,
-            self.we,
-            self.wCO2A,
-            self.wCO2R,
-            self.wCO2M,
-            self.thetav,
-            self.deltathetav,
-            self.wthetav,
-            self.wqe,
-            self.qsat,
-            self.e,
-            self.esat,
-            self.wCO2e,
-            self.wthetae,
-            self.wthetave,
-            self.lcl,
-            self.top_rh,
-            self.top_p,
-            self.top_T,
-            self.utend,
-            self.dutend,
-            self.vtend,
-            self.dvtend,
-            self.h_abl_tend,
-            self.thetatend,
-            self.deltathetatend,
-            self.qtend,
-            self.dqtend,
-            self.co2tend,
-            self.deltaCO2tend,
-            self.dztend,
-            self.ws,
-            self.wf,
-        ), None
-
-    @classmethod
-    def tree_unflatten(cls, aux, children):
-        return cls(*children)
 
 
 # alias
@@ -260,90 +205,84 @@ class BulkMixedLayerModel(AbstractStandardStatsModel, AbstractMixedLayerModel):
         land_state = state.land
 
         # Read surface fluxes from land state if available
-        # We check if land_state has wtheta, wq, wCO2
-        # StandardLandSurfaceState has wtheta, wq.
-        # AquaCropState has wCO2.
-        # MinimalLandSurfaceState does not have wtheta, wq?
-        # MinimalLandSurfaceModel does not compute them?
-        # MinimalLandSurfaceModel computes esat, qsat, etc.
-        # But it doesn't compute fluxes?
-        # If fluxes are NaN or missing, what to do?
-        # The original code relied on `ml_state` having them initialized.
-        # If `LandModel` updates them, we use them.
-        # If `LandModel` doesn't (like Minimal?), we might use `ml_state` values?
-        # But `Minimal` doesn't update `ml_state` either.
-        # So `wtheta` would be constant?
-        # In `minimal.py` example, `wtheta` is initialized in `ml_state`.
-        # So if `LandModel` doesn't update it, we use `ml_state.wtheta`.
-
         # Access fluxes from land state (using jnp.where to handle NaNs)
-        wtheta = jnp.where(jnp.isnan(land_state.wtheta), ml_state.wtheta, land_state.wtheta)
+        wtheta = jnp.where(
+            jnp.isnan(land_state.wtheta), ml_state.wtheta, land_state.wtheta
+        )
         wq = jnp.where(jnp.isnan(land_state.wq), ml_state.wq, land_state.wq)
         wCO2 = jnp.where(jnp.isnan(land_state.wCO2), ml_state.wCO2, land_state.wCO2)
 
-        ml_state.ws = self.compute_ws(ml_state.h_abl)
-        ml_state.wf = self.compute_wf(ml_state.deltatheta, const)
-        w_th_ft = self.compute_w_th_ft(ml_state.ws)
-        w_q_ft = self.compute_w_q_ft(ml_state.ws)
-        w_CO2_ft = self.compute_w_CO2_ft(ml_state.ws)
-        ml_state.wstar = self.compute_wstar(
+        ws = self.compute_ws(ml_state.h_abl)
+        wf = self.compute_wf(ml_state.deltatheta, const)
+        w_th_ft = self.compute_w_th_ft(ws)
+        w_q_ft = self.compute_w_q_ft(ws)
+        w_CO2_ft = self.compute_w_CO2_ft(ws)
+        wstar = self.compute_wstar(
             ml_state.h_abl,
             ml_state.wthetav,
             ml_state.thetav,
             const.g,
         )
-        ml_state.wthetave = self.compute_wthetave(ml_state.wthetav)
-        ml_state.we = self.compute_we(
+        wthetave = self.compute_wthetave(ml_state.wthetav)
+        we = self.compute_we(
             ml_state.h_abl,
-            ml_state.wthetave,
+            wthetave,
             ml_state.deltathetav,
             ml_state.thetav,
             sl_state.ustar,
             const.g,
         )
-        ml_state.wthetae = self.compute_wthetae(ml_state.we, ml_state.deltatheta)
-        ml_state.wqe = self.compute_wqe(ml_state.we, ml_state.dq)
-        ml_state.wCO2e = self.compute_wCO2e(ml_state.we, ml_state.deltaCO2)
-        ml_state.h_abl_tend = self.compute_h_abl_tend(
-            ml_state.we, ml_state.ws, ml_state.wf, cloud_state.cc_mf
+        wthetae = self.compute_wthetae(we, ml_state.deltatheta)
+        wqe = self.compute_wqe(we, ml_state.dq)
+        wCO2e = self.compute_wCO2e(we, ml_state.deltaCO2)
+        h_abl_tend = self.compute_h_abl_tend(we, ws, wf, cloud_state.cc_mf)
+        thetatend = self.compute_thetatend(ml_state.h_abl, wtheta, wthetae)
+        deltathetatend = self.compute_deltathetatend(
+            we, wf, cloud_state.cc_mf, thetatend, w_th_ft
         )
-        ml_state.thetatend = self.compute_thetatend(
-            ml_state.h_abl, wtheta, ml_state.wthetae
+        qtend = self.compute_qtend(ml_state.h_abl, wq, wqe, cloud_state.cc_qf)
+        dqtend = self.compute_dqtend(we, wf, cloud_state.cc_mf, qtend, w_q_ft)
+        co2tend = self.compute_co2tend(ml_state.h_abl, wCO2, wCO2e, cloud_state.wCO2M)
+        deltaCO2tend = self.compute_deltaCO2tend(
+            we, wf, cloud_state.cc_mf, co2tend, w_CO2_ft
         )
-        ml_state.deltathetatend = self.compute_deltathetatend(
-            ml_state.we, ml_state.wf, cloud_state.cc_mf, ml_state.thetatend, w_th_ft
+        utend = self.compute_utend(
+            ml_state.h_abl, we, sl_state.uw, ml_state.du, ml_state.dv
         )
-        ml_state.qtend = self.compute_qtend(
-            ml_state.h_abl, wq, ml_state.wqe, cloud_state.cc_qf
+        vtend = self.compute_vtend(
+            ml_state.h_abl, we, sl_state.vw, ml_state.du, ml_state.dv
         )
-        ml_state.dqtend = self.compute_dqtend(
-            ml_state.we, ml_state.wf, cloud_state.cc_mf, ml_state.qtend, w_q_ft
-        )
-        ml_state.co2tend = self.compute_co2tend(
-            ml_state.h_abl, wCO2, ml_state.wCO2e, ml_state.wCO2M
-        )
-        ml_state.deltaCO2tend = self.compute_deltaCO2tend(
-            ml_state.we, ml_state.wf, cloud_state.cc_mf, ml_state.co2tend, w_CO2_ft
-        )
-        ml_state.utend = self.compute_utend(
-            ml_state.h_abl, ml_state.we, sl_state.uw, ml_state.du, ml_state.dv
-        )
-        ml_state.vtend = self.compute_vtend(
-            ml_state.h_abl, ml_state.we, sl_state.vw, ml_state.du, ml_state.dv
-        )
-        ml_state.dutend = self.compute_dutend(
-            ml_state.we, ml_state.wf, cloud_state.cc_mf, ml_state.utend
-        )
-        ml_state.dvtend = self.compute_dvtend(
-            ml_state.we, ml_state.wf, cloud_state.cc_mf, ml_state.vtend
-        )
-        ml_state.dztend = self.compute_dztend(
+        dutend = self.compute_dutend(we, wf, cloud_state.cc_mf, utend)
+        dvtend = self.compute_dvtend(we, wf, cloud_state.cc_mf, vtend)
+        dztend = self.compute_dztend(
             ml_state.lcl,
             ml_state.h_abl,
             cloud_state.cc_frac,
             ml_state.dz_h,
         )
-        return ml_state
+        return replace(
+            ml_state,
+            ws=ws,
+            wf=wf,
+            wstar=wstar,
+            wthetave=wthetave,
+            we=we,
+            wthetae=wthetae,
+            wqe=wqe,
+            wCO2e=wCO2e,
+            h_abl_tend=h_abl_tend,
+            thetatend=thetatend,
+            deltathetatend=deltathetatend,
+            qtend=qtend,
+            dqtend=dqtend,
+            co2tend=co2tend,
+            deltaCO2tend=deltaCO2tend,
+            utend=utend,
+            vtend=vtend,
+            dutend=dutend,
+            dvtend=dvtend,
+            dztend=dztend,
+        )
 
     def integrate(self, state: BulkMixedLayerState, dt: float) -> BulkMixedLayerState:
         """Integrate mixed layer forward in time.
@@ -352,24 +291,38 @@ class BulkMixedLayerModel(AbstractStandardStatsModel, AbstractMixedLayerModel):
             state: BulkMixedLayerState (component state, not CoupledState).
             dt: Time step.
         """
-        state.h_abl += dt * state.h_abl_tend
-        state.theta += dt * state.thetatend
-        state.deltatheta += dt * state.deltathetatend
-        state.q += dt * state.qtend
-        state.dq += dt * state.dqtend
-        state.co2 += dt * state.co2tend
-        state.deltaCO2 += dt * state.deltaCO2tend
-        state.dz_h += dt * state.dztend
+        h_abl = state.h_abl + dt * state.h_abl_tend
+        theta = state.theta + dt * state.thetatend
+        deltatheta = state.deltatheta + dt * state.deltathetatend
+        q = state.q + dt * state.qtend
+        dq = state.dq + dt * state.dqtend
+        co2 = state.co2 + dt * state.co2tend
+        deltaCO2 = state.deltaCO2 + dt * state.deltaCO2tend
+        dz_h = state.dz_h + dt * state.dztend
 
         # limit dz to minimal value
-        state.dz_h = jnp.maximum(state.dz_h, 50.0)
+        dz_h = jnp.maximum(dz_h, 50.0)
 
-        state.u = jnp.where(self.is_wind_prog, state.u + dt * state.utend, state.u)
-        state.du = jnp.where(self.is_wind_prog, state.du + dt * state.dutend, state.du)
-        state.v = jnp.where(self.is_wind_prog, state.v + dt * state.vtend, state.v)
-        state.dv = jnp.where(self.is_wind_prog, state.dv + dt * state.dvtend, state.dv)
+        u = jnp.where(self.is_wind_prog, state.u + dt * state.utend, state.u)
+        du = jnp.where(self.is_wind_prog, state.du + dt * state.dutend, state.du)
+        v = jnp.where(self.is_wind_prog, state.v + dt * state.vtend, state.v)
+        dv = jnp.where(self.is_wind_prog, state.dv + dt * state.dvtend, state.dv)
 
-        return state
+        return replace(
+            state,
+            h_abl=h_abl,
+            theta=theta,
+            deltatheta=deltatheta,
+            q=q,
+            dq=dq,
+            co2=co2,
+            deltaCO2=deltaCO2,
+            dz_h=dz_h,
+            u=u,
+            du=du,
+            v=v,
+            dv=dv,
+        )
 
     def compute_ws(self, h_abl: Array) -> Array:
         """Compute the large-scale subsidence velocity as

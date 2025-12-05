@@ -10,40 +10,25 @@ from ..utils import PhysicalConstants, compute_esat
 from .standard import AbstractStandardLandSurfaceModel, StandardLandSurfaceState
 
 
-@jax.tree_util.register_pytree_node_class
 @dataclass
 class AquaCropState(StandardLandSurfaceState):
     """AquaCrop model state."""
 
-    rsCO2: float = jnp.nan
+    rsCO2: Array = jnp.nan
     """Stomatal resistance to CO2."""
-    gcco2: float = jnp.nan
+    gcco2: Array = jnp.nan
     """Conductance to CO2."""
-    ci: float = jnp.nan
+    ci: Array = jnp.nan
     """Intercellular CO2 concentration."""
-    co2abs: float = jnp.nan
+    co2abs: Array = jnp.nan
     """CO2 assimilation rate."""
-    wCO2A: float = jnp.nan
+    wCO2A: Array = jnp.nan
     """Net assimilation flux [mol m-2 s-1]."""
-    wCO2R: float = jnp.nan
+    wCO2R: Array = jnp.nan
     """Respiration flux [mol m-2 s-1]."""
-    wCO2: float = jnp.nan
+    wCO2: Array = jnp.nan
     """Total CO2 flux [mol m-2 s-1]."""
 
-    def tree_flatten(self):
-        children, _ = super().tree_flatten()
-        return children + (
-            self.rsCO2, self.gcco2, self.ci, self.co2abs,
-            self.wCO2A, self.wCO2R, self.wCO2
-        ), None
-
-    @classmethod
-    def tree_unflatten(cls, aux, children):
-        # We need to split children into parent and own fields
-        # StandardLandSurfaceState has 28 fields
-        parent_fields = children[:28]
-        own_fields = children[28:]
-        return cls(*parent_fields, *own_fields)
 
 # Alias for backward compatibility
 AquaCropInitConds = AquaCropState

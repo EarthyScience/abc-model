@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 import jax
 import jax.numpy as jnp
@@ -8,51 +8,44 @@ from ..abstracts import AbstractCoupledState, AbstractLandModel, AbstractLandSta
 from ..utils import PhysicalConstants, compute_esat, compute_qsat
 
 
-@jax.tree_util.register_pytree_node_class
+from simple_pytree import Pytree
+
+
 @dataclass
-class MinimalLandSurfaceState(AbstractLandState):
+class MinimalLandSurfaceState(AbstractLandState, Pytree):
     """Minimal land surface model state."""
 
-    alpha: float
+    alpha: Array
     """surface albedo [-], range 0 to 1."""
-    surf_temp: float
+    surf_temp: Array
     """Surface temperature [K]."""
-    rs: float
+    rs: Array
     """Surface resistance [s m-1]."""
-    wg: float = 0.0
+    wg: Array = 0.0
     """No moisture content in the root zone [m3 m-3]."""
-    wl: float = 0.0
+    wl: Array = 0.0
     """No water content in the canopy [m]."""
 
     # the following variables are assigned during warmup/timestep
-    ra: float = jnp.nan
+    ra: Array = jnp.nan
     """Aerodynamic resistance [s/m]."""
-    esat: float = jnp.nan
+    esat: Array = jnp.nan
     """Saturation vapor pressure [Pa]."""
-    qsat: float = jnp.nan
+    qsat: Array = jnp.nan
     """Saturation specific humidity [kg/kg]."""
-    dqsatdT: float = jnp.nan
+    dqsatdT: Array = jnp.nan
     """Derivative of saturation specific humidity with respect to temperature [kg/kg/K]."""
-    e: float = jnp.nan
+    e: Array = jnp.nan
     """Vapor pressure [Pa]."""
-    qsatsurf: float = jnp.nan
+    qsatsurf: Array = jnp.nan
     """Saturation specific humidity at surface temperature [kg/kg]."""
-    wtheta: float = jnp.nan
+    wtheta: Array = jnp.nan
     """Kinematic heat flux [K m/s]."""
-    wq: float = jnp.nan
+    wq: Array = jnp.nan
     """Kinematic moisture flux [kg/kg m/s]."""
-    wCO2: float = jnp.nan
+    wCO2: Array = jnp.nan
     """Kinematic CO2 flux [kg/kg m/s] or [mol m-2 s-1]."""
 
-    def tree_flatten(self):
-        return (
-            self.alpha, self.surf_temp, self.rs, self.wg, self.wl,
-            self.ra, self.esat, self.qsat, self.dqsatdT, self.e, self.qsatsurf
-        ), None
-
-    @classmethod
-    def tree_unflatten(cls, aux, children):
-        return cls(*children)
 
 # Alias for backward compatibility
 MinimalLandSurfaceInitConds = MinimalLandSurfaceState
@@ -85,15 +78,27 @@ class MinimalLandSurfaceModel(AbstractLandModel):
 
         # (1) compute aerodynamic resistance from state
         ueff = jnp.sqrt(ml_state.u**2.0 + ml_state.v**2.0 + ml_state.wstar**2.0)
-        land_state.ra = ueff / jnp.maximum(1.0e-3, sl_state.ustar) ** 2.0
+        ra = ueff / jnp.maximum(1.0e-3, sl_state.ustar) ** 2.0
 
         # (2) calculate essential thermodynamic variables
-        land_state.esat = compute_esat(ml_state.theta)
-        land_state.qsat = compute_qsat(ml_state.theta, ml_state.surf_pressure)
-        land_state.dqsatdT = self.compute_dqsatdT(land_state, ml_state.theta, ml_state.surf_pressure)
-        land_state.e = self.compute_e(ml_state.q, ml_state.surf_pressure)
+        esat = compute_esat(ml_state.theta)
+        qsat = compute_qsat(ml_state.theta, ml_state.surf_pressure)
+        
+        # Helper computation without modifying state in place
+        # compute_dqsatdT expects state for esat/qsat if it uses them, but here it accesses state.esat
+        # So we need to provide a state with Updated esat.
+        temp_state = replace(land_state, esat=esat, qsat=qsat)
+        dqsatdT = self.compute_dqsatdT(temp_state, ml_state.theta, ml_state.surf_pressure)
+        e = self.compute_e(ml_state.q, ml_state.surf_pressure)
 
-        return land_state
+        return replace(
+            land_state,
+            ra=ra,
+            esat=esat,
+            qsat=qsat,
+            dqsatdT=dqsatdT,
+            e=e
+        )
 
     def compute_dqsatdT(self, state: MinimalLandSurfaceState, theta: float, surf_pressure: float) -> Array:
         """Compute the derivative of saturation vapor pressure with respect to temperature ``dqsatdT``.

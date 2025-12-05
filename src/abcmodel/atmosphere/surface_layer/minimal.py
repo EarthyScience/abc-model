@@ -1,22 +1,25 @@
-from dataclasses import dataclass
-
+from dataclasses import dataclass, replace
 import jax.numpy as jnp
+from simple_pytree import Pytree
 from jaxtyping import Array, PyTree
-
 from ...utils import PhysicalConstants
 from ..abstracts import AbstractSurfaceLayerModel
 
 
 @dataclass
-class MinimalSurfaceLayerInitConds:
+class MinimalSurfaceLayerState(Pytree):
     """Minimal surface layer model initial state."""
 
-    ustar: float
+    ustar: Array
     """Surface friction velocity [m/s]."""
-    uw: float = jnp.nan
+    uw: Array = jnp.nan
     """Zonal surface momentum flux [m2 s-2]."""
-    vw: float = jnp.nan
+    vw: Array = jnp.nan
     """Meridional surface momentum flux [m2 s-2]."""
+
+
+# Alias
+MinimalSurfaceLayerInitConds = MinimalSurfaceLayerState
 
 
 class MinimalSurfaceLayerModel(AbstractSurfaceLayerModel):
@@ -44,10 +47,8 @@ class MinimalSurfaceLayerModel(AbstractSurfaceLayerModel):
 
     def run(self, state: PyTree, const: PhysicalConstants):
         """Calculate momentum fluxes from wind components and friction velocity."""
-        state.uw, state.vw = self.calculate_momentum_fluxes(
-            state.u, state.v, state.ustar
-        )
-        return state
+        uw, vw = self.calculate_momentum_fluxes(state.u, state.v, state.ustar)
+        return replace(state, uw=uw, vw=vw)
 
     @staticmethod
     def compute_ra(state: PyTree) -> Array:

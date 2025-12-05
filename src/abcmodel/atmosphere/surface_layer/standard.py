@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 import jax
 import jax.numpy as jnp
@@ -9,83 +9,58 @@ from ...utils import PhysicalConstants, compute_qsat
 from ..abstracts import AbstractSurfaceLayerModel, AbstractSurfaceLayerState
 
 
-@jax.tree_util.register_pytree_node_class
+from simple_pytree import Pytree
+
+
 @dataclass
-class StandardSurfaceLayerState(AbstractSurfaceLayerState):
+class StandardSurfaceLayerState(AbstractSurfaceLayerState, Pytree):
     """Standard surface layer model state."""
 
     # the following variables should be initialized by the user
-    ustar: float
+    ustar: Array
     """Surface friction velocity [m/s]."""
-    z0m: float
+    z0m: Array
     """Roughness length for momentum [m]."""
-    z0h: float
+    z0h: Array
     """Roughness length for scalars [m]."""
-    theta: float
+    theta: Array
     """Surface potential temperature [K]."""
 
     # the following variables are initialized to high values and
     # are expected to converge to realistic values during warmup
-    drag_m: float = 1e12
+    drag_m: Array = 1e12
     """Drag coefficient for momentum [-]."""
-    drag_s: float = 1e12
+    drag_s: Array = 1e12
     """Drag coefficient for scalars [-]."""
 
     # the following variables are initialized as NaNs and should
     # and are expected to be assigned during warmup
-    uw: float = jnp.nan
+    uw: Array = jnp.nan
     """Surface momentum flux u [m2 s-2]."""
-    vw: float = jnp.nan
+    vw: Array = jnp.nan
     """Surface momentum flux v [m2 s-2]."""
-    temp_2m: float = jnp.nan
+    temp_2m: Array = jnp.nan
     """2m temperature [K]."""
-    q2m: float = jnp.nan
+    q2m: Array = jnp.nan
     """2m specific humidity [kg kg-1]."""
-    u2m: float = jnp.nan
+    u2m: Array = jnp.nan
     """2m u-wind [m s-1]."""
-    v2m: float = jnp.nan
+    v2m: Array = jnp.nan
     """2m v-wind [m s-1]."""
-    e2m: float = jnp.nan
+    e2m: Array = jnp.nan
     """2m vapor pressure [Pa]."""
-    esat2m: float = jnp.nan
+    esat2m: Array = jnp.nan
     """2m saturated vapor pressure [Pa]."""
-    thetasurf: float = jnp.nan
+    thetasurf: Array = jnp.nan
     """Surface potential temperature [K]."""
-    thetavsurf: float = jnp.nan
+    thetavsurf: Array = jnp.nan
     """Surface virtual potential temperature [K]."""
-    qsurf: float = jnp.nan
+    qsurf: Array = jnp.nan
     """Surface specific humidity [kg kg-1]."""
-    obukhov_length: float = jnp.nan
+    obukhov_length: Array = jnp.nan
     """Obukhov length [m]."""
-    rib_number: float = jnp.nan
+    rib_number: Array = jnp.nan
     """Bulk Richardson number [-]."""
-
-    def tree_flatten(self):
-        return (
-            self.ustar,
-            self.z0m,
-            self.z0h,
-            self.theta,
-            self.drag_m,
-            self.drag_s,
-            self.uw,
-            self.vw,
-            self.temp_2m,
-            self.q2m,
-            self.u2m,
-            self.v2m,
-            self.e2m,
-            self.esat2m,
-            self.thetasurf,
-            self.thetavsurf,
-            self.qsurf,
-            self.obukhov_length,
-            self.rib_number,
-        ), None
-
-    @classmethod
-    def tree_unflatten(cls, aux, children):
-        return cls(*children)
 
 
 # Alias for backward compatibility if needed, or just for clarity in examples
@@ -116,13 +91,6 @@ class StandardSurfaceLayerModel(AbstractSurfaceLayerModel):
         """
         # Access components
         # We assume state is CoupledState
-        # surface layer state
-        # We need to assume state.atmosphere is DayOnlyAtmosphereState (or similar) to access surface_layer
-        # But AbstractCoupledState defines atmosphere as AbstractAtmosphereState
-        # AbstractAtmosphereState doesn't define surface_layer
-        # So we need to cast or assume.
-        # For now, we assume the runtime object has the structure.
-
         sl_state = state.atmosphere.surface_layer
         # mixed layer state (for u, v, wstar, theta, q, surf_pressure)
         ml_state = state.atmosphere.mixed_layer
@@ -131,9 +99,9 @@ class StandardSurfaceLayerModel(AbstractSurfaceLayerModel):
 
         ueff = compute_effective_wind_speed(ml_state.u, ml_state.v, ml_state.wstar)
         (
-            sl_state.thetasurf,
-            sl_state.qsurf,
-            sl_state.thetavsurf,
+            thetasurf,
+            qsurf,
+            thetavsurf,
         ) = compute_surface_properties(
             ueff,
             ml_state.theta,
@@ -146,25 +114,23 @@ class StandardSurfaceLayerModel(AbstractSurfaceLayerModel):
 
         # this should be a method
         zsl = 0.1 * ml_state.h_abl
-        sl_state.rib_number = compute_richardson_number(
-            ueff, zsl, const.g, ml_state.thetav, sl_state.thetavsurf
+        rib_number = compute_richardson_number(
+            ueff, zsl, const.g, ml_state.thetav, thetavsurf
         )
-        sl_state.obukhov_length = ribtol(
-            zsl, sl_state.rib_number, sl_state.z0h, sl_state.z0m
+        obukhov_length = ribtol(zsl, rib_number, sl_state.z0h, sl_state.z0m)
+        drag_m, drag_s = compute_drag_coefficients(
+            zsl, const.k, obukhov_length, sl_state.z0h, sl_state.z0m
         )
-        sl_state.drag_m, sl_state.drag_s = compute_drag_coefficients(
-            zsl, const.k, sl_state.obukhov_length, sl_state.z0h, sl_state.z0m
-        )
-        sl_state.ustar, sl_state.uw, sl_state.vw = compute_momentum_fluxes(
-            ueff, ml_state.u, ml_state.v, sl_state.drag_m
+        ustar, uw, vw = compute_momentum_fluxes(
+            ueff, ml_state.u, ml_state.v, drag_m
         )
         (
-            sl_state.temp_2m,
-            sl_state.q2m,
-            sl_state.u2m,
-            sl_state.v2m,
-            sl_state.e2m,
-            sl_state.esat2m,
+            temp_2m,
+            q2m,
+            u2m,
+            v2m,
+            e2m,
+            esat2m,
         ) = compute_2m_variables(
             ml_state.wtheta,
             ml_state.wq,
@@ -172,14 +138,32 @@ class StandardSurfaceLayerModel(AbstractSurfaceLayerModel):
             const.k,
             sl_state.z0h,
             sl_state.z0m,
-            sl_state.obukhov_length,
-            sl_state.thetasurf,
-            sl_state.qsurf,
-            sl_state.ustar,
-            sl_state.uw,
-            sl_state.vw,
+            obukhov_length,
+            thetasurf,
+            qsurf,
+            ustar,
+            uw,
+            vw,
         )
-        return sl_state
+        return replace(
+            sl_state,
+            thetasurf=thetasurf,
+            qsurf=qsurf,
+            thetavsurf=thetavsurf,
+            rib_number=rib_number,
+            obukhov_length=obukhov_length,
+            drag_m=drag_m,
+            drag_s=drag_s,
+            ustar=ustar,
+            uw=uw,
+            vw=vw,
+            temp_2m=temp_2m,
+            q2m=q2m,
+            u2m=u2m,
+            v2m=v2m,
+            e2m=e2m,
+            esat2m=esat2m,
+        )
 
     @staticmethod
     def compute_ra(state: AbstractCoupledState) -> Array:
