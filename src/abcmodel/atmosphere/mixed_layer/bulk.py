@@ -59,8 +59,6 @@ class BulkMixedLayerInitConds:
     """Surface assimulation CO2 flux [mgC/m²/s]."""
     wCO2R: float = 0.0
     """Surface respiration CO2 flux [mgC/m²/s]."""
-    wCO2M: float = 0.0
-    """CO2 mass flux [mgC/m²/s]."""
 
     # should be initialized during warmup
     thetav: float = jnp.nan
