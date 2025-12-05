@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 import jax
 import jax.numpy as jnp
-from jaxtyping import Array, PyTree
+from jaxtyping import Array
 
 from ...abstracts import AbstractCoupledState
 from ...utils import PhysicalConstants, compute_qsat
@@ -30,13 +30,18 @@ class StandardCumulusState(AbstractCloudState):
 
     def tree_flatten(self):
         return (
-            self.cc_frac, self.cc_mf, self.cc_qf, self.cl_trans,
-            self.q2_h, self.top_CO22
+            self.cc_frac,
+            self.cc_mf,
+            self.cc_qf,
+            self.cl_trans,
+            self.q2_h,
+            self.top_CO22,
         ), None
 
     @classmethod
     def tree_unflatten(cls, aux, children):
         return cls(*children)
+
 
 # Alias for backward compatibility
 StandardCumulusInitConds = StandardCumulusState
@@ -60,7 +65,9 @@ class StandardCumulusModel(AbstractCloudModel):
         self.tcc_cc = tcc_cc
         self.tcc_trans = tcc_trans
 
-    def run(self, state: AbstractCoupledState, const: PhysicalConstants) -> StandardCumulusState:
+    def run(
+        self, state: AbstractCoupledState, const: PhysicalConstants
+    ) -> StandardCumulusState:
         """Run the model."""
         # Access components
         cloud_state = state.atmosphere.clouds
@@ -89,10 +96,12 @@ class StandardCumulusModel(AbstractCloudModel):
         )
         cloud_state.cc_mf = self.compute_cc_mf(cloud_state.cc_frac, ml_state.wstar)
         cloud_state.cc_qf = self.compute_cc_qf(cloud_state.cc_mf, cloud_state.q2_h)
-        
+
         # Update wCO2M in mixed layer state
-        ml_state.wCO2M = self.compute_wCO2M(cloud_state.cc_mf, cloud_state.top_CO22, ml_state.deltaCO2)
-        
+        ml_state.wCO2M = self.compute_wCO2M(
+            cloud_state.cc_mf, cloud_state.top_CO22, ml_state.deltaCO2
+        )
+
         cloud_state.cl_trans = self.compute_cl_trans(cloud_state.cc_frac)
 
         return cloud_state
