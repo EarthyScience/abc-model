@@ -9,7 +9,7 @@ from .stats import AbstractStandardStatsModel
 
 
 @dataclass
-class MinimalMixedLayerInitConds(AbstractState):
+class MinimalMixedLayerInitConds(AbstractState, mutable=True):
     """Minimal mixed layer model initial state."""
 
     # the following variables are expected to be initialized by the user

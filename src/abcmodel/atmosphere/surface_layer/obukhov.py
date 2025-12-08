@@ -10,7 +10,7 @@ from ..abstracts import AbstractSurfaceLayerModel
 
 
 @dataclass
-class ObukhovSurfaceLayerInitConds(AbstractState):
+class ObukhovSurfaceLayerInitConds(AbstractState, mutable=True):
     """Standard surface layer model initial state."""
 
     # the following variables should be initialized by the user

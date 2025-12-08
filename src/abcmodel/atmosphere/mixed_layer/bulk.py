@@ -14,7 +14,7 @@ from .stats import AbstractStandardStatsModel
 
 
 @dataclass
-class BulkMixedLayerInitConds(AbstractState):
+class BulkMixedLayerInitConds(AbstractState, mutable=True):
     """Data class for bulk mixed layer model initial state."""
 
     # initialized by the user

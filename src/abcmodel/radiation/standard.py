@@ -8,7 +8,7 @@ from ..utils import PhysicalConstants
 
 
 @dataclass
-class StandardRadiationInitConds(AbstractState):
+class StandardRadiationInitConds(AbstractState, mutable=True):
     """Standard radiation model initial state."""
 
     net_rad: float

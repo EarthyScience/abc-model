@@ -8,7 +8,7 @@ from ..utils import PhysicalConstants, compute_esat, compute_qsat
 
 
 @dataclass
-class MinimalLandSurfaceInitConds(AbstractState):
+class MinimalLandSurfaceInitConds(AbstractState, mutable=True):
     """Minimal land surface model initial state."""
 
     alpha: float

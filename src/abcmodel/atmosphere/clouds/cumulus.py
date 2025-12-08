@@ -9,7 +9,7 @@ from ..abstracts import AbstractCloudModel
 
 
 @dataclass
-class StandardCumulusInitConds(AbstractState):
+class StandardCumulusInitConds(AbstractState, mutable=True):
     """Standard cumulus initial state."""
 
     cc_frac: float = 0.0

@@ -8,7 +8,7 @@ from ..abstracts import AbstractCloudModel
 
 
 @dataclass
-class NoCloudInitConds(AbstractState):
+class NoCloudInitConds(AbstractState, mutable=True):
     """No cloud initial state."""
 
     cc_frac: float = 0.0

@@ -9,7 +9,7 @@ from ..abstracts import AbstractSurfaceLayerModel
 
 
 @dataclass
-class SimpleSurfaceLayerInitConds(AbstractState):
+class SimpleSurfaceLayerInitConds(AbstractState, mutable=True):
     """Minimal surface layer model initial state."""
 
     ustar: float
