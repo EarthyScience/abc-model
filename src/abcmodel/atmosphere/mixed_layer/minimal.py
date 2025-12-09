@@ -47,10 +47,6 @@ class MinimalMixedLayerInitConds(AbstractState, mutable=True):
     """Convective velocity scale [m s-1]."""
     wqe: float = 0.0
     """Entrainment moisture flux [kg kg-1 m s-1]."""
-    wqe: float = 0.0
-    """Entrainment moisture flux [kg kg-1 m s-1]."""
-    wCO2M: float = 0.0
-    """CO2 mass flux [mgC m-2 s]."""
     wCO2e: float = 0.0
     """Entrainment CO2 flux [mgC m-2 s]."""
 
@@ -59,12 +55,6 @@ class MinimalMixedLayerInitConds(AbstractState, mutable=True):
     """Mixed-layer potential temperature [K]."""
     wthetav: float = jnp.nan
     """Surface kinematic virtual heat flux [K m s-1]."""
-    qsat: float = jnp.nan
-    """Saturation specific humidity [kg/kg]."""
-    e: float = jnp.nan
-    """Vapor pressure [Pa]."""
-    esat: float = jnp.nan
-    """Saturation vapor pressure [Pa]."""
     lcl: float = jnp.nan
     """Lifting condensation level [m]."""
     deltathetav: float = jnp.nan

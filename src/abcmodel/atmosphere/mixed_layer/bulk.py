@@ -24,18 +24,12 @@ class BulkMixedLayerInitConds(AbstractState, mutable=True):
     """Initial mixed-layer potential temperature [K]."""
     deltatheta: float
     """Initial temperature jump at the top of the ABL [K]."""
-    deltatheta: float
-    """Initial temperature jump at the top of the ABL [K]."""
     q: float
     """Initial mixed-layer specific humidity [kg/kg]."""
     dq: float
     """Initial specific humidity jump at h [kg/kg]."""
-    dq: float
-    """Initial specific humidity jump at h [kg/kg]."""
     co2: float
     """Initial mixed-layer CO2 [ppm]."""
-    deltaCO2: float
-    """Initial CO2 jump at the top of the ABL [ppm]."""
     deltaCO2: float
     """Initial CO2 jump at the top of the ABL [ppm]."""
     u: float
@@ -56,8 +50,6 @@ class BulkMixedLayerInitConds(AbstractState, mutable=True):
     """Convective velocity scale [m s-1]."""
     we: float = -1.0
     """Entrainment velocity [m s-1]."""
-    we: float = -1.0
-    """Entrainment velocity [m s-1]."""
 
     # should be initialized during warmup
     thetav: float = jnp.nan
@@ -68,12 +60,6 @@ class BulkMixedLayerInitConds(AbstractState, mutable=True):
     """Surface kinematic virtual heat flux [K m s-1]."""
     wqe: float = jnp.nan
     """Entrainment moisture flux [kg kg-1 m s-1]."""
-    qsat: float = jnp.nan
-    """Saturation specific humidity [kg/kg]."""
-    e: float = jnp.nan
-    """Vapor pressure [Pa]."""
-    esat: float = jnp.nan
-    """Saturation vapor pressure [Pa]."""
     wCO2e: float = jnp.nan
     """Entrainment CO2 flux [mgC/m²/s]."""
     wthetae: float = jnp.nan
