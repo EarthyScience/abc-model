@@ -1,9 +1,10 @@
 from dataclasses import dataclass, field, replace
 
 import jax.numpy as jnp
-from jaxtyping import Array, PyTree
+from jax import Array
 from simple_pytree import Pytree
 
+from ...coupling import CoupledState
 from ...utils import PhysicalConstants
 from ..abstracts import AbstractSurfaceLayerModel
 
@@ -49,7 +50,7 @@ class MinimalSurfaceLayerModel(AbstractSurfaceLayerModel):
         )
         return uw, vw
 
-    def run(self, state: PyTree, const: PhysicalConstants):
+    def run(self, state: CoupledState, const: PhysicalConstants):
         """Run the model.
 
         Args:
@@ -61,17 +62,13 @@ class MinimalSurfaceLayerModel(AbstractSurfaceLayerModel):
         """
         # Unpack state
         # Assuming state is CoupledState
-        # But wait, does PyTree typing allow attribute access via dot if it's not a dataclass?
+        # But wait, does CoupledState typing allow attribute access via dot if it's not a dataclass?
         # AbstractCoupledState is a dataclass.
         sl_state = state.atmosphere.surface_layer
         ml_state = state.atmosphere.mixed_layer
 
-        uw, vw = self.calculate_momentum_fluxes(
-            ml_state.u, ml_state.v, sl_state.ustar
-        )
-        ra = self.compute_ra(
-            ml_state.u, ml_state.v, ml_state.wstar, sl_state.ustar
-        )
+        uw, vw = self.calculate_momentum_fluxes(ml_state.u, ml_state.v, sl_state.ustar)
+        ra = self.compute_ra(ml_state.u, ml_state.v, ml_state.wstar, sl_state.ustar)
         return replace(sl_state, uw=uw, vw=vw, ra=ra)
 
     @staticmethod

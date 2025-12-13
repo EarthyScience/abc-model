@@ -1,7 +1,7 @@
 from dataclasses import dataclass, replace
 
 import jax.numpy as jnp
-from jaxtyping import Array
+from jax import Array
 
 from ..abstracts import AbstractCoupledState
 from ..utils import PhysicalConstants

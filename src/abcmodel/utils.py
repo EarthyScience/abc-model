@@ -1,9 +1,7 @@
 from dataclasses import dataclass
 
-import jax
 import jax.numpy as jnp
-
-Array = jax.Array
+from jax import Array
 
 
 def compute_esat(temp: Array) -> Array:

@@ -2,8 +2,8 @@ from dataclasses import dataclass, field, replace
 
 import jax
 import jax.numpy as jnp
+from jax import Array
 from jax.scipy.special import exp1
-from jaxtyping import Array
 
 from ..abstracts import AbstractCoupledState
 from ..utils import PhysicalConstants, compute_esat

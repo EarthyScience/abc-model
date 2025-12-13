@@ -1,8 +1,10 @@
 from dataclasses import replace
+
 import jax
 import jax.numpy as jnp
-from jaxtyping import Array, PyTree
+from jax import Array
 
+from ...coupling import CoupledState
 from ...utils import PhysicalConstants, compute_qsat
 from ..abstracts import (
     AbstractMixedLayerModel,
@@ -16,14 +18,14 @@ class AbstractStandardStatsModel(AbstractMixedLayerModel):
     properties, and lifting condensation level determination.
     """
 
-    def statistics(self, state: PyTree, t: int, const: PhysicalConstants):
+    def statistics(self, state: CoupledState, t: int, const: PhysicalConstants):
         """Compute standard meteorological statistics and diagnostics."""
         state = self.compute_virtual_temperatures(state)
         state = self.compute_mixed_layer_top_properties(state, const)
         lcl = self.compute_lcl(state, t, const)
         return replace(state, lcl=lcl)
 
-    def compute_virtual_temperatures(self, state: PyTree) -> PyTree:
+    def compute_virtual_temperatures(self, state: CoupledState) -> CoupledState:
         """Compute virtual temperatures and fluxes.
 
         Notes:
@@ -48,13 +50,11 @@ class AbstractStandardStatsModel(AbstractMixedLayerModel):
         deltathetav = (state.theta + state.deltatheta) * (
             1.0 + 0.61 * (state.q + state.dq)
         ) - state.theta * (1.0 + 0.61 * state.q)
-        return replace(
-            state, thetav=thetav, wthetav=wthetav, deltathetav=deltathetav
-        )
+        return replace(state, thetav=thetav, wthetav=wthetav, deltathetav=deltathetav)
 
     def compute_mixed_layer_top_properties(
-        self, state: PyTree, const: PhysicalConstants
-    ) -> PyTree:
+        self, state: CoupledState, const: PhysicalConstants
+    ) -> CoupledState:
         """Compute properties at the top of the mixed layer.
 
         Notes:
@@ -74,7 +74,9 @@ class AbstractStandardStatsModel(AbstractMixedLayerModel):
         top_rh = state.q / compute_qsat(top_T, top_p)
         return replace(state, top_p=top_p, top_T=top_T, top_rh=top_rh)
 
-    def compute_lcl(self, state: PyTree, t: int, const: PhysicalConstants) -> Array:
+    def compute_lcl(
+        self, state: CoupledState, t: int, const: PhysicalConstants
+    ) -> Array:
         """Compute the lifting condensation level (LCL).
 
         The LCL is found iteratively by finding the height where the relative humidity is 100%.

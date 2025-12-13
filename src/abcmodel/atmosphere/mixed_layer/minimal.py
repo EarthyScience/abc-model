@@ -1,9 +1,10 @@
 from dataclasses import dataclass, field
 
 import jax.numpy as jnp
-from jaxtyping import Array, PyTree
+from jax import Array
 from simple_pytree import Pytree
 
+from ...coupling import CoupledState
 from ...utils import PhysicalConstants
 from .stats import AbstractStandardStatsModel
 
@@ -89,7 +90,7 @@ class MinimalMixedLayerModel(AbstractStandardStatsModel):
     def __init__(self):
         pass
 
-    def run(self, state: PyTree, const: PhysicalConstants):
+    def run(self, state: CoupledState, const: PhysicalConstants):
         """Pass."""
         return state
 

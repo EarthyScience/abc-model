@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field, replace
 
 import jax.numpy as jnp
-from jaxtyping import Array
+from jax import Array
 from simple_pytree import Pytree
 
 from ..abstracts import AbstractCoupledState, AbstractLandModel, AbstractLandState
@@ -66,37 +66,15 @@ class MinimalLandSurfaceModel(AbstractLandModel):
         Returns:
             The updated land state object.
         """
-        # Access components
         land_state = state.land
         ml_state = state.atmosphere.mixed_layer
-        sl_state = state.atmosphere.surface_layer
-
-        # (1) compute aerodynamic resistance from state
-        # Moved to SurfaceLayerModel
-        # ueff = jnp.sqrt(ml_state.u**2.0 + ml_state.v**2.0 + ml_state.wstar**2.0)
-        # ra = ueff / jnp.maximum(1.0e-3, sl_state.ustar) ** 2.0
-        # ra = sl_state.ra
-        # Since this model does not need ra for anything else, we don't need to fetch it?
-        # StandardLandSurfaceModel uses ra to compute heat fluxes etc.
-        # MinimalLandSurfaceModel computes nothing that needs ra?
-        # It computes esat, qsat, dqsatdT, e. None of these need ra.
-        # It returns state... does anyone else need land.ra?
-        # Abstracts defined ra in LandState.
-        # If I remove ra from LandState abstract, then it's gone from interface.
-        # So I don't need to put it in state.
-
-        # (2) calculate essential thermodynamic variables
         esat = compute_esat(ml_state.theta)
         qsat = compute_qsat(ml_state.theta, ml_state.surf_pressure)
-
         dqsatdT = self.compute_dqsatdT(esat, ml_state.theta, ml_state.surf_pressure)
         e = self.compute_e(ml_state.q, ml_state.surf_pressure)
-
         return replace(land_state, esat=esat, qsat=qsat, dqsatdT=dqsatdT, e=e)
 
-    def compute_dqsatdT(
-        self, esat: Array, theta: float, surf_pressure: float
-    ) -> Array:
+    def compute_dqsatdT(self, esat: Array, theta: float, surf_pressure: float) -> Array:
         """Compute the derivative of saturation vapor pressure with respect to temperature ``dqsatdT``.
 
         Notes:

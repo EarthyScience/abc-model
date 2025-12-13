@@ -1,12 +1,10 @@
 from dataclasses import dataclass, replace
 
-import jax
+from jax import Array
 
 from ..abstracts import AbstractCoupledState
 from ..utils import PhysicalConstants
 from .standard import StandardRadiationModel, StandardRadiationState
-
-Array = jax.Array
 
 
 @dataclass

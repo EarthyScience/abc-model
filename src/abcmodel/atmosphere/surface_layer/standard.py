@@ -2,7 +2,7 @@ from dataclasses import dataclass, field, replace
 
 import jax
 import jax.numpy as jnp
-from jaxtyping import Array
+from jax import Array
 from simple_pytree import Pytree
 
 from ...abstracts import AbstractCoupledState

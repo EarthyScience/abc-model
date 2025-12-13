@@ -4,12 +4,11 @@ from dataclasses import replace
 import jax
 import jax.numpy as jnp
 import numpy as np
-from jaxtyping import PyTree
 
-from .coupling import ABCoupler
+from .coupling import ABCoupler, CoupledState
 
 
-def print_nan_variables(state: PyTree, prefix: str = ""):
+def print_nan_variables(state: CoupledState, prefix: str = ""):
     """Print all variables in a CoupledState that have NaN values, recursively."""
     nan_vars = []
 
@@ -54,7 +53,7 @@ def print_nan_variables(state: PyTree, prefix: str = ""):
     return nan_vars
 
 
-def warmup(state: PyTree, coupler: ABCoupler, t: int, dt: float) -> PyTree:
+def warmup(state: CoupledState, coupler: ABCoupler, t: int, dt: float) -> CoupledState:
     """Warmup the model by running it for a few timesteps."""
     # Update atmosphere statistics
     # statistics returns AtmosphereState, so we assign to state.atmosphere
@@ -74,7 +73,9 @@ def warmup(state: PyTree, coupler: ABCoupler, t: int, dt: float) -> PyTree:
     return state
 
 
-def timestep(state: PyTree, coupler: ABCoupler, t: int, dt: float) -> PyTree:
+def timestep(
+    state: CoupledState, coupler: ABCoupler, t: int, dt: float
+) -> CoupledState:
     """Run a single timestep of the model."""
     atmos = coupler.atmosphere.statistics(state.atmosphere, t, coupler.const)
     state = replace(state, atmosphere=atmos)
@@ -93,7 +94,7 @@ def timestep(state: PyTree, coupler: ABCoupler, t: int, dt: float) -> PyTree:
     return state
 
 
-def integrate(state: PyTree, coupler: ABCoupler, dt: float, runtime: float):
+def integrate(state: CoupledState, coupler: ABCoupler, dt: float, runtime: float):
     """Integrate the coupler forward in time.
 
     Args:
@@ -104,7 +105,7 @@ def integrate(state: PyTree, coupler: ABCoupler, dt: float, runtime: float):
 
     Returns:
         times: Array of time values [h].
-        trajectory: PyTree containing the full state trajectory.
+        trajectory: CoupledState containing the full state trajectory.
     """
     tsteps = int(np.floor(runtime / dt))
 

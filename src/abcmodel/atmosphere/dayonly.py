@@ -55,7 +55,6 @@ class DayOnlyAtmosphereModel(AbstractAtmosphereModel[DayOnlyAtmosphereState]):
         state_with_cl = replace(state_with_sl, atmosphere=new_atmosphere)
         ml_state = self.mixed_layer.run(state_with_cl, const)
         new_atmosphere = replace(new_atmosphere, mixed_layer=ml_state)
-
         return new_atmosphere
 
     def statistics(
@@ -75,39 +74,24 @@ class DayOnlyAtmosphereModel(AbstractAtmosphereModel[DayOnlyAtmosphereState]):
         land: AbstractLandModel,
     ) -> AbstractCoupledState:
         """Warmup the atmosphere by running it for a few timesteps."""
-        # state is CoupledState
-
-        # iterate surface layer to converge turbulent fluxes
-        # We need to update state in the loop
-        current_state = state
-
         for _ in range(10):
-            sl_state = self.surface_layer.run(current_state, const)
-            new_atmosphere = replace(current_state.atmosphere, surface_layer=sl_state)
-            current_state = replace(current_state, atmosphere=new_atmosphere)
-
-        # run land surface
-        # Land run returns LandState
-        land_state = land.run(current_state, const)
-        current_state = replace(current_state, land=land_state)
+            sl_state = self.surface_layer.run(state, const)
+            new_atmosphere = replace(state.atmosphere, surface_layer=sl_state)
+            state = replace(state, atmosphere=new_atmosphere)
+        land_state = land.run(state, const)
+        state = replace(state, land=land_state)
 
         if not isinstance(self.clouds, NoCloudModel):
-            # Run mixed layer
-            ml_state = self.mixed_layer.run(current_state, const)
-            new_atmosphere = replace(current_state.atmosphere, mixed_layer=ml_state)
-            current_state = replace(current_state, atmosphere=new_atmosphere)
-
-            # Run clouds
-            cl_state = self.clouds.run(current_state, const)
-            new_atmosphere = replace(current_state.atmosphere, clouds=cl_state)
-            current_state = replace(current_state, atmosphere=new_atmosphere)
-
-        # run mixed layer
-        ml_state = self.mixed_layer.run(current_state, const)
-        new_atmosphere = replace(current_state.atmosphere, mixed_layer=ml_state)
-        current_state = replace(current_state, atmosphere=new_atmosphere)
-
-        return current_state
+            ml_state = self.mixed_layer.run(state, const)
+            new_atmosphere = replace(state.atmosphere, mixed_layer=ml_state)
+            state = replace(state, atmosphere=new_atmosphere)
+            cl_state = self.clouds.run(state, const)
+            new_atmosphere = replace(state.atmosphere, clouds=cl_state)
+            state = replace(state, atmosphere=new_atmosphere)
+        ml_state = self.mixed_layer.run(state, const)
+        new_atmosphere = replace(state.atmosphere, mixed_layer=ml_state)
+        state = replace(state, atmosphere=new_atmosphere)
+        return state
 
     def integrate(
         self, state: DayOnlyAtmosphereState, dt: float
