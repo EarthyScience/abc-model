@@ -69,12 +69,12 @@ L = TypeVar("L", bound=AbstractLandState)
 A = TypeVar("A", bound=AbstractAtmosphereState)
 
 
-class AbstractCoupledState(AbstractState, Generic[A, L, R]):
-    """Abstract coupled state, generic over atmosphere, land, and radiation types."""
+class AbstractCoupledState(AbstractState, Generic[R, L, A]):
+    """Abstract coupled state, generic over radiation, land and atmosphere types."""
 
-    atmosphere: A
-    land: L
     radiation: R
+    land: L
+    atmosphere: A
 
     @property
     def net_rad(self) -> Array:
@@ -100,7 +100,7 @@ class AbstractRadiationModel(AbstractModel, Generic[R]):
     @abstractmethod
     def run(
         self,
-        state: AbstractCoupledState[A, L, R],
+        state: AbstractCoupledState[R, L, A],
         t: int,
         dt: float,
         const: PhysicalConstants,
@@ -114,7 +114,7 @@ class AbstractLandModel(AbstractModel, Generic[L]):
     @abstractmethod
     def run(
         self,
-        state: AbstractCoupledState[A, L, R],
+        state: AbstractCoupledState[R, L, A],
         const: PhysicalConstants,
     ) -> L:
         raise NotImplementedError
@@ -130,24 +130,24 @@ class AbstractAtmosphereModel(AbstractModel, Generic[A]):
     @abstractmethod
     def warmup(
         self,
-        state: AbstractCoupledState[A, L, R],
+        state: AbstractCoupledState[R, L, A],
         const: PhysicalConstants,
         land: AbstractLandModel[L],
-    ) -> AbstractCoupledState[A, L, R]:
+    ) -> AbstractCoupledState[R, L, A]:
         raise NotImplementedError
 
     @abstractmethod
     def run(
         self,
-        state: AbstractCoupledState[A, L, R],
+        state: AbstractCoupledState[R, L, A],
         const: PhysicalConstants,
     ) -> A:
         raise NotImplementedError
 
     @abstractmethod
     def statistics(
-        self, state: AbstractCoupledState[A, L, R], t: int, const: PhysicalConstants
-    ) -> AbstractCoupledState[A, L, R]:
+        self, state: AbstractCoupledState[R, L, A], t: int, const: PhysicalConstants
+    ) -> AbstractCoupledState[R, L, A]:
         raise NotImplementedError
 
     @abstractmethod

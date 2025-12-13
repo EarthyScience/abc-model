@@ -22,13 +22,13 @@ class DiagnosticsState(Pytree):
     total_energy: float = 0.0
 
 
-A = TypeVar("A", bound=AbstractAtmosphereState)
-L = TypeVar("L", bound=AbstractLandState)
 R = TypeVar("R", bound=AbstractRadiationState)
+L = TypeVar("L", bound=AbstractLandState)
+A = TypeVar("A", bound=AbstractAtmosphereState)
 
 
 @dataclass
-class CoupledState(AbstractCoupledState[A, L, R], Pytree, Generic[A, L, R]):
+class CoupledState(AbstractCoupledState[R, L, A], Generic[R, L, A]):
     """Hierarchical coupled state, generic over component types."""
 
     radiation: R
@@ -56,7 +56,7 @@ class ABCoupler:
         radiation_state: R,
         land_state: L,
         atmosphere_state: A,
-    ) -> CoupledState[A, L, R]:
+    ) -> CoupledState[R, L, A]:
         return CoupledState(
             radiation=radiation_state,
             land=land_state,

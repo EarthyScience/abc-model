@@ -3,8 +3,9 @@ from dataclasses import replace
 import jax
 import jax.numpy as jnp
 import numpy as np
+from jax import Array
 
-from .coupling import ABCoupler, CoupledState
+from .coupling import A, ABCoupler, CoupledState, L, R
 
 
 def warmup(state: CoupledState, coupler: ABCoupler, t: int, dt: float) -> CoupledState:
@@ -19,8 +20,8 @@ def warmup(state: CoupledState, coupler: ABCoupler, t: int, dt: float) -> Couple
 
 
 def timestep(
-    state: CoupledState, coupler: ABCoupler, t: int, dt: float
-) -> CoupledState:
+    state: CoupledState[R, L, A], coupler: ABCoupler, t: int, dt: float
+) -> CoupledState[R, L, A]:
     """Run a single timestep of the model."""
     atmos = coupler.atmosphere.statistics(state.atmosphere, t, coupler.const)
     state = replace(state, atmosphere=atmos)
@@ -38,7 +39,9 @@ def timestep(
     return state
 
 
-def integrate(state: CoupledState, coupler: ABCoupler, dt: float, runtime: float):
+def integrate(
+    state: CoupledState[R, L, A], coupler: ABCoupler, dt: float, runtime: float
+) -> tuple[Array, CoupledState[R, L, A]]:
     """Integrate the coupler forward in time.
 
     Args:
