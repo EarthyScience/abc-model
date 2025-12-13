@@ -27,7 +27,6 @@ class CumulusState(AbstractCloudState):
     """CO2 mass flux [mgC/m²/s]."""
 
 
-# alias
 CumulusInitConds = CumulusState
 
 

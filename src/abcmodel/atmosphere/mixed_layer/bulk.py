@@ -111,7 +111,6 @@ class BulkMixedLayerState(AbstractMixedLayerState):
     """Mixed-layer growth due to cloud top radiative divergence [m s-1]."""
 
 
-# alias
 BulkMixedLayerInitConds = BulkMixedLayerState
 
 
@@ -183,7 +182,6 @@ class BulkMixedLayerModel(AbstractStandardStatsModel, AbstractMixedLayerModel):
         self, state: AbstractCoupledState, const: PhysicalConstants
     ) -> BulkMixedLayerState:
         """Run the model."""
-        # Access components
         ml_state = state.atmosphere.mixed_layer
         sl_state = state.atmosphere.surface_layer
         cloud_state = state.atmosphere.clouds

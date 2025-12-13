@@ -95,7 +95,6 @@ class StandardLandSurfaceState(AbstractLandState):
     """Kinematic CO2 flux [kg/kg m/s] or [mol m-2 s-1]."""
 
 
-# Alias for backward compatibility
 StandardLandSurfaceInitConds = StandardLandSurfaceState
 
 
@@ -200,45 +199,22 @@ class AbstractStandardLandSurfaceModel(AbstractLandModel):
         land_state = state.land
         ml_state = state.atmosphere.mixed_layer
         sl_state = state.atmosphere.surface_layer
-        rad_state = state.radiation
-
-        # compute aerodynamic resistance from state
-        # Moved to SurfaceLayerModel
-        # ra = ueff / jnp.maximum(1.0e-3, sl_state.ustar) ** 2.0
-        # Use existing ra from surface layer state
         ra = sl_state.ra
-
         esat = compute_esat(ml_state.theta)
         qsat = compute_qsat(ml_state.theta, ml_state.surf_pressure)
-
         dqsatdT = self.compute_dqsatdT(esat, ml_state.theta, ml_state.surf_pressure)
         e = self.compute_e(ml_state.q, ml_state.surf_pressure)
-
-        # Update temp state for abstract methods
-        # ra is passed, but it is not part of land_state anymore!
-        # Wait, compute_skin_temperature needs ra.
-        # It takes ra as explicit argument now!
-        # So I don't need to put ra in land_state_updated.
-        # But I replaced land_state with ra... `replace(land_state, ra=ra, ...)`
-        # If ra is removed from land_state definition, this replace will fail.
-        # So I remove ra=ra from replace.
-
         land_state_updated = replace(
             land_state, esat=esat, qsat=qsat, dqsatdT=dqsatdT, e=e
         )
         state_for_update = replace(state, land=land_state_updated)
-
         state_after_rs = self.update_surface_resistance(state_for_update, const)
         state_after_co2 = self.update_co2_flux(state_after_rs, const)
-
-        # Now get the updated land state
         land_state_updated = state_after_co2.land
-
         rssoil = self.compute_soil_resistance(land_state_updated.wg)
         cliq = self.compute_cliq(land_state_updated.wl)
-
         surf_temp = self.compute_skin_temperature(
-            rad_state.net_rad,
+            state.net_rad,
             ml_state.theta,
             ml_state.q,
             land_state_updated.qsat,
@@ -251,7 +227,6 @@ class AbstractStandardLandSurfaceModel(AbstractLandModel):
             const,
         )
         qsatsurf = compute_qsat(surf_temp, ml_state.surf_pressure)
-
         le_veg = self.compute_le_veg(
             surf_temp,
             ml_state.theta,
@@ -284,12 +259,11 @@ class AbstractStandardLandSurfaceModel(AbstractLandModel):
             const,
         )
         wltend = self.compute_wltend(le_liq, const)
-
         le = self.compute_le(le_soil, le_veg, le_liq)
         hf = self.compute_hf(surf_temp, ml_state.theta, ra, const)
         gf = self.compute_gf(surf_temp, land_state_updated.temp_soil)
         le_pot = self.compute_le_pot(
-            rad_state.net_rad,
+            state.net_rad,
             gf,
             land_state_updated.dqsatdT,
             land_state_updated.qsat,
@@ -298,7 +272,7 @@ class AbstractStandardLandSurfaceModel(AbstractLandModel):
             const,
         )
         le_ref = self.compute_le_ref(
-            rad_state.net_rad,
+            state.net_rad,
             gf,
             land_state_updated.dqsatdT,
             land_state_updated.qsat,
@@ -313,7 +287,6 @@ class AbstractStandardLandSurfaceModel(AbstractLandModel):
 
         wtheta = self.compute_wtheta(hf, const)
         wq = self.compute_wq(le, const)
-
         return replace(
             land_state_updated,
             rssoil=rssoil,

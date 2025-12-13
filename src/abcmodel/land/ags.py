@@ -30,7 +30,6 @@ class AgsState(StandardLandSurfaceState):
     """Total CO2 flux [mol m-2 s-1]."""
 
 
-# alias
 AgsInitConds = AgsState
 
 
@@ -431,7 +430,6 @@ class AgsModel(AbstractStandardLandSurfaceModel):
         land_state = state.land
         ml_state = state.atmosphere.mixed_layer
         sl_state = state.atmosphere.surface_layer
-        rad_state = state.radiation
         thetasurf = sl_state.thetasurf
         co2comp = self.compute_co2comp(thetasurf, const.rho)
         gm = self.compute_gm(thetasurf)
@@ -450,7 +448,7 @@ class AgsModel(AbstractStandardLandSurfaceModel):
         fstr = self.compute_soil_moisture_stress_factor(self.w2)
         am = self.compute_gross_assimilation(ammax, gm, ci, co2comp)
         rdark = self.compute_dark_respiration(am)
-        par = self.compute_absorbed_par(rad_state.in_srad)
+        par = self.compute_absorbed_par(state.in_srad)
         alphac = self.compute_light_use_efficiency(co2abs, co2comp)
         gcco2 = self.compute_canopy_co2_conductance(
             alphac,

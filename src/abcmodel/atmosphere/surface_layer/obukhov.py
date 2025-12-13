@@ -62,7 +62,6 @@ class ObukhovSurfaceLayerState(AbstractSurfaceLayerState):
     """Aerodynamic resistance [s/m]."""
 
 
-# alias
 ObukhovSurfaceLayerInitConds = ObukhovSurfaceLayerState
 
 

@@ -15,10 +15,7 @@ from .standard import (
 class JarvisStewartState(StandardLandSurfaceState):
     """Jarvis-Stewart model state."""
 
-    pass
 
-
-# alias
 JarvisStewartInitConds = JarvisStewartState
 
 
@@ -45,14 +42,13 @@ class JarvisStewartModel(AbstractStandardLandSurfaceModel):
         Returns:
             CoupledState (with updated land component).
         """
-        f1 = self.compute_f1(state.radiation.in_srad)
+        f1 = self.compute_f1(state.in_srad)
         f2 = self.compute_f2(state.land.wg)
         f3 = self.compute_f3(state.land.esat, state.land.e)
         f4 = self.compute_f4(state.atmosphere.mixed_layer.theta)
         rs = self.rsmin / self.lai * f1 * f2 * f3 * f4
         new_land = replace(state.land, rs=rs)
         new_state = replace(state, land=new_land)
-
         return new_state
 
     def compute_f1(self, in_srad: Array) -> Array:

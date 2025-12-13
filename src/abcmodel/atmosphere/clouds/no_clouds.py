@@ -27,7 +27,6 @@ class NoCloudState(AbstractCloudState):
     """CO2 mass flux [mgC/m²/s]."""
 
 
-# alias
 NoCloudInitConds = NoCloudState
 
 

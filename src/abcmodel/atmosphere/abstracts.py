@@ -30,11 +30,6 @@ class AbstractSurfaceLayerModel(AbstractModel):
     ) -> AbstractSurfaceLayerState:
         raise NotImplementedError
 
-    @staticmethod
-    @abstractmethod
-    def compute_ra(state: AbstractSurfaceLayerState) -> Array:
-        raise NotImplementedError
-
 
 class AbstractMixedLayerModel(AbstractModel):
     """Abstract mixed layer model class to define the interface for all mixed layer models."""

@@ -76,6 +76,16 @@ class AbstractCoupledState(AbstractState, Generic[A, L, R]):
     land: L
     radiation: R
 
+    @property
+    def net_rad(self) -> Array:
+        """Net surface radiation [W m-2]."""
+        return self.radiation.net_rad
+
+    @property
+    def in_srad(self) -> Array:
+        """Incoming shortwave radiation [W m-2]."""
+        return self.radiation.in_srad
+
 
 class AbstractModel:
     """Abstract model class to define the interface for all models."""
