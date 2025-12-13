@@ -18,6 +18,8 @@ class MinimalSurfaceLayerState(Pytree):
     """Zonal surface momentum flux [m2 s-2]."""
     vw: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Meridional surface momentum flux [m2 s-2]."""
+    ra: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    """Aerodynamic resistance [s/m]."""
 
 
 # alias
@@ -48,9 +50,29 @@ class MinimalSurfaceLayerModel(AbstractSurfaceLayerModel):
         return uw, vw
 
     def run(self, state: PyTree, const: PhysicalConstants):
-        """Calculate momentum fluxes from wind components and friction velocity."""
-        uw, vw = self.calculate_momentum_fluxes(state.u, state.v, state.ustar)
-        return replace(state, uw=uw, vw=vw)
+        """Run the model.
+
+        Args:
+            state: CoupledState.
+            const: PhysicalConstants.
+
+        Returns:
+            Updated MinimalSurfaceLayerState.
+        """
+        # Unpack state
+        # Assuming state is CoupledState
+        # But wait, does PyTree typing allow attribute access via dot if it's not a dataclass?
+        # AbstractCoupledState is a dataclass.
+        sl_state = state.atmosphere.surface_layer
+        ml_state = state.atmosphere.mixed_layer
+
+        uw, vw = self.calculate_momentum_fluxes(
+            ml_state.u, ml_state.v, sl_state.ustar
+        )
+        ra = self.compute_ra(
+            ml_state.u, ml_state.v, ml_state.wstar, sl_state.ustar
+        )
+        return replace(sl_state, uw=uw, vw=vw, ra=ra)
 
     @staticmethod
     def compute_ra(u: Array, v: Array, wstar: Array, ustar: Array) -> Array:

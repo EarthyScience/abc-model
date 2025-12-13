@@ -24,8 +24,6 @@ class MinimalLandSurfaceState(AbstractLandState, Pytree):
     """No water content in the canopy [m]."""
 
     # the following variables are assigned during warmup/timestep
-    ra: Array = field(default_factory=lambda: jnp.array(jnp.nan))
-    """Aerodynamic resistance [s/m]."""
     esat: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Saturation vapor pressure [Pa]."""
     qsat: Array = field(default_factory=lambda: jnp.array(jnp.nan))
@@ -74,8 +72,18 @@ class MinimalLandSurfaceModel(AbstractLandModel):
         sl_state = state.atmosphere.surface_layer
 
         # (1) compute aerodynamic resistance from state
-        ueff = jnp.sqrt(ml_state.u**2.0 + ml_state.v**2.0 + ml_state.wstar**2.0)
-        ra = ueff / jnp.maximum(1.0e-3, sl_state.ustar) ** 2.0
+        # Moved to SurfaceLayerModel
+        # ueff = jnp.sqrt(ml_state.u**2.0 + ml_state.v**2.0 + ml_state.wstar**2.0)
+        # ra = ueff / jnp.maximum(1.0e-3, sl_state.ustar) ** 2.0
+        # ra = sl_state.ra
+        # Since this model does not need ra for anything else, we don't need to fetch it?
+        # StandardLandSurfaceModel uses ra to compute heat fluxes etc.
+        # MinimalLandSurfaceModel computes nothing that needs ra?
+        # It computes esat, qsat, dqsatdT, e. None of these need ra.
+        # It returns state... does anyone else need land.ra?
+        # Abstracts defined ra in LandState.
+        # If I remove ra from LandState abstract, then it's gone from interface.
+        # So I don't need to put it in state.
 
         # (2) calculate essential thermodynamic variables
         esat = compute_esat(ml_state.theta)
@@ -84,7 +92,7 @@ class MinimalLandSurfaceModel(AbstractLandModel):
         dqsatdT = self.compute_dqsatdT(esat, ml_state.theta, ml_state.surf_pressure)
         e = self.compute_e(ml_state.q, ml_state.surf_pressure)
 
-        return replace(land_state, ra=ra, esat=esat, qsat=qsat, dqsatdT=dqsatdT, e=e)
+        return replace(land_state, esat=esat, qsat=qsat, dqsatdT=dqsatdT, e=e)
 
     def compute_dqsatdT(
         self, esat: Array, theta: float, surf_pressure: float

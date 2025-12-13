@@ -89,6 +89,7 @@ def timestep(state: PyTree, coupler: ABCoupler, t: int, dt: float) -> PyTree:
     atmos = coupler.atmosphere.integrate(state.atmosphere, dt)
     state = replace(state, atmosphere=atmos)
     state = coupler.compute_diagnostics(state)
+    print_nan_variables(state, prefix=f"t={t}")
     return state
 
 

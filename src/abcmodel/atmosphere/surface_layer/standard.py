@@ -59,6 +59,8 @@ class StandardSurfaceLayerState(AbstractSurfaceLayerState, Pytree):
     """Obukhov length [m]."""
     rib_number: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Bulk Richardson number [-]."""
+    ra: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    """Aerodynamic resistance [s/m]."""
 
 
 # alias
@@ -87,12 +89,8 @@ class StandardSurfaceLayerModel(AbstractSurfaceLayerModel):
         Returns:
             The updated surface layer state.
         """
-        # Access components
-        # We assume state is CoupledState
         sl_state = state.atmosphere.surface_layer
-        # mixed layer state (for u, v, wstar, theta, q, surf_pressure)
         ml_state = state.atmosphere.mixed_layer
-        # land state (for rs)
         land_state = state.land
 
         ueff = compute_effective_wind_speed(ml_state.u, ml_state.v, ml_state.wstar)
@@ -141,8 +139,10 @@ class StandardSurfaceLayerModel(AbstractSurfaceLayerModel):
             uw,
             vw,
         )
+        ra = self.compute_ra(ml_state.u, ml_state.v, ml_state.wstar, drag_s)
         return replace(
             sl_state,
+            ra=ra,
             thetasurf=thetasurf,
             qsurf=qsurf,
             thetavsurf=thetavsurf,

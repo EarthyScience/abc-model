@@ -38,8 +38,7 @@ class AbstractLandState(AbstractState):
     """No moisture content in the root zone [m3 m-3]."""
     wl: Array
     """No water content in the canopy [m]."""
-    ra: Array
-    """Aerodynamic resistance [s/m]."""
+
     esat: Array
     """Saturation vapor pressure [Pa]."""
     qsat: Array

@@ -1,18 +1,15 @@
 from abc import abstractmethod
 from dataclasses import dataclass, field, replace
 
-import jax
 import jax.numpy as jnp
-from jaxtyping import Array, PyTree
+from jax import Array
 from simple_pytree import Pytree
 
 from ..abstracts import (
     AbstractCoupledState,
     AbstractLandModel,
     AbstractLandState,
-    AbstractRadiationState,
 )
-from ..atmosphere.abstracts import AbstractMixedLayerState, AbstractSurfaceLayerState
 from ..utils import PhysicalConstants, compute_esat, compute_qsat
 
 
@@ -31,13 +28,30 @@ class StandardLandSurfaceState(AbstractLandState, Pytree):
     surf_temp: Array
     """Surface temperature [K]."""
     wl: Array
-    """Liquid water storage on the canopy [m]."""
+    """No water content in the canopy [m]."""
 
     rs: Array = field(default_factory=lambda: jnp.array(1.0e6))
     """Surface resistance [m s-1]."""
     rssoil: Array = field(default_factory=lambda: jnp.array(1.0e6))
     """Soil resistance [m s-1]."""
 
+    # the following variables should be initialized to nan
+    esat: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    """Saturation vapor pressure [Pa]."""
+    qsat: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    """Saturation specific humidity [kg/kg]."""
+    dqsatdT: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    """Derivative of saturation specific humidity with respect to temperature [kg/kg/K]."""
+    e: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    """Vapor pressure [Pa]."""
+    qsatsurf: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    """Saturation specific humidity at surface temperature [kg/kg]."""
+    wtheta: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    """Kinematic heat flux [K m/s]."""
+    wq: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    """Kinematic moisture flux [kg/kg m/s]."""
+    wCO2: Array = field(default_factory=lambda: jnp.array(jnp.nan))
+    """Kinematic CO2 flux [kg/kg m/s] or [mol m-2 s-1]."""
     cliq: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Wet fraction of the canopy [-]."""
     temp_soil_tend: Array = field(default_factory=lambda: jnp.array(jnp.nan))
@@ -190,8 +204,10 @@ class AbstractStandardLandSurfaceModel(AbstractLandModel):
         rad_state = state.radiation
 
         # compute aerodynamic resistance from state
-        ueff = jnp.sqrt(ml_state.u**2.0 + ml_state.v**2.0 + ml_state.wstar**2.0)
-        ra = ueff / jnp.maximum(1.0e-3, sl_state.ustar) ** 2.0
+        # Moved to SurfaceLayerModel
+        # ra = ueff / jnp.maximum(1.0e-3, sl_state.ustar) ** 2.0
+        # Use existing ra from surface layer state
+        ra = sl_state.ra
 
         esat = compute_esat(ml_state.theta)
         qsat = compute_qsat(ml_state.theta, ml_state.surf_pressure)
@@ -200,8 +216,16 @@ class AbstractStandardLandSurfaceModel(AbstractLandModel):
         e = self.compute_e(ml_state.q, ml_state.surf_pressure)
 
         # Update temp state for abstract methods
+        # ra is passed, but it is not part of land_state anymore!
+        # Wait, compute_skin_temperature needs ra.
+        # It takes ra as explicit argument now!
+        # So I don't need to put ra in land_state_updated.
+        # But I replaced land_state with ra... `replace(land_state, ra=ra, ...)`
+        # If ra is removed from land_state definition, this replace will fail.
+        # So I remove ra=ra from replace.
+
         land_state_updated = replace(
-            land_state, ra=ra, esat=esat, qsat=qsat, dqsatdT=dqsatdT, e=e
+            land_state, esat=esat, qsat=qsat, dqsatdT=dqsatdT, e=e
         )
         state_for_update = replace(state, land=land_state_updated)
 
@@ -220,7 +244,7 @@ class AbstractStandardLandSurfaceModel(AbstractLandModel):
             ml_state.q,
             land_state_updated.qsat,
             land_state_updated.dqsatdT,
-            land_state_updated.ra,
+            ra,
             land_state_updated.rs,
             rssoil,
             cliq,
@@ -235,7 +259,7 @@ class AbstractStandardLandSurfaceModel(AbstractLandModel):
             ml_state.q,
             land_state_updated.qsat,
             land_state_updated.dqsatdT,
-            land_state_updated.ra,
+            ra,
             land_state_updated.rs,
             cliq,
             const,
@@ -246,7 +270,7 @@ class AbstractStandardLandSurfaceModel(AbstractLandModel):
             ml_state.q,
             land_state_updated.qsat,
             land_state_updated.dqsatdT,
-            land_state_updated.ra,
+            ra,
             cliq,
             const,
         )
@@ -256,14 +280,14 @@ class AbstractStandardLandSurfaceModel(AbstractLandModel):
             ml_state.q,
             land_state_updated.qsat,
             land_state_updated.dqsatdT,
-            land_state_updated.ra,
+            ra,
             rssoil,
             const,
         )
         wltend = self.compute_wltend(le_liq, const)
 
         le = self.compute_le(le_soil, le_veg, le_liq)
-        hf = self.compute_hf(surf_temp, ml_state.theta, land_state_updated.ra, const)
+        hf = self.compute_hf(surf_temp, ml_state.theta, ra, const)
         gf = self.compute_gf(surf_temp, land_state_updated.temp_soil)
         le_pot = self.compute_le_pot(
             rad_state.net_rad,
@@ -271,7 +295,7 @@ class AbstractStandardLandSurfaceModel(AbstractLandModel):
             land_state_updated.dqsatdT,
             land_state_updated.qsat,
             ml_state.q,
-            land_state_updated.ra,
+            ra,
             const,
         )
         le_ref = self.compute_le_ref(
@@ -280,7 +304,7 @@ class AbstractStandardLandSurfaceModel(AbstractLandModel):
             land_state_updated.dqsatdT,
             land_state_updated.qsat,
             ml_state.q,
-            land_state_updated.ra,
+            ra,
             const,
         )
         temp_soil_tend = self.compute_temp_soil_tend(
@@ -312,9 +336,7 @@ class AbstractStandardLandSurfaceModel(AbstractLandModel):
             wq=wq,
         )
 
-    def compute_dqsatdT(
-        self, esat: Array, theta: float, surf_pressure: float
-    ) -> Array:
+    def compute_dqsatdT(self, esat: Array, theta: float, surf_pressure: float) -> Array:
         """Compute the derivative of saturation vapor pressure with respect to temperature ``dqsatdT``.
 
         Notes:
@@ -352,18 +374,18 @@ class AbstractStandardLandSurfaceModel(AbstractLandModel):
     @abstractmethod
     def update_surface_resistance(
         self,
-        state: PyTree,
+        state: AbstractCoupledState,
         const: PhysicalConstants,
-    ) -> PyTree:
+    ) -> AbstractCoupledState:
         """Abstract method to update surface resistance."""
         raise NotImplementedError
 
     @abstractmethod
     def update_co2_flux(
         self,
-        state: PyTree,
+        state: AbstractCoupledState,
         const: PhysicalConstants,
-    ) -> PyTree:
+    ) -> AbstractCoupledState:
         """Abstract method to update CO2 flux."""
         raise NotImplementedError
 
@@ -495,17 +517,8 @@ class AbstractStandardLandSurfaceModel(AbstractLandModel):
             + self.lam * temp_soil
         ) / (
             const.rho * const.cp / ra
-            + self.cveg
-            * (1.0 - cliq)
-            * const.rho
-            * const.lv
-            / (ra + rs)
-            * dqsatdT
-            + (1.0 - self.cveg)
-            * const.rho
-            * const.lv
-            / (ra + rssoil)
-            * dqsatdT
+            + self.cveg * (1.0 - cliq) * const.rho * const.lv / (ra + rs) * dqsatdT
+            + (1.0 - self.cveg) * const.rho * const.lv / (ra + rssoil) * dqsatdT
             + self.cveg * cliq * const.rho * const.lv / ra * dqsatdT
             + self.lam
         )
@@ -553,9 +566,7 @@ class AbstractStandardLandSurfaceModel(AbstractLandModel):
         References:
             Equation 9.15 from the CLASS book.
         """
-        term = (
-            dqsatdT * (surf_temp - theta) + qsat - q
-        )
+        term = dqsatdT * (surf_temp - theta) + qsat - q
         le_veg = const.rho * const.lv / (ra + rs) * term
         frac = (1.0 - cliq) * self.cveg
         return frac * le_veg
@@ -586,9 +597,7 @@ class AbstractStandardLandSurfaceModel(AbstractLandModel):
         References:
             Equation 9.18 from the CLASS book.
         """
-        term = (
-            dqsatdT * (surf_temp - theta) + qsat - q
-        )
+        term = dqsatdT * (surf_temp - theta) + qsat - q
         le_liq = const.rho * const.lv / ra * term
         frac = cliq * self.cveg
         return frac * le_liq
@@ -618,9 +627,7 @@ class AbstractStandardLandSurfaceModel(AbstractLandModel):
         References:
             Equation 9.21 from the CLASS book.
         """
-        term = (
-            dqsatdT * (surf_temp - theta) + qsat - q
-        )
+        term = dqsatdT * (surf_temp - theta) + qsat - q
         le_soil = const.rho * const.lv / (ra + rssoil) * term
         frac = 1.0 - self.cveg
         return frac * le_soil

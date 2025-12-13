@@ -9,6 +9,9 @@ from ..utils import Array, PhysicalConstants
 class AbstractSurfaceLayerState(AbstractState):
     """Abstract surface layer state."""
 
+    ra: Array
+    """Aerodynamic resistance [s/m]."""
+
 
 class AbstractMixedLayerState(AbstractState):
     """Abstract mixed layer state."""
