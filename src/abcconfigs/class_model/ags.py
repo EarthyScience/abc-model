@@ -7,6 +7,7 @@ init_conds_kwargs = {
     "temp2": jnp.array(286.0),
     "surf_temp": jnp.array(290.0),
     "wl": jnp.array(0.0000),
+    "wq": jnp.array(1e-4),
 }
 """"""
 model_kwargs = {

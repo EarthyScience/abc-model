@@ -28,6 +28,8 @@ class StandardLandSurfaceState(AbstractLandState):
     """Surface temperature [K]."""
     wl: Array
     """No water content in the canopy [m]."""
+    wq: Array
+    """Kinematic moisture flux [kg/kg m/s]."""
 
     rs: Array = field(default_factory=lambda: jnp.array(1.0e6))
     """Surface resistance [m s-1]."""
@@ -47,8 +49,6 @@ class StandardLandSurfaceState(AbstractLandState):
     """Saturation specific humidity at surface temperature [kg/kg]."""
     wtheta: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Kinematic heat flux [K m/s]."""
-    wq: Array = field(default_factory=lambda: jnp.array(jnp.nan))
-    """Kinematic moisture flux [kg/kg m/s]."""
     wCO2: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Kinematic CO2 flux [kg/kg m/s] or [mol m-2 s-1]."""
     cliq: Array = field(default_factory=lambda: jnp.array(jnp.nan))
@@ -196,8 +196,8 @@ class AbstractStandardLandSurfaceModel(AbstractLandModel):
             The updated land state object.
         """
         land_state = state.land
-        ml_state = state.atmos.mixed_layer
-        sl_state = state.atmos.surface_layer
+        ml_state = state.atmos.mixed
+        sl_state = state.atmos.surface
         ra = sl_state.ra
         esat = compute_esat(ml_state.theta)
         qsat = compute_qsat(ml_state.theta, ml_state.surf_pressure)

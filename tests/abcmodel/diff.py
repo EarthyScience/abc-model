@@ -46,8 +46,8 @@ def run_model(theta0: float) -> float:
         clouds=cloud_model,
     )
     atmos_init_conds = abcmodel.atmos.DayOnlyAtmosphereState(
-        surface_layer=surface_layer_init_conds,
-        mixed_layer=mixed_layer_init_conds,
+        surface=surface_layer_init_conds,
+        mixed=mixed_layer_init_conds,
         clouds=cloud_init_conds,
     )
     atmos_model = abcmodel.atmos.DayOnlyAtmosphereModel(
@@ -66,7 +66,7 @@ def run_model(theta0: float) -> float:
     _, trajectory = abcmodel.integrate(state, abcoupler, dt=dt, runtime=runtime)
 
     # return final boundary layer height as scalar
-    return trajectory.atmos.mixed_layer.h_abl[-1]
+    return trajectory.atmos.mixed.h_abl[-1]
 
 
 def main():

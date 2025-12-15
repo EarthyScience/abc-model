@@ -53,7 +53,7 @@ class CumulusModel(AbstractCloudModel):
     ) -> CumulusState:
         """Run the model."""
         cloud_state = state.atmos.clouds
-        ml_state = state.atmos.mixed_layer
+        ml_state = state.atmos.mixed
 
         q2_h = self.compute_q2_h(
             cloud_state.cc_qf,

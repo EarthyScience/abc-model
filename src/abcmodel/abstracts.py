@@ -153,7 +153,7 @@ class AbstractAtmosphereModel(AbstractModel, Generic[AtmosT]):
         state: AbstractCoupledState[RadT, LandT, AtmosT],
         t: int,
         const: PhysicalConstants,
-    ) -> AbstractCoupledState[RadT, LandT, AtmosT]:
+    ) -> AtmosT:
         raise NotImplementedError
 
     @abstractmethod

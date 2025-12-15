@@ -60,8 +60,8 @@ def main():
         atmos=atmos_model,
     )
     atmos_state = abcmodel.atmos.DayOnlyAtmosphereState(
-        surface_layer=surface_layer_init_conds,
-        mixed_layer=mixed_layer_init_conds,
+        surface=surface_layer_init_conds,
+        mixed=mixed_layer_init_conds,
         clouds=cloud_init_conds,
     )
     state = abcoupler.init_state(

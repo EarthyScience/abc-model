@@ -20,7 +20,7 @@ def timestep(
     state: CoupledState[R, L, A], coupler: ABCoupler, t: int, dt: float
 ) -> CoupledState[R, L, A]:
     """Run a single timestep of the model."""
-    atmos = coupler.atmos.statistics(state.atmos, t, coupler.const)
+    atmos = coupler.atmos.statistics(state, t, coupler.const)
     state = state.replace(atmos=atmos)
     rad = coupler.rad.run(state, t, dt, coupler.const)
     state = state.replace(rad=rad)

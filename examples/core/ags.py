@@ -60,8 +60,8 @@ def main():
         atmos=atmos_model,
     )
     atmos_state = abcmodel.atmos.DayOnlyAtmosphereState(
-        surface_layer=surface_layer_init_conds,
-        mixed_layer=mixed_layer_init_conds,
+        surface=surface_layer_init_conds,
+        mixed=mixed_layer_init_conds,
         clouds=cloud_init_conds,
     )
     state = abcoupler.init_state(
@@ -77,17 +77,17 @@ def main():
     plt.figure(figsize=(12, 8))
 
     plt.subplot(231)
-    plt.plot(time, trajectory.atmos.mixed_layer.h_abl)
+    plt.plot(time, trajectory.atmos.mixed.h_abl)
     plt.xlabel("time [h]")
     plt.ylabel("h [m]")
 
     plt.subplot(234)
-    plt.plot(time, trajectory.atmos.mixed_layer.theta)
+    plt.plot(time, trajectory.atmos.mixed.theta)
     plt.xlabel("time [h]")
     plt.ylabel("theta [K]")
 
     plt.subplot(232)
-    plt.plot(time, trajectory.atmos.mixed_layer.q * 1000.0)
+    plt.plot(time, trajectory.atmos.mixed.q * 1000.0)
     plt.xlabel("time [h]")
     plt.ylabel("q [g kg-1]")
 

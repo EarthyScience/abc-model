@@ -7,7 +7,6 @@ init_conds_kwargs = {
     "wtheta": jnp.array(0.1),
     "q": jnp.array(0.008),
     "dq": jnp.array(-0.001),
-    "wq": jnp.array(1e-4),
     "co2": jnp.array(422.0),
     "deltaCO2": jnp.array(-44.0),
     "wCO2": jnp.array(0.0),

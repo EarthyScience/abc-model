@@ -61,8 +61,8 @@ def main():
         atmos=atmos_model,
     )
     atmos_state = abcmodel.atmos.DayOnlyAtmosphereState(
-        surface_layer=surface_layer_init_conds,
-        mixed_layer=mixed_layer_init_conds,
+        surface=surface_layer_init_conds,
+        mixed=mixed_layer_init_conds,
         clouds=cloud_init_conds,
     )
     state = abcoupler.init_state(
@@ -85,7 +85,7 @@ def main():
     axes[0].grid(True, alpha=0.3)
     axes[1].plot(
         time,
-        trajectory.atmos.mixed_layer.q * trajectory.atmos.mixed_layer.h_abl * const.rho,
+        trajectory.atmos.mixed.q * trajectory.atmos.mixed.h_abl * const.rho,
         label="Vapor",
     )
     axes[1].plot(time, trajectory.land.wg * const.rhow * 0.1, label="Soil layer 1")

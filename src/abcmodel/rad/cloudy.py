@@ -64,7 +64,7 @@ class CloudyRadiationModel(StandardRadiationModel):
         """
         # needed components
         rad_state = state.rad
-        ml_state = state.atmos.mixed_layer
+        ml_state = state.atmos.mixed
         land_state = state.land
         cloud_state = state.atmos.clouds
 

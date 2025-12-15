@@ -42,7 +42,7 @@ class AbstractMixedLayerModel(AbstractModel):
 
     @abstractmethod
     def statistics(
-        self, state: AbstractMixedLayerState, t: int, const: PhysicalConstants
+        self, state: AbstractCoupledState, t: int, const: PhysicalConstants
     ) -> AbstractMixedLayerState:
         raise NotImplementedError
 

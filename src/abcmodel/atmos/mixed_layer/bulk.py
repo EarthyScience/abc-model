@@ -25,8 +25,6 @@ class BulkMixedLayerState(AbstractMixedLayerState):
     """Initial mixed-layer specific humidity [kg/kg]."""
     dq: Array
     """Initial specific humidity jump at h [kg/kg]."""
-    wq: Array
-    """Surface kinematic moisture flux [kg/kg m/s]."""
     co2: Array
     """Initial mixed-layer CO2 [ppm]."""
     deltaCO2: Array
@@ -61,12 +59,6 @@ class BulkMixedLayerState(AbstractMixedLayerState):
     """Surface kinematic virtual heat flux [K m s-1]."""
     wqe: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Entrainment moisture flux [kg kg-1 m s-1]."""
-    qsat: Array = field(default_factory=lambda: jnp.array(jnp.nan))
-    """Saturation specific humidity [kg/kg]."""
-    e: Array = field(default_factory=lambda: jnp.array(jnp.nan))
-    """Vapor pressure [Pa]."""
-    esat: Array = field(default_factory=lambda: jnp.array(jnp.nan))
-    """Saturation vapor pressure [Pa]."""
     wCO2e: Array = field(default_factory=lambda: jnp.array(jnp.nan))
     """Entrainment CO2 flux [mgC/m²/s]."""
     wthetae: Array = field(default_factory=lambda: jnp.array(jnp.nan))
@@ -182,8 +174,8 @@ class BulkMixedLayerModel(AbstractStandardStatsModel, AbstractMixedLayerModel):
         self, state: AbstractCoupledState, const: PhysicalConstants
     ) -> BulkMixedLayerState:
         """Run the model."""
-        ml_state = state.atmos.mixed_layer
-        sl_state = state.atmos.surface_layer
+        ml_state = state.atmos.mixed
+        sl_state = state.atmos.surface
         cloud_state = state.atmos.clouds
         land_state = state.land
         wtheta = land_state.wtheta
