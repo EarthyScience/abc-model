@@ -106,7 +106,9 @@ class BulkMixedLayerState(AbstractMixedLayerState):
 BulkMixedLayerInitConds = BulkMixedLayerState
 
 
-class BulkMixedLayerModel(AbstractStandardStatsModel, AbstractMixedLayerModel):
+class BulkMixedLayerModel(
+    AbstractStandardStatsModel, AbstractMixedLayerModel[BulkMixedLayerState]
+):
     """Bulk mixed layer model with full atmospheric boundary layer dynamics.
 
     Complete mixed layer model that simulates atmospheric boundary layer evolution
@@ -174,10 +176,10 @@ class BulkMixedLayerModel(AbstractStandardStatsModel, AbstractMixedLayerModel):
         self, state: AbstractCoupledState, const: PhysicalConstants
     ) -> BulkMixedLayerState:
         """Run the model."""
-        ml_state = state.atmos.mixed
-        sl_state = state.atmos.surface
-        cloud_state = state.atmos.clouds
         land_state = state.land
+        sl_state = state.atmos.surface
+        ml_state = state.atmos.mixed
+        cloud_state = state.atmos.clouds
         wtheta = land_state.wtheta
         wq = land_state.wq
         wCO2 = land_state.wCO2

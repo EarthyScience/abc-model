@@ -1,40 +1,27 @@
-from dataclasses import dataclass, field
-from typing import Generic, TypeVar
-
-from simple_pytree import Pytree
+from dataclasses import dataclass
+from typing import Generic
 
 from .abstracts import (
     AbstractAtmosphereModel,
-    AbstractAtmosphereState,
     AbstractCoupledState,
     AbstractLandModel,
-    AbstractLandState,
     AbstractRadiationModel,
-    AbstractRadiationState,
+    AtmosT,
+    LandT,
+    RadT,
 )
 from .utils import PhysicalConstants
 
 
-class DiagnosticsState(Pytree):
-    """Diagnostic variables for the coupled system."""
-
-    total_water_mass: float = 0.0
-    total_energy: float = 0.0
-
-
-R = TypeVar("R", bound=AbstractRadiationState)
-L = TypeVar("L", bound=AbstractLandState)
-A = TypeVar("A", bound=AbstractAtmosphereState)
-
-
 @dataclass
-class CoupledState(AbstractCoupledState[R, L, A], Generic[R, L, A]):
+class CoupledState(
+    AbstractCoupledState[RadT, LandT, AtmosT], Generic[RadT, LandT, AtmosT]
+):
     """Hierarchical coupled state, generic over component types."""
 
-    rad: R
-    land: L
-    atmos: A
-    diagnostics: DiagnosticsState = field(default_factory=DiagnosticsState)
+    rad: RadT
+    land: LandT
+    atmos: AtmosT
 
 
 class ABCoupler:
@@ -53,10 +40,10 @@ class ABCoupler:
 
     @staticmethod
     def init_state(
-        rad_state: R,
-        land_state: L,
-        atmos_state: A,
-    ) -> CoupledState[R, L, A]:
+        rad_state: RadT,
+        land_state: LandT,
+        atmos_state: AtmosT,
+    ) -> CoupledState[RadT, LandT, AtmosT]:
         return CoupledState(
             rad=rad_state,
             land=land_state,

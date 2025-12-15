@@ -1,7 +1,7 @@
 """Abstract classes for atmos sub-modules."""
 
 from abc import abstractmethod
-from typing import TypeVar
+from typing import Generic, TypeVar
 
 from ..abstracts import AbstractCoupledState, AbstractModel, AbstractState
 from ..utils import Array, PhysicalConstants
@@ -22,48 +22,40 @@ class AbstractCloudState(AbstractState):
     """Abstract cloud state."""
 
 
-SL = TypeVar("SL", bound=AbstractSurfaceLayerState)
-ML = TypeVar("ML", bound=AbstractMixedLayerState)
-CL = TypeVar("CL", bound=AbstractCloudState)
+SurfT = TypeVar("SurfT", bound=AbstractSurfaceLayerState)
+MixedT = TypeVar("MixedT", bound=AbstractMixedLayerState)
+CloudT = TypeVar("CloudT", bound=AbstractCloudState)
 
 
-class AbstractSurfaceLayerModel(AbstractModel):
+class AbstractSurfaceLayerModel(AbstractModel, Generic[SurfT]):
     """Abstract surface layer model class to define the interface for all surface layer models."""
 
     @abstractmethod
-    def run(
-        self, state: AbstractCoupledState, const: PhysicalConstants
-    ) -> AbstractSurfaceLayerState:
+    def run(self, state: AbstractCoupledState, const: PhysicalConstants) -> SurfT:
         raise NotImplementedError
 
 
-class AbstractMixedLayerModel(AbstractModel):
+class AbstractMixedLayerModel(AbstractModel, Generic[MixedT]):
     """Abstract mixed layer model class to define the interface for all mixed layer models."""
 
     @abstractmethod
-    def run(
-        self, state: AbstractCoupledState, const: PhysicalConstants
-    ) -> AbstractMixedLayerState:
+    def run(self, state: AbstractCoupledState, const: PhysicalConstants) -> MixedT:
         raise NotImplementedError
 
     @abstractmethod
     def statistics(
         self, state: AbstractCoupledState, t: int, const: PhysicalConstants
-    ) -> AbstractMixedLayerState:
+    ) -> MixedT:
         raise NotImplementedError
 
     @abstractmethod
-    def integrate(
-        self, state: AbstractMixedLayerState, dt: float
-    ) -> AbstractMixedLayerState:
+    def integrate(self, state: MixedT, dt: float) -> MixedT:
         raise NotImplementedError
 
 
-class AbstractCloudModel(AbstractModel):
+class AbstractCloudModel(AbstractModel, Generic[CloudT]):
     """Abstract cloud model class to define the interface for all cloud models."""
 
     @abstractmethod
-    def run(
-        self, state: AbstractCoupledState, const: PhysicalConstants
-    ) -> AbstractCloudState:
+    def run(self, state: AbstractCoupledState, const: PhysicalConstants) -> CloudT:
         raise NotImplementedError

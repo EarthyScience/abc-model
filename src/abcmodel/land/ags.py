@@ -7,11 +7,11 @@ from jax.scipy.special import exp1
 
 from ..abstracts import AbstractCoupledState
 from ..utils import PhysicalConstants, compute_esat
-from .standard import AbstractStandardLandSurfaceModel, StandardLandSurfaceState
+from .standard import AbstractStandardLandModel, StandardLandState
 
 
 @dataclass
-class AgsState(StandardLandSurfaceState):
+class AgsState(StandardLandState):
     """A-gs model state."""
 
     rsCO2: Array = field(default_factory=lambda: jnp.array(jnp.nan))
@@ -33,7 +33,7 @@ class AgsState(StandardLandSurfaceState):
 AgsInitConds = AgsState
 
 
-class AgsModel(AbstractStandardLandSurfaceModel):
+class AgsModel(AbstractStandardLandModel):
     """Ags land surface model with coupled photosynthesis and stomatal conductance.
 
     ... (docstring omitted for brevity) ...

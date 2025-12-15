@@ -7,26 +7,36 @@ from ..abstracts import (
     AbstractCoupledState,
     AbstractLandModel,
     AbstractRadiationModel,
+    LandT,
+    RadT,
 )
 from ..utils import PhysicalConstants
 from .abstracts import (
-    CL,
-    ML,
-    SL,
     AbstractCloudModel,
     AbstractMixedLayerModel,
     AbstractSurfaceLayerModel,
+    CloudT,
+    MixedT,
+    SurfT,
 )
 from .clouds import NoCloudModel
 
 
 @dataclass
-class DayOnlyAtmosphereState(AbstractAtmosphereState, Generic[SL, ML, CL]):
+class DayOnlyAtmosphereState(AbstractAtmosphereState, Generic[SurfT, MixedT, CloudT]):
     """Atmosphere state aggregating surface layer, mixed layer, and clouds."""
 
-    surface: SL
-    mixed: ML
-    clouds: CL
+    surface: SurfT
+    mixed: MixedT
+    clouds: CloudT
+
+
+# limamau: can we use this?
+StateAlias = AbstractCoupledState[
+    RadT,
+    LandT,
+    DayOnlyAtmosphereState[SurfT, MixedT, CloudT],
+]
 
 
 class DayOnlyAtmosphereModel(AbstractAtmosphereModel[DayOnlyAtmosphereState]):
@@ -46,22 +56,23 @@ class DayOnlyAtmosphereModel(AbstractAtmosphereModel[DayOnlyAtmosphereState]):
         self,
         state: AbstractCoupledState,
         const: PhysicalConstants,
-    ) -> AbstractCoupledState:
+    ) -> DayOnlyAtmosphereState:
         sl_state = self.surface_layer.run(state, const)
-        new_atmos = replace(state.atmos, surface=sl_state)
-        state_with_sl = replace(state, atmos=new_atmos)
-        cl_state = self.clouds.run(state_with_sl, const)
-        new_atmos = replace(new_atmos, clouds=cl_state)
-        state_with_cl = replace(state_with_sl, atmos=new_atmos)
-        ml_state = self.mixed_layer.run(state_with_cl, const)
-        new_atmos = replace(new_atmos, mixed=ml_state)
-        return new_atmos
+        atmostate = replace(state.atmos, surface=sl_state)
+        state = state.replace(atmos=atmostate)
+        cl_state = self.clouds.run(state, const)
+        atmostate = replace(atmostate, clouds=cl_state)
+        state = state.replace(atmos=atmostate)
+        ml_state = self.mixed_layer.run(state, const)
+        atmostate = replace(atmostate, mixed=ml_state)
+        return atmostate
 
     def statistics(
         self, state: AbstractCoupledState, t: int, const: PhysicalConstants
-    ) -> AbstractCoupledState:
+    ) -> DayOnlyAtmosphereState:
         """Update statistics."""
-        return self.mixed_layer.statistics(state, t, const)
+        ml_state = self.mixed_layer.statistics(state, t, const)
+        return state.atmos.replace(mixed=ml_state)
 
     def warmup(
         self,
@@ -81,20 +92,20 @@ class DayOnlyAtmosphereModel(AbstractAtmosphereModel[DayOnlyAtmosphereState]):
             sl_state = self.surface_layer.run(state, const)
             atmostate = replace(state.atmos, surface=sl_state)
             state = state.replace(atmos=atmostate)
-        land_state = landmodel.run(state, const)
-        state = state.replace(land=land_state)
+        landstate = landmodel.run(state, const)
+        state = state.replace(land=landstate)
 
         # this is if clause is ok because it's outise the scan!
         if not isinstance(self.clouds, NoCloudModel):
             ml_state = self.mixed_layer.run(state, const)
-            new_atmos = replace(state.atmos, mixed=ml_state)
-            state = state.replace(atmos=new_atmos)
+            atmostate = replace(state.atmos, mixed=ml_state)
+            state = state.replace(atmos=atmostate)
             cl_state = self.clouds.run(state, const)
-            new_atmos = replace(state.atmos, clouds=cl_state)
-            state = state.replace(atmos=new_atmos)
+            atmostate = replace(state.atmos, clouds=cl_state)
+            state = state.replace(atmos=atmostate)
         ml_state = self.mixed_layer.run(state, const)
-        new_atmos = replace(state.atmos, mixed=ml_state)
-        state = state.replace(atmos=new_atmos)
+        atmostate = replace(state.atmos, mixed=ml_state)
+        state = state.replace(atmos=atmostate)
         return state
 
     def integrate(

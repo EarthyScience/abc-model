@@ -13,10 +13,10 @@ def main():
 
     # rad
     rad_init_conds = abcmodel.rad.StandardRadiationInitConds(
-        **cm.standard_rad.init_conds_kwargs
+        **cm.standard_radiation.init_conds_kwargs
     )
     rad_model = abcmodel.rad.StandardRadiationModel(
-        **cm.standard_rad.model_kwargs,
+        **cm.standard_radiation.model_kwargs,
     )
 
     # land surface

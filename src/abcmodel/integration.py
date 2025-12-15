@@ -3,24 +3,27 @@ import jax.numpy as jnp
 import numpy as np
 from jax import Array
 
-from .abstracts import AbstractCoupledState
-from .coupling import A, ABCoupler, L, R
+from .abstracts import AbstractCoupledState, AtmosT, LandT, RadT
+from .coupling import ABCoupler
 
 
 def warmup(
-    state: AbstractCoupledState[R, L, A], coupler: ABCoupler, t: int, dt: float
-) -> AbstractCoupledState[R, L, A]:
+    state: AbstractCoupledState[RadT, LandT, AtmosT],
+    coupler: ABCoupler,
+    t: int,
+    dt: float,
+) -> AbstractCoupledState[RadT, LandT, AtmosT]:
     """Warmup the model by running it for a few timesteps."""
     state = coupler.atmos.warmup(coupler.rad, coupler.land, state, t, dt, coupler.const)
     return state
 
 
 def timestep(
-    state: AbstractCoupledState[R, L, A],
+    state: AbstractCoupledState[RadT, LandT, AtmosT],
     coupler: ABCoupler,
     t: int,
     dt: float,
-) -> AbstractCoupledState[R, L, A]:
+) -> AbstractCoupledState[RadT, LandT, AtmosT]:
     """Run a single timestep of the model."""
     atmos = coupler.atmos.statistics(state, t, coupler.const)
     state = state.replace(atmos=atmos)
@@ -39,8 +42,11 @@ def timestep(
 
 
 def integrate(
-    state: AbstractCoupledState[R, L, A], coupler: ABCoupler, dt: float, runtime: float
-) -> tuple[Array, AbstractCoupledState[R, L, A]]:
+    state: AbstractCoupledState[RadT, LandT, AtmosT],
+    coupler: ABCoupler,
+    dt: float,
+    runtime: float,
+) -> tuple[Array, AbstractCoupledState[RadT, LandT, AtmosT]]:
     """Integrate the coupler forward in time.
 
     Args:

@@ -6,20 +6,20 @@ from jax import Array
 from ..abstracts import AbstractCoupledState
 from ..utils import PhysicalConstants
 from .standard import (
-    AbstractStandardLandSurfaceModel,
-    StandardLandSurfaceState,
+    AbstractStandardLandModel,
+    StandardLandState,
 )
 
 
 @dataclass
-class JarvisStewartState(StandardLandSurfaceState):
+class JarvisStewartState(StandardLandState):
     """Jarvis-Stewart model state."""
 
 
 JarvisStewartInitConds = JarvisStewartState
 
 
-class JarvisStewartModel(AbstractStandardLandSurfaceModel):
+class JarvisStewartModel(AbstractStandardLandModel):
     """Jarvis-Stewart land surface model with empirical surface resistance.
 
     ... (docstring omitted for brevity) ...

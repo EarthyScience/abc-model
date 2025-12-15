@@ -3,9 +3,12 @@ from dataclasses import dataclass, field, replace
 import jax.numpy as jnp
 from jax import Array
 
-from ...coupling import CoupledState
 from ...utils import PhysicalConstants
-from ..abstracts import AbstractSurfaceLayerModel, AbstractSurfaceLayerState
+from ..abstracts import (
+    AbstractCoupledState,
+    AbstractSurfaceLayerModel,
+    AbstractSurfaceLayerState,
+)
 
 
 @dataclass
@@ -48,7 +51,7 @@ class SimpleSurfaceLayerModel(AbstractSurfaceLayerModel):
         )
         return uw, vw
 
-    def run(self, state: CoupledState, const: PhysicalConstants):
+    def run(self, state: AbstractCoupledState, const: PhysicalConstants):
         """Run the model.
 
         Args:

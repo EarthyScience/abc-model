@@ -79,7 +79,7 @@ def main():
     _, axes = plt.subplots(1, 3, figsize=(12, 4))
 
     # row 1: water budget
-    axes[0].plot(time, trajectory.diagnostics.total_water_mass)
+    axes[0].plot(time, trajectory.total_water_mass)
     axes[0].set_xlabel("time [h]")
     axes[0].set_ylabel("Total water mass [kg m-2]")
     axes[0].grid(True, alpha=0.3)

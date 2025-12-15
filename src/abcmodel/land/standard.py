@@ -13,7 +13,7 @@ from ..utils import PhysicalConstants, compute_esat, compute_qsat
 
 
 @dataclass
-class StandardLandSurfaceState(AbstractLandState):
+class StandardLandState(AbstractLandState):
     """Standard land surface model state."""
 
     alpha: Array
@@ -95,10 +95,10 @@ class StandardLandSurfaceState(AbstractLandState):
     """Kinematic CO2 flux [kg/kg m/s] or [mol m-2 s-1]."""
 
 
-StandardLandSurfaceInitConds = StandardLandSurfaceState
+StandardLandInitConds = StandardLandState
 
 
-class AbstractStandardLandSurfaceModel(AbstractLandModel):
+class AbstractStandardLandModel(AbstractLandModel):
     """Abstract standard land surface model with comprehensive soil-vegetation dynamics.
 
     Args:
@@ -163,9 +163,7 @@ class AbstractStandardLandSurfaceModel(AbstractLandModel):
         self.lam = lam
         self.c_beta = 0.0
 
-    def integrate(
-        self, state: StandardLandSurfaceState, dt: float
-    ) -> StandardLandSurfaceState:
+    def integrate(self, state: StandardLandState, dt: float) -> StandardLandState:
         """Integrate model forward in time.
 
         Args:
@@ -185,7 +183,7 @@ class AbstractStandardLandSurfaceModel(AbstractLandModel):
         self,
         state: AbstractCoupledState,
         const: PhysicalConstants,
-    ) -> StandardLandSurfaceState:
+    ) -> StandardLandState:
         """Run the full land surface model for one time step.
 
         Args:

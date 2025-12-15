@@ -51,7 +51,7 @@ class AbstractStandardStatsModel(AbstractMixedLayerModel):
             top_rh=top_rh,
             lcl=lcl,
         )
-        return state.atmos.replace(mixed=ml_state)
+        return ml_state
 
     def compute_thetav(self, theta: Array, q: Array) -> Array:
         """Computes the virtual potential temperature as
