@@ -1,4 +1,4 @@
-from dataclasses import dataclass, replace
+from dataclasses import dataclass
 
 import jax.numpy as jnp
 from jax import Array
@@ -45,11 +45,11 @@ class JarvisStewartModel(AbstractStandardLandSurfaceModel):
         f1 = self.compute_f1(state.in_srad)
         f2 = self.compute_f2(state.land.wg)
         f3 = self.compute_f3(state.land.esat, state.land.e)
-        f4 = self.compute_f4(state.atmos.mixed_layer.theta)
+        f4 = self.compute_f4(state.atmos.mixed.theta)
         rs = self.rsmin / self.lai * f1 * f2 * f3 * f4
-        new_land = replace(state.land, rs=rs)
-        new_state = replace(state, land=new_land)
-        return new_state
+        landstate = state.land.replace(rs=rs)
+        state = state.replace(land=landstate)
+        return state
 
     def compute_f1(self, in_srad: Array) -> Array:
         """Compute rad factor f1."""

@@ -10,9 +10,11 @@ def run_model(theta0: float) -> float:
     runtime = 12 * 3600.0
 
     rad_init_conds = abcmodel.rad.StandardRadiationInitConds(
-        **cm.standard_rad.init_conds_kwargs
+        **cm.standard_radiation.init_conds_kwargs
     )
-    rad_model = abcmodel.rad.StandardRadiationModel(**cm.standard_rad.model_kwargs)
+    rad_model = abcmodel.rad.StandardRadiationModel(
+        **cm.standard_radiation.model_kwargs
+    )
 
     land_init_conds = abcmodel.land.JarvisStewartInitConds(
         **cm.jarvis_stewart.init_conds_kwargs

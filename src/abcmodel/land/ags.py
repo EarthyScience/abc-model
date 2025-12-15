@@ -464,7 +464,7 @@ class AgsModel(AbstractStandardLandSurfaceModel):
         )
         rs = self.compute_rs(gcco2)
         new_land = replace(land_state, ci=ci, co2abs=co2abs, gcco2=gcco2, rs=rs)
-        return replace(state, land=new_land)
+        return state.replace(land=new_land)
 
     def compute_surface_co2_resistance(self, gcco2: Array) -> Array:
         """Compute surface resistance to CO₂ (rsCO2) from canopy conductance.
@@ -545,10 +545,8 @@ class AgsModel(AbstractStandardLandSurfaceModel):
             - ``wCO2R``: Respiration flux (scaled to mol)
             - ``wCO2``: Total CO2 flux
         """
-        # state is CoupledState
         land_state = state.land
         sl_state = state.atmos.surface
-
         rsCO2 = self.compute_surface_co2_resistance(land_state.gcco2)
         an = self.compute_net_assimilation(
             land_state.co2abs, land_state.ci, sl_state.ra, rsCO2
@@ -558,6 +556,5 @@ class AgsModel(AbstractStandardLandSurfaceModel):
         wCO2A = self.scale_flux_to_mol(an, const)
         wCO2R = self.scale_flux_to_mol(resp, const)
         wCO2 = wCO2A + wCO2R
-
         new_land = replace(land_state, rsCO2=rsCO2, wCO2A=wCO2A, wCO2R=wCO2R, wCO2=wCO2)
-        return replace(state, land=new_land)
+        return state.replace(land=new_land)
