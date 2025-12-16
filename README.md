@@ -1,5 +1,5 @@
 # ABC Model
-A simple model coupling biosphere and atmos, but made fully differentiable using JAX.
+A simple model coupling biosphere and atmosphere made fully differentiable using JAX.
 
 ## Installation
 Install with
