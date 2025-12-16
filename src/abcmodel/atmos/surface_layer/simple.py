@@ -3,12 +3,15 @@ from dataclasses import dataclass, field, replace
 import jax.numpy as jnp
 from jax import Array
 
+from ...abstracts import AbstractCoupledState, LandT, RadT
 from ...utils import PhysicalConstants
 from ..abstracts import (
-    AbstractCoupledState,
     AbstractSurfaceLayerModel,
     AbstractSurfaceLayerState,
+    CloudT,
+    MixedT,
 )
+from ..dayonly import DayOnlyAtmosphereState
 
 
 @dataclass
@@ -26,6 +29,16 @@ class SimpleSurfaceLayerState(AbstractSurfaceLayerState):
 
 
 SimpleSurfaceLayerInitConds = SimpleSurfaceLayerState
+# limamau: maybe these type variables could be abstracts...
+StateAlias = AbstractCoupledState[
+    RadT,
+    LandT,
+    DayOnlyAtmosphereState[
+        SimpleSurfaceLayerState,
+        MixedT,
+        CloudT,
+    ],
+]
 
 
 class SimpleSurfaceLayerModel(AbstractSurfaceLayerModel[SimpleSurfaceLayerState]):
@@ -55,8 +68,7 @@ class SimpleSurfaceLayerModel(AbstractSurfaceLayerModel[SimpleSurfaceLayerState]
         """Run the model.
 
         Args:
-            state: CoupledState.
-            const: PhysicalConstants.
+            state:
 
         Returns:
             The updated surface layer state.

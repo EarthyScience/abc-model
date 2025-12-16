@@ -4,9 +4,15 @@ import jax
 import jax.numpy as jnp
 from jax import Array
 
-from ...abstracts import AbstractCoupledState
+from ...abstracts import AbstractCoupledState, LandT, RadT
 from ...utils import PhysicalConstants, compute_qsat
-from ..abstracts import AbstractSurfaceLayerModel, AbstractSurfaceLayerState
+from ..abstracts import (
+    AbstractSurfaceLayerModel,
+    AbstractSurfaceLayerState,
+    CloudT,
+    MixedT,
+)
+from ..dayonly import DayOnlyAtmosphereState
 
 
 @dataclass
@@ -63,6 +69,15 @@ class ObukhovSurfaceLayerState(AbstractSurfaceLayerState):
 
 
 ObukhovSurfaceLayerInitConds = ObukhovSurfaceLayerState
+StateAlias = AbstractCoupledState[
+    RadT,
+    LandT,
+    DayOnlyAtmosphereState[
+        ObukhovSurfaceLayerState,
+        MixedT,
+        CloudT,
+    ],
+]
 
 
 class ObukhovSurfaceLayerModel(AbstractSurfaceLayerModel[ObukhovSurfaceLayerState]):
@@ -76,13 +91,13 @@ class ObukhovSurfaceLayerModel(AbstractSurfaceLayerModel[ObukhovSurfaceLayerStat
         pass
 
     def run(
-        self, state: AbstractCoupledState, const: PhysicalConstants
+        self, state: StateAlias, const: PhysicalConstants
     ) -> ObukhovSurfaceLayerState:
         """Run the model.
 
         Args:
             state:
-            const: Physical constants.
+            const:
 
         Returns:
             The updated surface layer state.
