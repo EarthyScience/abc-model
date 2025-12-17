@@ -1,5 +1,5 @@
 
-Aquacrop
+Ags
 ========
 
 .. automodule:: abcconfigs.class_model.ags
