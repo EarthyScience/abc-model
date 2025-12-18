@@ -36,7 +36,9 @@ AgsInitConds = AgsState
 class AgsModel(AbstractStandardLandModel):
     """Ags land surface model with coupled photosynthesis and stomatal conductance.
 
-    ... (docstring omitted for brevity) ...
+    Args:
+        c3c4: string indicating whether the model should use C3 or C4 photosynthesis.
+        **kwargs: additional keyword arguments to pass to the base class.
     """
 
     def __init__(self, c3c4: str, **kwargs):

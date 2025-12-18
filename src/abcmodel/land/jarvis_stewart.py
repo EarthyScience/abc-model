@@ -22,7 +22,8 @@ JarvisStewartInitConds = JarvisStewartState
 class JarvisStewartModel(AbstractStandardLandModel):
     """Jarvis-Stewart land surface model with empirical surface resistance.
 
-    ... (docstring omitted for brevity) ...
+    Args:
+        **kwargs: additional keyword arguments to pass to the base class.
     """
 
     def __init__(self, **kwargs):
