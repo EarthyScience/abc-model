@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field, replace
+from dataclasses import dataclass, field
 
 import jax
 import jax.numpy as jnp
@@ -26,8 +26,6 @@ class ObukhovSurfaceLayerState(AbstractSurfaceLayerState):
     """Roughness length for momentum [m]."""
     z0h: Array
     """Roughness length for scalars [m]."""
-    theta: Array
-    """Surface potential temperature [K]."""
 
     # the following variables are initialized to high values and
     # are expected to converge to realistic values during warmup
@@ -80,19 +78,17 @@ StateAlias = AbstractCoupledState[
 ]
 
 
-class ObukhovSurfaceLayerModel(AbstractSurfaceLayerModel[ObukhovSurfaceLayerState]):
+class ObukhovSurfaceLayerModel(AbstractSurfaceLayerModel):
     """Standard surface layer model with atmospheric stability corrections.
 
-    Calculates surface-atmos exchange using Monin-Obukhov similarity theory
+    Calculates surface-atmosphere exchange using Monin-Obukhov similarity theory
     with stability functions and iterative solution for Obukhov length.
     """
 
     def __init__(self):
         pass
 
-    def run(
-        self, state: StateAlias, const: PhysicalConstants
-    ) -> ObukhovSurfaceLayerState:
+    def run(self, state: StateAlias, const: PhysicalConstants):
         """Run the model.
 
         Args:
@@ -100,70 +96,64 @@ class ObukhovSurfaceLayerModel(AbstractSurfaceLayerModel[ObukhovSurfaceLayerStat
             const:
 
         Returns:
-            The updated surface layer state.
+            The updated state.
         """
-        sl_state = state.atmos.surface
         ml_state = state.atmos.mixed
-        land_state = state.land
+        sl_state = state.atmos.surface
 
         ueff = compute_effective_wind_speed(ml_state.u, ml_state.v, ml_state.wstar)
-        (
-            thetasurf,
-            qsurf,
-            thetavsurf,
-        ) = compute_surface_properties(
-            ueff,
+        thetasurf = compute_thetasurf(
             ml_state.theta,
             ml_state.wtheta,
-            ml_state.q,
-            ml_state.surf_pressure,
-            land_state.rs,
             sl_state.drag_s,
+            ueff,
         )
-
-        # this should be a method
-        zsl = 0.1 * ml_state.h_abl
+        qsurf = compute_qsurf(
+            ml_state.q,
+            thetasurf,
+            ml_state.surf_pressure,
+            state.land.rs,
+            sl_state.drag_s,
+            ueff,
+        )
+        thetavsurf = compute_thetavsurf(thetasurf, qsurf)
+        zsl = compute_zsl(ml_state.h_abl)
         rib_number = compute_richardson_number(
             ueff, zsl, const.g, ml_state.thetav, thetavsurf
         )
         obukhov_length = ribtol(zsl, rib_number, sl_state.z0h, sl_state.z0m)
-        drag_m, drag_s = compute_drag_coefficients(
+        drag_m = compute_drag_m(zsl, const.k, obukhov_length, sl_state.z0m)
+        drag_s = compute_drag_s(
             zsl, const.k, obukhov_length, sl_state.z0h, sl_state.z0m
         )
-        ustar, uw, vw = compute_momentum_fluxes(ueff, ml_state.u, ml_state.v, drag_m)
-        (
-            temp_2m,
-            q2m,
-            u2m,
-            v2m,
-            e2m,
-            esat2m,
-        ) = compute_2m_variables(
+        ustar = compute_ustar(ueff, drag_m)
+        uw = compute_uw(ueff, ml_state.u, drag_m)
+        vw = compute_vw(ueff, ml_state.v, drag_m)
+        temp_2m = compute_temp_2m(
+            thetasurf,
             ml_state.wtheta,
-            land_state.wq,
-            ml_state.surf_pressure,
+            ustar,
             const.k,
             sl_state.z0h,
-            sl_state.z0m,
             obukhov_length,
-            thetasurf,
-            qsurf,
-            ustar,
-            uw,
-            vw,
         )
-        ra = self.compute_ra(ml_state.u, ml_state.v, ml_state.wstar, drag_s)
-        return replace(
-            sl_state,
-            ra=ra,
-            thetasurf=thetasurf,
-            qsurf=qsurf,
-            thetavsurf=thetavsurf,
-            rib_number=rib_number,
-            obukhov_length=obukhov_length,
+        q2m = compute_q2m(
+            qsurf,
+            state.land.wq,
+            ustar,
+            const.k,
+            sl_state.z0h,
+            obukhov_length,
+        )
+        u2m = compute_u2m(uw, ustar, const.k, sl_state.z0m, obukhov_length)
+        v2m = compute_v2m(vw, ustar, const.k, sl_state.z0m, obukhov_length)
+        e2m = compute_e2m(q2m, ml_state.surf_pressure)
+        esat2m = compute_esat2m(temp_2m)
+        ra = compute_ra(ml_state.u, ml_state.v, ml_state.wstar, drag_s)
+        return state.atmos.surface.replace(
+            ustar=ustar,
             drag_m=drag_m,
             drag_s=drag_s,
-            ustar=ustar,
             uw=uw,
             vw=vw,
             temp_2m=temp_2m,
@@ -172,22 +162,37 @@ class ObukhovSurfaceLayerModel(AbstractSurfaceLayerModel[ObukhovSurfaceLayerStat
             v2m=v2m,
             e2m=e2m,
             esat2m=esat2m,
+            thetasurf=thetasurf,
+            thetavsurf=thetavsurf,
+            qsurf=qsurf,
+            obukhov_length=obukhov_length,
+            rib_number=rib_number,
+            ra=ra,
         )
 
-    @staticmethod
-    def compute_ra(u: Array, v: Array, wstar: Array, drag_s: Array) -> Array:
-        """Calculate aerodynamic resistance from wind speed and drag coefficient.
 
-        Notes:
-            The aerodynamic resistance is given by
+def compute_ra(u: Array, v: Array, wstar: Array, drag_s: Array) -> Array:
+    """Calculate aerodynamic resistance from wind speed and drag coefficient.
 
-            .. math::
-                r_a = \\frac{1}{C_s u_{\\text{eff}}}
+    Args:
+        u: zonal wind speed [m s-1].
+        v: meridional wind speed [m s-1].
+        wstar: convective velocity scale [m s-1].
+        drag_s: drag coefficient for scalars [-].
 
-            where :math:`C_s` is the drag coefficient for scalars and :math:`u_{\\text{eff}}` is the effective wind speed.
-        """
-        ueff = jnp.sqrt(u**2.0 + v**2.0 + wstar**2.0)
-        return 1.0 / (drag_s * ueff)
+    Returns:
+        Aerodynamic resistance [s m-1].
+
+    Notes:
+        The aerodynamic resistance is given by
+
+        .. math::
+            r_a = \\frac{1}{C_s u_{\\text{eff}}}
+
+        where :math:`C_s` is the drag coefficient for scalars and :math:`u_{\\text{eff}}` is the effective wind speed.
+    """
+    ueff = jnp.sqrt(u**2.0 + v**2.0 + wstar**2.0)
+    return 1.0 / (drag_s * ueff)
 
 
 def compute_effective_wind_speed(u: Array, v: Array, wstar: Array) -> Array:
@@ -212,50 +217,99 @@ def compute_effective_wind_speed(u: Array, v: Array, wstar: Array) -> Array:
     return jnp.maximum(0.01, jnp.sqrt(u**2.0 + v**2.0 + wstar**2.0))
 
 
-def compute_surface_properties(
-    ueff: Array,
-    theta: Array,
-    wtheta: Array,
-    q: Array,
-    surf_pressure: Array,
-    rs: Array,
-    drag_s: Array,
-) -> tuple[Array, Array, Array]:
-    """Compute surface temperature, specific humidity, and virtual potential temperature.
+def compute_zsl(h_abl: Array) -> Array:
+    """Compute surface layer height.
 
     Args:
-        ueff: effective wind speed :math:`u_{\\text{eff}}`.
+        h_abl: Atmospheric boundary layer height [m].
+
+    Returns:
+        Surface layer height [m], defined as 10% of ABL height.
+
+    Notes:
+        The surface layer height is conventionally taken as 10% of
+        the atmospheric boundary layer height.
+    """
+    return 0.1 * h_abl
+
+
+def compute_thetasurf(
+    theta: Array,
+    wtheta: Array,
+    drag_s: Array,
+    ueff: Array,
+) -> Array:
+    """Compute surface potential temperature.
+
+    Args:
         theta: mixed layer potential temperature :math:`\\theta`.
         wtheta: surface kinematic heat flux :math:`w'\\theta'`.
-        q: mixed layer specific humidity :math:`q`.
-        surf_pressure: surface pressure :math:`p`.
-        rs: surface roughness length :math:`r_s`.
         drag_s: surface drag coefficient :math:`C_s`.
+        ueff: effective wind speed :math:`u_{\\text{eff}}`.
+
+    Returns:
+        Surface potential temperature :math:`\\theta_s`.
 
     Notes:
         The surface potential temperature is given by
 
         .. math::
             \\theta_s = \\theta + \\frac{w'\\theta'}{C_s u_{\\text{eff}}}.
+    """
+    return theta + wtheta / (drag_s * ueff)
 
+
+def compute_qsurf(
+    q: Array,
+    thetasurf: Array,
+    surf_pressure: Array,
+    rs: Array,
+    drag_s: Array,
+    ueff: Array,
+) -> Array:
+    """Compute surface specific humidity.
+
+    Args:
+        q: mixed layer specific humidity :math:`q`.
+        thetasurf: surface potential temperature :math:`\\theta_s`.
+        surf_pressure: surface pressure :math:`p`.
+        rs: surface resistance :math:`r_s`.
+        drag_s: surface drag coefficient :math:`C_s`.
+        ueff: effective wind speed :math:`u_{\\text{eff}}`.
+
+    Returns:
+        Surface specific humidity :math:`q_s`.
+
+    Notes:
         The surface specific humidity is a weighted average between the air and the saturated value at the surface
 
         .. math::
             q_s = (1 - c_q) q + c_q q_{sat}(\\theta_s, p),
 
         where :math:`c_q = [1 + C_s u_{\\text{eff}} r_s]^{-1}` and :math:`q_{sat}` is the saturation specific humidity.
+    """
+    qsatsurf = compute_qsat(thetasurf, surf_pressure)
+    cq = (1.0 + drag_s * ueff * rs) ** -1.0
+    return (1.0 - cq) * q + cq * qsatsurf
 
+
+def compute_thetavsurf(thetasurf: Array, qsurf: Array) -> Array:
+    """Compute surface virtual potential temperature.
+
+    Args:
+        thetasurf: surface potential temperature :math:`\\theta_s`.
+        qsurf: surface specific humidity :math:`q_s`.
+
+    Returns:
+        Surface virtual potential temperature :math:`\\theta_{v,s}`.
+
+    Notes:
         The surface virtual potential temperature is
 
         .. math::
             \\theta_{v,s} = \\theta_s (1 + 0.61 q_s)
     """
-    thetasurf = theta + wtheta / (drag_s * ueff)
-    qsatsurf = compute_qsat(thetasurf, surf_pressure)
-    cq = (1.0 + drag_s * ueff * rs) ** -1.0
-    qsurf = (1.0 - cq) * q + cq * qsatsurf
-    thetavsurf = thetasurf * (1.0 + 0.61 * qsurf)
-    return thetasurf, qsurf, thetavsurf
+    return thetasurf * (1.0 + 0.61 * qsurf)
 
 
 def compute_richardson_number(
@@ -342,8 +396,6 @@ def ribtol(zsl: Array, rib_number: Array, z0h: Array, z0m: Array):
         ).squeeze()
         return res
 
-    # limamau: the Rib is really used three times here?
-    # or is there a reason for a rib_function_term to be created?
     def body_fun(carry):
         oblen, _ = carry
         oblen0 = oblen
@@ -370,15 +422,46 @@ def ribtol(zsl: Array, rib_number: Array, z0h: Array, z0m: Array):
     return oblen
 
 
-# limamau: this should also be breaken down into two methods
-def compute_drag_coefficients(
+def compute_drag_m(
+    zsl: Array,
+    k: float,
+    obukhov_length: Array,
+    z0m: Array,
+) -> Array:
+    """Compute drag coefficient for momentum with stability corrections.
+
+    Args:
+        zsl: surface layer height :math:`z_{sl}`.
+        k: Von Kármán constant :math:`k`.
+        obukhov_length: Obukhov length :math:`L`.
+        z0m: roughness length for momentum :math:`z_{0m}`.
+
+    Returns:
+        Drag coefficient for momentum :math:`C_m`.
+
+    Notes:
+        The drag coefficient for momentum is given by
+
+        .. math::
+            C_m = \\frac{k^2}{[\\psi_m(z_{sl}/L)
+            - \\psi_m(z_{0m}/L)
+            + \\ln(z_{sl}/z_{0m})]^2}
+
+        where :math:`\\psi_m` (see :meth:`compute_momentum_correction_term`)
+        is the stability correction function for momentum.
+    """
+    momentum_correction = compute_momentum_correction_term(zsl, obukhov_length, z0m)
+    return k**2.0 / momentum_correction**2.0
+
+
+def compute_drag_s(
     zsl: Array,
     k: float,
     obukhov_length: Array,
     z0h: Array,
     z0m: Array,
-) -> tuple[Array, Array]:
-    """Compute drag coefficients for momentum and scalars with stability corrections.
+) -> Array:
+    """Compute drag coefficient for scalars with stability corrections.
 
     Args:
         zsl: surface layer height :math:`z_{sl}`.
@@ -388,17 +471,13 @@ def compute_drag_coefficients(
         z0m: roughness length for momentum :math:`z_{0m}`.
 
     Returns:
-        Friction velocity, zonal and meridional momentum fluxes.
+        Drag coefficient for scalars :math:`C_s`.
 
     Notes:
-        The drag coefficients are given by
+        The drag coefficient for scalars is given by
 
         .. math::
-            C_m &= \\frac{k^2}{[\\psi_m(z_{sl}/L)
-            - \\psi_m(z_{0m}/L)
-            + \\ln(z_{sl}/z_{0m})]^2}
-
-            C_s &= \\frac{k^2}{[\\psi_m(z_{sl}/L)
+            C_s = \\frac{k^2}{[\\psi_m(z_{sl}/L)
             - \\psi_m(z_{0m}/L)
             + \\ln(z_{sl}/z_{0m})] [\\psi_h(z_{sl}/L)
             - \\psi_h(z_{0h}/L)
@@ -408,111 +487,224 @@ def compute_drag_coefficients(
         :math:`\\psi_h` (see :meth:`compute_scalar_correction_term`)
         are stability correction functions for momentum and scalars.
     """
-    # momentum stability correction
     momentum_correction = compute_momentum_correction_term(zsl, obukhov_length, z0m)
-
-    # scalar stability correction
     scalar_correction = compute_scalar_correction_term(zsl, obukhov_length, z0h)
-
-    # drag coefficients
-    drag_m = k**2.0 / momentum_correction**2.0
-    drag_s = k**2.0 / (momentum_correction * scalar_correction)
-    return drag_m, drag_s
+    return k**2.0 / (momentum_correction * scalar_correction)
 
 
-# limamau: this should be broken down into three methods
-def compute_momentum_fluxes(
-    ueff: Array,
-    u: Array,
-    v: Array,
-    drag_m: Array,
-) -> tuple[Array, Array, Array]:
-    """Compute surface momentum fluxes and friction velocity.
+def compute_ustar(ueff: Array, drag_m: Array) -> Array:
+    """Compute surface friction velocity.
 
     Args:
         ueff: effective wind speed :math:`u_{\\text{eff}}`.
-        u: zonal wind speed :math:`u`.
-        v: meridional wind speed :math:`v`.
         drag_m: drag coefficient for momentum :math:`C_m`.
 
     Returns:
-        Friction velocity, zonal and meridional momentum fluxes.
+        Friction velocity :math:`u_*`.
 
     Notes:
         The friction velocity :math:`u_*` is given by
 
         .. math::
-            u_* = \\sqrt{C_m} u_{\\text{eff}},
-
-        and the momentum fluxes :math:`\\overline{u'w'}` and :math:`\\overline{v'w'}` are given by
-
-        .. math::
-            \\overline{u'w'} = -C_m u_{\\text{eff}} u,
-
-            \\overline{v'w'} = -C_m u_{\\text{eff}} v.
+            u_* = \\sqrt{C_m} u_{\\text{eff}}.
     """
-    ustar = jnp.sqrt(drag_m) * ueff
-    uw = -drag_m * ueff * u
-    vw = -drag_m * ueff * v
-    return ustar, uw, vw
+    return jnp.sqrt(drag_m) * ueff
 
 
-# limamau: this should be six or three different methods
-def compute_2m_variables(
-    wtheta: Array,
-    wq: Array,
-    surf_pressure: Array,
-    k: float,
-    z0h: Array,
-    z0m: Array,
-    obukhov_length: Array,
-    thetasurf: Array,
-    qsurf: Array,
-    ustar: Array,
-    uw: Array,
-    vw: Array,
-) -> tuple[Array, Array, Array, Array, Array, Array]:
-    """Compute 2m diagnostic meteorological variables.
+def compute_uw(ueff: Array, u: Array, drag_m: Array) -> Array:
+    """Compute zonal momentum flux.
+
+    Args:
+        ueff: effective wind speed :math:`u_{\\text{eff}}`.
+        u: zonal wind speed :math:`u`.
+        drag_m: drag coefficient for momentum :math:`C_m`.
+
+    Returns:
+        Zonal momentum flux :math:`\\overline{u'w'}`.
 
     Notes:
-        Computes temperature, humidity, wind, and vapor pressures at 2 meters above the surface,
-        applying Monin-Obukhov similarity theory with stability corrections.
+        The zonal momentum flux is given by
 
-        The 2m values are calculated using the surface values, fluxes, and stability correction terms.
+        .. math::
+            \\overline{u'w'} = -C_m u_{\\text{eff}} u.
     """
-    # stability correction terms
-    # limamau: this should call the method for scalar correction
-    scalar_correction = (
-        jnp.log(2.0 / z0h)
-        - compute_psih(2.0 / obukhov_length)
-        + compute_psih(z0h / obukhov_length)
-    )
-    # limamau: this should call the method for momentum correction
-    momentum_correction = (
-        jnp.log(2.0 / z0m)
-        - compute_psim(2.0 / obukhov_length)
-        + compute_psim(z0m / obukhov_length)
-    )
+    return -drag_m * ueff * u
 
-    # scaling factor for scalar fluxes
+
+def compute_vw(ueff: Array, v: Array, drag_m: Array) -> Array:
+    """Compute meridional momentum flux.
+
+    Args:
+        ueff: effective wind speed :math:`u_{\\text{eff}}`.
+        v: meridional wind speed :math:`v`.
+        drag_m: drag coefficient for momentum :math:`C_m`.
+
+    Returns:
+        Meridional momentum flux :math:`\\overline{v'w'}`.
+
+    Notes:
+        The meridional momentum flux is given by
+
+        .. math::
+            \\overline{v'w'} = -C_m u_{\\text{eff}} v.
+    """
+    return -drag_m * ueff * v
+
+
+def compute_temp_2m(
+    thetasurf: Array,
+    wtheta: Array,
+    ustar: Array,
+    k: float,
+    z0h: Array,
+    obukhov_length: Array,
+) -> Array:
+    """Compute 2m temperature diagnostic.
+
+    Args:
+        thetasurf: surface potential temperature :math:`\\theta_s`.
+        wtheta: surface kinematic heat flux :math:`w'\\theta'`.
+        ustar: friction velocity :math:`u_*`.
+        k: Von Kármán constant :math:`k`.
+        z0h: roughness length for scalars :math:`z_{0h}`.
+        obukhov_length: Obukhov length :math:`L`.
+
+    Returns:
+        Temperature at 2 meters above surface [K].
+
+    Notes:
+        Uses Monin-Obukhov similarity theory with stability corrections to extrapolate
+        surface temperature to 2m height.
+    """
+    scalar_correction = compute_scalar_correction_term(2.0, obukhov_length, z0h)
     scalar_scale = 1.0 / (ustar * k)
+    return thetasurf - wtheta * scalar_scale * scalar_correction
+
+
+def compute_q2m(
+    qsurf: Array,
+    wq: Array,
+    ustar: Array,
+    k: float,
+    z0h: Array,
+    obukhov_length: Array,
+) -> Array:
+    """Compute 2m specific humidity diagnostic.
+
+    Args:
+        qsurf: surface specific humidity :math:`q_s`.
+        wq: surface kinematic moisture flux :math:`w'q'`.
+        ustar: friction velocity :math:`u_*`.
+        k: Von Kármán constant :math:`k`.
+        z0h: roughness length for scalars :math:`z_{0h}`.
+        obukhov_length: Obukhov length :math:`L`.
+
+    Returns:
+        Specific humidity at 2 meters above surface [kg kg-1].
+
+    Notes:
+        Uses Monin-Obukhov similarity theory with stability corrections to extrapolate
+        surface specific humidity to 2m height.
+    """
+    scalar_correction = compute_scalar_correction_term(2.0, obukhov_length, z0h)
+    scalar_scale = 1.0 / (ustar * k)
+    return qsurf - wq * scalar_scale * scalar_correction
+
+
+def compute_u2m(
+    uw: Array,
+    ustar: Array,
+    k: float,
+    z0m: Array,
+    obukhov_length: Array,
+) -> Array:
+    """Compute 2m zonal wind diagnostic.
+
+    Args:
+        uw: zonal momentum flux :math:`\\overline{u'w'}`.
+        ustar: friction velocity :math:`u_*`.
+        k: Von Kármán constant :math:`k`.
+        z0m: roughness length for momentum :math:`z_{0m}`.
+        obukhov_length: Obukhov length :math:`L`.
+
+    Returns:
+        Zonal wind at 2 meters above surface [m s-1].
+
+    Notes:
+        Uses Monin-Obukhov similarity theory with stability corrections to extrapolate
+        surface momentum flux to 2m wind speed.
+    """
+    momentum_correction = compute_momentum_correction_term(2.0, obukhov_length, z0m)
     momentum_scale = 1.0 / (ustar * k)
-
-    # temperature and humidity at 2m
-    temp_2m = thetasurf - wtheta * scalar_scale * scalar_correction
-    q2m = qsurf - wq * scalar_scale * scalar_correction
-
-    # wind components at 2m
-    u2m = -uw * momentum_scale * momentum_correction
-    v2m = -vw * momentum_scale * momentum_correction
-
-    # vapor pressures at 2m
-    esat2m = 0.611e3 * jnp.exp(17.2694 * (temp_2m - 273.16) / (temp_2m - 35.86))
-    e2m = q2m * surf_pressure / 0.622
-    return temp_2m, q2m, u2m, v2m, e2m, esat2m
+    return -uw * momentum_scale * momentum_correction
 
 
-def compute_scalar_correction_term(z: Array, oblen: Array, z0h: Array) -> Array:
+def compute_v2m(
+    vw: Array,
+    ustar: Array,
+    k: float,
+    z0m: Array,
+    obukhov_length: Array,
+) -> Array:
+    """Compute 2m meridional wind diagnostic.
+
+    Args:
+        vw: meridional momentum flux :math:`\\overline{v'w'}`.
+        ustar: friction velocity :math:`u_*`.
+        k: Von Kármán constant :math:`k`.
+        z0m: roughness length for momentum :math:`z_{0m}`.
+        obukhov_length: Obukhov length :math:`L`.
+
+    Returns:
+        Meridional wind at 2 meters above surface [m s-1].
+
+    Notes:
+        Uses Monin-Obukhov similarity theory with stability corrections to extrapolate
+        surface momentum flux to 2m wind speed.
+    """
+    momentum_correction = compute_momentum_correction_term(2.0, obukhov_length, z0m)
+    momentum_scale = 1.0 / (ustar * k)
+    return -vw * momentum_scale * momentum_correction
+
+
+def compute_e2m(q2m: Array, surf_pressure: Array) -> Array:
+    """Compute 2m vapor pressure.
+
+    Args:
+        q2m: specific humidity at 2m :math:`q_{2m}`.
+        surf_pressure: surface pressure :math:`p`.
+
+    Returns:
+        Vapor pressure at 2 meters above surface [Pa].
+
+    Notes:
+        Converts specific humidity to vapor pressure using:
+
+        .. math::
+            e_{2m} = \\frac{q_{2m} \\cdot p}{0.622}
+    """
+    return q2m * surf_pressure / 0.622
+
+
+def compute_esat2m(temp_2m: Array) -> Array:
+    """Compute 2m saturated vapor pressure.
+
+    Args:
+        temp_2m: temperature at 2m [K].
+
+    Returns:
+        Saturated vapor pressure at 2 meters above surface [Pa].
+
+    Notes:
+        Uses the Tetens formula:
+
+        .. math::
+            e_{sat,2m} = 611 \\exp\\left(\\frac{17.2694(T_{2m} - 273.16)}{T_{2m} - 35.86}\\right)
+    """
+    return 0.611e3 * jnp.exp(17.2694 * (temp_2m - 273.16) / (temp_2m - 35.86))
+
+
+def compute_scalar_correction_term(z: Array | float, oblen: Array, z0h: Array) -> Array:
     """Compute scalar stability correction term.
 
     Args:
@@ -539,7 +731,9 @@ def compute_scalar_correction_term(z: Array, oblen: Array, z0h: Array) -> Array:
     return log_term - upper_stability + surface_stability
 
 
-def compute_momentum_correction_term(z: Array, oblen: Array, z0m: Array) -> Array:
+def compute_momentum_correction_term(
+    z: Array | float, oblen: Array, z0m: Array
+) -> Array:
     """Compute momentum stability correction term.
 
     Args:
