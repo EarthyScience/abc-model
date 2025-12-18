@@ -9,7 +9,8 @@ from ..abstracts import (
     AtmosT,
     LandT,
 )
-from ..utils import Array, PhysicalConstants
+from ..utils import Array
+from ..utils import PhysicalConstants as cst
 
 
 @dataclass
@@ -65,7 +66,6 @@ class StandardRadiationModel(AbstractRadiationModel[StandardRadiationState]):
         t: int,
         dt: float,
         tstart: float,
-        const: PhysicalConstants,
     ) -> StandardRadiationState:
         """Calculate rad components and net surface rad.
 
@@ -74,7 +74,6 @@ class StandardRadiationModel(AbstractRadiationModel[StandardRadiationState]):
             t: Current time step index [-].
             dt: Time step duration [s].
             tstart: Start time of day [hours UTC], range 0 to 24.
-            const: PhysicalConstants object.
 
         Returns:
             The updated rad state object.
@@ -91,7 +90,6 @@ class StandardRadiationModel(AbstractRadiationModel[StandardRadiationState]):
             ml_state.surf_pressure,
             ml_state.h_abl,
             ml_state.theta,
-            const,
         )
         atmospheric_transmission = self.compute_atmospheric_transmission(
             solar_elevation
@@ -108,7 +106,6 @@ class StandardRadiationModel(AbstractRadiationModel[StandardRadiationState]):
             air_temp,
             land_state.alpha,
             land_state.surf_temp,
-            const,
         )
         return replace(
             rad_state,
@@ -197,7 +194,6 @@ class StandardRadiationModel(AbstractRadiationModel[StandardRadiationState]):
         surf_pressure: Array,
         h_abl: Array,
         theta: Array,
-        const: PhysicalConstants,
     ) -> Array:
         """Compute air temperature at reference level using potential temperature.
 
@@ -205,7 +201,6 @@ class StandardRadiationModel(AbstractRadiationModel[StandardRadiationState]):
             surf_pressure: surface pressure [Pa].
             h_abl: atmospheric boundary layer height [m].
             theta: potential temperature [K].
-            const:
 
         Returns:
             Air temperature at the reference level [K].
@@ -237,11 +232,11 @@ class StandardRadiationModel(AbstractRadiationModel[StandardRadiationState]):
                 capacity of air :math:`c_p`.
         """
         # calculate pressure at reference level (10% reduction from surface)
-        ref_pressure = surf_pressure - 0.1 * h_abl * const.rho * const.g
+        ref_pressure = surf_pressure - 0.1 * h_abl * cst.rho * cst.g
 
         # convert potential temperature to actual temperature
         pressure_ratio = ref_pressure / surf_pressure
-        air_temp = theta * (pressure_ratio ** (const.rd / const.cp))
+        air_temp = theta * (pressure_ratio ** (cst.rd / cst.cp))
 
         return air_temp
 
@@ -290,7 +285,6 @@ class StandardRadiationModel(AbstractRadiationModel[StandardRadiationState]):
         air_temp: Array,
         alpha: Array,
         surf_temp: Array,
-        const: PhysicalConstants,
     ) -> tuple[Array, Array, Array, Array, Array]:
         """Compute all rad components and update attributes.
 
@@ -300,7 +294,6 @@ class StandardRadiationModel(AbstractRadiationModel[StandardRadiationState]):
             air_temp: air temperature [K].
             alpha: surface albedo [-].
             surf_temp: surface temperature [K].
-            const:
 
         Returns:
             A tuple containing net rad, incoming shortwave rad, outgoing shortwave
@@ -357,12 +350,12 @@ class StandardRadiationModel(AbstractRadiationModel[StandardRadiationState]):
                                  (LW_{\\text{in}} - LW_{\\text{out}}).
         """
         # shortwave rad components
-        in_srad = const.solar_in * atmospheric_transmission * solar_elevation
-        out_srad = alpha * const.solar_in * atmospheric_transmission * solar_elevation
+        in_srad = cst.solar_in * atmospheric_transmission * solar_elevation
+        out_srad = alpha * cst.solar_in * atmospheric_transmission * solar_elevation
 
         # longwave rad components
-        in_lrad = 0.8 * const.bolz * air_temp**4.0
-        out_lrad = const.bolz * surf_temp**4.0
+        in_lrad = 0.8 * cst.bolz * air_temp**4.0
+        out_lrad = cst.bolz * surf_temp**4.0
 
         # net rad
         net_rad = in_srad - out_srad + in_lrad - out_lrad

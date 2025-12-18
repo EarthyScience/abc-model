@@ -4,7 +4,6 @@ import jax.numpy as jnp
 from jax import Array
 
 from ..abstracts import AbstractCoupledState
-from ..utils import PhysicalConstants
 from .standard import (
     AbstractStandardLandModel,
     StandardLandState,
@@ -32,13 +31,11 @@ class JarvisStewartModel(AbstractStandardLandModel):
     def update_surface_resistance(
         self,
         state: AbstractCoupledState,
-        const: PhysicalConstants,
     ) -> AbstractCoupledState:
         """Update the surface resistance ``rs`` in the state using the Jarvis-Stewart model.
 
         Args:
             state: CoupledState.
-            const: PhysicalConstants.
 
         Returns:
             CoupledState (with updated land component).
@@ -83,7 +80,6 @@ class JarvisStewartModel(AbstractStandardLandModel):
     def update_co2_flux(
         self,
         state: AbstractCoupledState,
-        const: PhysicalConstants,
     ) -> AbstractCoupledState:
         """No CO2 flux is computed using this model. See :class:`~abcmodel.land.ags.AgsModel`."""
         return state

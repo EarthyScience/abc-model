@@ -6,8 +6,6 @@ from typing import Generic, TypeVar
 from jax import Array
 from simple_pytree import Pytree
 
-from .utils import PhysicalConstants
-
 
 class AbstractState(Pytree):
     """Abstract state class to define the interface for all states."""
@@ -107,7 +105,6 @@ class AbstractRadiationModel(AbstractModel, Generic[RadT]):
         t: int,
         dt: float,
         tstart: float,
-        const: PhysicalConstants,
     ) -> RadT:
         raise NotImplementedError
 
@@ -119,7 +116,6 @@ class AbstractLandModel(AbstractModel, Generic[LandT]):
     def run(
         self,
         state: AbstractCoupledState[RadT, LandT, AtmosT],
-        const: PhysicalConstants,
     ) -> LandT:
         raise NotImplementedError
 
@@ -140,7 +136,6 @@ class AbstractAtmosphereModel(AbstractModel, Generic[AtmosT]):
         t: int,
         dt: float,
         tstart: float,
-        const: PhysicalConstants,
     ) -> AbstractCoupledState[RadT, LandT, AtmosT]:
         raise NotImplementedError
 
@@ -148,7 +143,6 @@ class AbstractAtmosphereModel(AbstractModel, Generic[AtmosT]):
     def run(
         self,
         state: AbstractCoupledState[RadT, LandT, AtmosT],
-        const: PhysicalConstants,
     ) -> AtmosT:
         raise NotImplementedError
 
@@ -157,7 +151,6 @@ class AbstractAtmosphereModel(AbstractModel, Generic[AtmosT]):
         self,
         state: AbstractCoupledState[RadT, LandT, AtmosT],
         t: int,
-        const: PhysicalConstants,
     ) -> AtmosT:
         raise NotImplementedError
 

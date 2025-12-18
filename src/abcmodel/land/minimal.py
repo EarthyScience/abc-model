@@ -4,7 +4,8 @@ import jax.numpy as jnp
 from jax import Array
 
 from ..abstracts import AbstractCoupledState, AbstractLandModel, AbstractLandState
-from ..utils import PhysicalConstants, compute_esat, compute_qsat
+from ..utils import compute_esat, compute_qsat
+
 
 # limamau: this could be much simpler!
 @dataclass
@@ -54,13 +55,11 @@ class MinimalLandSurfaceModel(AbstractLandModel):
     def run(
         self,
         state: AbstractCoupledState,
-        const: PhysicalConstants,
     ) -> MinimalLandSurfaceState:
         """Run the model.
 
         Args:
             state: CoupledState.
-            const: the physical constants object.
 
         Returns:
             The updated land state object.

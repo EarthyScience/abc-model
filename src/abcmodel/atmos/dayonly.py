@@ -10,7 +10,6 @@ from ..abstracts import (
     LandT,
     RadT,
 )
-from ..utils import PhysicalConstants
 from .abstracts import (
     AbstractCloudModel,
     AbstractMixedLayerModel,
@@ -56,23 +55,20 @@ class DayOnlyAtmosphereModel(AbstractAtmosphereModel[DayOnlyAtmosphereState]):
     def run(
         self,
         state: StateAlias,
-        const: PhysicalConstants,
     ) -> DayOnlyAtmosphereState:
-        sl_state = self.surface_layer.run(state, const)
+        sl_state = self.surface_layer.run(state)
         atmostate = replace(state.atmos, surface=sl_state)
         state = state.replace(atmos=atmostate)
-        cl_state = self.clouds.run(state, const)
+        cl_state = self.clouds.run(state)
         atmostate = replace(atmostate, clouds=cl_state)
         state = state.replace(atmos=atmostate)
-        ml_state = self.mixed_layer.run(state, const)
+        ml_state = self.mixed_layer.run(state)
         atmostate = replace(atmostate, mixed=ml_state)
         return atmostate
 
-    def statistics(
-        self, state: StateAlias, t: int, const: PhysicalConstants
-    ) -> DayOnlyAtmosphereState:
+    def statistics(self, state: StateAlias, t: int) -> DayOnlyAtmosphereState:
         """Update statistics."""
-        ml_state = self.mixed_layer.statistics(state, t, const)
+        ml_state = self.mixed_layer.statistics(state, t)
         return state.atmos.replace(mixed=ml_state)
 
     def warmup(
@@ -83,29 +79,28 @@ class DayOnlyAtmosphereModel(AbstractAtmosphereModel[DayOnlyAtmosphereState]):
         t: int,
         dt: float,
         tstart: float,
-        const: PhysicalConstants,
     ) -> StateAlias:
         """Warmup the atmos by running it for a few timesteps."""
         state = state.replace(
-            atmos=self.statistics(state, t, const),
+            atmos=self.statistics(state, t),
         )
-        state = state.replace(rad=radmodel.run(state, t, dt, tstart, const))
+        state = state.replace(rad=radmodel.run(state, t, dt, tstart))
         for _ in range(10):
-            sl_state = self.surface_layer.run(state, const)
+            sl_state = self.surface_layer.run(state)
             atmostate = replace(state.atmos, surface=sl_state)
             state = state.replace(atmos=atmostate)
-        landstate = landmodel.run(state, const)
+        landstate = landmodel.run(state)
         state = state.replace(land=landstate)
 
         # this is if clause is ok because it's outise the scan!
         if not isinstance(self.clouds, NoCloudModel):
-            ml_state = self.mixed_layer.run(state, const)
+            ml_state = self.mixed_layer.run(state)
             atmostate = replace(state.atmos, mixed=ml_state)
             state = state.replace(atmos=atmostate)
-            cl_state = self.clouds.run(state, const)
+            cl_state = self.clouds.run(state)
             atmostate = replace(state.atmos, clouds=cl_state)
             state = state.replace(atmos=atmostate)
-        ml_state = self.mixed_layer.run(state, const)
+        ml_state = self.mixed_layer.run(state)
         atmostate = replace(state.atmos, mixed=ml_state)
         state = state.replace(atmos=atmostate)
         return state

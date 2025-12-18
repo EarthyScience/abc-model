@@ -3,7 +3,6 @@ from dataclasses import dataclass, replace
 from jax import Array
 
 from ..abstracts import AbstractCoupledState, AtmosT, LandT
-from ..utils import PhysicalConstants
 from .standard import StandardRadiationModel, StandardRadiationState
 
 
@@ -47,7 +46,6 @@ class CloudyRadiationModel(StandardRadiationModel):
         t: int,
         dt: float,
         tstart: float,
-        const: PhysicalConstants,
     ) -> StandardRadiationState:
         """Calculate rad components and net surface rad.
 
@@ -56,7 +54,6 @@ class CloudyRadiationModel(StandardRadiationModel):
             t: Current time step index [-].
             dt: Time step duration [s].
             tstart: Start time of day [hours UTC], range 0 to 24.
-            const: PhysicalConstants object.
 
         Returns:
             The updated rad state object.
@@ -74,7 +71,6 @@ class CloudyRadiationModel(StandardRadiationModel):
             ml_state.surf_pressure,
             ml_state.h_abl,
             ml_state.theta,
-            const,
         )
         atmospheric_transmission = self.compute_atmospheric_transmission_w_clouds(
             solar_elevation,
@@ -92,7 +88,6 @@ class CloudyRadiationModel(StandardRadiationModel):
             air_temp,
             land_state.alpha,
             land_state.surf_temp,
-            const,
         )
 
         return replace(

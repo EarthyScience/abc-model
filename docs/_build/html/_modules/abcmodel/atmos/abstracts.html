@@ -313,7 +313,7 @@ document.write(`
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Generic</span><span class="p">,</span> <span class="n">TypeVar</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">..abstracts</span><span class="w"> </span><span class="kn">import</span> <span class="n">AbstractCoupledState</span><span class="p">,</span> <span class="n">AbstractModel</span><span class="p">,</span> <span class="n">AbstractState</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">..utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">Array</span><span class="p">,</span> <span class="n">PhysicalConstants</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">Array</span>
 
 
 <div class="viewcode-block" id="AbstractSurfaceLayerState">
@@ -353,7 +353,7 @@ document.write(`
 <div class="viewcode-block" id="AbstractSurfaceLayerModel.run">
 <a class="viewcode-back" href="../../../source/api/abcmodel.atmos.abstracts.html#abcmodel.atmos.abstracts.AbstractSurfaceLayerModel.run">[docs]</a>
     <span class="nd">@abstractmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">AbstractCoupledState</span><span class="p">,</span> <span class="n">const</span><span class="p">:</span> <span class="n">PhysicalConstants</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SurfT</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">AbstractCoupledState</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SurfT</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 </div>
 
@@ -367,7 +367,7 @@ document.write(`
 <div class="viewcode-block" id="AbstractMixedLayerModel.run">
 <a class="viewcode-back" href="../../../source/api/abcmodel.atmos.abstracts.html#abcmodel.atmos.abstracts.AbstractMixedLayerModel.run">[docs]</a>
     <span class="nd">@abstractmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">AbstractCoupledState</span><span class="p">,</span> <span class="n">const</span><span class="p">:</span> <span class="n">PhysicalConstants</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MixedT</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">AbstractCoupledState</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MixedT</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
 
@@ -375,7 +375,7 @@ document.write(`
 <a class="viewcode-back" href="../../../source/api/abcmodel.atmos.abstracts.html#abcmodel.atmos.abstracts.AbstractMixedLayerModel.statistics">[docs]</a>
     <span class="nd">@abstractmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">statistics</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">AbstractCoupledState</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">const</span><span class="p">:</span> <span class="n">PhysicalConstants</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">AbstractCoupledState</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="nb">int</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MixedT</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
@@ -397,7 +397,7 @@ document.write(`
 <div class="viewcode-block" id="AbstractCloudModel.run">
 <a class="viewcode-back" href="../../../source/api/abcmodel.atmos.abstracts.html#abcmodel.atmos.abstracts.AbstractCloudModel.run">[docs]</a>
     <span class="nd">@abstractmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">AbstractCoupledState</span><span class="p">,</span> <span class="n">const</span><span class="p">:</span> <span class="n">PhysicalConstants</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CloudT</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">AbstractCoupledState</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CloudT</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 </div>
 

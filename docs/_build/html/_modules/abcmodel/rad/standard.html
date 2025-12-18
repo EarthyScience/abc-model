@@ -318,7 +318,8 @@ document.write(`
     <span class="n">AtmosT</span><span class="p">,</span>
     <span class="n">LandT</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">..utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">Array</span><span class="p">,</span> <span class="n">PhysicalConstants</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">Array</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">PhysicalConstants</span> <span class="k">as</span> <span class="n">cst</span>
 
 
 <div class="viewcode-block" id="StandardRadiationState">
@@ -381,7 +382,6 @@ document.write(`
         <span class="n">t</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
         <span class="n">tstart</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-        <span class="n">const</span><span class="p">:</span> <span class="n">PhysicalConstants</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StandardRadiationState</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate rad components and net surface rad.</span>
 
@@ -390,7 +390,6 @@ document.write(`
 <span class="sd">            t: Current time step index [-].</span>
 <span class="sd">            dt: Time step duration [s].</span>
 <span class="sd">            tstart: Start time of day [hours UTC], range 0 to 24.</span>
-<span class="sd">            const: PhysicalConstants object.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            The updated rad state object.</span>
@@ -407,7 +406,6 @@ document.write(`
             <span class="n">ml_state</span><span class="o">.</span><span class="n">surf_pressure</span><span class="p">,</span>
             <span class="n">ml_state</span><span class="o">.</span><span class="n">h_abl</span><span class="p">,</span>
             <span class="n">ml_state</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span>
-            <span class="n">const</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">atmospheric_transmission</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_atmospheric_transmission</span><span class="p">(</span>
             <span class="n">solar_elevation</span>
@@ -424,7 +422,6 @@ document.write(`
             <span class="n">air_temp</span><span class="p">,</span>
             <span class="n">land_state</span><span class="o">.</span><span class="n">alpha</span><span class="p">,</span>
             <span class="n">land_state</span><span class="o">.</span><span class="n">surf_temp</span><span class="p">,</span>
-            <span class="n">const</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">replace</span><span class="p">(</span>
             <span class="n">rad_state</span><span class="p">,</span>
@@ -522,7 +519,6 @@ document.write(`
         <span class="n">surf_pressure</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
         <span class="n">h_abl</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
         <span class="n">theta</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-        <span class="n">const</span><span class="p">:</span> <span class="n">PhysicalConstants</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute air temperature at reference level using potential temperature.</span>
 
@@ -530,7 +526,6 @@ document.write(`
 <span class="sd">            surf_pressure: surface pressure [Pa].</span>
 <span class="sd">            h_abl: atmospheric boundary layer height [m].</span>
 <span class="sd">            theta: potential temperature [K].</span>
-<span class="sd">            const:</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            Air temperature at the reference level [K].</span>
@@ -562,11 +557,11 @@ document.write(`
 <span class="sd">                capacity of air :math:`c_p`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># calculate pressure at reference level (10% reduction from surface)</span>
-        <span class="n">ref_pressure</span> <span class="o">=</span> <span class="n">surf_pressure</span> <span class="o">-</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="n">h_abl</span> <span class="o">*</span> <span class="n">const</span><span class="o">.</span><span class="n">rho</span> <span class="o">*</span> <span class="n">const</span><span class="o">.</span><span class="n">g</span>
+        <span class="n">ref_pressure</span> <span class="o">=</span> <span class="n">surf_pressure</span> <span class="o">-</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="n">h_abl</span> <span class="o">*</span> <span class="n">cst</span><span class="o">.</span><span class="n">rho</span> <span class="o">*</span> <span class="n">cst</span><span class="o">.</span><span class="n">g</span>
 
         <span class="c1"># convert potential temperature to actual temperature</span>
         <span class="n">pressure_ratio</span> <span class="o">=</span> <span class="n">ref_pressure</span> <span class="o">/</span> <span class="n">surf_pressure</span>
-        <span class="n">air_temp</span> <span class="o">=</span> <span class="n">theta</span> <span class="o">*</span> <span class="p">(</span><span class="n">pressure_ratio</span> <span class="o">**</span> <span class="p">(</span><span class="n">const</span><span class="o">.</span><span class="n">rd</span> <span class="o">/</span> <span class="n">const</span><span class="o">.</span><span class="n">cp</span><span class="p">))</span>
+        <span class="n">air_temp</span> <span class="o">=</span> <span class="n">theta</span> <span class="o">*</span> <span class="p">(</span><span class="n">pressure_ratio</span> <span class="o">**</span> <span class="p">(</span><span class="n">cst</span><span class="o">.</span><span class="n">rd</span> <span class="o">/</span> <span class="n">cst</span><span class="o">.</span><span class="n">cp</span><span class="p">))</span>
 
         <span class="k">return</span> <span class="n">air_temp</span></div>
 
@@ -621,7 +616,6 @@ document.write(`
         <span class="n">air_temp</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
         <span class="n">alpha</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
         <span class="n">surf_temp</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-        <span class="n">const</span><span class="p">:</span> <span class="n">PhysicalConstants</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">Array</span><span class="p">,</span> <span class="n">Array</span><span class="p">,</span> <span class="n">Array</span><span class="p">,</span> <span class="n">Array</span><span class="p">,</span> <span class="n">Array</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute all rad components and update attributes.</span>
 
@@ -631,7 +625,6 @@ document.write(`
 <span class="sd">            air_temp: air temperature [K].</span>
 <span class="sd">            alpha: surface albedo [-].</span>
 <span class="sd">            surf_temp: surface temperature [K].</span>
-<span class="sd">            const:</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            A tuple containing net rad, incoming shortwave rad, outgoing shortwave</span>
@@ -688,12 +681,12 @@ document.write(`
 <span class="sd">                                 (LW_{\\text{in}} - LW_{\\text{out}}).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># shortwave rad components</span>
-        <span class="n">in_srad</span> <span class="o">=</span> <span class="n">const</span><span class="o">.</span><span class="n">solar_in</span> <span class="o">*</span> <span class="n">atmospheric_transmission</span> <span class="o">*</span> <span class="n">solar_elevation</span>
-        <span class="n">out_srad</span> <span class="o">=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">const</span><span class="o">.</span><span class="n">solar_in</span> <span class="o">*</span> <span class="n">atmospheric_transmission</span> <span class="o">*</span> <span class="n">solar_elevation</span>
+        <span class="n">in_srad</span> <span class="o">=</span> <span class="n">cst</span><span class="o">.</span><span class="n">solar_in</span> <span class="o">*</span> <span class="n">atmospheric_transmission</span> <span class="o">*</span> <span class="n">solar_elevation</span>
+        <span class="n">out_srad</span> <span class="o">=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">cst</span><span class="o">.</span><span class="n">solar_in</span> <span class="o">*</span> <span class="n">atmospheric_transmission</span> <span class="o">*</span> <span class="n">solar_elevation</span>
 
         <span class="c1"># longwave rad components</span>
-        <span class="n">in_lrad</span> <span class="o">=</span> <span class="mf">0.8</span> <span class="o">*</span> <span class="n">const</span><span class="o">.</span><span class="n">bolz</span> <span class="o">*</span> <span class="n">air_temp</span><span class="o">**</span><span class="mf">4.0</span>
-        <span class="n">out_lrad</span> <span class="o">=</span> <span class="n">const</span><span class="o">.</span><span class="n">bolz</span> <span class="o">*</span> <span class="n">surf_temp</span><span class="o">**</span><span class="mf">4.0</span>
+        <span class="n">in_lrad</span> <span class="o">=</span> <span class="mf">0.8</span> <span class="o">*</span> <span class="n">cst</span><span class="o">.</span><span class="n">bolz</span> <span class="o">*</span> <span class="n">air_temp</span><span class="o">**</span><span class="mf">4.0</span>
+        <span class="n">out_lrad</span> <span class="o">=</span> <span class="n">cst</span><span class="o">.</span><span class="n">bolz</span> <span class="o">*</span> <span class="n">surf_temp</span><span class="o">**</span><span class="mf">4.0</span>
 
         <span class="c1"># net rad</span>
         <span class="n">net_rad</span> <span class="o">=</span> <span class="n">in_srad</span> <span class="o">-</span> <span class="n">out_srad</span> <span class="o">+</span> <span class="n">in_lrad</span> <span class="o">-</span> <span class="n">out_lrad</span>

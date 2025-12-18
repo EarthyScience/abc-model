@@ -15,9 +15,7 @@ def warmup(
     tstart: float,
 ) -> AbstractCoupledState[RadT, LandT, AtmosT]:
     """Warmup the model by running it for a few timesteps."""
-    state = coupler.atmos.warmup(
-        coupler.rad, coupler.land, state, t, dt, tstart, coupler.const
-    )
+    state = coupler.atmos.warmup(coupler.rad, coupler.land, state, t, dt, tstart)
     return state
 
 
@@ -29,13 +27,13 @@ def timestep(
     tstart: float,
 ) -> AbstractCoupledState[RadT, LandT, AtmosT]:
     """Run a single timestep of the model."""
-    atmos = coupler.atmos.statistics(state, t, coupler.const)
+    atmos = coupler.atmos.statistics(state, t)
     state = state.replace(atmos=atmos)
-    rad = coupler.rad.run(state, t, dt, tstart, coupler.const)
+    rad = coupler.rad.run(state, t, dt, tstart)
     state = state.replace(rad=rad)
-    land = coupler.land.run(state, coupler.const)
+    land = coupler.land.run(state)
     state = state.replace(land=land)
-    atmos = coupler.atmos.run(state, coupler.const)
+    atmos = coupler.atmos.run(state)
     state = state.replace(atmos=atmos)
     land = coupler.land.integrate(state.land, dt)
     state = state.replace(land=land)

@@ -5,7 +5,8 @@ import jax.numpy as jnp
 from jax import Array
 
 from ...abstracts import AbstractCoupledState, LandT, RadT
-from ...utils import PhysicalConstants, compute_qsat
+from ...utils import PhysicalConstants as cst
+from ...utils import compute_qsat
 from ..abstracts import (
     AbstractSurfaceLayerModel,
     AbstractSurfaceLayerState,
@@ -88,12 +89,11 @@ class ObukhovSurfaceLayerModel(AbstractSurfaceLayerModel):
     def __init__(self):
         pass
 
-    def run(self, state: StateAlias, const: PhysicalConstants):
+    def run(self, state: StateAlias):
         """Run the model.
 
         Args:
             state:
-            const:
 
         Returns:
             The updated state.
@@ -119,13 +119,11 @@ class ObukhovSurfaceLayerModel(AbstractSurfaceLayerModel):
         thetavsurf = compute_thetavsurf(thetasurf, qsurf)
         zsl = compute_zsl(ml_state.h_abl)
         rib_number = compute_richardson_number(
-            ueff, zsl, const.g, ml_state.thetav, thetavsurf
+            ueff, zsl, cst.g, ml_state.thetav, thetavsurf
         )
         obukhov_length = ribtol(zsl, rib_number, sl_state.z0h, sl_state.z0m)
-        drag_m = compute_drag_m(zsl, const.k, obukhov_length, sl_state.z0m)
-        drag_s = compute_drag_s(
-            zsl, const.k, obukhov_length, sl_state.z0h, sl_state.z0m
-        )
+        drag_m = compute_drag_m(zsl, cst.k, obukhov_length, sl_state.z0m)
+        drag_s = compute_drag_s(zsl, cst.k, obukhov_length, sl_state.z0h, sl_state.z0m)
         ustar = compute_ustar(ueff, drag_m)
         uw = compute_uw(ueff, ml_state.u, drag_m)
         vw = compute_vw(ueff, ml_state.v, drag_m)
@@ -133,7 +131,7 @@ class ObukhovSurfaceLayerModel(AbstractSurfaceLayerModel):
             thetasurf,
             ml_state.wtheta,
             ustar,
-            const.k,
+            cst.k,
             sl_state.z0h,
             obukhov_length,
         )
@@ -141,12 +139,12 @@ class ObukhovSurfaceLayerModel(AbstractSurfaceLayerModel):
             qsurf,
             state.land.wq,
             ustar,
-            const.k,
+            cst.k,
             sl_state.z0h,
             obukhov_length,
         )
-        u2m = compute_u2m(uw, ustar, const.k, sl_state.z0m, obukhov_length)
-        v2m = compute_v2m(vw, ustar, const.k, sl_state.z0m, obukhov_length)
+        u2m = compute_u2m(uw, ustar, cst.k, sl_state.z0m, obukhov_length)
+        v2m = compute_v2m(vw, ustar, cst.k, sl_state.z0m, obukhov_length)
         e2m = compute_e2m(q2m, ml_state.surf_pressure)
         esat2m = compute_esat2m(temp_2m)
         ra = compute_ra(ml_state.u, ml_state.v, ml_state.wstar, drag_s)

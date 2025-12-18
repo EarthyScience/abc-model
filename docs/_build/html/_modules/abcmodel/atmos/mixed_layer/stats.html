@@ -311,7 +311,8 @@ document.write(`
 <span class="kn">import</span><span class="w"> </span><span class="nn">jax.numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">jnp</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">jax</span><span class="w"> </span><span class="kn">import</span> <span class="n">Array</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">...utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">PhysicalConstants</span><span class="p">,</span> <span class="n">compute_qsat</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">...utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">PhysicalConstants</span> <span class="k">as</span> <span class="n">cst</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">...utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">compute_qsat</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..abstracts</span><span class="w"> </span><span class="kn">import</span> <span class="n">AbstractCoupledState</span><span class="p">,</span> <span class="n">AbstractMixedLayerModel</span>
 
 
@@ -326,7 +327,7 @@ document.write(`
 
 <div class="viewcode-block" id="AbstractStandardStatsModel.statistics">
 <a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.stats.html#abcmodel.atmos.mixed_layer.stats.AbstractStandardStatsModel.statistics">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">statistics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">AbstractCoupledState</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">const</span><span class="p">:</span> <span class="n">PhysicalConstants</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">statistics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">AbstractCoupledState</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute standard meteorological statistics and diagnostics.&quot;&quot;&quot;</span>
         <span class="n">mixed_state</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">atmos</span><span class="o">.</span><span class="n">mixed</span>
         <span class="n">thetav</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_thetav</span><span class="p">(</span><span class="n">mixed_state</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span> <span class="n">mixed_state</span><span class="o">.</span><span class="n">q</span><span class="p">)</span>
@@ -340,11 +341,9 @@ document.write(`
             <span class="n">mixed_state</span><span class="o">.</span><span class="n">dq</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">top_p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_top_p</span><span class="p">(</span>
-            <span class="n">mixed_state</span><span class="o">.</span><span class="n">surf_pressure</span><span class="p">,</span> <span class="n">const</span><span class="o">.</span><span class="n">rho</span><span class="p">,</span> <span class="n">const</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="n">mixed_state</span><span class="o">.</span><span class="n">h_abl</span>
+            <span class="n">mixed_state</span><span class="o">.</span><span class="n">surf_pressure</span><span class="p">,</span> <span class="n">cst</span><span class="o">.</span><span class="n">rho</span><span class="p">,</span> <span class="n">cst</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="n">mixed_state</span><span class="o">.</span><span class="n">h_abl</span>
         <span class="p">)</span>
-        <span class="n">top_T</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_top_T</span><span class="p">(</span>
-            <span class="n">mixed_state</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span> <span class="n">const</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="n">const</span><span class="o">.</span><span class="n">cp</span><span class="p">,</span> <span class="n">mixed_state</span><span class="o">.</span><span class="n">h_abl</span>
-        <span class="p">)</span>
+        <span class="n">top_T</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_top_T</span><span class="p">(</span><span class="n">mixed_state</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span> <span class="n">cst</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="n">cst</span><span class="o">.</span><span class="n">cp</span><span class="p">,</span> <span class="n">mixed_state</span><span class="o">.</span><span class="n">h_abl</span><span class="p">)</span>
         <span class="n">top_rh</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_top_rh</span><span class="p">(</span><span class="n">mixed_state</span><span class="o">.</span><span class="n">q</span><span class="p">,</span> <span class="n">top_T</span><span class="p">,</span> <span class="n">top_p</span><span class="p">)</span>
         <span class="n">lcl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_lcl</span><span class="p">(</span>
             <span class="n">mixed_state</span><span class="o">.</span><span class="n">h_abl</span><span class="p">,</span>
@@ -353,7 +352,6 @@ document.write(`
             <span class="n">mixed_state</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span>
             <span class="n">mixed_state</span><span class="o">.</span><span class="n">q</span><span class="p">,</span>
             <span class="n">t</span><span class="p">,</span>
-            <span class="n">const</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">ml_state</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">atmos</span><span class="o">.</span><span class="n">mixed</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
             <span class="n">thetav</span><span class="o">=</span><span class="n">thetav</span><span class="p">,</span>
@@ -452,7 +450,6 @@ document.write(`
         <span class="n">theta</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
         <span class="n">q</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
         <span class="n">t</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-        <span class="n">const</span><span class="p">:</span> <span class="n">PhysicalConstants</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the lifting condensation level (LCL).</span>
 
@@ -471,8 +468,9 @@ document.write(`
             <span class="n">new_lcl</span> <span class="o">=</span> <span class="n">lcl</span> <span class="o">+</span> <span class="n">lcl_adjustment</span>
 
             <span class="c1"># calculate new relative humidity at updated lcl</span>
-            <span class="n">p_lcl</span> <span class="o">=</span> <span class="n">surf_pressure</span> <span class="o">-</span> <span class="n">const</span><span class="o">.</span><span class="n">rho</span> <span class="o">*</span> <span class="n">const</span><span class="o">.</span><span class="n">g</span> <span class="o">*</span> <span class="n">new_lcl</span>
-            <span class="n">temp_lcl</span> <span class="o">=</span> <span class="n">theta</span> <span class="o">-</span> <span class="n">const</span><span class="o">.</span><span class="n">g</span> <span class="o">/</span> <span class="n">const</span><span class="o">.</span><span class="n">cp</span> <span class="o">*</span> <span class="n">new_lcl</span>
+            <span class="c1"># calculate new relative humidity at updated lcl</span>
+            <span class="n">p_lcl</span> <span class="o">=</span> <span class="n">surf_pressure</span> <span class="o">-</span> <span class="n">cst</span><span class="o">.</span><span class="n">rho</span> <span class="o">*</span> <span class="n">cst</span><span class="o">.</span><span class="n">g</span> <span class="o">*</span> <span class="n">new_lcl</span>
+            <span class="n">temp_lcl</span> <span class="o">=</span> <span class="n">theta</span> <span class="o">-</span> <span class="n">cst</span><span class="o">.</span><span class="n">g</span> <span class="o">/</span> <span class="n">cst</span><span class="o">.</span><span class="n">cp</span> <span class="o">*</span> <span class="n">new_lcl</span>
             <span class="n">new_rhlcl</span> <span class="o">=</span> <span class="n">q</span> <span class="o">/</span> <span class="n">compute_qsat</span><span class="p">(</span><span class="n">temp_lcl</span><span class="p">,</span> <span class="n">p_lcl</span><span class="p">)</span>
 
             <span class="k">return</span> <span class="n">new_lcl</span><span class="p">,</span> <span class="n">new_rhlcl</span><span class="p">,</span> <span class="n">iteration</span> <span class="o">+</span> <span class="mi">1</span>

@@ -2,7 +2,8 @@ import jax
 import jax.numpy as jnp
 from jax import Array
 
-from ...utils import PhysicalConstants, compute_qsat
+from ...utils import PhysicalConstants as cst
+from ...utils import compute_qsat
 from ..abstracts import AbstractCoupledState, AbstractMixedLayerModel
 
 
@@ -13,7 +14,7 @@ class AbstractStandardStatsModel(AbstractMixedLayerModel):
     properties, and lifting condensation level determination.
     """
 
-    def statistics(self, state: AbstractCoupledState, t: int, const: PhysicalConstants):
+    def statistics(self, state: AbstractCoupledState, t: int):
         """Compute standard meteorological statistics and diagnostics."""
         mixed_state = state.atmos.mixed
         thetav = self.compute_thetav(mixed_state.theta, mixed_state.q)
@@ -27,11 +28,9 @@ class AbstractStandardStatsModel(AbstractMixedLayerModel):
             mixed_state.dq,
         )
         top_p = self.compute_top_p(
-            mixed_state.surf_pressure, const.rho, const.g, mixed_state.h_abl
+            mixed_state.surf_pressure, cst.rho, cst.g, mixed_state.h_abl
         )
-        top_T = self.compute_top_T(
-            mixed_state.theta, const.g, const.cp, mixed_state.h_abl
-        )
+        top_T = self.compute_top_T(mixed_state.theta, cst.g, cst.cp, mixed_state.h_abl)
         top_rh = self.compute_top_rh(mixed_state.q, top_T, top_p)
         lcl = self.compute_lcl(
             mixed_state.h_abl,
@@ -40,7 +39,6 @@ class AbstractStandardStatsModel(AbstractMixedLayerModel):
             mixed_state.theta,
             mixed_state.q,
             t,
-            const,
         )
         ml_state = state.atmos.mixed.replace(
             thetav=thetav,
@@ -118,7 +116,6 @@ class AbstractStandardStatsModel(AbstractMixedLayerModel):
         theta: Array,
         q: Array,
         t: int,
-        const: PhysicalConstants,
     ) -> Array:
         """Compute the lifting condensation level (LCL).
 
@@ -137,8 +134,9 @@ class AbstractStandardStatsModel(AbstractMixedLayerModel):
             new_lcl = lcl + lcl_adjustment
 
             # calculate new relative humidity at updated lcl
-            p_lcl = surf_pressure - const.rho * const.g * new_lcl
-            temp_lcl = theta - const.g / const.cp * new_lcl
+            # calculate new relative humidity at updated lcl
+            p_lcl = surf_pressure - cst.rho * cst.g * new_lcl
+            temp_lcl = theta - cst.g / cst.cp * new_lcl
             new_rhlcl = q / compute_qsat(temp_lcl, p_lcl)
 
             return new_lcl, new_rhlcl, iteration + 1

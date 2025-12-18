@@ -313,7 +313,6 @@ document.write(`
 <span class="kn">from</span><span class="w"> </span><span class="nn">jax</span><span class="w"> </span><span class="kn">import</span> <span class="n">Array</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">..abstracts</span><span class="w"> </span><span class="kn">import</span> <span class="n">AbstractCoupledState</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">..utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">PhysicalConstants</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.standard</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">AbstractStandardLandModel</span><span class="p">,</span>
     <span class="n">StandardLandState</span><span class="p">,</span>
@@ -348,13 +347,11 @@ document.write(`
     <span class="k">def</span><span class="w"> </span><span class="nf">update_surface_resistance</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">state</span><span class="p">:</span> <span class="n">AbstractCoupledState</span><span class="p">,</span>
-        <span class="n">const</span><span class="p">:</span> <span class="n">PhysicalConstants</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AbstractCoupledState</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Update the surface resistance ``rs`` in the state using the Jarvis-Stewart model.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            state: CoupledState.</span>
-<span class="sd">            const: PhysicalConstants.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            CoupledState (with updated land component).</span>
@@ -414,7 +411,6 @@ document.write(`
     <span class="k">def</span><span class="w"> </span><span class="nf">update_co2_flux</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">state</span><span class="p">:</span> <span class="n">AbstractCoupledState</span><span class="p">,</span>
-        <span class="n">const</span><span class="p">:</span> <span class="n">PhysicalConstants</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AbstractCoupledState</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;No CO2 flux is computed using this model. See :class:`~abcmodel.land.ags.AgsModel`.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">state</span></div>

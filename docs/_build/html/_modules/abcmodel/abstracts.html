@@ -315,8 +315,6 @@ document.write(`
 <span class="kn">from</span><span class="w"> </span><span class="nn">jax</span><span class="w"> </span><span class="kn">import</span> <span class="n">Array</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">simple_pytree</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pytree</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">PhysicalConstants</span>
-
 
 <div class="viewcode-block" id="AbstractState">
 <a class="viewcode-back" href="../../source/api/abcmodel.abstracts.html#abcmodel.abstracts.AbstractState">[docs]</a>
@@ -438,7 +436,6 @@ document.write(`
         <span class="n">t</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
         <span class="n">tstart</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-        <span class="n">const</span><span class="p">:</span> <span class="n">PhysicalConstants</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RadT</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 </div>
@@ -456,7 +453,6 @@ document.write(`
     <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">state</span><span class="p">:</span> <span class="n">AbstractCoupledState</span><span class="p">[</span><span class="n">RadT</span><span class="p">,</span> <span class="n">LandT</span><span class="p">,</span> <span class="n">AtmosT</span><span class="p">],</span>
-        <span class="n">const</span><span class="p">:</span> <span class="n">PhysicalConstants</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LandT</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
@@ -486,7 +482,6 @@ document.write(`
         <span class="n">t</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
         <span class="n">tstart</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
-        <span class="n">const</span><span class="p">:</span> <span class="n">PhysicalConstants</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AbstractCoupledState</span><span class="p">[</span><span class="n">RadT</span><span class="p">,</span> <span class="n">LandT</span><span class="p">,</span> <span class="n">AtmosT</span><span class="p">]:</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
@@ -497,7 +492,6 @@ document.write(`
     <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">state</span><span class="p">:</span> <span class="n">AbstractCoupledState</span><span class="p">[</span><span class="n">RadT</span><span class="p">,</span> <span class="n">LandT</span><span class="p">,</span> <span class="n">AtmosT</span><span class="p">],</span>
-        <span class="n">const</span><span class="p">:</span> <span class="n">PhysicalConstants</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AtmosT</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
@@ -509,7 +503,6 @@ document.write(`
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">state</span><span class="p">:</span> <span class="n">AbstractCoupledState</span><span class="p">[</span><span class="n">RadT</span><span class="p">,</span> <span class="n">LandT</span><span class="p">,</span> <span class="n">AtmosT</span><span class="p">],</span>
         <span class="n">t</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-        <span class="n">const</span><span class="p">:</span> <span class="n">PhysicalConstants</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AtmosT</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 

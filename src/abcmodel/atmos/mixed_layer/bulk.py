@@ -3,7 +3,8 @@ from dataclasses import dataclass, field, replace
 import jax.numpy as jnp
 
 from ...abstracts import AbstractCoupledState
-from ...utils import Array, PhysicalConstants
+from ...utils import Array
+from ...utils import PhysicalConstants as cst
 from ..abstracts import AbstractMixedLayerModel, AbstractMixedLayerState
 from .stats import AbstractStandardStatsModel
 
@@ -172,9 +173,7 @@ class BulkMixedLayerModel(
         self.is_fix_free_trop = is_fix_free_trop
         self.is_wind_prog = is_wind_prog
 
-    def run(
-        self, state: AbstractCoupledState, const: PhysicalConstants
-    ) -> BulkMixedLayerState:
+    def run(self, state: AbstractCoupledState) -> BulkMixedLayerState:
         """Run the model.
 
         Args:
@@ -193,7 +192,7 @@ class BulkMixedLayerModel(
         wCO2 = land_state.wCO2
 
         ws = self.compute_ws(ml_state.h_abl)
-        wf = self.compute_wf(ml_state.deltatheta, const)
+        wf = self.compute_wf(ml_state.deltatheta)
         w_th_ft = self.compute_w_th_ft(ws)
         w_q_ft = self.compute_w_q_ft(ws)
         w_CO2_ft = self.compute_w_CO2_ft(ws)
@@ -201,7 +200,7 @@ class BulkMixedLayerModel(
             ml_state.h_abl,
             ml_state.wthetav,
             ml_state.thetav,
-            const.g,
+            cst.g,
         )
         wthetave = self.compute_wthetave(ml_state.wthetav)
         we = self.compute_we(
@@ -210,7 +209,7 @@ class BulkMixedLayerModel(
             ml_state.deltathetav,
             ml_state.thetav,
             sl_state.ustar,
-            const.g,
+            cst.g,
         )
         wthetae = self.compute_wthetae(we, ml_state.deltatheta)
         wqe = self.compute_wqe(we, ml_state.dq)
@@ -314,7 +313,7 @@ class BulkMixedLayerModel(
         """
         return -self.divU * h_abl
 
-    def compute_wf(self, deltatheta: Array, const: PhysicalConstants) -> Array:
+    def compute_wf(self, deltatheta: Array) -> Array:
         """Compute the mixed-layer growth due to cloud top radiative divergence as
 
         .. math::
@@ -323,7 +322,7 @@ class BulkMixedLayerModel(
         where :math:`\\Delta F_z` is the cloud top radiative divergence, :math:`\\rho` is air density,
         :math:`c_p` is specific heat capacity, and :math:`\\Delta \\theta` is the temperature jump at the top of the ABL.
         """
-        radiative_denominator = const.rho * const.cp * deltatheta
+        radiative_denominator = cst.rho * cst.cp * deltatheta
         return self.deltaFz / radiative_denominator
 
     def compute_w_th_ft(self, ws: Array) -> Array:

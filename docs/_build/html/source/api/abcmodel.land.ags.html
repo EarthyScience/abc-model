@@ -472,13 +472,13 @@ document.write(`
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="abcmodel.land.ags.AgsModel.compute_co2comp">
-<span class="sig-name descname"><span class="pre">compute_co2comp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">thetasurf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rho</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/ags.html#AgsModel.compute_co2comp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.ags.AgsModel.compute_co2comp" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">compute_co2comp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">thetasurf</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/ags.html#AgsModel.compute_co2comp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.ags.AgsModel.compute_co2comp" title="Link to this definition">#</a></dt>
 <dd><p>Compute the CO₂ compensation concentration.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>thetasurf</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></span>) – surface potential temperature <span class="math notranslate nohighlight">\(\theta_s\)</span> [K].</p></li>
-<li><p><strong>rho</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – air density [kg m⁻³].</p></li>
+<li><p><strong>rho</strong> – air density [kg m⁻³].</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -559,7 +559,7 @@ and <span class="math notranslate nohighlight">\(e\)</span> is the actual vapor 
 
 <dl class="py method">
 <dt class="sig sig-object py" id="abcmodel.land.ags.AgsModel.compute_internal_co2">
-<span class="sig-name descname"><span class="pre">compute_internal_co2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fmin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">co2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">co2comp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/ags.html#AgsModel.compute_internal_co2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.ags.AgsModel.compute_internal_co2" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">compute_internal_co2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fmin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">co2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">co2comp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/ags.html#AgsModel.compute_internal_co2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.ags.AgsModel.compute_internal_co2" title="Link to this definition">#</a></dt>
 <dd><p>Compute cfrac, co2abs, and ci (internal CO2 concentration).</p>
 <p class="rubric">Notes</p>
 <p>The fraction of internal to ambient CO2 concentration <span class="math notranslate nohighlight">\(c_{frac}\)</span> is given by</p>
@@ -668,7 +668,7 @@ assuming an exponential decay of rad and photosynthetic capacity.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="abcmodel.land.ags.AgsModel.update_surface_resistance">
-<span class="sig-name descname"><span class="pre">update_surface_resistance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/ags.html#AgsModel.update_surface_resistance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.ags.AgsModel.update_surface_resistance" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">update_surface_resistance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/ags.html#AgsModel.update_surface_resistance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.ags.AgsModel.update_surface_resistance" title="Link to this definition">#</a></dt>
 <dd><p>Compute surface resistance using Ags photosynthesis-conductance model.</p>
 </dd></dl>
 
@@ -714,7 +714,7 @@ and <span class="math notranslate nohighlight">\(T_{ref} = 283.15\)</span> K.</p
 
 <dl class="py method">
 <dt class="sig sig-object py" id="abcmodel.land.ags.AgsModel.scale_flux_to_mol">
-<span class="sig-name descname"><span class="pre">scale_flux_to_mol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flux</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/ags.html#AgsModel.scale_flux_to_mol"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.ags.AgsModel.scale_flux_to_mol" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">scale_flux_to_mol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flux</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/ags.html#AgsModel.scale_flux_to_mol"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.ags.AgsModel.scale_flux_to_mol" title="Link to this definition">#</a></dt>
 <dd><p>Scale a flux to mol m⁻² s⁻¹ using physical constants.</p>
 <p class="rubric">Notes</p>
 <p>The scaling is given by</p>
@@ -724,7 +724,7 @@ and <span class="math notranslate nohighlight">\(T_{ref} = 283.15\)</span> K.</p
 
 <dl class="py method">
 <dt class="sig sig-object py" id="abcmodel.land.ags.AgsModel.update_co2_flux">
-<span class="sig-name descname"><span class="pre">update_co2_flux</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/ags.html#AgsModel.update_co2_flux"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.ags.AgsModel.update_co2_flux" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">update_co2_flux</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/ags.html#AgsModel.update_co2_flux"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.ags.AgsModel.update_co2_flux" title="Link to this definition">#</a></dt>
 <dd><p>Compute the CO₂ flux and update the state.</p>
 <p class="rubric">Notes</p>
 <p>This method updates the CO2 flux variables in the state:

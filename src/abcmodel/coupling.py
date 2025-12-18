@@ -13,7 +13,6 @@ from .abstracts import (
     LandT,
     RadT,
 )
-from .utils import PhysicalConstants
 
 
 @dataclass
@@ -40,7 +39,6 @@ class ABCoupler:
         self.rad = rad
         self.land = land
         self.atmos = atmos
-        self.const = PhysicalConstants()
 
     @staticmethod
     def init_state(

@@ -313,7 +313,8 @@ document.write(`
 <span class="kn">from</span><span class="w"> </span><span class="nn">jax</span><span class="w"> </span><span class="kn">import</span> <span class="n">Array</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">..abstracts</span><span class="w"> </span><span class="kn">import</span> <span class="n">AbstractCoupledState</span><span class="p">,</span> <span class="n">AbstractLandModel</span><span class="p">,</span> <span class="n">AbstractLandState</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">..utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">PhysicalConstants</span><span class="p">,</span> <span class="n">compute_esat</span><span class="p">,</span> <span class="n">compute_qsat</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">compute_esat</span><span class="p">,</span> <span class="n">compute_qsat</span>
+
 
 <span class="c1"># limamau: this could be much simpler!</span>
 <div class="viewcode-block" id="MinimalLandSurfaceState">
@@ -370,13 +371,11 @@ document.write(`
     <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">state</span><span class="p">:</span> <span class="n">AbstractCoupledState</span><span class="p">,</span>
-        <span class="n">const</span><span class="p">:</span> <span class="n">PhysicalConstants</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MinimalLandSurfaceState</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Run the model.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            state: CoupledState.</span>
-<span class="sd">            const: the physical constants object.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            The updated land state object.</span>

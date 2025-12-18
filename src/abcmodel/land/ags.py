@@ -6,7 +6,8 @@ from jax import Array
 from jax.scipy.special import exp1
 
 from ..abstracts import AbstractCoupledState
-from ..utils import PhysicalConstants, compute_esat
+from ..utils import PhysicalConstants as cst
+from ..utils import compute_esat
 from .standard import AbstractStandardLandModel, StandardLandState
 
 
@@ -75,7 +76,6 @@ class AgsModel(AbstractStandardLandModel):
     def compute_co2comp(
         self,
         thetasurf: Array,
-        rho: float,
     ) -> Array:
         """Compute the CO₂ compensation concentration.
 
@@ -103,7 +103,7 @@ class AgsModel(AbstractStandardLandModel):
         # where is this rho coming from?
         temp_diff = 0.1 * (thetasurf - 298.0)
         exp_term = jnp.pow(self.net_rad10CO2[self.c3c4], temp_diff)
-        return self.co2comp298[self.c3c4] * rho * exp_term
+        return self.co2comp298[self.c3c4] * cst.rho * exp_term
 
     def compute_gm(self, thetasurf: Array) -> Array:
         """Compute the mesophyll conductance.
@@ -205,7 +205,6 @@ class AgsModel(AbstractStandardLandModel):
         fmin: Array,
         co2: Array,
         co2comp: Array,
-        const: PhysicalConstants,
     ) -> tuple[Array, Array]:
         """Compute cfrac, co2abs, and ci (internal CO2 concentration).
 
@@ -228,7 +227,7 @@ class AgsModel(AbstractStandardLandModel):
             where :math:`\\gamma` is the CO2 compensation point.
         """
         cfrac = self.f0[self.c3c4] * (1.0 - (ds / d0)) + fmin * (ds / d0)
-        co2abs = co2 * (const.mco2 / const.mair) * const.rho
+        co2abs = co2 * (cst.mco2 / cst.mair) * cst.rho
         ci = cfrac * (co2abs - co2comp) + co2comp
         return ci, co2abs
 
@@ -426,14 +425,14 @@ class AgsModel(AbstractStandardLandModel):
         return 1.0 / (1.6 * gcco2)
 
     def update_surface_resistance(
-        self, state: AbstractCoupledState, const: PhysicalConstants
+        self, state: AbstractCoupledState
     ) -> AbstractCoupledState:
         """Compute surface resistance using Ags photosynthesis-conductance model."""
         land_state = state.land
         ml_state = state.atmos.mixed
         sl_state = state.atmos.surface
         thetasurf = sl_state.thetasurf
-        co2comp = self.compute_co2comp(thetasurf, const.rho)
+        co2comp = self.compute_co2comp(thetasurf)
         gm = self.compute_gm(thetasurf)
         fmin = self.compute_fmin(gm)
         ds = self.compute_ds(thetasurf, land_state.e)
@@ -444,7 +443,6 @@ class AgsModel(AbstractStandardLandModel):
             fmin,
             ml_state.co2,
             co2comp,
-            const,
         )
         ammax = self.compute_max_gross_primary_production(thetasurf)
         fstr = self.compute_soil_moisture_stress_factor(self.w2)
@@ -523,7 +521,6 @@ class AgsModel(AbstractStandardLandModel):
     def scale_flux_to_mol(
         self,
         flux: Array,
-        const: PhysicalConstants,
     ) -> Array:
         """Scale a flux to mol m⁻² s⁻¹ using physical constants.
 
@@ -533,11 +530,9 @@ class AgsModel(AbstractStandardLandModel):
             .. math::
                 F_{mol} = F \\frac{M_{air}}{\\rho M_{CO2}}
         """
-        return flux * (const.mair / (const.rho * const.mco2))
+        return flux * (cst.mair / (cst.rho * cst.mco2))
 
-    def update_co2_flux(
-        self, state: AbstractCoupledState, const: PhysicalConstants
-    ) -> AbstractCoupledState:
+    def update_co2_flux(self, state: AbstractCoupledState) -> AbstractCoupledState:
         """Compute the CO₂ flux and update the state.
 
         Notes:
@@ -555,8 +550,8 @@ class AgsModel(AbstractStandardLandModel):
         )
         fw = self.compute_soil_water_fraction(land_state.wg)
         resp = self.compute_respiration(land_state.temp_soil, fw)
-        wCO2A = self.scale_flux_to_mol(an, const)
-        wCO2R = self.scale_flux_to_mol(resp, const)
+        wCO2A = self.scale_flux_to_mol(an)
+        wCO2R = self.scale_flux_to_mol(resp)
         wCO2 = wCO2A + wCO2R
         new_land = replace(land_state, rsCO2=rsCO2, wCO2A=wCO2A, wCO2R=wCO2R, wCO2=wCO2)
         return state.replace(land=new_land)

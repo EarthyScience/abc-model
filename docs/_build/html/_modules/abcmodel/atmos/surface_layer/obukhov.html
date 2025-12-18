@@ -314,7 +314,8 @@ document.write(`
 <span class="kn">from</span><span class="w"> </span><span class="nn">jax</span><span class="w"> </span><span class="kn">import</span> <span class="n">Array</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">...abstracts</span><span class="w"> </span><span class="kn">import</span> <span class="n">AbstractCoupledState</span><span class="p">,</span> <span class="n">LandT</span><span class="p">,</span> <span class="n">RadT</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">...utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">PhysicalConstants</span><span class="p">,</span> <span class="n">compute_qsat</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">...utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">PhysicalConstants</span> <span class="k">as</span> <span class="n">cst</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">...utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">compute_qsat</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..abstracts</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">AbstractSurfaceLayerModel</span><span class="p">,</span>
     <span class="n">AbstractSurfaceLayerState</span><span class="p">,</span>
@@ -404,12 +405,11 @@ document.write(`
 
 <div class="viewcode-block" id="ObukhovSurfaceLayerModel.run">
 <a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html#abcmodel.atmos.surface_layer.obukhov.ObukhovSurfaceLayerModel.run">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">StateAlias</span><span class="p">,</span> <span class="n">const</span><span class="p">:</span> <span class="n">PhysicalConstants</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">StateAlias</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Run the model.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            state:</span>
-<span class="sd">            const:</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            The updated state.</span>
@@ -435,13 +435,11 @@ document.write(`
         <span class="n">thetavsurf</span> <span class="o">=</span> <span class="n">compute_thetavsurf</span><span class="p">(</span><span class="n">thetasurf</span><span class="p">,</span> <span class="n">qsurf</span><span class="p">)</span>
         <span class="n">zsl</span> <span class="o">=</span> <span class="n">compute_zsl</span><span class="p">(</span><span class="n">ml_state</span><span class="o">.</span><span class="n">h_abl</span><span class="p">)</span>
         <span class="n">rib_number</span> <span class="o">=</span> <span class="n">compute_richardson_number</span><span class="p">(</span>
-            <span class="n">ueff</span><span class="p">,</span> <span class="n">zsl</span><span class="p">,</span> <span class="n">const</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="n">ml_state</span><span class="o">.</span><span class="n">thetav</span><span class="p">,</span> <span class="n">thetavsurf</span>
+            <span class="n">ueff</span><span class="p">,</span> <span class="n">zsl</span><span class="p">,</span> <span class="n">cst</span><span class="o">.</span><span class="n">g</span><span class="p">,</span> <span class="n">ml_state</span><span class="o">.</span><span class="n">thetav</span><span class="p">,</span> <span class="n">thetavsurf</span>
         <span class="p">)</span>
         <span class="n">obukhov_length</span> <span class="o">=</span> <span class="n">ribtol</span><span class="p">(</span><span class="n">zsl</span><span class="p">,</span> <span class="n">rib_number</span><span class="p">,</span> <span class="n">sl_state</span><span class="o">.</span><span class="n">z0h</span><span class="p">,</span> <span class="n">sl_state</span><span class="o">.</span><span class="n">z0m</span><span class="p">)</span>
-        <span class="n">drag_m</span> <span class="o">=</span> <span class="n">compute_drag_m</span><span class="p">(</span><span class="n">zsl</span><span class="p">,</span> <span class="n">const</span><span class="o">.</span><span class="n">k</span><span class="p">,</span> <span class="n">obukhov_length</span><span class="p">,</span> <span class="n">sl_state</span><span class="o">.</span><span class="n">z0m</span><span class="p">)</span>
-        <span class="n">drag_s</span> <span class="o">=</span> <span class="n">compute_drag_s</span><span class="p">(</span>
-            <span class="n">zsl</span><span class="p">,</span> <span class="n">const</span><span class="o">.</span><span class="n">k</span><span class="p">,</span> <span class="n">obukhov_length</span><span class="p">,</span> <span class="n">sl_state</span><span class="o">.</span><span class="n">z0h</span><span class="p">,</span> <span class="n">sl_state</span><span class="o">.</span><span class="n">z0m</span>
-        <span class="p">)</span>
+        <span class="n">drag_m</span> <span class="o">=</span> <span class="n">compute_drag_m</span><span class="p">(</span><span class="n">zsl</span><span class="p">,</span> <span class="n">cst</span><span class="o">.</span><span class="n">k</span><span class="p">,</span> <span class="n">obukhov_length</span><span class="p">,</span> <span class="n">sl_state</span><span class="o">.</span><span class="n">z0m</span><span class="p">)</span>
+        <span class="n">drag_s</span> <span class="o">=</span> <span class="n">compute_drag_s</span><span class="p">(</span><span class="n">zsl</span><span class="p">,</span> <span class="n">cst</span><span class="o">.</span><span class="n">k</span><span class="p">,</span> <span class="n">obukhov_length</span><span class="p">,</span> <span class="n">sl_state</span><span class="o">.</span><span class="n">z0h</span><span class="p">,</span> <span class="n">sl_state</span><span class="o">.</span><span class="n">z0m</span><span class="p">)</span>
         <span class="n">ustar</span> <span class="o">=</span> <span class="n">compute_ustar</span><span class="p">(</span><span class="n">ueff</span><span class="p">,</span> <span class="n">drag_m</span><span class="p">)</span>
         <span class="n">uw</span> <span class="o">=</span> <span class="n">compute_uw</span><span class="p">(</span><span class="n">ueff</span><span class="p">,</span> <span class="n">ml_state</span><span class="o">.</span><span class="n">u</span><span class="p">,</span> <span class="n">drag_m</span><span class="p">)</span>
         <span class="n">vw</span> <span class="o">=</span> <span class="n">compute_vw</span><span class="p">(</span><span class="n">ueff</span><span class="p">,</span> <span class="n">ml_state</span><span class="o">.</span><span class="n">v</span><span class="p">,</span> <span class="n">drag_m</span><span class="p">)</span>
@@ -449,7 +447,7 @@ document.write(`
             <span class="n">thetasurf</span><span class="p">,</span>
             <span class="n">ml_state</span><span class="o">.</span><span class="n">wtheta</span><span class="p">,</span>
             <span class="n">ustar</span><span class="p">,</span>
-            <span class="n">const</span><span class="o">.</span><span class="n">k</span><span class="p">,</span>
+            <span class="n">cst</span><span class="o">.</span><span class="n">k</span><span class="p">,</span>
             <span class="n">sl_state</span><span class="o">.</span><span class="n">z0h</span><span class="p">,</span>
             <span class="n">obukhov_length</span><span class="p">,</span>
         <span class="p">)</span>
@@ -457,12 +455,12 @@ document.write(`
             <span class="n">qsurf</span><span class="p">,</span>
             <span class="n">state</span><span class="o">.</span><span class="n">land</span><span class="o">.</span><span class="n">wq</span><span class="p">,</span>
             <span class="n">ustar</span><span class="p">,</span>
-            <span class="n">const</span><span class="o">.</span><span class="n">k</span><span class="p">,</span>
+            <span class="n">cst</span><span class="o">.</span><span class="n">k</span><span class="p">,</span>
             <span class="n">sl_state</span><span class="o">.</span><span class="n">z0h</span><span class="p">,</span>
             <span class="n">obukhov_length</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="n">u2m</span> <span class="o">=</span> <span class="n">compute_u2m</span><span class="p">(</span><span class="n">uw</span><span class="p">,</span> <span class="n">ustar</span><span class="p">,</span> <span class="n">const</span><span class="o">.</span><span class="n">k</span><span class="p">,</span> <span class="n">sl_state</span><span class="o">.</span><span class="n">z0m</span><span class="p">,</span> <span class="n">obukhov_length</span><span class="p">)</span>
-        <span class="n">v2m</span> <span class="o">=</span> <span class="n">compute_v2m</span><span class="p">(</span><span class="n">vw</span><span class="p">,</span> <span class="n">ustar</span><span class="p">,</span> <span class="n">const</span><span class="o">.</span><span class="n">k</span><span class="p">,</span> <span class="n">sl_state</span><span class="o">.</span><span class="n">z0m</span><span class="p">,</span> <span class="n">obukhov_length</span><span class="p">)</span>
+        <span class="n">u2m</span> <span class="o">=</span> <span class="n">compute_u2m</span><span class="p">(</span><span class="n">uw</span><span class="p">,</span> <span class="n">ustar</span><span class="p">,</span> <span class="n">cst</span><span class="o">.</span><span class="n">k</span><span class="p">,</span> <span class="n">sl_state</span><span class="o">.</span><span class="n">z0m</span><span class="p">,</span> <span class="n">obukhov_length</span><span class="p">)</span>
+        <span class="n">v2m</span> <span class="o">=</span> <span class="n">compute_v2m</span><span class="p">(</span><span class="n">vw</span><span class="p">,</span> <span class="n">ustar</span><span class="p">,</span> <span class="n">cst</span><span class="o">.</span><span class="n">k</span><span class="p">,</span> <span class="n">sl_state</span><span class="o">.</span><span class="n">z0m</span><span class="p">,</span> <span class="n">obukhov_length</span><span class="p">)</span>
         <span class="n">e2m</span> <span class="o">=</span> <span class="n">compute_e2m</span><span class="p">(</span><span class="n">q2m</span><span class="p">,</span> <span class="n">ml_state</span><span class="o">.</span><span class="n">surf_pressure</span><span class="p">)</span>
         <span class="n">esat2m</span> <span class="o">=</span> <span class="n">compute_esat2m</span><span class="p">(</span><span class="n">temp_2m</span><span class="p">)</span>
         <span class="n">ra</span> <span class="o">=</span> <span class="n">compute_ra</span><span class="p">(</span><span class="n">ml_state</span><span class="o">.</span><span class="n">u</span><span class="p">,</span> <span class="n">ml_state</span><span class="o">.</span><span class="n">v</span><span class="p">,</span> <span class="n">ml_state</span><span class="o">.</span><span class="n">wstar</span><span class="p">,</span> <span class="n">drag_s</span><span class="p">)</span>

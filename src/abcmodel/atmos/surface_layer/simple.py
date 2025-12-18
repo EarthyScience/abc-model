@@ -4,7 +4,6 @@ import jax.numpy as jnp
 from jax import Array
 
 from ...abstracts import AbstractCoupledState, LandT, RadT
-from ...utils import PhysicalConstants
 from ..abstracts import (
     AbstractSurfaceLayerModel,
     AbstractSurfaceLayerState,
@@ -47,7 +46,7 @@ class SimpleSurfaceLayerModel(AbstractSurfaceLayerModel[SimpleSurfaceLayerState]
     def __init__(self):
         pass
 
-    def run(self, state: StateAlias, const: PhysicalConstants):
+    def run(self, state: StateAlias):
         """Run the model.
 
         Args:

@@ -3,7 +3,7 @@ from dataclasses import dataclass, field, replace
 import jax.numpy as jnp
 
 from ...abstracts import AbstractCoupledState
-from ...utils import Array, PhysicalConstants, compute_qsat
+from ...utils import Array, compute_qsat
 from ..abstracts import AbstractCloudModel, AbstractCloudState
 
 
@@ -48,14 +48,11 @@ class CumulusModel(AbstractCloudModel[CumulusState]):
         self.tcc_cc = tcc_cc
         self.tcc_trans = tcc_trans
 
-    def run(
-        self, state: AbstractCoupledState, const: PhysicalConstants
-    ) -> CumulusState:
+    def run(self, state: AbstractCoupledState) -> CumulusState:
         """Run the model.
 
         Args:
             state:
-            const:
 
         Returns:
             The updated cloud state.

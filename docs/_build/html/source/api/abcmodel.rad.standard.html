@@ -449,7 +449,7 @@ rad components.</p>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="abcmodel.rad.standard.StandardRadiationModel.run">
-<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tstart</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/rad/standard.html#StandardRadiationModel.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.rad.standard.StandardRadiationModel.run" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tstart</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/rad/standard.html#StandardRadiationModel.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.rad.standard.StandardRadiationModel.run" title="Link to this definition">#</a></dt>
 <dd><p>Calculate rad components and net surface rad.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -458,7 +458,6 @@ rad components.</p>
 <li><p><strong>t</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></span>) – Current time step index [-].</p></li>
 <li><p><strong>dt</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Time step duration [s].</p></li>
 <li><p><strong>tstart</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Start time of day [hours UTC], range 0 to 24.</p></li>
-<li><p><strong>const</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="abcmodel.utils.html#abcmodel.utils.PhysicalConstants" title="abcmodel.utils.PhysicalConstants"><code class="xref py py-class docutils literal notranslate"><span class="pre">PhysicalConstants</span></code></a></span>) – PhysicalConstants object.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -528,7 +527,7 @@ mathematical instability in subsequent calculations.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="abcmodel.rad.standard.StandardRadiationModel.compute_air_temperature">
-<span class="sig-name descname"><span class="pre">compute_air_temperature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">surf_pressure</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h_abl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/rad/standard.html#StandardRadiationModel.compute_air_temperature"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.rad.standard.StandardRadiationModel.compute_air_temperature" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">compute_air_temperature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">surf_pressure</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h_abl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/rad/standard.html#StandardRadiationModel.compute_air_temperature"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.rad.standard.StandardRadiationModel.compute_air_temperature" title="Link to this definition">#</a></dt>
 <dd><p>Compute air temperature at reference level using potential temperature.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -536,7 +535,6 @@ mathematical instability in subsequent calculations.</p>
 <li><p><strong>surf_pressure</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></span>) – surface pressure [Pa].</p></li>
 <li><p><strong>h_abl</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></span>) – atmospheric boundary layer height [m].</p></li>
 <li><p><strong>theta</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></span>) – potential temperature [K].</p></li>
-<li><p><strong>const</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="abcmodel.utils.html#abcmodel.utils.PhysicalConstants" title="abcmodel.utils.PhysicalConstants"><code class="xref py py-class docutils literal notranslate"><span class="pre">PhysicalConstants</span></code></a></span>)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -603,7 +601,7 @@ calculated based on the cloud cover <span class="math notranslate nohighlight">\
 
 <dl class="py method">
 <dt class="sig sig-object py" id="abcmodel.rad.standard.StandardRadiationModel.compute_rad_components">
-<span class="sig-name descname"><span class="pre">compute_rad_components</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">solar_elevation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atmospheric_transmission</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">air_temp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surf_temp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">const</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/rad/standard.html#StandardRadiationModel.compute_rad_components"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.rad.standard.StandardRadiationModel.compute_rad_components" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">compute_rad_components</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">solar_elevation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atmospheric_transmission</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">air_temp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surf_temp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/rad/standard.html#StandardRadiationModel.compute_rad_components"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.rad.standard.StandardRadiationModel.compute_rad_components" title="Link to this definition">#</a></dt>
 <dd><p>Compute all rad components and update attributes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -613,7 +611,6 @@ calculated based on the cloud cover <span class="math notranslate nohighlight">\
 <li><p><strong>air_temp</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></span>) – air temperature [K].</p></li>
 <li><p><strong>alpha</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></span>) – surface albedo [-].</p></li>
 <li><p><strong>surf_temp</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></span>) – surface temperature [K].</p></li>
-<li><p><strong>const</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="abcmodel.utils.html#abcmodel.utils.PhysicalConstants" title="abcmodel.utils.PhysicalConstants"><code class="xref py py-class docutils literal notranslate"><span class="pre">PhysicalConstants</span></code></a></span>)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>

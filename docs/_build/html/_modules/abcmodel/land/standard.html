@@ -318,7 +318,8 @@ document.write(`
     <span class="n">AbstractLandModel</span><span class="p">,</span>
     <span class="n">AbstractLandState</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">..utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">PhysicalConstants</span><span class="p">,</span> <span class="n">compute_esat</span><span class="p">,</span> <span class="n">compute_qsat</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">PhysicalConstants</span> <span class="k">as</span> <span class="n">cst</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">compute_esat</span><span class="p">,</span> <span class="n">compute_qsat</span>
 
 
 <div class="viewcode-block" id="StandardLandState">
@@ -501,13 +502,11 @@ document.write(`
     <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">state</span><span class="p">:</span> <span class="n">AbstractCoupledState</span><span class="p">,</span>
-        <span class="n">const</span><span class="p">:</span> <span class="n">PhysicalConstants</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StandardLandState</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Run the full land surface model for one time step.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            state: CoupledState.</span>
-<span class="sd">            const: the physical constants object.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            The updated land state object.</span>
@@ -522,8 +521,8 @@ document.write(`
         <span class="n">e</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_e</span><span class="p">(</span><span class="n">ml_state</span><span class="o">.</span><span class="n">q</span><span class="p">,</span> <span class="n">ml_state</span><span class="o">.</span><span class="n">surf_pressure</span><span class="p">)</span>
         <span class="n">land_state</span> <span class="o">=</span> <span class="n">land_state</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">esat</span><span class="o">=</span><span class="n">esat</span><span class="p">,</span> <span class="n">qsat</span><span class="o">=</span><span class="n">qsat</span><span class="p">,</span> <span class="n">dqsatdT</span><span class="o">=</span><span class="n">dqsatdT</span><span class="p">,</span> <span class="n">e</span><span class="o">=</span><span class="n">e</span><span class="p">)</span>
         <span class="n">state</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">land</span><span class="o">=</span><span class="n">land_state</span><span class="p">)</span>
-        <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_surface_resistance</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">const</span><span class="p">)</span>
-        <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_co2_flux</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">const</span><span class="p">)</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_surface_resistance</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_co2_flux</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
         <span class="n">land_state</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">land</span>
         <span class="n">rssoil</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_soil_resistance</span><span class="p">(</span><span class="n">land_state</span><span class="o">.</span><span class="n">wg</span><span class="p">)</span>
         <span class="n">cliq</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_cliq</span><span class="p">(</span><span class="n">land_state</span><span class="o">.</span><span class="n">wl</span><span class="p">)</span>
@@ -538,7 +537,6 @@ document.write(`
             <span class="n">rssoil</span><span class="p">,</span>
             <span class="n">cliq</span><span class="p">,</span>
             <span class="n">land_state</span><span class="o">.</span><span class="n">temp_soil</span><span class="p">,</span>
-            <span class="n">const</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">qsatsurf</span> <span class="o">=</span> <span class="n">compute_qsat</span><span class="p">(</span><span class="n">surf_temp</span><span class="p">,</span> <span class="n">ml_state</span><span class="o">.</span><span class="n">surf_pressure</span><span class="p">)</span>
         <span class="n">le_veg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_le_veg</span><span class="p">(</span>
@@ -550,7 +548,6 @@ document.write(`
             <span class="n">ra</span><span class="p">,</span>
             <span class="n">land_state</span><span class="o">.</span><span class="n">rs</span><span class="p">,</span>
             <span class="n">cliq</span><span class="p">,</span>
-            <span class="n">const</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">le_liq</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_le_liq</span><span class="p">(</span>
             <span class="n">surf_temp</span><span class="p">,</span>
@@ -560,7 +557,6 @@ document.write(`
             <span class="n">land_state</span><span class="o">.</span><span class="n">dqsatdT</span><span class="p">,</span>
             <span class="n">ra</span><span class="p">,</span>
             <span class="n">cliq</span><span class="p">,</span>
-            <span class="n">const</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">le_soil</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_le_soil</span><span class="p">(</span>
             <span class="n">surf_temp</span><span class="p">,</span>
@@ -570,11 +566,10 @@ document.write(`
             <span class="n">land_state</span><span class="o">.</span><span class="n">dqsatdT</span><span class="p">,</span>
             <span class="n">ra</span><span class="p">,</span>
             <span class="n">rssoil</span><span class="p">,</span>
-            <span class="n">const</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="n">wltend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_wltend</span><span class="p">(</span><span class="n">le_liq</span><span class="p">,</span> <span class="n">const</span><span class="p">)</span>
+        <span class="n">wltend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_wltend</span><span class="p">(</span><span class="n">le_liq</span><span class="p">)</span>
         <span class="n">le</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_le</span><span class="p">(</span><span class="n">le_soil</span><span class="p">,</span> <span class="n">le_veg</span><span class="p">,</span> <span class="n">le_liq</span><span class="p">)</span>
-        <span class="n">hf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_hf</span><span class="p">(</span><span class="n">surf_temp</span><span class="p">,</span> <span class="n">ml_state</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span> <span class="n">ra</span><span class="p">,</span> <span class="n">const</span><span class="p">)</span>
+        <span class="n">hf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_hf</span><span class="p">(</span><span class="n">surf_temp</span><span class="p">,</span> <span class="n">ml_state</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span> <span class="n">ra</span><span class="p">)</span>
         <span class="n">gf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_gf</span><span class="p">(</span><span class="n">surf_temp</span><span class="p">,</span> <span class="n">land_state</span><span class="o">.</span><span class="n">temp_soil</span><span class="p">)</span>
         <span class="n">le_pot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_le_pot</span><span class="p">(</span>
             <span class="n">state</span><span class="o">.</span><span class="n">net_rad</span><span class="p">,</span>
@@ -583,7 +578,6 @@ document.write(`
             <span class="n">land_state</span><span class="o">.</span><span class="n">qsat</span><span class="p">,</span>
             <span class="n">ml_state</span><span class="o">.</span><span class="n">q</span><span class="p">,</span>
             <span class="n">ra</span><span class="p">,</span>
-            <span class="n">const</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">le_ref</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_le_ref</span><span class="p">(</span>
             <span class="n">state</span><span class="o">.</span><span class="n">net_rad</span><span class="p">,</span>
@@ -592,15 +586,14 @@ document.write(`
             <span class="n">land_state</span><span class="o">.</span><span class="n">qsat</span><span class="p">,</span>
             <span class="n">ml_state</span><span class="o">.</span><span class="n">q</span><span class="p">,</span>
             <span class="n">ra</span><span class="p">,</span>
-            <span class="n">const</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">temp_soil_tend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_temp_soil_tend</span><span class="p">(</span>
             <span class="n">gf</span><span class="p">,</span> <span class="n">land_state</span><span class="o">.</span><span class="n">temp_soil</span><span class="p">,</span> <span class="n">land_state</span><span class="o">.</span><span class="n">temp2</span>
         <span class="p">)</span>
-        <span class="n">wgtend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_wgtend</span><span class="p">(</span><span class="n">land_state</span><span class="o">.</span><span class="n">wg</span><span class="p">,</span> <span class="n">le_soil</span><span class="p">,</span> <span class="n">const</span><span class="p">)</span>
+        <span class="n">wgtend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_wgtend</span><span class="p">(</span><span class="n">land_state</span><span class="o">.</span><span class="n">wg</span><span class="p">,</span> <span class="n">le_soil</span><span class="p">)</span>
 
-        <span class="n">wtheta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_wtheta</span><span class="p">(</span><span class="n">hf</span><span class="p">,</span> <span class="n">const</span><span class="p">)</span>
-        <span class="n">wq</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_wq</span><span class="p">(</span><span class="n">le</span><span class="p">,</span> <span class="n">const</span><span class="p">)</span>
+        <span class="n">wtheta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_wtheta</span><span class="p">(</span><span class="n">hf</span><span class="p">)</span>
+        <span class="n">wq</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_wq</span><span class="p">(</span><span class="n">le</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">land_state</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
             <span class="n">rssoil</span><span class="o">=</span><span class="n">rssoil</span><span class="p">,</span>
             <span class="n">cliq</span><span class="o">=</span><span class="n">cliq</span><span class="p">,</span>
@@ -669,7 +662,6 @@ document.write(`
     <span class="k">def</span><span class="w"> </span><span class="nf">update_surface_resistance</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">state</span><span class="p">:</span> <span class="n">AbstractCoupledState</span><span class="p">,</span>
-        <span class="n">const</span><span class="p">:</span> <span class="n">PhysicalConstants</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AbstractCoupledState</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Abstract method to update surface resistance.&quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
@@ -681,7 +673,6 @@ document.write(`
     <span class="k">def</span><span class="w"> </span><span class="nf">update_co2_flux</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">state</span><span class="p">:</span> <span class="n">AbstractCoupledState</span><span class="p">,</span>
-        <span class="n">const</span><span class="p">:</span> <span class="n">PhysicalConstants</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AbstractCoupledState</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Abstract method to update CO2 flux.&quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
@@ -761,7 +752,6 @@ document.write(`
         <span class="n">rssoil</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
         <span class="n">cliq</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
         <span class="n">temp_soil</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-        <span class="n">const</span><span class="p">:</span> <span class="n">PhysicalConstants</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the skin temperature ``surf_temp``.</span>
 
@@ -802,30 +792,25 @@ document.write(`
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">(</span>
             <span class="n">net_rad</span>
-            <span class="o">+</span> <span class="n">const</span><span class="o">.</span><span class="n">rho</span> <span class="o">*</span> <span class="n">const</span><span class="o">.</span><span class="n">cp</span> <span class="o">/</span> <span class="n">ra</span> <span class="o">*</span> <span class="n">theta</span>
+            <span class="o">+</span> <span class="n">cst</span><span class="o">.</span><span class="n">rho</span> <span class="o">*</span> <span class="n">cst</span><span class="o">.</span><span class="n">cp</span> <span class="o">/</span> <span class="n">ra</span> <span class="o">*</span> <span class="n">theta</span>
             <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">cveg</span>
             <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">cliq</span><span class="p">)</span>
-            <span class="o">*</span> <span class="n">const</span><span class="o">.</span><span class="n">rho</span>
-            <span class="o">*</span> <span class="n">const</span><span class="o">.</span><span class="n">lv</span>
+            <span class="o">*</span> <span class="n">cst</span><span class="o">.</span><span class="n">rho</span>
+            <span class="o">*</span> <span class="n">cst</span><span class="o">.</span><span class="n">lv</span>
             <span class="o">/</span> <span class="p">(</span><span class="n">ra</span> <span class="o">+</span> <span class="n">rs</span><span class="p">)</span>
             <span class="o">*</span> <span class="p">(</span><span class="n">dqsatdT</span> <span class="o">*</span> <span class="n">theta</span> <span class="o">-</span> <span class="n">qsat</span> <span class="o">+</span> <span class="n">q</span><span class="p">)</span>
             <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">cveg</span><span class="p">)</span>
-            <span class="o">*</span> <span class="n">const</span><span class="o">.</span><span class="n">rho</span>
-            <span class="o">*</span> <span class="n">const</span><span class="o">.</span><span class="n">lv</span>
+            <span class="o">*</span> <span class="n">cst</span><span class="o">.</span><span class="n">rho</span>
+            <span class="o">*</span> <span class="n">cst</span><span class="o">.</span><span class="n">lv</span>
             <span class="o">/</span> <span class="p">(</span><span class="n">ra</span> <span class="o">+</span> <span class="n">rssoil</span><span class="p">)</span>
             <span class="o">*</span> <span class="p">(</span><span class="n">dqsatdT</span> <span class="o">*</span> <span class="n">theta</span> <span class="o">-</span> <span class="n">qsat</span> <span class="o">+</span> <span class="n">q</span><span class="p">)</span>
-            <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">cveg</span>
-            <span class="o">*</span> <span class="n">cliq</span>
-            <span class="o">*</span> <span class="n">const</span><span class="o">.</span><span class="n">rho</span>
-            <span class="o">*</span> <span class="n">const</span><span class="o">.</span><span class="n">lv</span>
-            <span class="o">/</span> <span class="n">ra</span>
-            <span class="o">*</span> <span class="p">(</span><span class="n">dqsatdT</span> <span class="o">*</span> <span class="n">theta</span> <span class="o">-</span> <span class="n">qsat</span> <span class="o">+</span> <span class="n">q</span><span class="p">)</span>
+            <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">cveg</span> <span class="o">*</span> <span class="n">cliq</span> <span class="o">*</span> <span class="n">cst</span><span class="o">.</span><span class="n">rho</span> <span class="o">*</span> <span class="n">cst</span><span class="o">.</span><span class="n">lv</span> <span class="o">/</span> <span class="n">ra</span> <span class="o">*</span> <span class="p">(</span><span class="n">dqsatdT</span> <span class="o">*</span> <span class="n">theta</span> <span class="o">-</span> <span class="n">qsat</span> <span class="o">+</span> <span class="n">q</span><span class="p">)</span>
             <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">lam</span> <span class="o">*</span> <span class="n">temp_soil</span>
         <span class="p">)</span> <span class="o">/</span> <span class="p">(</span>
-            <span class="n">const</span><span class="o">.</span><span class="n">rho</span> <span class="o">*</span> <span class="n">const</span><span class="o">.</span><span class="n">cp</span> <span class="o">/</span> <span class="n">ra</span>
-            <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">cveg</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">cliq</span><span class="p">)</span> <span class="o">*</span> <span class="n">const</span><span class="o">.</span><span class="n">rho</span> <span class="o">*</span> <span class="n">const</span><span class="o">.</span><span class="n">lv</span> <span class="o">/</span> <span class="p">(</span><span class="n">ra</span> <span class="o">+</span> <span class="n">rs</span><span class="p">)</span> <span class="o">*</span> <span class="n">dqsatdT</span>
-            <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">cveg</span><span class="p">)</span> <span class="o">*</span> <span class="n">const</span><span class="o">.</span><span class="n">rho</span> <span class="o">*</span> <span class="n">const</span><span class="o">.</span><span class="n">lv</span> <span class="o">/</span> <span class="p">(</span><span class="n">ra</span> <span class="o">+</span> <span class="n">rssoil</span><span class="p">)</span> <span class="o">*</span> <span class="n">dqsatdT</span>
-            <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">cveg</span> <span class="o">*</span> <span class="n">cliq</span> <span class="o">*</span> <span class="n">const</span><span class="o">.</span><span class="n">rho</span> <span class="o">*</span> <span class="n">const</span><span class="o">.</span><span class="n">lv</span> <span class="o">/</span> <span class="n">ra</span> <span class="o">*</span> <span class="n">dqsatdT</span>
+            <span class="n">cst</span><span class="o">.</span><span class="n">rho</span> <span class="o">*</span> <span class="n">cst</span><span class="o">.</span><span class="n">cp</span> <span class="o">/</span> <span class="n">ra</span>
+            <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">cveg</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">cliq</span><span class="p">)</span> <span class="o">*</span> <span class="n">cst</span><span class="o">.</span><span class="n">rho</span> <span class="o">*</span> <span class="n">cst</span><span class="o">.</span><span class="n">lv</span> <span class="o">/</span> <span class="p">(</span><span class="n">ra</span> <span class="o">+</span> <span class="n">rs</span><span class="p">)</span> <span class="o">*</span> <span class="n">dqsatdT</span>
+            <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">cveg</span><span class="p">)</span> <span class="o">*</span> <span class="n">cst</span><span class="o">.</span><span class="n">rho</span> <span class="o">*</span> <span class="n">cst</span><span class="o">.</span><span class="n">lv</span> <span class="o">/</span> <span class="p">(</span><span class="n">ra</span> <span class="o">+</span> <span class="n">rssoil</span><span class="p">)</span> <span class="o">*</span> <span class="n">dqsatdT</span>
+            <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">cveg</span> <span class="o">*</span> <span class="n">cliq</span> <span class="o">*</span> <span class="n">cst</span><span class="o">.</span><span class="n">rho</span> <span class="o">*</span> <span class="n">cst</span><span class="o">.</span><span class="n">lv</span> <span class="o">/</span> <span class="n">ra</span> <span class="o">*</span> <span class="n">dqsatdT</span>
             <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">lam</span>
         <span class="p">)</span></div>
 
@@ -842,7 +827,6 @@ document.write(`
         <span class="n">ra</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
         <span class="n">rs</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
         <span class="n">cliq</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-        <span class="n">const</span><span class="p">:</span> <span class="n">PhysicalConstants</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the latent heat flux (transpiration) from vegetation ``le_veg``.</span>
 
@@ -876,7 +860,7 @@ document.write(`
 <span class="sd">            Equation 9.15 from the CLASS book.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">term</span> <span class="o">=</span> <span class="n">dqsatdT</span> <span class="o">*</span> <span class="p">(</span><span class="n">surf_temp</span> <span class="o">-</span> <span class="n">theta</span><span class="p">)</span> <span class="o">+</span> <span class="n">qsat</span> <span class="o">-</span> <span class="n">q</span>
-        <span class="n">le_veg</span> <span class="o">=</span> <span class="n">const</span><span class="o">.</span><span class="n">rho</span> <span class="o">*</span> <span class="n">const</span><span class="o">.</span><span class="n">lv</span> <span class="o">/</span> <span class="p">(</span><span class="n">ra</span> <span class="o">+</span> <span class="n">rs</span><span class="p">)</span> <span class="o">*</span> <span class="n">term</span>
+        <span class="n">le_veg</span> <span class="o">=</span> <span class="n">cst</span><span class="o">.</span><span class="n">rho</span> <span class="o">*</span> <span class="n">cst</span><span class="o">.</span><span class="n">lv</span> <span class="o">/</span> <span class="p">(</span><span class="n">ra</span> <span class="o">+</span> <span class="n">rs</span><span class="p">)</span> <span class="o">*</span> <span class="n">term</span>
         <span class="n">frac</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">cliq</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">cveg</span>
         <span class="k">return</span> <span class="n">frac</span> <span class="o">*</span> <span class="n">le_veg</span></div>
 
@@ -892,7 +876,6 @@ document.write(`
         <span class="n">dqsatdT</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
         <span class="n">ra</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
         <span class="n">cliq</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-        <span class="n">const</span><span class="p">:</span> <span class="n">PhysicalConstants</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the latent heat flux on the leaf (dew) ``le_liq``.</span>
 
@@ -910,7 +893,7 @@ document.write(`
 <span class="sd">            Equation 9.18 from the CLASS book.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">term</span> <span class="o">=</span> <span class="n">dqsatdT</span> <span class="o">*</span> <span class="p">(</span><span class="n">surf_temp</span> <span class="o">-</span> <span class="n">theta</span><span class="p">)</span> <span class="o">+</span> <span class="n">qsat</span> <span class="o">-</span> <span class="n">q</span>
-        <span class="n">le_liq</span> <span class="o">=</span> <span class="n">const</span><span class="o">.</span><span class="n">rho</span> <span class="o">*</span> <span class="n">const</span><span class="o">.</span><span class="n">lv</span> <span class="o">/</span> <span class="n">ra</span> <span class="o">*</span> <span class="n">term</span>
+        <span class="n">le_liq</span> <span class="o">=</span> <span class="n">cst</span><span class="o">.</span><span class="n">rho</span> <span class="o">*</span> <span class="n">cst</span><span class="o">.</span><span class="n">lv</span> <span class="o">/</span> <span class="n">ra</span> <span class="o">*</span> <span class="n">term</span>
         <span class="n">frac</span> <span class="o">=</span> <span class="n">cliq</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">cveg</span>
         <span class="k">return</span> <span class="n">frac</span> <span class="o">*</span> <span class="n">le_liq</span></div>
 
@@ -926,7 +909,6 @@ document.write(`
         <span class="n">dqsatdT</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
         <span class="n">ra</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
         <span class="n">rssoil</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-        <span class="n">const</span><span class="p">:</span> <span class="n">PhysicalConstants</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the latent heat flux on the soil (evaporation) ``le_soil``.</span>
 
@@ -943,14 +925,14 @@ document.write(`
 <span class="sd">            Equation 9.21 from the CLASS book.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">term</span> <span class="o">=</span> <span class="n">dqsatdT</span> <span class="o">*</span> <span class="p">(</span><span class="n">surf_temp</span> <span class="o">-</span> <span class="n">theta</span><span class="p">)</span> <span class="o">+</span> <span class="n">qsat</span> <span class="o">-</span> <span class="n">q</span>
-        <span class="n">le_soil</span> <span class="o">=</span> <span class="n">const</span><span class="o">.</span><span class="n">rho</span> <span class="o">*</span> <span class="n">const</span><span class="o">.</span><span class="n">lv</span> <span class="o">/</span> <span class="p">(</span><span class="n">ra</span> <span class="o">+</span> <span class="n">rssoil</span><span class="p">)</span> <span class="o">*</span> <span class="n">term</span>
+        <span class="n">le_soil</span> <span class="o">=</span> <span class="n">cst</span><span class="o">.</span><span class="n">rho</span> <span class="o">*</span> <span class="n">cst</span><span class="o">.</span><span class="n">lv</span> <span class="o">/</span> <span class="p">(</span><span class="n">ra</span> <span class="o">+</span> <span class="n">rssoil</span><span class="p">)</span> <span class="o">*</span> <span class="n">term</span>
         <span class="n">frac</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">cveg</span>
         <span class="k">return</span> <span class="n">frac</span> <span class="o">*</span> <span class="n">le_soil</span></div>
 
 
 <div class="viewcode-block" id="AbstractStandardLandModel.compute_wltend">
 <a class="viewcode-back" href="../../../source/api/abcmodel.land.standard.html#abcmodel.land.standard.AbstractStandardLandModel.compute_wltend">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">compute_wltend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">le_liq</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">const</span><span class="p">:</span> <span class="n">PhysicalConstants</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_wltend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">le_liq</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the water layer depth tendency tendency ``wltend``.</span>
 
 <span class="sd">        Notes:</span>
@@ -965,7 +947,7 @@ document.write(`
 <span class="sd">        References:</span>
 <span class="sd">            Equation 9.20 from the CLASS book, with sign convention.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="o">-</span><span class="n">le_liq</span> <span class="o">/</span> <span class="p">(</span><span class="n">const</span><span class="o">.</span><span class="n">rhow</span> <span class="o">*</span> <span class="n">const</span><span class="o">.</span><span class="n">lv</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="o">-</span><span class="n">le_liq</span> <span class="o">/</span> <span class="p">(</span><span class="n">cst</span><span class="o">.</span><span class="n">rhow</span> <span class="o">*</span> <span class="n">cst</span><span class="o">.</span><span class="n">lv</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="AbstractStandardLandModel.compute_le">
@@ -990,7 +972,6 @@ document.write(`
         <span class="n">surf_temp</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
         <span class="n">theta</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
         <span class="n">ra</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-        <span class="n">const</span><span class="p">:</span> <span class="n">PhysicalConstants</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the sensible heat flux ``hf``.</span>
 
@@ -1009,7 +990,7 @@ document.write(`
 <span class="sd">            Equation 9.13 from the CLASS book, but why are we using :math:`T_s` instead of :math:`\\theta_s`?</span>
 <span class="sd">            Probably because the variations of pressure are not significant enough.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">const</span><span class="o">.</span><span class="n">rho</span> <span class="o">*</span> <span class="n">const</span><span class="o">.</span><span class="n">cp</span> <span class="o">/</span> <span class="n">ra</span> <span class="o">*</span> <span class="p">(</span><span class="n">surf_temp</span> <span class="o">-</span> <span class="n">theta</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">cst</span><span class="o">.</span><span class="n">rho</span> <span class="o">*</span> <span class="n">cst</span><span class="o">.</span><span class="n">cp</span> <span class="o">/</span> <span class="n">ra</span> <span class="o">*</span> <span class="p">(</span><span class="n">surf_temp</span> <span class="o">-</span> <span class="n">theta</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="AbstractStandardLandModel.compute_gf">
@@ -1044,7 +1025,6 @@ document.write(`
         <span class="n">qsat</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
         <span class="n">q</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
         <span class="n">ra</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-        <span class="n">const</span><span class="p">:</span> <span class="n">PhysicalConstants</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the potential latent heat flux ``le_pot``.</span>
 
@@ -1066,8 +1046,8 @@ document.write(`
 <span class="sd">            Equation 9.16 from the CLASS book.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">rad_term</span> <span class="o">=</span> <span class="n">dqsatdT</span> <span class="o">*</span> <span class="p">(</span><span class="n">net_rad</span> <span class="o">-</span> <span class="n">gf</span><span class="p">)</span>
-        <span class="n">aerodynamic_term</span> <span class="o">=</span> <span class="n">const</span><span class="o">.</span><span class="n">rho</span> <span class="o">*</span> <span class="n">const</span><span class="o">.</span><span class="n">cp</span> <span class="o">/</span> <span class="n">ra</span> <span class="o">*</span> <span class="p">(</span><span class="n">qsat</span> <span class="o">-</span> <span class="n">q</span><span class="p">)</span>
-        <span class="n">denominator</span> <span class="o">=</span> <span class="n">dqsatdT</span> <span class="o">+</span> <span class="n">const</span><span class="o">.</span><span class="n">cp</span> <span class="o">/</span> <span class="n">const</span><span class="o">.</span><span class="n">lv</span>
+        <span class="n">aerodynamic_term</span> <span class="o">=</span> <span class="n">cst</span><span class="o">.</span><span class="n">rho</span> <span class="o">*</span> <span class="n">cst</span><span class="o">.</span><span class="n">cp</span> <span class="o">/</span> <span class="n">ra</span> <span class="o">*</span> <span class="p">(</span><span class="n">qsat</span> <span class="o">-</span> <span class="n">q</span><span class="p">)</span>
+        <span class="n">denominator</span> <span class="o">=</span> <span class="n">dqsatdT</span> <span class="o">+</span> <span class="n">cst</span><span class="o">.</span><span class="n">cp</span> <span class="o">/</span> <span class="n">cst</span><span class="o">.</span><span class="n">lv</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">rad_term</span> <span class="o">+</span> <span class="n">aerodynamic_term</span><span class="p">)</span> <span class="o">/</span> <span class="n">denominator</span></div>
 
 
@@ -1081,7 +1061,6 @@ document.write(`
         <span class="n">qsat</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
         <span class="n">q</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
         <span class="n">ra</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
-        <span class="n">const</span><span class="p">:</span> <span class="n">PhysicalConstants</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the reference latent heat flux ``le_ref``.</span>
 
@@ -1106,9 +1085,9 @@ document.write(`
 <span class="sd">            Equation 9.16 from the CLASS book.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">rad_term</span> <span class="o">=</span> <span class="n">dqsatdT</span> <span class="o">*</span> <span class="p">(</span><span class="n">net_rad</span> <span class="o">-</span> <span class="n">gf</span><span class="p">)</span>
-        <span class="n">aerodynamic_term</span> <span class="o">=</span> <span class="n">const</span><span class="o">.</span><span class="n">rho</span> <span class="o">*</span> <span class="n">const</span><span class="o">.</span><span class="n">cp</span> <span class="o">/</span> <span class="n">ra</span> <span class="o">*</span> <span class="p">(</span><span class="n">qsat</span> <span class="o">-</span> <span class="n">q</span><span class="p">)</span>
+        <span class="n">aerodynamic_term</span> <span class="o">=</span> <span class="n">cst</span><span class="o">.</span><span class="n">rho</span> <span class="o">*</span> <span class="n">cst</span><span class="o">.</span><span class="n">cp</span> <span class="o">/</span> <span class="n">ra</span> <span class="o">*</span> <span class="p">(</span><span class="n">qsat</span> <span class="o">-</span> <span class="n">q</span><span class="p">)</span>
         <span class="n">den1</span> <span class="o">=</span> <span class="n">dqsatdT</span>
-        <span class="n">den2</span> <span class="o">=</span> <span class="n">const</span><span class="o">.</span><span class="n">cp</span> <span class="o">/</span> <span class="n">const</span><span class="o">.</span><span class="n">lv</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">rsmin</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">lai</span> <span class="o">/</span> <span class="n">ra</span><span class="p">)</span>
+        <span class="n">den2</span> <span class="o">=</span> <span class="n">cst</span><span class="o">.</span><span class="n">cp</span> <span class="o">/</span> <span class="n">cst</span><span class="o">.</span><span class="n">lv</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">rsmin</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">lai</span> <span class="o">/</span> <span class="n">ra</span><span class="p">)</span>
         <span class="k">return</span> <span class="p">(</span><span class="n">rad_term</span> <span class="o">+</span> <span class="n">aerodynamic_term</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">den1</span> <span class="o">+</span> <span class="n">den2</span><span class="p">)</span></div>
 
 
@@ -1151,9 +1130,7 @@ document.write(`
 
 <div class="viewcode-block" id="AbstractStandardLandModel.compute_wgtend">
 <a class="viewcode-back" href="../../../source/api/abcmodel.land.standard.html#abcmodel.land.standard.AbstractStandardLandModel.compute_wgtend">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">compute_wgtend</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">wg</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">le_soil</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">const</span><span class="p">:</span> <span class="n">PhysicalConstants</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_wgtend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wg</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">le_soil</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the soil moisture tendency ``wgtend``.</span>
 
 <span class="sd">        Notes:</span>
@@ -1204,14 +1181,14 @@ document.write(`
             <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">w2</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">wsat</span><span class="p">)</span> <span class="o">**</span> <span class="bp">self</span><span class="o">.</span><span class="n">p</span>
             <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">w2</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">wsat</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="mf">8.0</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="p">))</span>
         <span class="p">)</span>
-        <span class="n">evap_loss</span> <span class="o">=</span> <span class="o">-</span><span class="n">c1</span> <span class="o">/</span> <span class="p">(</span><span class="n">const</span><span class="o">.</span><span class="n">rhow</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">d1</span><span class="p">)</span> <span class="o">*</span> <span class="n">le_soil</span> <span class="o">/</span> <span class="n">const</span><span class="o">.</span><span class="n">lv</span>
+        <span class="n">evap_loss</span> <span class="o">=</span> <span class="o">-</span><span class="n">c1</span> <span class="o">/</span> <span class="p">(</span><span class="n">cst</span><span class="o">.</span><span class="n">rhow</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">d1</span><span class="p">)</span> <span class="o">*</span> <span class="n">le_soil</span> <span class="o">/</span> <span class="n">cst</span><span class="o">.</span><span class="n">lv</span>
         <span class="n">deep_grad</span> <span class="o">=</span> <span class="n">c2</span> <span class="o">/</span> <span class="mf">86400.0</span> <span class="o">*</span> <span class="p">(</span><span class="n">wg</span> <span class="o">-</span> <span class="n">wgeq</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">evap_loss</span> <span class="o">+</span> <span class="n">deep_grad</span></div>
 
 
 <div class="viewcode-block" id="AbstractStandardLandModel.compute_wtheta">
 <a class="viewcode-back" href="../../../source/api/abcmodel.land.standard.html#abcmodel.land.standard.AbstractStandardLandModel.compute_wtheta">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">compute_wtheta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hf</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">const</span><span class="p">:</span> <span class="n">PhysicalConstants</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_wtheta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hf</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the kinematic heat flux ``wtheta``.</span>
 
 <span class="sd">        Notes:</span>
@@ -1224,12 +1201,12 @@ document.write(`
 <span class="sd">            where :math:`\\rho` is the density of air and</span>
 <span class="sd">            :math:`c_p` is the specific heat capacity of air at constant pressure.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">hf</span> <span class="o">/</span> <span class="p">(</span><span class="n">const</span><span class="o">.</span><span class="n">rho</span> <span class="o">*</span> <span class="n">const</span><span class="o">.</span><span class="n">cp</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">hf</span> <span class="o">/</span> <span class="p">(</span><span class="n">cst</span><span class="o">.</span><span class="n">rho</span> <span class="o">*</span> <span class="n">cst</span><span class="o">.</span><span class="n">cp</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="AbstractStandardLandModel.compute_wq">
 <a class="viewcode-back" href="../../../source/api/abcmodel.land.standard.html#abcmodel.land.standard.AbstractStandardLandModel.compute_wq">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">compute_wq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">le</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">const</span><span class="p">:</span> <span class="n">PhysicalConstants</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_wq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">le</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the kinematic moisture flux ``wq``.</span>
 
 <span class="sd">        Notes:</span>
@@ -1242,7 +1219,7 @@ document.write(`
 <span class="sd">            where :math:`\\rho` is the density of air and</span>
 <span class="sd">            :math:`L_v` is the latent heat of vaporization.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">le</span> <span class="o">/</span> <span class="p">(</span><span class="n">const</span><span class="o">.</span><span class="n">rho</span> <span class="o">*</span> <span class="n">const</span><span class="o">.</span><span class="n">lv</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">le</span> <span class="o">/</span> <span class="p">(</span><span class="n">cst</span><span class="o">.</span><span class="n">rho</span> <span class="o">*</span> <span class="n">cst</span><span class="o">.</span><span class="n">lv</span><span class="p">)</span></div>
 </div>
 
 </pre></div>

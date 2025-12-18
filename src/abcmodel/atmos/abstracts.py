@@ -4,7 +4,7 @@ from abc import abstractmethod
 from typing import Generic, TypeVar
 
 from ..abstracts import AbstractCoupledState, AbstractModel, AbstractState
-from ..utils import Array, PhysicalConstants
+from ..utils import Array
 
 
 class AbstractSurfaceLayerState(AbstractState):
@@ -31,7 +31,7 @@ class AbstractSurfaceLayerModel(AbstractModel, Generic[SurfT]):
     """Abstract surface layer model class to define the interface for all surface layer models."""
 
     @abstractmethod
-    def run(self, state: AbstractCoupledState, const: PhysicalConstants) -> SurfT:
+    def run(self, state: AbstractCoupledState) -> SurfT:
         raise NotImplementedError
 
 
@@ -39,12 +39,12 @@ class AbstractMixedLayerModel(AbstractModel, Generic[MixedT]):
     """Abstract mixed layer model class to define the interface for all mixed layer models."""
 
     @abstractmethod
-    def run(self, state: AbstractCoupledState, const: PhysicalConstants) -> MixedT:
+    def run(self, state: AbstractCoupledState) -> MixedT:
         raise NotImplementedError
 
     @abstractmethod
     def statistics(
-        self, state: AbstractCoupledState, t: int, const: PhysicalConstants
+        self, state: AbstractCoupledState, t: int
     ) -> MixedT:
         raise NotImplementedError
 
@@ -57,5 +57,5 @@ class AbstractCloudModel(AbstractModel, Generic[CloudT]):
     """Abstract cloud model class to define the interface for all cloud models."""
 
     @abstractmethod
-    def run(self, state: AbstractCoupledState, const: PhysicalConstants) -> CloudT:
+    def run(self, state: AbstractCoupledState) -> CloudT:
         raise NotImplementedError

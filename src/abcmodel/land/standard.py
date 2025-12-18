@@ -9,7 +9,8 @@ from ..abstracts import (
     AbstractLandModel,
     AbstractLandState,
 )
-from ..utils import PhysicalConstants, compute_esat, compute_qsat
+from ..utils import PhysicalConstants as cst
+from ..utils import compute_esat, compute_qsat
 
 
 @dataclass
@@ -182,13 +183,11 @@ class AbstractStandardLandModel(AbstractLandModel):
     def run(
         self,
         state: AbstractCoupledState,
-        const: PhysicalConstants,
     ) -> StandardLandState:
         """Run the full land surface model for one time step.
 
         Args:
             state: CoupledState.
-            const: the physical constants object.
 
         Returns:
             The updated land state object.
@@ -203,8 +202,8 @@ class AbstractStandardLandModel(AbstractLandModel):
         e = self.compute_e(ml_state.q, ml_state.surf_pressure)
         land_state = land_state.replace(esat=esat, qsat=qsat, dqsatdT=dqsatdT, e=e)
         state = state.replace(land=land_state)
-        state = self.update_surface_resistance(state, const)
-        state = self.update_co2_flux(state, const)
+        state = self.update_surface_resistance(state)
+        state = self.update_co2_flux(state)
         land_state = state.land
         rssoil = self.compute_soil_resistance(land_state.wg)
         cliq = self.compute_cliq(land_state.wl)
@@ -219,7 +218,6 @@ class AbstractStandardLandModel(AbstractLandModel):
             rssoil,
             cliq,
             land_state.temp_soil,
-            const,
         )
         qsatsurf = compute_qsat(surf_temp, ml_state.surf_pressure)
         le_veg = self.compute_le_veg(
@@ -231,7 +229,6 @@ class AbstractStandardLandModel(AbstractLandModel):
             ra,
             land_state.rs,
             cliq,
-            const,
         )
         le_liq = self.compute_le_liq(
             surf_temp,
@@ -241,7 +238,6 @@ class AbstractStandardLandModel(AbstractLandModel):
             land_state.dqsatdT,
             ra,
             cliq,
-            const,
         )
         le_soil = self.compute_le_soil(
             surf_temp,
@@ -251,11 +247,10 @@ class AbstractStandardLandModel(AbstractLandModel):
             land_state.dqsatdT,
             ra,
             rssoil,
-            const,
         )
-        wltend = self.compute_wltend(le_liq, const)
+        wltend = self.compute_wltend(le_liq)
         le = self.compute_le(le_soil, le_veg, le_liq)
-        hf = self.compute_hf(surf_temp, ml_state.theta, ra, const)
+        hf = self.compute_hf(surf_temp, ml_state.theta, ra)
         gf = self.compute_gf(surf_temp, land_state.temp_soil)
         le_pot = self.compute_le_pot(
             state.net_rad,
@@ -264,7 +259,6 @@ class AbstractStandardLandModel(AbstractLandModel):
             land_state.qsat,
             ml_state.q,
             ra,
-            const,
         )
         le_ref = self.compute_le_ref(
             state.net_rad,
@@ -273,15 +267,14 @@ class AbstractStandardLandModel(AbstractLandModel):
             land_state.qsat,
             ml_state.q,
             ra,
-            const,
         )
         temp_soil_tend = self.compute_temp_soil_tend(
             gf, land_state.temp_soil, land_state.temp2
         )
-        wgtend = self.compute_wgtend(land_state.wg, le_soil, const)
+        wgtend = self.compute_wgtend(land_state.wg, le_soil)
 
-        wtheta = self.compute_wtheta(hf, const)
-        wq = self.compute_wq(le, const)
+        wtheta = self.compute_wtheta(hf)
+        wq = self.compute_wq(le)
         return land_state.replace(
             rssoil=rssoil,
             cliq=cliq,
@@ -341,7 +334,6 @@ class AbstractStandardLandModel(AbstractLandModel):
     def update_surface_resistance(
         self,
         state: AbstractCoupledState,
-        const: PhysicalConstants,
     ) -> AbstractCoupledState:
         """Abstract method to update surface resistance."""
         raise NotImplementedError
@@ -350,7 +342,6 @@ class AbstractStandardLandModel(AbstractLandModel):
     def update_co2_flux(
         self,
         state: AbstractCoupledState,
-        const: PhysicalConstants,
     ) -> AbstractCoupledState:
         """Abstract method to update CO2 flux."""
         raise NotImplementedError
@@ -421,7 +412,6 @@ class AbstractStandardLandModel(AbstractLandModel):
         rssoil: Array,
         cliq: Array,
         temp_soil: Array,
-        const: PhysicalConstants,
     ) -> Array:
         """Compute the skin temperature ``surf_temp``.
 
@@ -462,30 +452,25 @@ class AbstractStandardLandModel(AbstractLandModel):
         """
         return (
             net_rad
-            + const.rho * const.cp / ra * theta
+            + cst.rho * cst.cp / ra * theta
             + self.cveg
             * (1.0 - cliq)
-            * const.rho
-            * const.lv
+            * cst.rho
+            * cst.lv
             / (ra + rs)
             * (dqsatdT * theta - qsat + q)
             + (1.0 - self.cveg)
-            * const.rho
-            * const.lv
+            * cst.rho
+            * cst.lv
             / (ra + rssoil)
             * (dqsatdT * theta - qsat + q)
-            + self.cveg
-            * cliq
-            * const.rho
-            * const.lv
-            / ra
-            * (dqsatdT * theta - qsat + q)
+            + self.cveg * cliq * cst.rho * cst.lv / ra * (dqsatdT * theta - qsat + q)
             + self.lam * temp_soil
         ) / (
-            const.rho * const.cp / ra
-            + self.cveg * (1.0 - cliq) * const.rho * const.lv / (ra + rs) * dqsatdT
-            + (1.0 - self.cveg) * const.rho * const.lv / (ra + rssoil) * dqsatdT
-            + self.cveg * cliq * const.rho * const.lv / ra * dqsatdT
+            cst.rho * cst.cp / ra
+            + self.cveg * (1.0 - cliq) * cst.rho * cst.lv / (ra + rs) * dqsatdT
+            + (1.0 - self.cveg) * cst.rho * cst.lv / (ra + rssoil) * dqsatdT
+            + self.cveg * cliq * cst.rho * cst.lv / ra * dqsatdT
             + self.lam
         )
 
@@ -499,7 +484,6 @@ class AbstractStandardLandModel(AbstractLandModel):
         ra: Array,
         rs: Array,
         cliq: Array,
-        const: PhysicalConstants,
     ) -> Array:
         """Compute the latent heat flux (transpiration) from vegetation ``le_veg``.
 
@@ -533,7 +517,7 @@ class AbstractStandardLandModel(AbstractLandModel):
             Equation 9.15 from the CLASS book.
         """
         term = dqsatdT * (surf_temp - theta) + qsat - q
-        le_veg = const.rho * const.lv / (ra + rs) * term
+        le_veg = cst.rho * cst.lv / (ra + rs) * term
         frac = (1.0 - cliq) * self.cveg
         return frac * le_veg
 
@@ -546,7 +530,6 @@ class AbstractStandardLandModel(AbstractLandModel):
         dqsatdT: Array,
         ra: Array,
         cliq: Array,
-        const: PhysicalConstants,
     ) -> Array:
         """Compute the latent heat flux on the leaf (dew) ``le_liq``.
 
@@ -564,7 +547,7 @@ class AbstractStandardLandModel(AbstractLandModel):
             Equation 9.18 from the CLASS book.
         """
         term = dqsatdT * (surf_temp - theta) + qsat - q
-        le_liq = const.rho * const.lv / ra * term
+        le_liq = cst.rho * cst.lv / ra * term
         frac = cliq * self.cveg
         return frac * le_liq
 
@@ -577,7 +560,6 @@ class AbstractStandardLandModel(AbstractLandModel):
         dqsatdT: Array,
         ra: Array,
         rssoil: Array,
-        const: PhysicalConstants,
     ) -> Array:
         """Compute the latent heat flux on the soil (evaporation) ``le_soil``.
 
@@ -594,11 +576,11 @@ class AbstractStandardLandModel(AbstractLandModel):
             Equation 9.21 from the CLASS book.
         """
         term = dqsatdT * (surf_temp - theta) + qsat - q
-        le_soil = const.rho * const.lv / (ra + rssoil) * term
+        le_soil = cst.rho * cst.lv / (ra + rssoil) * term
         frac = 1.0 - self.cveg
         return frac * le_soil
 
-    def compute_wltend(self, le_liq: Array, const: PhysicalConstants) -> Array:
+    def compute_wltend(self, le_liq: Array) -> Array:
         """Compute the water layer depth tendency tendency ``wltend``.
 
         Notes:
@@ -613,7 +595,7 @@ class AbstractStandardLandModel(AbstractLandModel):
         References:
             Equation 9.20 from the CLASS book, with sign convention.
         """
-        return -le_liq / (const.rhow * const.lv)
+        return -le_liq / (cst.rhow * cst.lv)
 
     def compute_le(self, le_soil: Array, le_veg: Array, le_liq: Array) -> Array:
         """Compute the evapotranspiration (latent heat flux) ``le``.
@@ -632,7 +614,6 @@ class AbstractStandardLandModel(AbstractLandModel):
         surf_temp: Array,
         theta: Array,
         ra: Array,
-        const: PhysicalConstants,
     ) -> Array:
         """Compute the sensible heat flux ``hf``.
 
@@ -651,7 +632,7 @@ class AbstractStandardLandModel(AbstractLandModel):
             Equation 9.13 from the CLASS book, but why are we using :math:`T_s` instead of :math:`\\theta_s`?
             Probably because the variations of pressure are not significant enough.
         """
-        return const.rho * const.cp / ra * (surf_temp - theta)
+        return cst.rho * cst.cp / ra * (surf_temp - theta)
 
     def compute_gf(self, surf_temp: Array, temp_soil: Array) -> Array:
         """Compute the ground heat flux ``gf``.
@@ -680,7 +661,6 @@ class AbstractStandardLandModel(AbstractLandModel):
         qsat: Array,
         q: Array,
         ra: Array,
-        const: PhysicalConstants,
     ) -> Array:
         """Compute the potential latent heat flux ``le_pot``.
 
@@ -702,8 +682,8 @@ class AbstractStandardLandModel(AbstractLandModel):
             Equation 9.16 from the CLASS book.
         """
         rad_term = dqsatdT * (net_rad - gf)
-        aerodynamic_term = const.rho * const.cp / ra * (qsat - q)
-        denominator = dqsatdT + const.cp / const.lv
+        aerodynamic_term = cst.rho * cst.cp / ra * (qsat - q)
+        denominator = dqsatdT + cst.cp / cst.lv
         return (rad_term + aerodynamic_term) / denominator
 
     def compute_le_ref(
@@ -714,7 +694,6 @@ class AbstractStandardLandModel(AbstractLandModel):
         qsat: Array,
         q: Array,
         ra: Array,
-        const: PhysicalConstants,
     ) -> Array:
         """Compute the reference latent heat flux ``le_ref``.
 
@@ -739,9 +718,9 @@ class AbstractStandardLandModel(AbstractLandModel):
             Equation 9.16 from the CLASS book.
         """
         rad_term = dqsatdT * (net_rad - gf)
-        aerodynamic_term = const.rho * const.cp / ra * (qsat - q)
+        aerodynamic_term = cst.rho * cst.cp / ra * (qsat - q)
         den1 = dqsatdT
-        den2 = const.cp / const.lv * (1.0 + self.rsmin / self.lai / ra)
+        den2 = cst.cp / cst.lv * (1.0 + self.rsmin / self.lai / ra)
         return (rad_term + aerodynamic_term) / (den1 + den2)
 
     def compute_temp_soil_tend(
@@ -778,9 +757,7 @@ class AbstractStandardLandModel(AbstractLandModel):
         cg = self.cgsat * (self.wsat / self.w2) ** (self.b / (2.0 * jnp.log(10.0)))
         return cg * gf - 2.0 * jnp.pi / 86400.0 * (temp_soil - temp2)
 
-    def compute_wgtend(
-        self, wg: Array, le_soil: Array, const: PhysicalConstants
-    ) -> Array:
+    def compute_wgtend(self, wg: Array, le_soil: Array) -> Array:
         """Compute the soil moisture tendency ``wgtend``.
 
         Notes:
@@ -831,11 +808,11 @@ class AbstractStandardLandModel(AbstractLandModel):
             (self.w2 / self.wsat) ** self.p
             * (1.0 - (self.w2 / self.wsat) ** (8.0 * self.p))
         )
-        evap_loss = -c1 / (const.rhow * self.d1) * le_soil / const.lv
+        evap_loss = -c1 / (cst.rhow * self.d1) * le_soil / cst.lv
         deep_grad = c2 / 86400.0 * (wg - wgeq)
         return evap_loss + deep_grad
 
-    def compute_wtheta(self, hf: Array, const: PhysicalConstants) -> Array:
+    def compute_wtheta(self, hf: Array) -> Array:
         """Compute the kinematic heat flux ``wtheta``.
 
         Notes:
@@ -848,9 +825,9 @@ class AbstractStandardLandModel(AbstractLandModel):
             where :math:`\\rho` is the density of air and
             :math:`c_p` is the specific heat capacity of air at constant pressure.
         """
-        return hf / (const.rho * const.cp)
+        return hf / (cst.rho * cst.cp)
 
-    def compute_wq(self, le: Array, const: PhysicalConstants) -> Array:
+    def compute_wq(self, le: Array) -> Array:
         """Compute the kinematic moisture flux ``wq``.
 
         Notes:
@@ -863,4 +840,4 @@ class AbstractStandardLandModel(AbstractLandModel):
             where :math:`\\rho` is the density of air and
             :math:`L_v` is the latent heat of vaporization.
         """
-        return le / (const.rho * const.lv)
+        return le / (cst.rho * cst.lv)

@@ -3,7 +3,7 @@ from dataclasses import dataclass, field
 import jax.numpy as jnp
 
 from ...coupling import AbstractCoupledState
-from ...utils import Array, PhysicalConstants
+from ...utils import Array
 from ..abstracts import AbstractCloudModel, AbstractCloudState
 
 
@@ -36,8 +36,6 @@ class NoCloudModel(AbstractCloudModel[NoCloudState]):
     def __init__(self):
         pass
 
-    def run(
-        self, state: AbstractCoupledState, const: PhysicalConstants
-    ) -> NoCloudState:
+    def run(self, state: AbstractCoupledState) -> NoCloudState:
         """No calculations."""
         return state.atmos.clouds

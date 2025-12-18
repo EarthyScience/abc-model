@@ -312,7 +312,8 @@ document.write(`
 <span class="kn">import</span><span class="w"> </span><span class="nn">jax.numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">jnp</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">...abstracts</span><span class="w"> </span><span class="kn">import</span> <span class="n">AbstractCoupledState</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">...utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">Array</span><span class="p">,</span> <span class="n">PhysicalConstants</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">...utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">Array</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">...utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">PhysicalConstants</span> <span class="k">as</span> <span class="n">cst</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..abstracts</span><span class="w"> </span><span class="kn">import</span> <span class="n">AbstractMixedLayerModel</span><span class="p">,</span> <span class="n">AbstractMixedLayerState</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">AbstractStandardStatsModel</span>
 
@@ -488,9 +489,7 @@ document.write(`
 
 <div class="viewcode-block" id="BulkMixedLayerModel.run">
 <a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel.run">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">AbstractCoupledState</span><span class="p">,</span> <span class="n">const</span><span class="p">:</span> <span class="n">PhysicalConstants</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BulkMixedLayerState</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">AbstractCoupledState</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BulkMixedLayerState</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Run the model.</span>
 
 <span class="sd">        Args:</span>
@@ -509,7 +508,7 @@ document.write(`
         <span class="n">wCO2</span> <span class="o">=</span> <span class="n">land_state</span><span class="o">.</span><span class="n">wCO2</span>
 
         <span class="n">ws</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_ws</span><span class="p">(</span><span class="n">ml_state</span><span class="o">.</span><span class="n">h_abl</span><span class="p">)</span>
-        <span class="n">wf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_wf</span><span class="p">(</span><span class="n">ml_state</span><span class="o">.</span><span class="n">deltatheta</span><span class="p">,</span> <span class="n">const</span><span class="p">)</span>
+        <span class="n">wf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_wf</span><span class="p">(</span><span class="n">ml_state</span><span class="o">.</span><span class="n">deltatheta</span><span class="p">)</span>
         <span class="n">w_th_ft</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_w_th_ft</span><span class="p">(</span><span class="n">ws</span><span class="p">)</span>
         <span class="n">w_q_ft</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_w_q_ft</span><span class="p">(</span><span class="n">ws</span><span class="p">)</span>
         <span class="n">w_CO2_ft</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_w_CO2_ft</span><span class="p">(</span><span class="n">ws</span><span class="p">)</span>
@@ -517,7 +516,7 @@ document.write(`
             <span class="n">ml_state</span><span class="o">.</span><span class="n">h_abl</span><span class="p">,</span>
             <span class="n">ml_state</span><span class="o">.</span><span class="n">wthetav</span><span class="p">,</span>
             <span class="n">ml_state</span><span class="o">.</span><span class="n">thetav</span><span class="p">,</span>
-            <span class="n">const</span><span class="o">.</span><span class="n">g</span><span class="p">,</span>
+            <span class="n">cst</span><span class="o">.</span><span class="n">g</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">wthetave</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_wthetave</span><span class="p">(</span><span class="n">ml_state</span><span class="o">.</span><span class="n">wthetav</span><span class="p">)</span>
         <span class="n">we</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_we</span><span class="p">(</span>
@@ -526,7 +525,7 @@ document.write(`
             <span class="n">ml_state</span><span class="o">.</span><span class="n">deltathetav</span><span class="p">,</span>
             <span class="n">ml_state</span><span class="o">.</span><span class="n">thetav</span><span class="p">,</span>
             <span class="n">sl_state</span><span class="o">.</span><span class="n">ustar</span><span class="p">,</span>
-            <span class="n">const</span><span class="o">.</span><span class="n">g</span><span class="p">,</span>
+            <span class="n">cst</span><span class="o">.</span><span class="n">g</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">wthetae</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_wthetae</span><span class="p">(</span><span class="n">we</span><span class="p">,</span> <span class="n">ml_state</span><span class="o">.</span><span class="n">deltatheta</span><span class="p">)</span>
         <span class="n">wqe</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_wqe</span><span class="p">(</span><span class="n">we</span><span class="p">,</span> <span class="n">ml_state</span><span class="o">.</span><span class="n">dq</span><span class="p">)</span>
@@ -639,7 +638,7 @@ document.write(`
 
 <div class="viewcode-block" id="BulkMixedLayerModel.compute_wf">
 <a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html#abcmodel.atmos.mixed_layer.bulk.BulkMixedLayerModel.compute_wf">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">compute_wf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">deltatheta</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">const</span><span class="p">:</span> <span class="n">PhysicalConstants</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_wf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">deltatheta</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute the mixed-layer growth due to cloud top radiative divergence as</span>
 
 <span class="sd">        .. math::</span>
@@ -648,7 +647,7 @@ document.write(`
 <span class="sd">        where :math:`\\Delta F_z` is the cloud top radiative divergence, :math:`\\rho` is air density,</span>
 <span class="sd">        :math:`c_p` is specific heat capacity, and :math:`\\Delta \\theta` is the temperature jump at the top of the ABL.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">radiative_denominator</span> <span class="o">=</span> <span class="n">const</span><span class="o">.</span><span class="n">rho</span> <span class="o">*</span> <span class="n">const</span><span class="o">.</span><span class="n">cp</span> <span class="o">*</span> <span class="n">deltatheta</span>
+        <span class="n">radiative_denominator</span> <span class="o">=</span> <span class="n">cst</span><span class="o">.</span><span class="n">rho</span> <span class="o">*</span> <span class="n">cst</span><span class="o">.</span><span class="n">cp</span> <span class="o">*</span> <span class="n">deltatheta</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">deltaFz</span> <span class="o">/</span> <span class="n">radiative_denominator</span></div>
 
 
