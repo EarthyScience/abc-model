@@ -1,5 +1,3 @@
-import jax.numpy as jnp
-
 import abcconfigs.class_model as cm
 import abcmodel
 

@@ -11,6 +11,9 @@ class AbstractState(Pytree):
     """Abstract state class to define the interface for all states."""
 
 
+StateT = TypeVar("StateT", bound=AbstractState)
+
+
 class AbstractRadiationState(AbstractState):
     """Abstract rad state."""
 
@@ -88,8 +91,12 @@ class AbstractCoupledState(AbstractState, Generic[RadT, LandT, AtmosT]):
 
 # limamau: for now this is not needed,
 # but in the future we might say that this is an eqx.Module or something
-class AbstractModel:
+class AbstractModel(Generic[StateT]):
     """Abstract model class to define the interface for all models."""
+
+    @abstractmethod
+    def init_state(self, *args, **kwargs) -> StateT:
+        raise NotImplementedError
 
 
 class AbstractRadiationModel(AbstractModel, Generic[RadT]):
