@@ -91,16 +91,16 @@ class StandardRadiationModel(AbstractRadiationModel[StandardRadiationState]):
         """
         # needed components
         rad_state = state.rad
-        ml_state = state.atmos.mixed
+        atmos = state.atmos
         land_state = state.land
 
         # computations
         solar_declination = self.compute_solar_declination(self.doy)
         solar_elevation = self.compute_solar_elevation(t, dt, tstart, solar_declination)
         air_temp = self.compute_air_temperature(
-            ml_state.surf_pressure,
-            ml_state.h_abl,
-            ml_state.theta,
+            atmos.surf_pressure,
+            atmos.h_abl,
+            atmos.theta,
         )
         atmospheric_transmission = self.compute_atmospheric_transmission(
             solar_elevation

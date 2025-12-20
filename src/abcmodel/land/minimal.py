@@ -56,6 +56,7 @@ class MinimalLandSurfaceModel(AbstractLandModel):
         rs: float,
         wg: float = 0.0,
         wl: float = 0.0,
+        wtheta: float = 0.0,
     ) -> MinimalLandSurfaceState:
         """Initialize the model state.
 
@@ -65,6 +66,7 @@ class MinimalLandSurfaceModel(AbstractLandModel):
             rs: Surface resistance [s m-1].
             wg: Volumetric soil moisture [m3 m-3].
             wl: Canopy water content [m].
+            wtheta: Kinematic heat flux [K m/s].
 
         Returns:
             The initial land state.
@@ -75,6 +77,7 @@ class MinimalLandSurfaceModel(AbstractLandModel):
             rs=jnp.array(rs),
             wg=jnp.array(wg),
             wl=jnp.array(wl),
+            wtheta=jnp.array(wtheta),
         )
 
     def run(
@@ -90,11 +93,11 @@ class MinimalLandSurfaceModel(AbstractLandModel):
             The updated land state object.
         """
         land_state = state.land
-        ml_state = state.atmos.mixed
-        esat = compute_esat(ml_state.theta)
-        qsat = compute_qsat(ml_state.theta, ml_state.surf_pressure)
-        dqsatdT = self.compute_dqsatdT(esat, ml_state.theta, ml_state.surf_pressure)
-        e = self.compute_e(ml_state.q, ml_state.surf_pressure)
+        atmos = state.atmos
+        esat = compute_esat(atmos.theta)
+        qsat = compute_qsat(atmos.theta, atmos.surf_pressure)
+        dqsatdT = self.compute_dqsatdT(esat, atmos.theta, atmos.surf_pressure)
+        e = self.compute_e(atmos.q, atmos.surf_pressure)
         return replace(land_state, esat=esat, qsat=qsat, dqsatdT=dqsatdT, e=e)
 
     def compute_dqsatdT(self, esat: Array, theta: float, surf_pressure: float) -> Array:

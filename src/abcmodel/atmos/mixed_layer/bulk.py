@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field, replace
+from dataclasses import dataclass, field
 
 import jax.numpy as jnp
 
@@ -239,12 +239,8 @@ class BulkMixedLayerModel(
 
         """
         land_state = state.land
-        sl_state = state.atmos.surface
-        ml_state = state.atmos.mixed
-        cloud_state = state.atmos.clouds
-        wtheta = land_state.wtheta
-        wq = land_state.wq
-        wCO2 = land_state.wCO2
+        atmos = state.atmos
+        ml_state = atmos.mixed
 
         ws = self.compute_ws(ml_state.h_abl)
         wf = self.compute_wf(ml_state.deltatheta)
@@ -263,39 +259,38 @@ class BulkMixedLayerModel(
             wthetave,
             ml_state.deltathetav,
             ml_state.thetav,
-            sl_state.ustar,
+            atmos.ustar,
             cst.g,
         )
         wthetae = self.compute_wthetae(we, ml_state.deltatheta)
         wqe = self.compute_wqe(we, ml_state.dq)
         wCO2e = self.compute_wCO2e(we, ml_state.deltaCO2)
-        h_abl_tend = self.compute_h_abl_tend(we, ws, wf, cloud_state.cc_mf)
-        thetatend = self.compute_thetatend(ml_state.h_abl, wtheta, wthetae)
+        h_abl_tend = self.compute_h_abl_tend(we, ws, wf, atmos.cc_mf)
+        thetatend = self.compute_thetatend(ml_state.h_abl, land_state.wtheta, wthetae)
         deltathetatend = self.compute_deltathetatend(
-            we, wf, cloud_state.cc_mf, thetatend, w_th_ft
+            we, wf, atmos.cc_mf, thetatend, w_th_ft
         )
-        qtend = self.compute_qtend(ml_state.h_abl, wq, wqe, cloud_state.cc_qf)
-        dqtend = self.compute_dqtend(we, wf, cloud_state.cc_mf, qtend, w_q_ft)
-        co2tend = self.compute_co2tend(ml_state.h_abl, wCO2, wCO2e, cloud_state.wCO2M)
-        deltaCO2tend = self.compute_deltaCO2tend(
-            we, wf, cloud_state.cc_mf, co2tend, w_CO2_ft
+        qtend = self.compute_qtend(ml_state.h_abl, land_state.wq, wqe, atmos.cc_qf)
+        dqtend = self.compute_dqtend(we, wf, atmos.cc_mf, qtend, w_q_ft)
+        co2tend = self.compute_co2tend(
+            ml_state.h_abl, land_state.wCO2, wCO2e, atmos.wCO2M
         )
+        deltaCO2tend = self.compute_deltaCO2tend(we, wf, atmos.cc_mf, co2tend, w_CO2_ft)
         utend = self.compute_utend(
-            ml_state.h_abl, we, sl_state.uw, ml_state.du, ml_state.dv
+            ml_state.h_abl, we, atmos.uw, ml_state.du, ml_state.dv
         )
         vtend = self.compute_vtend(
-            ml_state.h_abl, we, sl_state.vw, ml_state.du, ml_state.dv
+            ml_state.h_abl, we, atmos.vw, ml_state.du, ml_state.dv
         )
-        dutend = self.compute_dutend(we, wf, cloud_state.cc_mf, utend)
-        dvtend = self.compute_dvtend(we, wf, cloud_state.cc_mf, vtend)
+        dutend = self.compute_dutend(we, wf, atmos.cc_mf, utend)
+        dvtend = self.compute_dvtend(we, wf, atmos.cc_mf, vtend)
         dztend = self.compute_dztend(
             ml_state.lcl,
             ml_state.h_abl,
-            cloud_state.cc_frac,
+            atmos.cc_frac,
             ml_state.dz_h,
         )
-        return replace(
-            ml_state,
+        return ml_state.replace(
             ws=ws,
             wf=wf,
             wstar=wstar,
@@ -342,8 +337,7 @@ class BulkMixedLayerModel(
         v = jnp.where(self.is_wind_prog, state.v + dt * state.vtend, state.v)
         dv = jnp.where(self.is_wind_prog, state.dv + dt * state.dvtend, state.dv)
 
-        return replace(
-            state,
+        return state.replace(
             h_abl=h_abl,
             theta=theta,
             deltatheta=deltatheta,

@@ -34,6 +34,7 @@ class JarvisStewartModel(AbstractStandardLandModel):
         surf_temp: float,
         wl: float,
         wq: float,
+        wtheta: float = 0.0,
         rs: float = 1.0e6,
         rssoil: float = 1.0e6,
     ) -> JarvisStewartState:
@@ -47,6 +48,7 @@ class JarvisStewartModel(AbstractStandardLandModel):
             surf_temp: Surface temperature [K].
             wl: Canopy water content [m].
             wq: Kinematic moisture flux [kg/kg m/s].
+            wtheta: Kinematic heat flux [K m/s].
             rs: Surface resistance [s m-1].
             rssoil: Soil resistance [s m-1].
 
@@ -61,6 +63,7 @@ class JarvisStewartModel(AbstractStandardLandModel):
             surf_temp=jnp.array(surf_temp),
             wl=jnp.array(wl),
             wq=jnp.array(wq),
+            wtheta=jnp.array(wtheta),
             rs=jnp.array(rs),
             rssoil=jnp.array(rssoil),
         )
@@ -80,7 +83,7 @@ class JarvisStewartModel(AbstractStandardLandModel):
         f1 = self.compute_f1(state.in_srad)
         f2 = self.compute_f2(state.land.wg)
         f3 = self.compute_f3(state.land.esat, state.land.e)
-        f4 = self.compute_f4(state.atmos.mixed.theta)
+        f4 = self.compute_f4(state.atmos.theta)
         rs = self.rsmin / self.lai * f1 * f2 * f3 * f4
         landstate = state.land.replace(rs=rs)
         state = state.replace(land=landstate)

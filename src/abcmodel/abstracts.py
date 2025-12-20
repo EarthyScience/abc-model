@@ -42,7 +42,6 @@ class AbstractLandState(AbstractState):
     """No moisture content in the root zone [m3 m-3]."""
     wl: Array
     """No water content in the canopy [m]."""
-
     esat: Array
     """Saturation vapor pressure [Pa]."""
     qsat: Array
@@ -63,6 +62,162 @@ class AbstractLandState(AbstractState):
 
 class AbstractAtmosphereState(AbstractState):
     """Abstract atmos state."""
+
+    @property
+    @abstractmethod
+    def theta(self) -> Array:
+        """Potential temperature [K]."""
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def q(self) -> Array:
+        """Specific humidity [kg/kg]."""
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def co2(self) -> Array:
+        """CO2 concentration [ppmv]."""
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def surf_pressure(self) -> Array:
+        """Surface pressure [Pa]."""
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def u(self) -> Array:
+        """Zonal wind speed [m/s]."""
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def v(self) -> Array:
+        """Meridional wind speed [m/s]."""
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def ra(self) -> Array:
+        """Aerodynamic resistance [s/m]."""
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def thetasurf(self) -> Array:
+        """Surface potential temperature [K]."""
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def h_abl(self) -> Array:
+        """Boundary layer height [m]."""
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def ustar(self) -> Array:
+        """Friction velocity [m/s]."""
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def uw(self) -> Array:
+        """Zonal momentum flux [m²/s²]."""
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def vw(self) -> Array:
+        """Meridional momentum flux [m²/s²]."""
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def wstar(self) -> Array:
+        """Convective velocity scale [m/s]."""
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def thetav(self) -> Array:
+        """Mixed-layer virtual potential temperature [K]."""
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def top_T(self) -> Array:
+        """Temperature at top of mixed layer [K]."""
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def top_p(self) -> Array:
+        """Pressure at top of mixed layer [Pa]."""
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def cc_mf(self) -> Array:
+        """Cloud core mass flux [kg/kg/s]."""
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def cc_qf(self) -> Array:
+        """Cloud core moisture flux [kg/kg/s]."""
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def wCO2M(self) -> Array:
+        """Cloud core CO2 mass flux [mgC/m²/s]."""
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def cc_frac(self) -> Array:
+        """Cloud core fraction [-]."""
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def wthetav(self) -> Array:
+        """Virtual potential temperature flux at surface [K m/s]."""
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def wqe(self) -> Array:
+        """Entrainment moisture flux [kg/kg m/s]."""
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def dq(self) -> Array:
+        """Specific humidity jump at h [kg/kg]."""
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def dz_h(self) -> Array:
+        """Transition layer thickness [m]."""
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def deltaCO2(self) -> Array:
+        """CO2 jump at h [ppm]."""
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def wCO2e(self) -> Array:
+        """Entrainment CO2 flux [mgC/m²/s]."""
+        raise NotImplementedError
 
 
 RadT = TypeVar("RadT", bound=AbstractRadiationState)

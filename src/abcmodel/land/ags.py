@@ -79,6 +79,7 @@ class AgsModel(AbstractStandardLandModel):
         surf_temp: float,
         wl: float,
         wq: float,
+        wtheta: float = 0.0,
         rs: float = 1.0e6,
         rssoil: float = 1.0e6,
     ) -> AgsState:
@@ -92,6 +93,7 @@ class AgsModel(AbstractStandardLandModel):
             surf_temp: Surface temperature [K].
             wl: Canopy water content [m].
             wq: Kinematic moisture flux [kg/kg m/s].
+            wtheta: Kinematic heat flux [K m/s].
             rs: Surface resistance [s m-1].
             rssoil: Soil resistance [s m-1].
 
@@ -106,6 +108,7 @@ class AgsModel(AbstractStandardLandModel):
             surf_temp=jnp.array(surf_temp),
             wl=jnp.array(wl),
             wq=jnp.array(wq),
+            wtheta=jnp.array(wtheta),
             rs=jnp.array(rs),
             rssoil=jnp.array(rssoil),
         )
@@ -466,9 +469,8 @@ class AgsModel(AbstractStandardLandModel):
     ) -> AbstractCoupledState:
         """Compute surface resistance using Ags photosynthesis-conductance model."""
         land_state = state.land
-        ml_state = state.atmos.mixed
-        sl_state = state.atmos.surface
-        thetasurf = sl_state.thetasurf
+        atmos = state.atmos
+        thetasurf = atmos.thetasurf
         co2comp = self.compute_co2comp(thetasurf)
         gm = self.compute_gm(thetasurf)
         fmin = self.compute_fmin(gm)
@@ -478,7 +480,7 @@ class AgsModel(AbstractStandardLandModel):
             ds,
             d0,
             fmin,
-            ml_state.co2,
+            atmos.co2,
             co2comp,
         )
         ammax = self.compute_max_gross_primary_production(thetasurf)
@@ -580,10 +582,10 @@ class AgsModel(AbstractStandardLandModel):
             - ``wCO2``: Total CO2 flux
         """
         land_state = state.land
-        sl_state = state.atmos.surface
+        atmos = state.atmos
         rsCO2 = self.compute_surface_co2_resistance(land_state.gcco2)
         an = self.compute_net_assimilation(
-            land_state.co2abs, land_state.ci, sl_state.ra, rsCO2
+            land_state.co2abs, land_state.ci, atmos.ra, rsCO2
         )
         fw = self.compute_soil_water_fraction(land_state.wg)
         resp = self.compute_respiration(land_state.temp_soil, fw)

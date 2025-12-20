@@ -160,6 +160,7 @@ class AbstractStandardLandModel(AbstractLandModel):
         surf_temp: float,
         wl: float,
         wq: float,
+        wtheta: float = 0.0,
         rs: float = 1.0e6,
         rssoil: float = 1.0e6,
     ) -> StandardLandState:
@@ -173,6 +174,7 @@ class AbstractStandardLandModel(AbstractLandModel):
             surf_temp: Surface temperature [K].
             wl: Canopy water content [m].
             wq: Kinematic moisture flux [kg/kg m/s].
+            wtheta: Kinematic heat flux [K m/s].
             rs: Surface resistance [s m-1].
             rssoil: Soil resistance [s m-1].
 
@@ -187,6 +189,7 @@ class AbstractStandardLandModel(AbstractLandModel):
             surf_temp=jnp.array(surf_temp),
             wl=jnp.array(wl),
             wq=jnp.array(wq),
+            wtheta=jnp.array(wtheta),
             rs=jnp.array(rs),
             rssoil=jnp.array(rssoil),
         )
@@ -220,13 +223,12 @@ class AbstractStandardLandModel(AbstractLandModel):
             The updated land state object.
         """
         land_state = state.land
-        ml_state = state.atmos.mixed
-        sl_state = state.atmos.surface
-        ra = sl_state.ra
-        esat = compute_esat(ml_state.theta)
-        qsat = compute_qsat(ml_state.theta, ml_state.surf_pressure)
-        dqsatdT = self.compute_dqsatdT(esat, ml_state.theta, ml_state.surf_pressure)
-        e = self.compute_e(ml_state.q, ml_state.surf_pressure)
+        atmos = state.atmos
+        ra = atmos.ra
+        esat = compute_esat(atmos.theta)
+        qsat = compute_qsat(atmos.theta, atmos.surf_pressure)
+        dqsatdT = self.compute_dqsatdT(esat, atmos.theta, atmos.surf_pressure)
+        e = self.compute_e(atmos.q, atmos.surf_pressure)
         land_state = land_state.replace(esat=esat, qsat=qsat, dqsatdT=dqsatdT, e=e)
         state = state.replace(land=land_state)
         state = self.update_surface_resistance(state)
@@ -236,8 +238,8 @@ class AbstractStandardLandModel(AbstractLandModel):
         cliq = self.compute_cliq(land_state.wl)
         surf_temp = self.compute_skin_temperature(
             state.net_rad,
-            ml_state.theta,
-            ml_state.q,
+            atmos.theta,
+            atmos.q,
             land_state.qsat,
             land_state.dqsatdT,
             ra,
@@ -246,11 +248,11 @@ class AbstractStandardLandModel(AbstractLandModel):
             cliq,
             land_state.temp_soil,
         )
-        qsatsurf = compute_qsat(surf_temp, ml_state.surf_pressure)
+        qsatsurf = compute_qsat(surf_temp, atmos.surf_pressure)
         le_veg = self.compute_le_veg(
             surf_temp,
-            ml_state.theta,
-            ml_state.q,
+            atmos.theta,
+            atmos.q,
             land_state.qsat,
             land_state.dqsatdT,
             ra,
@@ -259,8 +261,8 @@ class AbstractStandardLandModel(AbstractLandModel):
         )
         le_liq = self.compute_le_liq(
             surf_temp,
-            ml_state.theta,
-            ml_state.q,
+            atmos.theta,
+            atmos.q,
             land_state.qsat,
             land_state.dqsatdT,
             ra,
@@ -268,8 +270,8 @@ class AbstractStandardLandModel(AbstractLandModel):
         )
         le_soil = self.compute_le_soil(
             surf_temp,
-            ml_state.theta,
-            ml_state.q,
+            atmos.theta,
+            atmos.q,
             land_state.qsat,
             land_state.dqsatdT,
             ra,
@@ -277,14 +279,14 @@ class AbstractStandardLandModel(AbstractLandModel):
         )
         wltend = self.compute_wltend(le_liq)
         le = self.compute_le(le_soil, le_veg, le_liq)
-        hf = self.compute_hf(surf_temp, ml_state.theta, ra)
+        hf = self.compute_hf(surf_temp, atmos.theta, ra)
         gf = self.compute_gf(surf_temp, land_state.temp_soil)
         le_pot = self.compute_le_pot(
             state.net_rad,
             gf,
             land_state.dqsatdT,
             land_state.qsat,
-            ml_state.q,
+            atmos.q,
             ra,
         )
         le_ref = self.compute_le_ref(
@@ -292,7 +294,7 @@ class AbstractStandardLandModel(AbstractLandModel):
             gf,
             land_state.dqsatdT,
             land_state.qsat,
-            ml_state.q,
+            atmos.q,
             ra,
         )
         temp_soil_tend = self.compute_temp_soil_tend(

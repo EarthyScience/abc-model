@@ -67,11 +67,11 @@ class SimpleSurfaceLayerModel(AbstractSurfaceLayerModel[SimpleSurfaceLayerState]
         Returns:
             The updated surface layer state.
         """
-        sl_state = state.atmos.surface
-        ml_state = state.atmos.mixed
-        uw = compute_uw(ml_state.u, ml_state.v, sl_state.ustar)
-        vw = compute_vw(ml_state.u, ml_state.v, sl_state.ustar)
-        ra = compute_ra(ml_state.u, ml_state.v, ml_state.wstar, sl_state.ustar)
+        atmos = state.atmos
+        sl_state = atmos.surface
+        uw = compute_uw(atmos.u, atmos.v, sl_state.ustar)
+        vw = compute_vw(atmos.u, atmos.v, sl_state.ustar)
+        ra = compute_ra(atmos.u, atmos.v, atmos.wstar, sl_state.ustar)
         return replace(sl_state, uw=uw, vw=vw, ra=ra)
 
 

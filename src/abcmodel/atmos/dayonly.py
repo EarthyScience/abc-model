@@ -10,6 +10,7 @@ from ..abstracts import (
     LandT,
     RadT,
 )
+from ..utils import Array
 from .abstracts import (
     AbstractCloudModel,
     AbstractMixedLayerModel,
@@ -28,6 +29,136 @@ class DayOnlyAtmosphereState(AbstractAtmosphereState, Generic[SurfT, MixedT, Clo
     surface: SurfT
     mixed: MixedT
     clouds: CloudT
+
+    @property
+    def theta(self) -> Array:
+        """Potential temperature [K]."""
+        return self.mixed.theta
+
+    @property
+    def q(self) -> Array:
+        """Specific humidity [kg/kg]."""
+        return self.mixed.q
+
+    @property
+    def co2(self) -> Array:
+        """CO2 concentration [ppmv]."""
+        return self.mixed.co2
+
+    @property
+    def surf_pressure(self) -> Array:
+        """Surface pressure [Pa]."""
+        return self.mixed.surf_pressure
+
+    @property
+    def u(self) -> Array:
+        """Zonal wind speed [m/s]."""
+        return self.mixed.u
+
+    @property
+    def v(self) -> Array:
+        """Meridional wind speed [m/s]."""
+        return self.mixed.v
+
+    @property
+    def ra(self) -> Array:
+        """Aerodynamic resistance [s/m]."""
+        return self.surface.ra
+
+    @property
+    def thetasurf(self) -> Array:
+        """Surface potential temperature [K]."""
+        return self.surface.thetasurf
+
+    @property
+    def h_abl(self) -> Array:
+        """Boundary layer height [m]."""
+        return self.mixed.h_abl
+
+    @property
+    def ustar(self) -> Array:
+        """Friction velocity [m/s]."""
+        return self.surface.ustar
+
+    @property
+    def uw(self) -> Array:
+        """Zonal momentum flux [m²/s²]."""
+        return self.surface.uw
+
+    @property
+    def vw(self) -> Array:
+        """Meridional momentum flux [m²/s²]."""
+        return self.surface.vw
+
+    @property
+    def wstar(self) -> Array:
+        """Convective velocity scale [m/s]."""
+        return self.mixed.wstar
+
+    @property
+    def thetav(self) -> Array:
+        """Mixed-layer virtual potential temperature [K]."""
+        return self.mixed.thetav
+
+    @property
+    def top_T(self) -> Array:
+        """Temperature at top of mixed layer [K]."""
+        return self.mixed.top_T
+
+    @property
+    def top_p(self) -> Array:
+        """Pressure at top of mixed layer [Pa]."""
+        return self.mixed.top_p
+
+    @property
+    def cc_mf(self) -> Array:
+        """Cloud core mass flux [kg/kg/s]."""
+        return self.clouds.cc_mf
+
+    @property
+    def cc_qf(self) -> Array:
+        """Cloud core moisture flux [kg/kg/s]."""
+        return self.clouds.cc_qf
+
+    @property
+    def wCO2M(self) -> Array:
+        """Cloud core CO2 mass flux [mgC/m²/s]."""
+        return self.clouds.wCO2M
+
+    @property
+    def cc_frac(self) -> Array:
+        """Cloud core fraction [-]."""
+        return self.clouds.cc_frac
+
+    @property
+    def wthetav(self) -> Array:
+        """Virtual potential temperature flux at surface [K m/s]."""
+        return self.mixed.wthetav
+
+    @property
+    def wqe(self) -> Array:
+        """Entrainment moisture flux [kg/kg m/s]."""
+        return self.mixed.wqe
+
+    @property
+    def dq(self) -> Array:
+        """Specific humidity jump at h [kg/kg]."""
+        return self.mixed.dq
+
+    @property
+    def dz_h(self) -> Array:
+        """Transition layer thickness [m]."""
+        return self.mixed.dz_h
+
+    @property
+    def deltaCO2(self) -> Array:
+        """CO2 jump at h [ppm]."""
+        return self.mixed.deltaCO2
+
+    @property
+    def wCO2e(self) -> Array:
+        """Entrainment CO2 flux [mgC/m²/s]."""
+        return self.mixed.wCO2e
 
 
 # in this case we are sure that the coupled state being used here

@@ -63,31 +63,31 @@ class CumulusModel(AbstractCloudModel[CumulusState]):
             The updated cloud state.
 
         """
-        cloud_state = state.atmos.clouds
-        ml_state = state.atmos.mixed
+        atmos = state.atmos
+        cloud_state = atmos.clouds
 
         q2_h = self.compute_q2_h(
             cloud_state.cc_qf,
-            ml_state.wthetav,
-            ml_state.wqe,
-            ml_state.dq,
-            ml_state.h_abl,
-            ml_state.dz_h,
-            ml_state.wstar,
+            atmos.wthetav,
+            atmos.wqe,
+            atmos.dq,
+            atmos.h_abl,
+            atmos.dz_h,
+            atmos.wstar,
         )
         top_CO22 = self.compute_top_CO22(
-            ml_state.wthetav,
-            ml_state.h_abl,
-            ml_state.dz_h,
-            ml_state.wstar,
-            ml_state.wCO2e,
+            atmos.wthetav,
+            atmos.h_abl,
+            atmos.dz_h,
+            atmos.wstar,
+            atmos.wCO2e,
             cloud_state.wCO2M,
-            ml_state.deltaCO2,
+            atmos.deltaCO2,
         )
-        cc_frac = self.compute_cc_frac(ml_state.q, ml_state.top_T, ml_state.top_p, q2_h)
-        cc_mf = self.compute_cc_mf(cc_frac, ml_state.wstar)
+        cc_frac = self.compute_cc_frac(atmos.q, atmos.top_T, atmos.top_p, q2_h)
+        cc_mf = self.compute_cc_mf(cc_frac, atmos.wstar)
         cc_qf = self.compute_cc_qf(cc_mf, q2_h)
-        wCO2M = self.compute_wCO2M(cc_mf, top_CO22, ml_state.deltaCO2)
+        wCO2M = self.compute_wCO2M(cc_mf, top_CO22, atmos.deltaCO2)
         cl_trans = self.compute_cl_trans(cc_frac)
 
         return replace(

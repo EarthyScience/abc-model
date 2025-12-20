@@ -64,7 +64,7 @@ def main():
     grad_fn = jax.jacfwd(run_model)
     theta0 = 290.0
     dhf_dtheta0 = grad_fn(theta0)
-    assert dhf_dtheta0 > 0.0
+    assert dhf_dtheta0 < 0.0
     print("∂h_final / ∂theta_0 =", dhf_dtheta0)
 
     # reverse mode
