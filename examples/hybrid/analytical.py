@@ -2,13 +2,14 @@ import jax
 import jax.numpy as jnp
 import matplotlib.pyplot as plt
 import optax
-
-import abcconfigs.class_model as cm
-import abcmodel
-from abcmodel.atmos.surface_layer.hybrid import (
+from flax import nnx
+from model import (
     HybridObukhovSurfaceLayerModel,
     StabilityEmulator,
 )
+
+import abcconfigs.class_model as cm
+import abcmodel
 from abcmodel.atmos.surface_layer.obukhov import (
     ObukhovSurfaceLayerModel,
     compute_psih,
@@ -16,38 +17,30 @@ from abcmodel.atmos.surface_layer.obukhov import (
 )
 
 
-def train_emulator(target_fn, key, label="Emulator"):
+def train_emulator(target_fn, key, label):
     print(f"training {label}...")
-
-    # synthetic training data:
-    # zeta typically ranges from unstable (-5) to stable (+2)
     zeta_train = jnp.linspace(-5.0, 2.0, 1000).reshape(-1, 1)
     targets = target_fn(zeta_train)
 
-    emulator = StabilityEmulator()
-    params = emulator.init(key, jnp.ones((1, 1)))
+    model = StabilityEmulator(rngs=nnx.Rngs(key))
+    optimizer = nnx.Optimizer(model, optax.adam(1e-3))
 
-    optimizer = optax.adam(1e-3)
-    opt_state = optimizer.init(params)
-
-    @jax.jit
-    def loss_fn(params, x, y):
-        pred = emulator.apply(params, x)
+    def loss_fn(model, x, y):
+        pred = model(x)
         return jnp.mean((pred - y) ** 2)
 
-    @jax.jit
-    def update(params, opt_state, x, y):
-        loss, grads = jax.value_and_grad(loss_fn)(params, x, y)
-        updates, opt_state = optimizer.update(grads, opt_state, params)
-        params = optax.apply_updates(params, updates)
-        return params, opt_state, loss
+    @nnx.jit
+    def update(model, optimizer, x, y):
+        loss, grads = nnx.value_and_grad(loss_fn)(model, x, y)
+        optimizer.update(grads)
+        return loss
 
     for step in range(2000):
-        params, opt_state, loss = update(params, opt_state, zeta_train, targets)
+        loss = update(model, optimizer, zeta_train, targets)
         if step % 500 == 0:
             print(f"  step {step}, loss: {loss:.6f}")
 
-    return emulator, params
+    return model
 
 
 def run_simulation(surface_layer_model):
@@ -99,13 +92,10 @@ def main():
     root_key = jax.random.PRNGKey(42)
     k1, k2 = jax.random.split(root_key)
 
-    # train emulators for momentum and heat stability functions
-    psim_emulator, psim_params = train_emulator(compute_psim, k1, "Psi_m")
-    psih_emulator, psih_params = train_emulator(compute_psih, k2, "Psi_h")
-
-    # instantiate hybrid model with the trained emulators
+    psim_emulator = train_emulator(compute_psim, k1, "psim")
+    psih_emulator = train_emulator(compute_psih, k2, "psih")
     hybrid_model = HybridObukhovSurfaceLayerModel(
-        psim_emulator, psih_emulator, psim_params, psih_params
+        psim_emulator=psim_emulator, psih_emulator=psih_emulator
     )
 
     # visual verification
@@ -120,7 +110,7 @@ def main():
     plt.figure(figsize=(12, 5))
 
     plt.subplot(1, 2, 1)
-    plt.plot(zeta_test, psim_orig, "C0-", label="standard closure")
+    plt.plot(zeta_test, psim_orig, "C0-", label="standard")
     plt.plot(zeta_test, psim_ml, "C1--", label="hybrid")
     plt.xlabel(r"$\zeta = z/L$")
     plt.ylabel(r"$\Psi_m$")
@@ -128,7 +118,7 @@ def main():
     plt.grid(True)
 
     plt.subplot(1, 2, 2)
-    plt.plot(zeta_test, psih_orig, "C0-", label="standard closure")
+    plt.plot(zeta_test, psih_orig, "C0-", label="standard")
     plt.plot(zeta_test, psih_ml, "C1--", label="hybrid")
     plt.xlabel(r"$\zeta = z/L$")
     plt.ylabel(r"$\Psi_h$")
@@ -148,16 +138,16 @@ def main():
     plt.figure(figsize=(12, 5))
 
     plt.subplot(1, 2, 1)
-    plt.plot(times, traj_std.atmos.mixed.h_abl, "C0-", label="Standard Physics")
-    plt.plot(times, traj_hybrid.atmos.mixed.h_abl, "C1--", label="Hybrid (ML Emulator)")
+    plt.plot(times, traj_std.atmos.mixed.h_abl, "C0-", label="standard")
+    plt.plot(times, traj_hybrid.atmos.mixed.h_abl, "C1--", label="hybrid")
     plt.xlabel("time [h]")
     plt.ylabel("PBL height [m]")
     plt.legend()
     plt.grid(True)
 
     plt.subplot(1, 2, 2)
-    plt.plot(times, traj_std.atmos.mixed.theta, "C0-", label="Standard Physics")
-    plt.plot(times, traj_hybrid.atmos.mixed.theta, "C1--", label="Hybrid (ML Emulator)")
+    plt.plot(times, traj_std.atmos.mixed.theta, "C0-", label="standard")
+    plt.plot(times, traj_hybrid.atmos.mixed.theta, "C1--", label="hybrid")
     plt.xlabel("time [h]")
     plt.ylabel("potential temperature [K]")
     plt.legend()
