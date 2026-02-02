@@ -80,7 +80,7 @@ def load_model_and_template_state(key: Array):
     return abcoupler, state
 
 
-def load_batched_data(key, template_state, ratio=0.8):
+def load_batched_data(key: Array, template_state, ratio: float = 0.8):
     """Loads data into the State structure."""
     script_dir = os.path.dirname(os.path.abspath(__file__))
     file_path = os.path.join(script_dir, "../../data/dataset.h5")
@@ -136,15 +136,15 @@ def load_batched_data(key, template_state, ratio=0.8):
     return x_train, x_test, y_train, y_test
 
 
-def normalize_tree(tree, mean_tree, std_tree):
+def normalize_tree(tree, mean_tree: Array, std_tree: Array):
     return jtu.tree_map(lambda x, m, s: (x - m) / s, tree, mean_tree, std_tree)
 
 
-def unnormalize_tree(tree, mean_tree, std_tree):
+def unnormalize_tree(tree, mean_tree: Array, std_tree: Array):
     return jtu.tree_map(lambda x, m, s: x * s + m, tree, mean_tree, std_tree)
 
 
-def create_dataloader(x_state, y, batch_size, key):
+def create_dataloader(x_state, y: Array, batch_size: int, key: Array):
     """Yields batches: x_state is a PyTree, y is an array."""
     num_samples = y.shape[0]
     indices = jax.random.permutation(key, num_samples)
@@ -240,10 +240,10 @@ def train(
 
 def benchmark_plot(
     hybrid_coupler,
-    inner_dt,
-    outter_dt,
-    runtime,
-    tstart,
+    inner_dt: float,
+    outter_dt: float,
+    runtime: float,
+    tstart: float,
 ):
     # rad with clouds
     rad_model = abcmodel.rad.CloudyRadiationModel(
