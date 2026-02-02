@@ -9,6 +9,7 @@ from tqdm import tqdm
 
 import abcconfigs.class_model as cm
 import abcmodel
+from abcmodel.utils import get_path_string
 
 NUM_TRAJS = 100
 
@@ -112,21 +113,6 @@ def sample_params(key):
     d1 = random.uniform(keys[8], minval=0.1, maxval=1.0)
     cc = random.uniform(keys[9], minval=0.0, maxval=0.5)
     return h_abl, theta, q, deltatheta, u, v, wg, d1, cc, temp_soil
-
-
-# limamau: this should be inside utils
-def get_path_string(path_tuple):
-    """
-    Converts a JAX key path tuple (e.g. (GetAttrKey('atmos'), GetAttrKey('u')))
-    into a string like 'atmos/u' for HDF5 naming.
-    """
-    keys = []
-    for p in path_tuple:
-        if hasattr(p, "name"):
-            keys.append(p.name)
-        else:
-            raise ValueError(f"Unsupported path element: {p}")
-    return "/".join(keys)
 
 
 def main():

@@ -12,6 +12,7 @@ from utils import HybridObukhovModel, NeuralNetwork
 import abcconfigs.class_model as cm
 import abcmodel
 from abcmodel.integration import outter_step
+from abcmodel.utils import get_path_string
 
 
 def load_model_and_template_state(key: Array):
@@ -81,17 +82,6 @@ def load_batched_data(key, template_state, ratio=0.8):
     """Loads data into the State structure."""
     script_dir = os.path.dirname(os.path.abspath(__file__))
     file_path = os.path.join(script_dir, "../../data/dataset.h5")
-
-    def get_path_string(path):
-        """Converts a JAX KeyPath tuple into a string path like, e.g., land.le becomes 'land/le'."""
-        parts = []
-        for p in path:
-            if hasattr(p, "name"):
-                parts.append(str(p.name))
-            else:
-                raise ValueError(f"Unsupported path element: {p}")
-
-        return "/".join(parts)
 
     def load_leaf(path, leaf_template):
         path_str = get_path_string(path)
