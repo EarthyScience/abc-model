@@ -14,9 +14,11 @@ from flax import nnx
 from jax import Array
 from utils import HybridObukhovModel, NeuralNetwork
 
-from abcmodel.integration import outter_step_fn
+import abcconfigs.class_model as cm
+import abcmodel
 
 
+# todo: x needs to be the entire state, t needs to be returned, and y needs to be normalized
 def load_data(key: Array, ratio: float = 0.8) -> tuple[Array, ...]:
     script_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -42,17 +44,55 @@ def load_data(key: Array, ratio: float = 0.8) -> tuple[Array, ...]:
     return x_train, x_test, y_train, y_test
 
 
-def train(x: Array, y: Array, key: Array):
-    print("training...")
+def load_model(key: Array):
+    rad_model = abcmodel.rad.StandardRadiationModel(
+        **cm.standard_radiation.model_kwargs
+    )
+    land_model = abcmodel.land.JarvisStewartModel(**cm.jarvis_stewart.model_kwargs)
+
+    # definition od the hybrid model
     mkey, hkey = jax.random.split(key)
     mnet = NeuralNetwork(rngs=nnx.Rngs(mkey))
     hnet = NeuralNetwork(rngs=nnx.Rngs(hkey))
-    net = HybridObukhovModel(mnet, hnet)
-    optimizer = nnx.Optimizer(net, optax.adam(1e-3))
+    hybrid_surface = HybridObukhovModel(mnet, hnet)
+
+    mixed_layer_model = abcmodel.atmos.mixed_layer.BulkMixedLayerModel(
+        **cm.bulk_mixed_layer.model_kwargs
+    )
+    cloud_model = abcmodel.atmos.clouds.CumulusModel()
+    atmos_model = abcmodel.atmos.DayOnlyAtmosphereModel(
+        surface_layer=hybrid_surface,
+        mixed_layer=mixed_layer_model,
+        clouds=cloud_model,
+    )
+
+    return abcmodel.ABCoupler(rad=rad_model, land=land_model, atmos=atmos_model)
+
+
+def train(model, x: Array, y: Array):
+    # time settings: should be the same as the
+    # ones that were used to generate the dataset
+    inner_dt = 60.0
+    outter_dt = 60.0 * 30
+    tstart = 6.5
+    inner_tsteps = int(outter_dt / inner_dt)
+
+    print("training...")
+    optimizer = nnx.Optimizer(model.atmos.surface_layer.psim_emulator, optax.adam(1e-3))
+    # optimizer2 = nnx.Optimizer(model.atmos.mixed_layer.psih_emulator, optax.adam(1e-3))
 
     def loss_fn(model, x, y):
-        pred = model(x)
-        return jnp.mean((pred - y) ** 2)
+        pred = abcmodel.integration.outter_step(
+            x,
+            t,  # this should come from the loading of the dataset
+            coupler=model,
+            inner_dt=inner_dt,
+            inner_tsteps=inner_tsteps,
+            tstart=tstart,
+        )
+        # this should be normalized
+        pred_le = pred.land.le  # type: ignore
+        return jnp.mean((pred_le - y) ** 2)
 
     @jax.jit
     def update(model, optimizer, x, y):
@@ -61,23 +101,19 @@ def train(x: Array, y: Array, key: Array):
         return loss
 
     for step in range(2000):
-        loss = update(net, optimizer, x, y)
+        loss = update(model, optimizer, x, y)
         if step % 500 == 0:
             print(f"  step {step}, loss: {loss:.6f}")
 
-    return net
-
-
-def plot_results(model, x: Array, y: Array):
-    pass
+    return model
 
 
 def main():
     key = jax.random.PRNGKey(42)
-    data_key, train_key = jax.random.split(key)
+    data_key, model_key = jax.random.split(key)
     x_train, x_test, y_train, y_test = load_data(data_key)
-    model = train(x_train, y_train, train_key)
-    plot_results(model, x_test, y_test)
+    model = load_model(model_key)
+    model = train(model, x_train, y_train)
 
 
 if __name__ == "__main__":

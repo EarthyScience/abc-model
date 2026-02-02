@@ -636,7 +636,7 @@ class AbstractStandardLandModel(AbstractLandModel):
             - evaporation from bare soil in :meth:`compute_le_soil`;
             - evaporation from wet leaves (dew) in :meth:`compute_le_liq`.
         """
-        return le_soil + le_veg + le_liq
+        return jnp.clip(le_soil + le_veg + le_liq, 0.0, None)
 
     def compute_hf(
         self,

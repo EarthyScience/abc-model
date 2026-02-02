@@ -24,6 +24,7 @@ class CoupledState(
     rad: RadT
     land: LandT
     atmos: AtmosT
+    t: Array = field(default_factory=lambda: jnp.array(-1))
     total_water_mass: Array = field(default_factory=lambda: jnp.array(0.0))
 
 

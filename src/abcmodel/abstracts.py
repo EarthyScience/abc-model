@@ -231,6 +231,7 @@ class AbstractCoupledState(AbstractState, Generic[RadT, LandT, AtmosT]):
     rad: RadT
     land: LandT
     atmos: AtmosT
+    t: Array
     total_water_mass: Array
 
     @property
