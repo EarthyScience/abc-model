@@ -99,13 +99,10 @@ def load_batched_data(key: Array, template_state, ratio: float = 0.8):
     # 1) x = state[t], y = LE[t+1]
     # 2) shapes: (num_ens, num_times) -> (num_ens * num_times)
     def prep_input(arr):
-        # take all times except the last one (0 to T-1)
         sliced = arr[:, :-1]
-        # Flatten (N, T-1) -> (N * (T-1))
         return sliced.reshape(-1)
 
     def prep_target(arr):
-        # take all times starting from 1 (1 to T)
         sliced = arr[:, 1:]
         return sliced.reshape(-1)
 
