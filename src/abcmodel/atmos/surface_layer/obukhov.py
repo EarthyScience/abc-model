@@ -143,7 +143,9 @@ class ObukhovSurfaceLayerModel(AbstractSurfaceLayerModel):
         )
         obukhov_length = self.ribtol(zsl, rib_number, sl_state.z0h, sl_state.z0m)
         drag_m = self.compute_drag_m(zsl, cst.k, obukhov_length, sl_state.z0m)
-        drag_s = self.compute_drag_s(zsl, cst.k, obukhov_length, sl_state.z0h, sl_state.z0m)
+        drag_s = self.compute_drag_s(
+            zsl, cst.k, obukhov_length, sl_state.z0h, sl_state.z0m
+        )
         ustar = self.compute_ustar(ueff, drag_m)
         uw = self.compute_uw(ueff, atmos.u, drag_m)
         vw = self.compute_vw(ueff, atmos.v, drag_m)
@@ -211,7 +213,6 @@ class ObukhovSurfaceLayerModel(AbstractSurfaceLayerModel):
         ueff = jnp.sqrt(u**2.0 + v**2.0 + wstar**2.0)
         return 1.0 / (drag_s * ueff)
 
-
     def compute_effective_wind_speed(self, u: Array, v: Array, wstar: Array) -> Array:
         """Compute effective wind speed ``ueff``.
 
@@ -233,7 +234,6 @@ class ObukhovSurfaceLayerModel(AbstractSurfaceLayerModel):
         """
         return jnp.maximum(0.01, jnp.sqrt(u**2.0 + v**2.0 + wstar**2.0))
 
-
     def compute_zsl(self, h_abl: Array) -> Array:
         """Compute surface layer height.
 
@@ -248,7 +248,6 @@ class ObukhovSurfaceLayerModel(AbstractSurfaceLayerModel):
             the atmospheric boundary layer height.
         """
         return 0.1 * h_abl
-
 
     def compute_thetasurf(
         self,
@@ -275,7 +274,6 @@ class ObukhovSurfaceLayerModel(AbstractSurfaceLayerModel):
                 \\theta_s = \\theta + \\frac{w'\\theta'}{C_s u_{\\text{eff}}}.
         """
         return theta + wtheta / (drag_s * ueff)
-
 
     def compute_qsurf(
         self,
@@ -311,7 +309,6 @@ class ObukhovSurfaceLayerModel(AbstractSurfaceLayerModel):
         cq = (1.0 + drag_s * ueff * rs) ** -1.0
         return (1.0 - cq) * q + cq * qsatsurf
 
-
     def compute_thetavsurf(self, thetasurf: Array, qsurf: Array) -> Array:
         """Compute surface virtual potential temperature.
 
@@ -329,7 +326,6 @@ class ObukhovSurfaceLayerModel(AbstractSurfaceLayerModel):
                 \\theta_{v,s} = \\theta_s (1 + 0.61 q_s)
         """
         return thetasurf * (1.0 + 0.61 * qsurf)
-
 
     def compute_richardson_number(
         self, ueff: Array, zsl: Array, g: float, thetav: Array, thetavsurf: Array
@@ -353,7 +349,6 @@ class ObukhovSurfaceLayerModel(AbstractSurfaceLayerModel):
         """
         rib_number = g / thetav * zsl * (thetav - thetavsurf) / ueff**2.0
         return jnp.minimum(rib_number, 0.2)
-
 
     def compute_rib_function(
         self,
@@ -388,7 +383,6 @@ class ObukhovSurfaceLayerModel(AbstractSurfaceLayerModel):
         momentum_term = self.compute_momentum_correction_term(zsl, oblen, z0m)
 
         return rib_number - zsl / oblen * scalar_term / momentum_term**2.0
-
 
     def ribtol(self, zsl: Array, rib_number: Array, z0h: Array, z0m: Array):
         """Iteratively solve for the Obukhov length given the Richardson number.
@@ -435,10 +429,11 @@ class ObukhovSurfaceLayerModel(AbstractSurfaceLayerModel):
 
         # now we have a fixed number of iterations!
         n_iter = 20
-        (oblen, _), _ = jax.lax.scan(body_fun_scan, (oblen, oblen0), None, length=n_iter)
+        (oblen, _), _ = jax.lax.scan(
+            body_fun_scan, (oblen, oblen0), None, length=n_iter
+        )
 
         return oblen
-
 
     def compute_drag_m(
         self,
@@ -469,9 +464,10 @@ class ObukhovSurfaceLayerModel(AbstractSurfaceLayerModel):
             where :math:`\\psi_m` (see :meth:`compute_momentum_correction_term`)
             is the stability correction function for momentum.
         """
-        momentum_correction = self.compute_momentum_correction_term(zsl, obukhov_length, z0m)
+        momentum_correction = self.compute_momentum_correction_term(
+            zsl, obukhov_length, z0m
+        )
         return k**2.0 / momentum_correction**2.0
-
 
     def compute_drag_s(
         self,
@@ -507,10 +503,13 @@ class ObukhovSurfaceLayerModel(AbstractSurfaceLayerModel):
             :math:`\\psi_h` (see :meth:`compute_scalar_correction_term`)
             are stability correction functions for momentum and scalars.
         """
-        momentum_correction = self.compute_momentum_correction_term(zsl, obukhov_length, z0m)
-        scalar_correction = self.compute_scalar_correction_term(zsl, obukhov_length, z0h)
+        momentum_correction = self.compute_momentum_correction_term(
+            zsl, obukhov_length, z0m
+        )
+        scalar_correction = self.compute_scalar_correction_term(
+            zsl, obukhov_length, z0h
+        )
         return k**2.0 / (momentum_correction * scalar_correction)
-
 
     def compute_ustar(self, ueff: Array, drag_m: Array) -> Array:
         """Compute surface friction velocity.
@@ -529,7 +528,6 @@ class ObukhovSurfaceLayerModel(AbstractSurfaceLayerModel):
                 u_* = \\sqrt{C_m} u_{\\text{eff}}.
         """
         return jnp.sqrt(drag_m) * ueff
-
 
     def compute_uw(self, ueff: Array, u: Array, drag_m: Array) -> Array:
         """Compute zonal momentum flux.
@@ -550,7 +548,6 @@ class ObukhovSurfaceLayerModel(AbstractSurfaceLayerModel):
         """
         return -drag_m * ueff * u
 
-
     def compute_vw(self, ueff: Array, v: Array, drag_m: Array) -> Array:
         """Compute meridional momentum flux.
 
@@ -569,7 +566,6 @@ class ObukhovSurfaceLayerModel(AbstractSurfaceLayerModel):
                 \\overline{v'w'} = -C_m u_{\\text{eff}} v.
         """
         return -drag_m * ueff * v
-
 
     def compute_temp_2m(
         self,
@@ -597,10 +593,11 @@ class ObukhovSurfaceLayerModel(AbstractSurfaceLayerModel):
             Uses Monin-Obukhov similarity theory with stability corrections to extrapolate
             surface temperature to 2m height.
         """
-        scalar_correction = self.compute_scalar_correction_term(2.0, obukhov_length, z0h)
+        scalar_correction = self.compute_scalar_correction_term(
+            2.0, obukhov_length, z0h
+        )
         scalar_scale = 1.0 / (ustar * k)
         return thetasurf - wtheta * scalar_scale * scalar_correction
-
 
     def compute_q2m(
         self,
@@ -628,10 +625,11 @@ class ObukhovSurfaceLayerModel(AbstractSurfaceLayerModel):
             Uses Monin-Obukhov similarity theory with stability corrections to extrapolate
             surface specific humidity to 2m height.
         """
-        scalar_correction = self.compute_scalar_correction_term(2.0, obukhov_length, z0h)
+        scalar_correction = self.compute_scalar_correction_term(
+            2.0, obukhov_length, z0h
+        )
         scalar_scale = 1.0 / (ustar * k)
         return qsurf - wq * scalar_scale * scalar_correction
-
 
     def compute_u2m(
         self,
@@ -657,10 +655,11 @@ class ObukhovSurfaceLayerModel(AbstractSurfaceLayerModel):
             Uses Monin-Obukhov similarity theory with stability corrections to extrapolate
             surface momentum flux to 2m wind speed.
         """
-        momentum_correction = self.compute_momentum_correction_term(2.0, obukhov_length, z0m)
+        momentum_correction = self.compute_momentum_correction_term(
+            2.0, obukhov_length, z0m
+        )
         momentum_scale = 1.0 / (ustar * k)
         return -uw * momentum_scale * momentum_correction
-
 
     def compute_v2m(
         self,
@@ -686,10 +685,11 @@ class ObukhovSurfaceLayerModel(AbstractSurfaceLayerModel):
             Uses Monin-Obukhov similarity theory with stability corrections to extrapolate
             surface momentum flux to 2m wind speed.
         """
-        momentum_correction = self.compute_momentum_correction_term(2.0, obukhov_length, z0m)
+        momentum_correction = self.compute_momentum_correction_term(
+            2.0, obukhov_length, z0m
+        )
         momentum_scale = 1.0 / (ustar * k)
         return -vw * momentum_scale * momentum_correction
-
 
     def compute_e2m(self, q2m: Array, surf_pressure: Array) -> Array:
         """Compute 2m vapor pressure.
@@ -709,7 +709,6 @@ class ObukhovSurfaceLayerModel(AbstractSurfaceLayerModel):
         """
         return q2m * surf_pressure / 0.622
 
-
     def compute_esat2m(self, temp_2m: Array) -> Array:
         """Compute 2m saturated vapor pressure.
 
@@ -727,8 +726,9 @@ class ObukhovSurfaceLayerModel(AbstractSurfaceLayerModel):
         """
         return 0.611e3 * jnp.exp(17.2694 * (temp_2m - 273.16) / (temp_2m - 35.86))
 
-
-    def compute_scalar_correction_term(self, z: Array | float, oblen: Array, z0h: Array) -> Array:
+    def compute_scalar_correction_term(
+        self, z: Array | float, oblen: Array, z0h: Array
+    ) -> Array:
         """Compute scalar stability correction term.
 
         Args:
@@ -753,7 +753,6 @@ class ObukhovSurfaceLayerModel(AbstractSurfaceLayerModel):
         upper_stability = self.compute_psih(z / oblen)
         surface_stability = self.compute_psih(z0h / oblen)
         return log_term - upper_stability + surface_stability
-
 
     def compute_momentum_correction_term(
         self, z: Array | float, oblen: Array, z0m: Array
@@ -782,7 +781,6 @@ class ObukhovSurfaceLayerModel(AbstractSurfaceLayerModel):
         upper_stability = self.compute_psim(z / oblen)
         surface_stability = self.compute_psim(z0m / oblen)
         return log_term - upper_stability + surface_stability
-
 
     def compute_psim(self, zeta: Array) -> Array:
         """Compute momentum stability function from Monin-Obukhov similarity theory.
@@ -851,7 +849,6 @@ class ObukhovSurfaceLayerModel(AbstractSurfaceLayerModel):
 
         return psim
 
-
     def compute_psih(self, zeta: Array) -> Array:
         """Compute scalar stability function from Monin-Obukhov similarity theory.
 
@@ -910,77 +907,3 @@ class ObukhovSurfaceLayerModel(AbstractSurfaceLayerModel):
         psih = jnp.where(zeta <= 0, psih_unstable, psih_stable)
 
         return psih
-
-
-# Standalone functions for backward compatibility or direct use
-def compute_ra(u, v, wstar, drag_s):
-    return ObukhovSurfaceLayerModel().compute_ra(u, v, wstar, drag_s)
-
-def compute_effective_wind_speed(u, v, wstar):
-    return ObukhovSurfaceLayerModel().compute_effective_wind_speed(u, v, wstar)
-
-def compute_zsl(h_abl):
-    return ObukhovSurfaceLayerModel().compute_zsl(h_abl)
-
-def compute_thetasurf(theta, wtheta, drag_s, ueff):
-    return ObukhovSurfaceLayerModel().compute_thetasurf(theta, wtheta, drag_s, ueff)
-
-def compute_qsurf(q, thetasurf, surf_pressure, rs, drag_s, ueff):
-    return ObukhovSurfaceLayerModel().compute_qsurf(q, thetasurf, surf_pressure, rs, drag_s, ueff)
-
-def compute_thetavsurf(thetasurf, qsurf):
-    return ObukhovSurfaceLayerModel().compute_thetavsurf(thetasurf, qsurf)
-
-def compute_richardson_number(ueff, zsl, g, thetav, thetavsurf):
-    return ObukhovSurfaceLayerModel().compute_richardson_number(ueff, zsl, g, thetav, thetavsurf)
-
-def compute_rib_function(zsl, oblen, rib_number, z0h, z0m):
-    return ObukhovSurfaceLayerModel().compute_rib_function(zsl, oblen, rib_number, z0h, z0m)
-
-def ribtol(zsl, rib_number, z0h, z0m):
-    return ObukhovSurfaceLayerModel().ribtol(zsl, rib_number, z0h, z0m)
-
-def compute_drag_m(zsl, k, obukhov_length, z0m):
-    return ObukhovSurfaceLayerModel().compute_drag_m(zsl, k, obukhov_length, z0m)
-
-def compute_drag_s(zsl, k, obukhov_length, z0h, z0m):
-    return ObukhovSurfaceLayerModel().compute_drag_s(zsl, k, obukhov_length, z0h, z0m)
-
-def compute_ustar(ueff, drag_m):
-    return ObukhovSurfaceLayerModel().compute_ustar(ueff, drag_m)
-
-def compute_uw(ueff, u, drag_m):
-    return ObukhovSurfaceLayerModel().compute_uw(ueff, u, drag_m)
-
-def compute_vw(ueff, v, drag_m):
-    return ObukhovSurfaceLayerModel().compute_vw(ueff, v, drag_m)
-
-def compute_temp_2m(thetasurf, wtheta, ustar, k, z0h, obukhov_length):
-    return ObukhovSurfaceLayerModel().compute_temp_2m(thetasurf, wtheta, ustar, k, z0h, obukhov_length)
-
-def compute_q2m(qsurf, wq, ustar, k, z0h, obukhov_length):
-    return ObukhovSurfaceLayerModel().compute_q2m(qsurf, wq, ustar, k, z0h, obukhov_length)
-
-def compute_u2m(uw, ustar, k, z0m, obukhov_length):
-    return ObukhovSurfaceLayerModel().compute_u2m(uw, ustar, k, z0m, obukhov_length)
-
-def compute_v2m(vw, ustar, k, z0m, obukhov_length):
-    return ObukhovSurfaceLayerModel().compute_v2m(vw, ustar, k, z0m, obukhov_length)
-
-def compute_e2m(q2m, surf_pressure):
-    return ObukhovSurfaceLayerModel().compute_e2m(q2m, surf_pressure)
-
-def compute_esat2m(temp_2m):
-    return ObukhovSurfaceLayerModel().compute_esat2m(temp_2m)
-
-def compute_scalar_correction_term(z, oblen, z0h):
-    return ObukhovSurfaceLayerModel().compute_scalar_correction_term(z, oblen, z0h)
-
-def compute_momentum_correction_term(z, oblen, z0m):
-    return ObukhovSurfaceLayerModel().compute_momentum_correction_term(z, oblen, z0m)
-
-def compute_psim(zeta):
-    return ObukhovSurfaceLayerModel().compute_psim(zeta)
-
-def compute_psih(zeta):
-    return ObukhovSurfaceLayerModel().compute_psih(zeta)

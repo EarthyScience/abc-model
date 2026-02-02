@@ -3,17 +3,17 @@ import jax.numpy as jnp
 import matplotlib.pyplot as plt
 import optax
 from flax import nnx
-from model import (
-    HybridObukhovSurfaceLayerModel,
-    StabilityEmulator,
+from utils import (
+    HybridObukhovModel,
+    NeuralNetwork,
 )
 
 import abcconfigs.class_model as cm
 import abcmodel
 from abcmodel.atmos.surface_layer.obukhov import (
     ObukhovSurfaceLayerModel,
-    compute_psih,
-    compute_psim,
+    # compute_psih,
+    # compute_psim,
 )
 
 
@@ -22,7 +22,7 @@ def train_emulator(target_fn, key, label):
     zeta_train = jnp.linspace(-5.0, 2.0, 1000).reshape(-1, 1)
     targets = target_fn(zeta_train)
 
-    model = StabilityEmulator(rngs=nnx.Rngs(key))
+    model = NeuralNetwork(rngs=nnx.Rngs(key))
     optimizer = nnx.Optimizer(model, optax.adam(1e-3))
 
     def loss_fn(model, x, y):
@@ -92,19 +92,19 @@ def main():
     root_key = jax.random.PRNGKey(42)
     k1, k2 = jax.random.split(root_key)
 
-    psim_emulator = train_emulator(compute_psim, k1, "psim")
-    psih_emulator = train_emulator(compute_psih, k2, "psih")
-    hybrid_model = HybridObukhovSurfaceLayerModel(
+    psim_emulator = train_emulator(ObukhovSurfaceLayerModel.compute_psim, k1, "psim")
+    psih_emulator = train_emulator(ObukhovSurfaceLayerModel.compute_psih, k2, "psih")
+    hybrid_model = HybridObukhovModel(
         psim_emulator=psim_emulator, psih_emulator=psih_emulator
     )
 
     # visual verification
     zeta_test = jnp.linspace(-6.0, 3.0, 200).reshape(-1, 1)
 
-    psim_orig = compute_psim(zeta_test)
+    psim_orig = ObukhovSurfaceLayerModel.compute_psim(zeta_test)
     psim_ml = hybrid_model.compute_psim(zeta_test)
 
-    psih_orig = compute_psih(zeta_test)
+    psih_orig = ObukhovSurfaceLayerModel.compute_psih(zeta_test)
     psih_ml = hybrid_model.compute_psih(zeta_test)
 
     plt.figure(figsize=(12, 5))

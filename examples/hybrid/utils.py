@@ -4,7 +4,7 @@ from jax import Array
 from abcmodel.atmos.surface_layer.obukhov import ObukhovSurfaceLayerModel
 
 
-class StabilityEmulator(nnx.Module):
+class NeuralNetwork(nnx.Module):
     def __init__(self, rngs: nnx.Rngs):
         self.linear1 = nnx.Linear(1, 32, rngs=rngs)
         self.linear2 = nnx.Linear(32, 32, rngs=rngs)
@@ -19,11 +19,11 @@ class StabilityEmulator(nnx.Module):
         return x
 
 
-class HybridObukhovSurfaceLayerModel(ObukhovSurfaceLayerModel):
+class HybridObukhovModel(ObukhovSurfaceLayerModel):
     def __init__(
         self,
-        psim_emulator: StabilityEmulator,
-        psih_emulator: StabilityEmulator,
+        psim_emulator: NeuralNetwork,
+        psih_emulator: NeuralNetwork,
     ):
         super().__init__()
         self.psim_emulator = psim_emulator
