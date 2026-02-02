@@ -114,6 +114,7 @@ def sample_params(key):
     return h_abl, theta, q, deltatheta, u, v, wg, d1, cc, temp_soil
 
 
+# limamau: this should be inside utils
 def get_path_string(path_tuple):
     """
     Converts a JAX key path tuple (e.g. (GetAttrKey('atmos'), GetAttrKey('u')))

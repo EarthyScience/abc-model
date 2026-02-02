@@ -82,57 +82,24 @@ def load_batched_data(key, template_state, ratio=0.8):
     script_dir = os.path.dirname(os.path.abspath(__file__))
     file_path = os.path.join(script_dir, "../../data/dataset.h5")
 
-    # --- A. Helper to map PyTree paths to HDF5 keys ---
     def get_path_string(path):
-        """
-        Converts a JAX KeyPath tuple into a string path like 'land/le'.
-        Handles Classes (GetAttrKey), Dicts (DictKey), and Lists (SequenceKey).
-        """
+        """Converts a JAX KeyPath tuple into a string path like, e.g., land.le becomes 'land/le'."""
         parts = []
         for p in path:
-            # 1. Custom Classes (like your CoupledState) use .name
             if hasattr(p, "name"):
                 parts.append(str(p.name))
-            # 2. Dictionaries use .key
-            elif hasattr(p, "key"):
-                parts.append(str(p.key))
-            # 3. Lists/Tuples use .idx
-            elif hasattr(p, "idx"):
-                parts.append(str(p.idx))
-            # 4. Fallback
             else:
-                parts.append(str(p))
+                raise ValueError(f"Unsupported path element: {p}")
 
         return "/".join(parts)
 
-    # --- B. Recursive Loader ---
     def load_leaf(path, leaf_template):
         path_str = get_path_string(path)
-
         with h5py.File(file_path, "r") as f:
-            # Handle special cases or missing keys
-            if path_str not in f:
-                # If 't' isn't in the file, initialize it to 0
-                if path_str.endswith("t"):
-                    # Assuming shape (N_ensembles, Time)
-                    # We grab the shape from a known variable (e.g. land/le) if possible
-                    # or just infer it. Here we assume generic shape handling.
-                    # For safety, we skip loading 't' here and set it later or
-                    # rely on the user to ensure 't' is in the H5 file.
-                    return jnp.zeros_like(
-                        leaf_template, shape=(100, 100)
-                    )  # Placeholder
-
-                print(f"Warning: {path_str} not found in H5.")
-                return leaf_template  # Fallback to template value
-
             data = jnp.array(f[path_str])
-
-            # Ensure shape is (N_ensembles, Time)
-            # If your H5 is already (N, T), this is fine.
             return data
 
-    print("Loading data structure...")
+    print("loading data structure...")
     # This magic function walks the template state and loads the matching H5 data for every variable
     full_history = jtu.tree_map_with_path(load_leaf, template_state)
 
@@ -209,8 +176,8 @@ def train(model, template_state):
     outter_dt = 60.0 * 30
     tstart = 6.5
     inner_tsteps = int(outter_dt / inner_dt)
-    lr = 1e-3
-    batch_size = 32
+    lr = 1e-5
+    batch_size = 4
     epochs = 100
 
     # data setup
@@ -222,7 +189,7 @@ def train(model, template_state):
     print(f"training on {y_train.shape[0]} samples...")
 
     # optimizer
-    optimizer = nnx.Optimizer(model, optax.adam(lr), wrt=nnx.Param)
+    optimizer = nnx.Optimizer(model, optax.radam(lr), wrt=nnx.Param)
 
     def loss_fn(model, x_batch_state, y_batch):
         # here, x_batch_state is a CoupledState object with physical values
