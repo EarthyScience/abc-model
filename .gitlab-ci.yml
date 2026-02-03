@@ -2,9 +2,6 @@ create-pages:
   image: python:3.11
   stage: deploy
   script:
-    - cd docs
-    - make html
-    - cd ..
     - mv docs/_build/html public
   artifacts:
     paths:
