@@ -129,6 +129,13 @@ plt.show()
 Which should give us something like the figure below.
 ![readme_example](figs/readme-example.png "readme example")
 
+## Documentation
+Detailed documentation of the model is included in the repo. To view the documentation, navigate to `docs/_build/html` and run 
+```
+python -m http.server
+```
+This will launch a local http server displaying the interactive documentation and print the port to access it in your terminal.
+
 ## Changing models, parameters and initial conditions
 Now let's say you want to use a different model for the land surface.
 Instead of the Jarvis Stewart model, you may choose Ags.
