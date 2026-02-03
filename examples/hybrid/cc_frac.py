@@ -32,6 +32,8 @@ class NeuralNetwork(nnx.Module):
 
 class HybridCumulusModel(CumulusModel):
     def __init__(self, net: NeuralNetwork):
+        # the model does not have any parameters,
+        # but otherwise we would need to pass them to init the parent class
         super().__init__()
         self.net = net
         # this will be modified one we know the exact values for normalization
@@ -76,11 +78,9 @@ def load_model_and_template_state(key: Array):
     # mixed layer
     mixed_state_kwargs = cm.bulk_mixed_layer.state_kwargs
     mixed_layer_model = abcmodel.atmos.mixed_layer.BulkModel(
-        **cm.bulk_mixed_layer.model_kwargs,
+        **cm.bulk_mixed_layer.model_kwargs
     )
-    mixed_layer_state = mixed_layer_model.init_state(
-        **mixed_state_kwargs,
-    )
+    mixed_layer_state = mixed_layer_model.init_state(**mixed_state_kwargs)
 
     # clouds
     net = NeuralNetwork(rngs=nnx.Rngs(key))
@@ -94,22 +94,12 @@ def load_model_and_template_state(key: Array):
         clouds=cloud_model,
     )
     atmos_state = atmos_model.init_state(
-        surface=surface_layer_state,
-        mixed=mixed_layer_state,
-        clouds=cloud_state,
+        surface=surface_layer_state, mixed=mixed_layer_state, clouds=cloud_state
     )
 
     # coupler
-    abcoupler = abcmodel.ABCoupler(
-        rad=rad_model,
-        land=land_model,
-        atmos=atmos_model,
-    )
-    state = abcoupler.init_state(
-        rad_state,
-        land_state,
-        atmos_state,
-    )
+    abcoupler = abcmodel.ABCoupler(rad=rad_model, land=land_model, atmos=atmos_model)
+    state = abcoupler.init_state(rad_state, land_state, atmos_state)
 
     return abcoupler, state
 
