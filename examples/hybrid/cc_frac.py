@@ -7,20 +7,56 @@ import matplotlib.pyplot as plt
 import optax
 from flax import nnx
 from jax import Array
-from utils import HybridObukhovModel, NeuralNetwork
 
 import abcconfigs.class_model as cm
 import abcmodel
+from abcmodel.atmos.clouds.cumulus import CumulusModel
 from abcmodel.integration import outter_step
-from abcmodel.utils import get_path_string
+from abcmodel.utils import create_dataloader, get_path_string
+
+
+class NeuralNetwork(nnx.Module):
+    def __init__(self, rngs: nnx.Rngs):
+        self.linear1 = nnx.Linear(4, 32, rngs=rngs)
+        self.linear2 = nnx.Linear(32, 32, rngs=rngs)
+        self.linear3 = nnx.Linear(32, 1, rngs=rngs)
+
+    def __call__(self, x: Array) -> Array:
+        x = self.linear1(x)
+        x = nnx.relu(x)
+        x = self.linear2(x)
+        x = nnx.relu(x)
+        x = self.linear3(x)
+        return x
+
+
+class HybridCumulusModel(CumulusModel):
+    def __init__(self, net: NeuralNetwork):
+        # the model does not have any parameters,
+        # but otherwise we would need to pass them to init the parent class
+        super().__init__()
+        self.net = net
+        # this will be modified one we know the exact values for normalization
+        self.x_in_mean = nnx.BatchStat(jnp.array([0.0, 0.0, 0.0, 0.0]))
+        self.x_in_std = nnx.BatchStat(jnp.array([1.0, 1.0, 1.0, 1.0]))
+        self.x_out_mean = nnx.BatchStat(jnp.array(0.0))
+        self.x_out_std = nnx.BatchStat(jnp.array(1.0))
+
+    def compute_cc_frac(
+        self,
+        q: Array,
+        top_T: Array,
+        top_p: Array,
+        q2_h: Array,
+    ) -> Array:
+        x = jnp.array([q, top_T, top_p, q2_h])
+        x = (x - self.x_in_mean.value) / self.x_in_std.value
+        x = jnp.squeeze(self.net(x))
+        x = x * self.x_out_std.value + self.x_out_mean.value
+        return x
 
 
 def load_model_and_template_state(key: Array):
-    """Loads the standard model and it's template state."""
-    psim_key, psih_key = jax.random.split(key)
-    psim_net = NeuralNetwork(rngs=nnx.Rngs(psim_key))
-    psih_net = NeuralNetwork(rngs=nnx.Rngs(psih_key))
-
     # radiation
     rad_model_kwargs = cm.standard_radiation.model_kwargs
     rad_model = abcmodel.rad.StandardRadiationModel(**rad_model_kwargs)
@@ -34,7 +70,7 @@ def load_model_and_template_state(key: Array):
     land_state = land_model.init_state(**ags_state_kwargs)
 
     # surface layer (the one we build with the neural nets!)
-    surface_layer_model = HybridObukhovModel(psim_net, psih_net)
+    surface_layer_model = abcmodel.atmos.surface_layer.ObukhovModel()
     surface_layer_state = surface_layer_model.init_state(
         **cm.obukhov_surface_layer.state_kwargs
     )
@@ -42,14 +78,13 @@ def load_model_and_template_state(key: Array):
     # mixed layer
     mixed_state_kwargs = cm.bulk_mixed_layer.state_kwargs
     mixed_layer_model = abcmodel.atmos.mixed_layer.BulkModel(
-        **cm.bulk_mixed_layer.model_kwargs,
+        **cm.bulk_mixed_layer.model_kwargs
     )
-    mixed_layer_state = mixed_layer_model.init_state(
-        **mixed_state_kwargs,
-    )
+    mixed_layer_state = mixed_layer_model.init_state(**mixed_state_kwargs)
 
     # clouds
-    cloud_model = abcmodel.atmos.clouds.CumulusModel()
+    net = NeuralNetwork(rngs=nnx.Rngs(key))
+    cloud_model = HybridCumulusModel(net)
     cloud_state = cloud_model.init_state()
 
     # atmosphere
@@ -59,28 +94,17 @@ def load_model_and_template_state(key: Array):
         clouds=cloud_model,
     )
     atmos_state = atmos_model.init_state(
-        surface=surface_layer_state,
-        mixed=mixed_layer_state,
-        clouds=cloud_state,
+        surface=surface_layer_state, mixed=mixed_layer_state, clouds=cloud_state
     )
 
     # coupler
-    abcoupler = abcmodel.ABCoupler(
-        rad=rad_model,
-        land=land_model,
-        atmos=atmos_model,
-    )
-    state = abcoupler.init_state(
-        rad_state,
-        land_state,
-        atmos_state,
-    )
+    abcoupler = abcmodel.ABCoupler(rad=rad_model, land=land_model, atmos=atmos_model)
+    state = abcoupler.init_state(rad_state, land_state, atmos_state)
 
     return abcoupler, state
 
 
 def load_batched_data(key: Array, template_state, ratio: float = 0.8):
-    """Loads data into the State structure."""
     script_dir = os.path.dirname(os.path.abspath(__file__))
     file_path = os.path.join(script_dir, "../../data/dataset.h5")
 
@@ -96,7 +120,7 @@ def load_batched_data(key: Array, template_state, ratio: float = 0.8):
     traj_ensembles = jax.tree.map_with_path(load_leaf, template_state)
 
     # the two prep functions follow:
-    # 1) x = state[t], y = LE[t+1]
+    # 1) x = state[t], y = target_var[t+1]
     # 2) shapes: (num_ens, num_times) -> (num_ens * num_times)
     def prep_input(arr):
         sliced = arr[:, :-1]
@@ -108,8 +132,7 @@ def load_batched_data(key: Array, template_state, ratio: float = 0.8):
 
     # apply prep functions
     x_full = jax.tree.map(prep_input, traj_ensembles)
-    # our target is latent heat
-    y_full = prep_target(traj_ensembles.land.le)
+    y_full = prep_target(traj_ensembles.atmos.clouds.cc_frac)
 
     # train/test split
     num_samples = y_full.shape[0]
@@ -132,26 +155,30 @@ def load_batched_data(key: Array, template_state, ratio: float = 0.8):
     return x_train, x_test, y_train, y_test
 
 
-def normalize_tree(tree, mean_tree: Array, std_tree: Array):
-    return jax.tree.map(lambda x, m, s: (x - m) / s, tree, mean_tree, std_tree)
+def get_norms(x, y):
+    # take norms
+    x_in_mean = jnp.array(
+        [
+            jnp.mean(x.atmos.mixed.q),
+            jnp.mean(x.atmos.mixed.top_T),
+            jnp.mean(x.atmos.mixed.top_p),
+            jnp.mean(x.atmos.clouds.q2_h),
+        ]
+    )
+    x_in_std = jnp.array(
+        [
+            jnp.std(x.atmos.mixed.q),
+            jnp.std(x.atmos.mixed.top_T),
+            jnp.std(x.atmos.mixed.top_p),
+            jnp.std(x.atmos.clouds.q2_h),
+        ]
+    )
+    x_out_mean = jnp.mean(x.atmos.clouds.cc_frac)
+    x_out_std = jnp.std(x.atmos.clouds.cc_frac)
+    y_mean = jnp.mean(y)
+    y_std = jnp.std(y)
 
-
-def unnormalize_tree(tree, mean_tree: Array, std_tree: Array):
-    return jax.tree.map(lambda x, m, s: x * s + m, tree, mean_tree, std_tree)
-
-
-def create_dataloader(x_state, y: Array, batch_size: int, key: Array):
-    """Yields batches: x_state is a PyTree, y is an array."""
-    num_samples = y.shape[0]
-    indices = jax.random.permutation(key, num_samples)
-    num_batches = num_samples // batch_size
-
-    def get_batch(tree, idxs):
-        return jax.tree.map(lambda x: x[idxs], tree)
-
-    for i in range(num_batches):
-        batch_idx = indices[i * batch_size : (i + 1) * batch_size]
-        yield get_batch(x_state, batch_idx), y[batch_idx]
+    return x_in_mean, x_in_std, x_out_mean, x_out_std, y_mean, y_std
 
 
 def train(
@@ -162,7 +189,7 @@ def train(
     tstart: float,
     lr: float = 1e-5,
     batch_size: int = 4,
-    epochs: int = 1,
+    epochs: int = 3,
     print_every: int = 100,
 ):
     # config
@@ -172,7 +199,14 @@ def train(
     key = jax.random.PRNGKey(42)
     data_key, train_key = jax.random.split(key)
     x_train, x_test, y_train, y_test = load_batched_data(data_key, template_state)
-    y_mean, y_std = jnp.mean(y_train), jnp.std(y_train)
+    x_in_mean, x_in_std, x_out_mean, x_out_std, y_mean, y_std = get_norms(
+        x_train, y_train
+    )
+    # this is a hacky trick :P
+    model.atmos.clouds.x_in_mean.value = x_in_mean
+    model.atmos.clouds.x_in_std.value = x_in_std
+    model.atmos.clouds.x_out_mean.value = x_out_mean
+    model.atmos.clouds.x_out_std.value = x_out_std
 
     # optimizer
     optimizer = nnx.Optimizer(
@@ -194,7 +228,7 @@ def train(
             return final_state
 
         pred_state = jax.vmap(run_single)(x_batch_state)
-        pred_le = pred_state.land.le
+        pred_le = pred_state.atmos.clouds.cc_frac
         pred_le_norm = (pred_le - y_mean) / y_std
         y_batch_norm = (y_batch - y_mean) / y_std
         return jnp.mean((pred_le_norm - y_batch_norm) ** 2)
@@ -209,27 +243,37 @@ def train(
         # clip gradients
         grads = jax.tree.map(lambda g: jnp.clip(g, -1.0, 1.0), grads)
 
-        optimizer.update(model, grads)
+        optimizer.update(grads)
 
         return loss
 
-    print(f"training on {y_train.shape[0]} samples")
-    print(f"training for {epochs} epochs with batch size {batch_size}")
+    print(f"training on {y_train.shape[0]} samples;")
+    print(f"training for {epochs} epochs with batch size {batch_size};")
     print(f"printing avg loss every {print_every} steps...")
 
     # training loop
     total_loss = 0.0
     step = 0
+    last_printed_loss = jnp.inf
+    early_stop = False
     for _ in range(epochs):
         train_key, subkey = jax.random.split(train_key)
         loader = create_dataloader(x_train, y_train, batch_size, subkey)
         for x_batch, y_batch in loader:
             loss = update_step(model, optimizer, x_batch, y_batch)
             total_loss += loss
-            if step % print_every == 0:
-                print(f"step {step} | loss: {total_loss / print_every:.6f}")
+            if (step % print_every == 0) & (step > 0):
+                avg_loss = total_loss / print_every
+                print(f"step {step} | loss: {avg_loss:.6f}", flush=True)
                 total_loss = 0.0
+                if avg_loss < last_printed_loss:
+                    last_printed_loss = avg_loss
+                else:
+                    early_stop = True
+                    break
             step += 1
+        if early_stop:
+            break
 
     return model
 

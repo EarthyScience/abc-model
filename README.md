@@ -1,5 +1,5 @@
 # ABC Model
-A simple model coupling biosphere and atmosphere made fully differentiable using JAX.
+A simple model coupling biosphere and atmosphere made fully differentiable using JAX built up on the [CLASS model](https://github.com/classmodel/modelpy).
 
 ## Installation
 These instructions work on Linux and MacOS and assume that python with pip is installed already. Otherwise, install python and pip with the tool of your choice, such as [miniforge](https://conda-forge.org/download/) or [uv](https://docs.astral.sh/uv/), before you proceed. See below for full instructions to install on Windows.
@@ -13,13 +13,22 @@ or clone the repo and make an editable install inside your local repo using
 pip install -e .
 ```
 
+If you want to use jax on GPUs, change the tag from `[cpu]` to `[gpu]` in an environment with GPUs installed.
+This is not necessary to run the examples in this repository.
+
 ## Quick example
-To setup the coupler we will always use 5 models:
-1. Radiation model
-2. Land surface model
-3. Surface layer model
-4. Mixed layer model
-5. Cloud model
+To setup the coupler we will always use 3 components:
+1. Radiation model (rad)
+2. Land surface model (land)
+3. Atmosphere model (atmos)
+
+The atmosphere model uses 3 components:
+
+3.1. Surface layer model
+
+3.2. Mixed layer model
+
+3.3. Cloud model
 
 Each model is a class that is initialized with model-specific parameters. We provide a config example (which we take from the [CLASS model](https://github.com/classmodel/modelpy)).
 This can be loaded through the `abcconfigs` module:
@@ -79,46 +88,52 @@ state = abcoupler.init_state(
 All set - let's integrate our model by defining the timestepping and the run time.
 ```python
 # time step [s]
-dt = 60.0
+inner_dt = 15.0 # this is the "running" time step
+outter_dt = 60.0 * 30 # this is "diagnostic" time step
 # total run time [s]
 runtime = 12 * 3600.0
+# start time of the day [h]
+tstart = 6.5
 
-time, trajectory = abcmodel.integrate(state, abcoupler, dt, runtime, tstart)
+time, trajectory = abcmodel.integrate(
+    state, abcoupler, inner_dt, outter_dt, runtime, tstart
+)
 ```
 
 To plot the results, we will typically follow something like the code below.
 ```python
 import matplotlib.pyplot as plt
 
+# plot output
 plt.figure(figsize=(12, 8))
 
 plt.subplot(231)
-plt.plot(time, trajectory.abl_height)
+plt.plot(time, trajectory.atmos.mixed.h_abl)
 plt.xlabel("time [h]")
 plt.ylabel("h [m]")
 
 plt.subplot(234)
-plt.plot(time, trajectory.theta)
+plt.plot(time, trajectory.atmos.mixed.theta)
 plt.xlabel("time [h]")
 plt.ylabel("theta [K]")
 
 plt.subplot(232)
-plt.plot(time, trajectory.q * 1000.0)
+plt.plot(time, trajectory.atmos.mixed.q * 1000.0)
 plt.xlabel("time [h]")
 plt.ylabel("q [g kg-1]")
 
 plt.subplot(235)
-plt.plot(time, trajectory.cc_frac)
+plt.plot(time, trajectory.atmos.clouds.cc_frac)
 plt.xlabel("time [h]")
 plt.ylabel("cloud fraction [-]")
 
 plt.subplot(233)
-plt.plot(time, trajectory.gf)
+plt.plot(time, trajectory.land.gf)
 plt.xlabel("time [h]")
 plt.ylabel("ground heat flux [W m-2]")
 
 plt.subplot(236)
-plt.plot(time, trajectory.le_veg)
+plt.plot(time, trajectory.land.le_veg)
 plt.xlabel("time [h]")
 plt.ylabel("latent heat flux from vegetation [W m-2]")
 
@@ -183,5 +198,4 @@ uv pip install -e .
 ```
 
 ## See also
-The model was constructed from the [CLASS model](https://github.com/classmodel/modelpy).
 For a more advanced model, see [ClimaLand.jl](https://github.com/CliMA/ClimaLand.jl).

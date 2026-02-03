@@ -14,18 +14,12 @@ def main():
     tstart = 6.8
 
     # rad with clouds
-    rad_model = abcmodel.rad.CloudyRadiationModel(
-        **cm.cloudy_radiation.model_kwargs,
-    )
+    rad_model = abcmodel.rad.CloudyRadiationModel(**cm.cloudy_radiation.model_kwargs)
     rad_state = rad_model.init_state(**cm.cloudy_radiation.state_kwargs)
 
     # land surface
-    land_model = abcmodel.land.AgsModel(
-        **cm.ags.model_kwargs,
-    )
-    land_state = land_model.init_state(
-        **cm.ags.state_kwargs,
-    )
+    land_model = abcmodel.land.AgsModel(**cm.ags.model_kwargs)
+    land_state = land_model.init_state(**cm.ags.state_kwargs)
 
     # surface layer
     surface_layer_model = abcmodel.atmos.surface_layer.ObukhovModel()
@@ -35,11 +29,9 @@ def main():
 
     # mixed layer
     mixed_layer_model = abcmodel.atmos.mixed_layer.BulkModel(
-        **cm.bulk_mixed_layer.model_kwargs,
+        **cm.bulk_mixed_layer.model_kwargs
     )
-    mixed_layer_state = mixed_layer_model.init_state(
-        **cm.bulk_mixed_layer.state_kwargs,
-    )
+    mixed_layer_state = mixed_layer_model.init_state(**cm.bulk_mixed_layer.state_kwargs)
 
     # clouds
     cloud_model = abcmodel.atmos.clouds.CumulusModel()
@@ -58,16 +50,8 @@ def main():
     )
 
     # define coupler and coupled state
-    abcoupler = abcmodel.ABCoupler(
-        rad=rad_model,
-        land=land_model,
-        atmos=atmos_model,
-    )
-    state = abcoupler.init_state(
-        rad_state,
-        land_state,
-        atmos_state,
-    )
+    abcoupler = abcmodel.ABCoupler(rad=rad_model, land=land_model, atmos=atmos_model)
+    state = abcoupler.init_state(rad_state, land_state, atmos_state)
 
     # run run run
     time, trajectory = abcmodel.integrate(
