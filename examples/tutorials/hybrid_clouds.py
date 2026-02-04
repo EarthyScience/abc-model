@@ -27,7 +27,7 @@ class NeuralNetwork(nnx.Module):
         x = self.linear2(x)
         x = nnx.relu(x)
         x = self.linear3(x)
-        return x
+        return nnx.relu(x)
 
 
 class HybridCumulusModel(CumulusModel):
@@ -60,8 +60,8 @@ class HybridCumulusModel(CumulusModel):
         # we squeeze the output to maintain the same shape through the ABC-Model
         x = jnp.squeeze(self.net(x))
         # and we re-normalize the output too
-        x = x * self.x_out_std.value + self.x_out_mean.value
-        return x
+        # x = x * self.x_out_std.value + self.x_out_mean.value
+        return jnp.where(q2_h <= 0, 0.0, x)
 
 
 def load_model_and_template_state(key: Array):
@@ -230,7 +230,7 @@ def train(
     optimizer = nnx.Optimizer(
         # this is the entire model with the mechanistic and neural network parts
         model,
-        optax.chain(optax.clip_by_global_norm(1.0), optax.radam(lr)),
+        optax.chain(optax.clip_by_global_norm(1.0), optax.adam(lr)),
         # but the optimizer needs takes gradient only w.r.t. nnx.Params
         wrt=nnx.Param,
     )
@@ -272,7 +272,7 @@ def train(
         # !!!! important !!!!
         # for old jax versions (e.g., 0.4.38)
         # take out the model from the update
-        optimizer.update(model, grads)
+        optimizer.update(grads)
 
         return loss
 
