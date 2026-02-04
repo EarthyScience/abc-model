@@ -285,6 +285,7 @@ def train(
     step = 0
     last_printed_loss = jnp.inf
     is_early_stopping = False
+    early_model = model
     for _ in range(epochs):
         train_key, subkey = jax.random.split(train_key)
         loader = create_dataloader(x_train, y_train, batch_size, subkey)
@@ -295,16 +296,20 @@ def train(
                 avg_loss = total_loss / print_every
                 print(f"step {step} | loss: {avg_loss:.6f}", flush=True)
                 total_loss = 0.0
+
+                # early stopping check
                 if avg_loss < last_printed_loss:
                     last_printed_loss = avg_loss
+                    early_model = model
                 else:
                     is_early_stopping = True
                     break
             step += 1
+
         if is_early_stopping:
             break
 
-    return model
+    return early_model
 
 
 def benchmark_plot(
