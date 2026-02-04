@@ -228,6 +228,17 @@ Lastly, while in the abc-model directory, install the abc-model with uv:
 
    uv pip install -e .
 
+Detailed API Reference
+----------------------
+
+For a detailed description of each model and its functions, see the API section.
+
+.. toctree::
+    :hidden:
+
+    ABC Model <source/api/abcmodel>
+    ABC Configs <source/api/abcconfigs>
+
 See also
 --------
 
