@@ -271,7 +271,7 @@ def train(
 
         # !!!! important !!!!
         # for old jax versions (e.g., 0.4.38)
-        # take out the model fmor the update
+        # take out the model from the update
         optimizer.update(model, grads)
 
         return loss

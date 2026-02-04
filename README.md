@@ -89,7 +89,7 @@ All set - let's integrate our model by defining the timestepping and the run tim
 ```python
 # time step [s]
 inner_dt = 15.0 # this is the "running" time step
-outter_dt = 60.0 * 30 # this is "diagnostic" time step
+outter_dt = 60.0 * 30 # this is the "diagnostic" time step
 # total run time [s]
 runtime = 12 * 3600.0
 # start time of the day [h]
