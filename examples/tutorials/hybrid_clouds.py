@@ -60,7 +60,7 @@ class HybridCumulusModel(CumulusModel):
         # we squeeze the output to maintain the same shape through the ABC-Model
         x = jnp.squeeze(self.net(x))
         # and we re-normalize the output too
-        # x = x * self.x_out_std.value + self.x_out_mean.value
+        # x = x * self.x_out_std.value + self.x_out_mean.value (legacy)
         return jnp.where(q2_h <= 0, 0.0, x)
 
 
