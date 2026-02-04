@@ -1,7 +1,0 @@
-abcmodel.atmos.abstracts module
-===============================
-
-.. automodule:: abcmodel.atmos.abstracts
-   :members:
-   :show-inheritance:
-   :undoc-members:
