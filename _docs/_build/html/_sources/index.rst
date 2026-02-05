@@ -12,7 +12,7 @@ Install with
 
 .. code-block:: bash
 
-   pip install git+https://git.bgc-jena.mpg.de/abc3/abc-model
+   pip install git@github.com:limamau/abc-model.git
 
 or clone the repo and make an editable install inside your local repo using
 
