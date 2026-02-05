@@ -74,7 +74,7 @@ class StandardRadiationModel(AbstractRadiationModel[StandardRadiationState]):
     def run(
         self,
         state: StateAlias,
-        t: int,
+        t: Array,
         dt: float,
         tstart: float,
     ) -> StandardRadiationState:
@@ -153,7 +153,7 @@ class StandardRadiationModel(AbstractRadiationModel[StandardRadiationState]):
 
     def compute_solar_elevation(
         self,
-        t: int,
+        t: Array,
         dt: float,
         tstart: float,
         solar_declination: Array,

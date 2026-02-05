@@ -12,7 +12,7 @@ StateT = AbstractCoupledState[RadT, LandT, AtmosT]
 
 def warmup(
     state: AbstractCoupledState[RadT, LandT, AtmosT],
-    t: int,
+    t: Array,
     coupler: ABCoupler,
     dt: float,
     tstart: float,
@@ -96,7 +96,7 @@ def integrate(
     outter_tsteps = int(runtime / outter_dt)
 
     # warmup and initial diagnostics (t=0)
-    state = warmup(state, 0, coupler, inner_dt, tstart)
+    state = warmup(state, jnp.asarray(0), coupler, inner_dt, tstart)
     state = coupler.compute_diagnostics(state)
 
     # configure outter step function

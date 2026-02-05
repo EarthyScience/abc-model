@@ -264,7 +264,7 @@ class AbstractRadiationModel(AbstractModel, Generic[RadT]):
     def run(
         self,
         state: AbstractCoupledState[RadT, LandT, AtmosT],
-        t: int,
+        t: Array,
         dt: float,
         tstart: float,
     ) -> RadT:
@@ -295,7 +295,7 @@ class AbstractAtmosphereModel(AbstractModel, Generic[AtmosT]):
         radmodel: AbstractRadiationModel[RadT],
         landmodel: AbstractLandModel[LandT],
         state: AbstractCoupledState[RadT, LandT, AtmosT],
-        t: int,
+        t: Array,
         dt: float,
         tstart: float,
     ) -> AbstractCoupledState[RadT, LandT, AtmosT]:
@@ -312,7 +312,7 @@ class AbstractAtmosphereModel(AbstractModel, Generic[AtmosT]):
     def statistics(
         self,
         state: AbstractCoupledState[RadT, LandT, AtmosT],
-        t: int,
+        t: Array,
     ) -> AtmosT:
         raise NotImplementedError
 
