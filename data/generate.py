@@ -11,14 +11,14 @@ import abcconfigs.class_model as cm
 import abcmodel
 from abcmodel.utils import get_path_string
 
-NUM_TRAJS = 100
+NUM_TRAJS = 1
 
 
 @jax.jit
 def run_simulation(h_abl, theta, q, deltatheta, u, v, wg, d1, temp_soil):
     # rad
     rad_model_kwargs = cm.standard_radiation.model_kwargs
-    #rad_model_kwargs["cc"] = cc
+    # rad_model_kwargs["cc"] = cc
     rad_model = abcmodel.rad.StandardRadiationModel(**rad_model_kwargs)
     rad_state = rad_model.init_state(**cm.standard_radiation.state_kwargs)
 
@@ -111,7 +111,7 @@ def sample_params(key):
     v = random.uniform(keys[6], minval=-5.0, maxval=5.0)
     wg = random.uniform(keys[7], minval=0.171, maxval=0.35)
     d1 = random.uniform(keys[8], minval=0.1, maxval=1.0)
-    #cc = random.uniform(keys[9], minval=0.0, maxval=0.5)
+    # cc = random.uniform(keys[9], minval=0.0, maxval=0.5)
     return h_abl, theta, q, deltatheta, u, v, wg, d1, temp_soil
 
 
@@ -138,9 +138,7 @@ def main():
             key, subkey = random.split(key)
 
             # run simulation
-            h_abl, theta, q, deltatheta, u, v, wg, d1, temp_soil = sample_params(
-                subkey
-            )
+            h_abl, theta, q, deltatheta, u, v, wg, d1, temp_soil = sample_params(subkey)
             traj_jax, times_jax = run_simulation(
                 h_abl, theta, q, deltatheta, u, v, wg, d1, temp_soil
             )

@@ -109,6 +109,8 @@ def get_path_string(path):
     for p in path:
         if hasattr(p, "name"):
             parts.append(str(p.name))
+        elif hasattr(p, "key"):
+            parts.append(str(p.key))
         else:
             raise ValueError(f"Unsupported path element: {p}")
 
