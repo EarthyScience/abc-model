@@ -213,7 +213,7 @@ class DayOnlyAtmosphereModel(AbstractAtmosphereModel[DayOnlyAtmosphereState]):
         atmostate = replace(atmostate, mixed=ml_state)
         return atmostate
 
-    def statistics(self, state: StateAlias, t: int) -> DayOnlyAtmosphereState:
+    def statistics(self, state: StateAlias, t: Array) -> DayOnlyAtmosphereState:
         """Update statistics."""
         ml_state = self.mixed_layer.statistics(state, t)
         return state.atmos.replace(mixed=ml_state)
@@ -223,7 +223,7 @@ class DayOnlyAtmosphereModel(AbstractAtmosphereModel[DayOnlyAtmosphereState]):
         radmodel: AbstractRadiationModel,
         landmodel: AbstractLandModel,
         state: StateAlias,
-        t: int,
+        t: Array,
         dt: float,
         tstart: float,
     ) -> StateAlias:

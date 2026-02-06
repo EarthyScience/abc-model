@@ -102,7 +102,7 @@ class AbstractMixedLayerModel(AbstractModel, Generic[MixedT]):
         raise NotImplementedError
 
     @abstractmethod
-    def statistics(self, state: AbstractCoupledState, t: int) -> MixedT:
+    def statistics(self, state: AbstractCoupledState, t: Array) -> MixedT:
         raise NotImplementedError
 
     @abstractmethod

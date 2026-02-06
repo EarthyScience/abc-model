@@ -30,15 +30,10 @@ class CloudyRadiationModel(StandardRadiationModel):
         doy: day of year [-], range 1 to 365.
     """
 
-    def __init__(
-        self,
-        lat: float,
-        lon: float,
-        doy: float,
-    ):
-        self.lat = jnp.array(lat)
-        self.lon = jnp.array(lon)
-        self.doy = jnp.array(doy)
+    def __init__(self, lat: float, lon: float, doy: float):
+        self.lat = lat
+        self.lon = lon
+        self.doy = doy
 
     def init_state(self, net_rad: float) -> CloudyRadiationState:
         """Initialize the model state.
@@ -56,7 +51,7 @@ class CloudyRadiationModel(StandardRadiationModel):
     def run(
         self,
         state: StateAlias,
-        t: int,
+        t: Array,
         dt: float,
         tstart: float,
     ) -> StandardRadiationState:
