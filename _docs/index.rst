@@ -227,18 +227,14 @@ Lastly, while in the abc-model directory, install the abc-model with uv:
 
    uv pip install -e .
 
-Detailed API Reference
-----------------------
+See also
+--------
 
-For a detailed description of each model and its functions, see the API section.
+For a more advanced model, see `ClimaLand.jl <https://github.com/CliMA/ClimaLand.jl>`_.
+
 
 .. toctree::
     :hidden:
 
     ABC Model <source/api/abcmodel>
     ABC Configs <source/api/abcconfigs>
-
-See also
---------
-
-For a more advanced model, see `ClimaLand.jl <https://github.com/CliMA/ClimaLand.jl>`_.

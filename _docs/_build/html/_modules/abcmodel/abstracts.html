@@ -603,7 +603,7 @@ document.write(`
     <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">state</span><span class="p">:</span> <span class="n">AbstractCoupledState</span><span class="p">[</span><span class="n">RadT</span><span class="p">,</span> <span class="n">LandT</span><span class="p">,</span> <span class="n">AtmosT</span><span class="p">],</span>
-        <span class="n">t</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">t</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
         <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
         <span class="n">tstart</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RadT</span><span class="p">:</span>
@@ -649,7 +649,7 @@ document.write(`
         <span class="n">radmodel</span><span class="p">:</span> <span class="n">AbstractRadiationModel</span><span class="p">[</span><span class="n">RadT</span><span class="p">],</span>
         <span class="n">landmodel</span><span class="p">:</span> <span class="n">AbstractLandModel</span><span class="p">[</span><span class="n">LandT</span><span class="p">],</span>
         <span class="n">state</span><span class="p">:</span> <span class="n">AbstractCoupledState</span><span class="p">[</span><span class="n">RadT</span><span class="p">,</span> <span class="n">LandT</span><span class="p">,</span> <span class="n">AtmosT</span><span class="p">],</span>
-        <span class="n">t</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">t</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
         <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
         <span class="n">tstart</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AbstractCoupledState</span><span class="p">[</span><span class="n">RadT</span><span class="p">,</span> <span class="n">LandT</span><span class="p">,</span> <span class="n">AtmosT</span><span class="p">]:</span>
@@ -672,7 +672,7 @@ document.write(`
     <span class="k">def</span><span class="w"> </span><span class="nf">statistics</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">state</span><span class="p">:</span> <span class="n">AbstractCoupledState</span><span class="p">[</span><span class="n">RadT</span><span class="p">,</span> <span class="n">LandT</span><span class="p">,</span> <span class="n">AtmosT</span><span class="p">],</span>
-        <span class="n">t</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">t</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AtmosT</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
