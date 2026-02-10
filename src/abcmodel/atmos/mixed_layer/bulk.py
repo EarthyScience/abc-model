@@ -729,7 +729,7 @@ class BulkModel(AbstractMixedLayerModel[BulkState]):
 
         return dztend
 
-    def statistics(self, state: AbstractCoupledState, t: int):
+    def statistics(self, state: AbstractCoupledState, t: Array):
         """Compute standard meteorological statistics and diagnostics."""
         mixed_state = state.atmos.mixed
         land_state = state.land
@@ -831,7 +831,7 @@ class BulkModel(AbstractMixedLayerModel[BulkState]):
         surf_pressure: Array,
         theta: Array,
         q: Array,
-        t: int,
+        t: Array,
     ) -> Array:
         """Compute the lifting condensation level (LCL).
 
