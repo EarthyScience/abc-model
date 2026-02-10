@@ -1,5 +1,6 @@
-abcconfigs.aridities.humid module
-=================================
+
+Humid
+=====
 
 .. automodule:: abcconfigs.aridities.humid
    :members:

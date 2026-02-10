@@ -1,5 +1,6 @@
-abcmodel.atmos.abstracts module
-===============================
+
+Abstracts
+=========
 
 .. automodule:: abcmodel.atmos.abstracts
    :members:

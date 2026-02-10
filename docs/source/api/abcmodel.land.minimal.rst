@@ -1,5 +1,6 @@
-abcmodel.land.minimal module
-============================
+
+Minimal
+=======
 
 .. automodule:: abcmodel.land.minimal
    :members:

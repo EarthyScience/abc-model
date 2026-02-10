@@ -1,19 +1,9 @@
-abcmodel.rad package
-====================
 
-Submodules
-----------
+Radiation
+=========
 
 .. toctree::
-   :maxdepth: 4
+    :maxdepth: 1
 
-   abcmodel.rad.cloudy
-   abcmodel.rad.standard
-
-Module contents
----------------
-
-.. automodule:: abcmodel.rad
-   :members:
-   :show-inheritance:
-   :undoc-members:
+    abcmodel.rad.standard
+    abcmodel.rad.cloudy

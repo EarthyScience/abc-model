@@ -1,5 +1,6 @@
-abcmodel.rad.cloudy module
-==========================
+
+Cloudy
+======
 
 .. automodule:: abcmodel.rad.cloudy
    :members:

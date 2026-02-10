@@ -1,21 +1,11 @@
-abcmodel.land package
-=====================
 
-Submodules
-----------
+Land
+====
 
 .. toctree::
-   :maxdepth: 4
+    :maxdepth: 1
 
-   abcmodel.land.ags
-   abcmodel.land.jarvis_stewart
-   abcmodel.land.minimal
-   abcmodel.land.standard
-
-Module contents
----------------
-
-.. automodule:: abcmodel.land
-   :members:
-   :show-inheritance:
-   :undoc-members:
+    abcmodel.land.ags
+    abcmodel.land.jarvis_stewart
+    abcmodel.land.minimal
+    abcmodel.land.standard

@@ -1,18 +1,8 @@
-abcmodel.atmos.mixed\_layer package
-===================================
 
-Submodules
-----------
+Mixed Layer
+===========
 
 .. toctree::
-   :maxdepth: 4
+    :maxdepth: 1
 
-   abcmodel.atmos.mixed_layer.bulk
-
-Module contents
----------------
-
-.. automodule:: abcmodel.atmos.mixed_layer
-   :members:
-   :show-inheritance:
-   :undoc-members:
+    abcmodel.atmos.mixed_layer.bulk

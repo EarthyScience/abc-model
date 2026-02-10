@@ -1,5 +1,6 @@
-abcmodel.atmos.surface\_layer.simple module
-===========================================
+
+Simple
+======
 
 .. automodule:: abcmodel.atmos.surface_layer.simple
    :members:

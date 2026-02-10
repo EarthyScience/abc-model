@@ -1,5 +1,6 @@
-abcmodel.atmos.dayonly module
-=============================
+
+Dayonly
+=======
 
 .. automodule:: abcmodel.atmos.dayonly
    :members:

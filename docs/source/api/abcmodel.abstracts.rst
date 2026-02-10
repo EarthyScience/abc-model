@@ -1,5 +1,6 @@
-abcmodel.abstracts module
-=========================
+
+Abstracts
+=========
 
 .. automodule:: abcmodel.abstracts
    :members:

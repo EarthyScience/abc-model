@@ -1,5 +1,6 @@
-abcmodel.land.standard module
-=============================
+
+Standard
+========
 
 .. automodule:: abcmodel.land.standard
    :members:

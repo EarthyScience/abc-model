@@ -1,5 +1,6 @@
-abcmodel.rad.standard module
-============================
+
+Standard
+========
 
 .. automodule:: abcmodel.rad.standard
    :members:

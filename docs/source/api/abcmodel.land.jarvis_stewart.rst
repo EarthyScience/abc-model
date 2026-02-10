@@ -1,5 +1,6 @@
-abcmodel.land.jarvis\_stewart module
-====================================
+
+Jarvis Stewart
+==============
 
 .. automodule:: abcmodel.land.jarvis_stewart
    :members:

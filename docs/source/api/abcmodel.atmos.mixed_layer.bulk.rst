@@ -1,5 +1,6 @@
-abcmodel.atmos.mixed\_layer.bulk module
-=======================================
+
+Bulk
+====
 
 .. automodule:: abcmodel.atmos.mixed_layer.bulk
    :members:

@@ -1,5 +1,6 @@
-abcconfigs.aridities.standard module
-====================================
+
+Standard
+========
 
 .. automodule:: abcconfigs.aridities.standard
    :members:

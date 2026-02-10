@@ -1,5 +1,6 @@
-abcconfigs.aridities.arid module
-================================
+
+Arid
+====
 
 .. automodule:: abcconfigs.aridities.arid
    :members:

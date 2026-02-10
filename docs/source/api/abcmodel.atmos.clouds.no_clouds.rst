@@ -1,5 +1,6 @@
-abcmodel.atmos.clouds.no\_clouds module
-=======================================
+
+No Clouds
+=========
 
 .. automodule:: abcmodel.atmos.clouds.no_clouds
    :members:

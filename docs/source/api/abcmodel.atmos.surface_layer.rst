@@ -1,19 +1,9 @@
-abcmodel.atmos.surface\_layer package
-=====================================
 
-Submodules
-----------
+Surface Layer
+=============
 
 .. toctree::
-   :maxdepth: 4
+    :maxdepth: 1
 
-   abcmodel.atmos.surface_layer.obukhov
-   abcmodel.atmos.surface_layer.simple
-
-Module contents
----------------
-
-.. automodule:: abcmodel.atmos.surface_layer
-   :members:
-   :show-inheritance:
-   :undoc-members:
+    abcmodel.atmos.surface_layer.simple
+    abcmodel.atmos.surface_layer.obukhov

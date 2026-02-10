@@ -1,29 +1,26 @@
-abcmodel.atmos package
-======================
 
-Subpackages
------------
+Atmosphere
+==========
 
-.. toctree::
-   :maxdepth: 4
-
-   abcmodel.atmos.clouds
-   abcmodel.atmos.mixed_layer
-   abcmodel.atmos.surface_layer
-
-Submodules
-----------
+For now, we only have a model simulating the evolution of the atmos during daytime
 
 .. toctree::
-   :maxdepth: 4
+    :maxdepth: 1
 
-   abcmodel.atmos.abstracts
-   abcmodel.atmos.dayonly
+    abcmodel.atmos.dayonly
 
-Module contents
----------------
+which uses three components
 
-.. automodule:: abcmodel.atmos
-   :members:
-   :show-inheritance:
-   :undoc-members:
+.. toctree::
+    :maxdepth: 1
+
+    abcmodel.atmos.surface_layer
+    abcmodel.atmos.mixed_layer
+    abcmodel.atmos.clouds
+
+as implementation of the abstracts
+
+.. toctree::
+    :maxdepth: 1
+
+    abcmodel.atmos.abstracts

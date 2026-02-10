@@ -1,5 +1,6 @@
-abcmodel.atmos.clouds.cumulus module
-====================================
+
+Cumulus
+=======
 
 .. automodule:: abcmodel.atmos.clouds.cumulus
    :members:
