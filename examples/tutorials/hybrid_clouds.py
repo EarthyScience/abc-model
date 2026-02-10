@@ -82,9 +82,7 @@ def load_model_and_template_state(key: Array):
 
     # surface layer
     surface_layer_model = abcmodel.atmos.surface_layer.ObukhovModel()
-    surface_layer_state = surface_layer_model.init_state(
-        **cm.obukhov_surface_layer.state_kwargs
-    )
+    surface_layer_state = surface_layer_model.init_state()
 
     # mixed layer
     mixed_layer_model = abcmodel.atmos.mixed_layer.BulkModel()
@@ -333,9 +331,7 @@ def benchmark_plot(
 
     # surface layer
     surface_layer_model = abcmodel.atmos.surface_layer.ObukhovModel()
-    surface_layer_state = surface_layer_model.init_state(
-        **cm.obukhov_surface_layer.state_kwargs
-    )
+    surface_layer_state = surface_layer_model.init_state()
 
     # mixed layer
     mixed_layer_model = abcmodel.atmos.mixed_layer.BulkModel()

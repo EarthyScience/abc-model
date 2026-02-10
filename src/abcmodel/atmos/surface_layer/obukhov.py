@@ -89,9 +89,9 @@ class ObukhovModel(AbstractSurfaceLayerModel):
 
     def init_state(
         self,
-        ustar: float,
-        z0m: float,
-        z0h: float,
+        ustar: float = 0.3,
+        z0m: float = 0.02,
+        z0h: float = 0.002,
     ) -> ObukhovState:
         """Initialize the model state.
 

@@ -34,9 +34,7 @@ def run_simulation(h_abl, theta, q, deltatheta, u, v, wg, d1, temp_soil):
 
     # surface layer
     surface_layer_model = abcmodel.atmos.surface_layer.ObukhovModel()
-    surface_layer_state = surface_layer_model.init_state(
-        **cm.obukhov_surface_layer.state_kwargs
-    )
+    surface_layer_state = surface_layer_model.init_state()
 
     # mixed layer
     mixed_layer_model = abcmodel.atmos.mixed_layer.BulkModel()
