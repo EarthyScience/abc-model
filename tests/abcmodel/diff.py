@@ -17,8 +17,8 @@ def run_model(theta0: float) -> Array:
     )
     rad_state = rad_model.init_state(**cm.standard_radiation.state_kwargs)
 
-    land_model = abcmodel.land.JarvisStewartModel(**cm.jarvis_stewart.model_kwargs)
-    land_state = land_model.init_state(**cm.jarvis_stewart.state_kwargs)
+    land_model = abcmodel.land.JarvisStewartModel()
+    land_state = land_model.init_state()
 
     surface_layer_model = abcmodel.atmos.surface_layer.ObukhovModel()
     surface_layer_state = surface_layer_model.init_state()

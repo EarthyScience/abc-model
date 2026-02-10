@@ -54,21 +54,13 @@ def main():
     if use_ags:
         # you can use the ags model, that includes
         # CO2-induced stomatal closure
-        land_model = abcmodel.land.AgsModel(
-            **cm.ags.model_kwargs,
-        )
-        land_state = land_model.init_state(
-            **cm.ags.state_kwargs,
-        )
+        land_model = abcmodel.land.AgsModel()
+        land_state = land_model.init_state()
 
     else:
         # otherwise use the jarvis stewart model for simpler representation
-        land_model = abcmodel.land.JarvisStewartModel(
-            **cm.jarvis_stewart.model_kwargs,
-        )
-        land_state = land_model.init_state(
-            **cm.jarvis_stewart.state_kwargs,
-        )
+        land_model = abcmodel.land.JarvisStewartModel()
+        land_state = land_model.init_state()
 
     ##########################################################
     # define atmos model with all its components

@@ -39,7 +39,7 @@ class AgsModel(AbstractStandardLandModel):
         **kwargs: additional keyword arguments to pass to the base class.
     """
 
-    def __init__(self, c3c4: str, **kwargs):
+    def __init__(self, c3c4: str = "c3", **kwargs):
         super().__init__(**kwargs)
         if c3c4 == "c3":
             self.c3c4 = 0
@@ -72,14 +72,14 @@ class AgsModel(AbstractStandardLandModel):
 
     def init_state(
         self,
-        alpha: float,
-        wg: float,
-        temp_soil: float,
-        temp2: float,
-        surf_temp: float,
-        wl: float,
-        wq: float,
-        wtheta: float = 0.0,
+        alpha: float = 0.25,
+        wg: float = 0.21,
+        temp_soil: float = 285.0,
+        temp2: float = 286.0,
+        surf_temp: float = 290.0,
+        wl: float = 0.0000,
+        wq: float = 1e-4,
+        wtheta: float = 0.1,
         rs: float = 1.0e6,
         rssoil: float = 1.0e6,
     ) -> AgsState:

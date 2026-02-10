@@ -20,8 +20,8 @@ def main():
     rad_state = rad_model.init_state(**cm.standard_radiation.state_kwargs)
 
     # land surface
-    land_model = abcmodel.land.JarvisStewartModel(**cm.jarvis_stewart.model_kwargs)
-    land_state = land_model.init_state(**cm.jarvis_stewart.state_kwargs)
+    land_model = abcmodel.land.JarvisStewartModel()
+    land_state = land_model.init_state()
 
     # surface layer
     surface_layer_model = abcmodel.atmos.surface_layer.ObukhovModel()

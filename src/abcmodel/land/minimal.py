@@ -51,9 +51,9 @@ class MinimalLandSurfaceModel(AbstractLandModel):
 
     def init_state(
         self,
-        alpha: float,
-        surf_temp: float,
-        rs: float,
+        alpha: float = 0.25,
+        surf_temp: float = 290.0,
+        rs: float = 1.0e6,
         wg: float = 0.0,
         wl: float = 0.0,
         wtheta: float = 0.0,

@@ -74,11 +74,8 @@ def load_model_and_template_state(key: Array):
     rad_state = rad_model.init_state(**cm.standard_radiation.state_kwargs)
 
     # land
-    ags_model_kwargs = cm.ags.model_kwargs
-    land_model = abcmodel.land.AgsModel(**ags_model_kwargs)
-
-    ags_state_kwargs = cm.ags.state_kwargs
-    land_state = land_model.init_state(**ags_state_kwargs)
+    land_model = abcmodel.land.AgsModel()
+    land_state = land_model.init_state()
 
     # surface layer
     surface_layer_model = abcmodel.atmos.surface_layer.ObukhovModel()
@@ -322,12 +319,8 @@ def benchmark_plot(
     rad_state = rad_model.init_state(**cm.cloudy_radiation.state_kwargs)
 
     # land surface
-    land_model = abcmodel.land.AgsModel(
-        **cm.ags.model_kwargs,
-    )
-    land_state = land_model.init_state(
-        **cm.ags.state_kwargs,
-    )
+    land_model = abcmodel.land.AgsModel()
+    land_state = land_model.init_state()
 
     # surface layer
     surface_layer_model = abcmodel.atmos.surface_layer.ObukhovModel()
