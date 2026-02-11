@@ -18,91 +18,218 @@ class BulkState(AbstractMixedLayerState):
     """Data class for bulk mixed layer model state."""
 
     # initialized by the user
-    h_abl: Array
+    h_abl: Array = field(
+        metadata={"description": "Initial atmospheric boundary layer (ABL) height [m]"}
+    )
     """Initial atmospheric boundary layer (ABL) height [m]."""
-    theta: Array
+    theta: Array = field(
+        metadata={"description": "Initial mixed-layer potential temperature [K]"}
+    )
     """Initial mixed-layer potential temperature [K]."""
-    deltatheta: Array
+    deltatheta: Array = field(
+        metadata={"description": "Initial temperature jump at the top of the ABL [K]"}
+    )
     """Initial temperature jump at the top of the ABL [K]."""
-    q: Array
+    q: Array = field(
+        metadata={"description": "Initial mixed-layer specific humidity [kg/kg]"}
+    )
     """Initial mixed-layer specific humidity [kg/kg]."""
-    dq: Array
+    dq: Array = field(
+        metadata={"description": "Initial specific humidity jump at h [kg/kg]"}
+    )
     """Initial specific humidity jump at h [kg/kg]."""
-    co2: Array
+    co2: Array = field(metadata={"description": "Initial mixed-layer CO2 [ppm]"})
     """Initial mixed-layer CO2 [ppm]."""
-    deltaCO2: Array
+    deltaCO2: Array = field(
+        metadata={"description": "Initial CO2 jump at the top of the ABL [ppm]"}
+    )
     """Initial CO2 jump at the top of the ABL [ppm]."""
-    wCO2: Array
+    wCO2: Array = field(
+        metadata={"description": "Surface kinematic CO2 flux [mgC/m²/s]"}
+    )
     """Surface kinematic CO2 flux [mgC/m²/s]."""
-    u: Array
+    u: Array = field(
+        metadata={"description": "Initial mixed-layer u-wind speed [m/s]"}
+    )
     """Initial mixed-layer u-wind speed [m/s]."""
-    du: Array
+    du: Array = field(
+        metadata={"description": "Initial u-wind jump at the top of the ABL [m/s]"}
+    )
     """Initial u-wind jump at the top of the ABL [m/s]."""
-    v: Array
+    v: Array = field(
+        metadata={"description": "Initial mixed-layer v-wind speed [m/s]"}
+    )
     """Initial mixed-layer v-wind speed [m/s]."""
-    dv: Array
+    dv: Array = field(
+        metadata={"description": "Initial v-wind jump at the top of the ABL [m/s]"}
+    )
     """Initial v-wind jump at the top of the ABL [m/s]."""
-    dz_h: Array
+    dz_h: Array = field(
+        metadata={"description": "Transition layer thickness [m]"}
+    )
     """Transition layer thickness [m]."""
-    surf_pressure: Array
+    surf_pressure: Array = field(
+        metadata={
+            "description": "Surface pressure, which is actually not updated (not a state), it's only here for simplicity [Pa]"
+        }
+    )
     """Surface pressure, which is actually not updated (not a state), it's only here for simplicity [Pa]."""
 
     # initialized to zero by default
-    wstar: Array = field(default_factory=lambda: jnp.array(0.0))
+    wstar: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={"description": "Convective velocity scale [m s-1]"},
+    )
     """Convective velocity scale [m s-1]."""
-    we: Array = field(default_factory=lambda: jnp.array(-1.0))
+    we: Array = field(
+        default_factory=lambda: jnp.array(-1.0),
+        metadata={"description": "Entrainment velocity [m s-1]"},
+    )
     """Entrainment velocity [m s-1]."""
 
     # should be initialized during warmup
-    thetav: Array = field(default_factory=lambda: jnp.array(0.0))
+    thetav: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={"description": "Mixed-layer potential temperature [K]"},
+    )
     """Mixed-layer potential temperature [K]."""
-    deltathetav: Array = field(default_factory=lambda: jnp.array(0.0))
+    deltathetav: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={"description": "Virtual temperature jump at the top of the ABL [K]"},
+    )
     """Virtual temperature jump at the top of the ABL [K]."""
-    wthetav: Array = field(default_factory=lambda: jnp.array(0.0))
+    wthetav: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={"description": "Surface kinematic virtual heat flux [K m s-1]"},
+    )
     """Surface kinematic virtual heat flux [K m s-1]."""
-    wqe: Array = field(default_factory=lambda: jnp.array(0.0))
+    wqe: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={"description": "Entrainment moisture flux [kg kg-1 m s-1]"},
+    )
     """Entrainment moisture flux [kg kg-1 m s-1]."""
-    wCO2e: Array = field(default_factory=lambda: jnp.array(0.0))
+    wCO2e: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={"description": "Entrainment CO2 flux [mgC/m²/s]"},
+    )
     """Entrainment CO2 flux [mgC/m²/s]."""
-    wthetae: Array = field(default_factory=lambda: jnp.array(0.0))
+    wthetae: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={"description": "Entrainment potential temperature flux [K m s-1]"},
+    )
     """Entrainment potential temperature flux [K m s-1]."""
-    wthetave: Array = field(default_factory=lambda: jnp.array(0.0))
+    wthetave: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={"description": "Entrainment virtual heat flux [K m s-1]"},
+    )
     """Entrainment virtual heat flux [K m s-1]."""
-    lcl: Array = field(default_factory=lambda: jnp.array(0.0))
+    lcl: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={"description": "Lifting condensation level [m]"},
+    )
     """Lifting condensation level [m]."""
-    top_rh: Array = field(default_factory=lambda: jnp.array(0.0))
+    top_rh: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={"description": "Top of mixed layer relative humidity [%]"},
+    )
     """Top of mixed layer relative humidity [%]."""
-    top_p: Array = field(default_factory=lambda: jnp.array(0.0))
+    top_p: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={"description": "Pressure at top of mixed layer [Pa]"},
+    )
     """Pressure at top of mixed layer [Pa]."""
-    top_T: Array = field(default_factory=lambda: jnp.array(0.0))
+    top_T: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={"description": "Temperature at top of mixed layer [K]"},
+    )
     """Temperature at top of mixed layer [K]."""
-    utend: Array = field(default_factory=lambda: jnp.array(0.0))
+    utend: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={"description": "Zonal wind velocity tendency [m s-2]"},
+    )
     """Zonal wind velocity tendency [m s-2]."""
-    dutend: Array = field(default_factory=lambda: jnp.array(0.0))
+    dutend: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={
+            "description": "Zonal wind velocity tendency at the ABL height [m s-2]"
+        },
+    )
     """Zonal wind velocity tendency at the ABL height [m s-2]."""
-    vtend: Array = field(default_factory=lambda: jnp.array(0.0))
+    vtend: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={"description": "Meridional wind velocity tendency [m s-2]"},
+    )
     """Meridional wind velocity tendency [m s-2]."""
-    dvtend: Array = field(default_factory=lambda: jnp.array(0.0))
+    dvtend: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={
+            "description": "Meridional wind velocity tendency at the ABL height [m/s²]"
+        },
+    )
     """Meridional wind velocity tendency at the ABL height [m/s²]."""
-    h_abl_tend: Array = field(default_factory=lambda: jnp.array(0.0))
+    h_abl_tend: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={"description": "Tendency of CBL [m s-1]"},
+    )
     """Tendency of CBL [m s-1]."""
-    thetatend: Array = field(default_factory=lambda: jnp.array(0.0))
+    thetatend: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={
+            "description": "Tendency of mixed-layer potential temperature [K s-1]"
+        },
+    )
     """Tendency of mixed-layer potential temperature [K s-1]."""
-    deltathetatend: Array = field(default_factory=lambda: jnp.array(0.0))
+    deltathetatend: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={
+            "description": "Tendency of mixed-layer potential temperature at the ABL height [K s-1]"
+        },
+    )
     """Tendency of mixed-layer potential temperature at the ABL height [K s-1]."""
-    qtend: Array = field(default_factory=lambda: jnp.array(0.0))
+    qtend: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={
+            "description": "Tendency of mixed-layer specific humidity [kg/kg s-1]"
+        },
+    )
     """Tendency of mixed-layer specific humidity [kg/kg s-1]."""
-    dqtend: Array = field(default_factory=lambda: jnp.array(0.0))
+    dqtend: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={
+            "description": "Tendency of mixed-layer specific humidity at the ABL height [kg/kg s-1]"
+        },
+    )
     """Tendency of mixed-layer specific humidity at the ABL height [kg/kg s-1]."""
-    co2tend: Array = field(default_factory=lambda: jnp.array(0.0))
+    co2tend: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={"description": "Tendency of CO2 concentration [ppm s-1]"},
+    )
     """Tendency of CO2 concentration [ppm s-1]."""
-    deltaCO2tend: Array = field(default_factory=lambda: jnp.array(0.0))
+    deltaCO2tend: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={
+            "description": "Tendency of CO2 concentration at the ABL height [ppm s-1]"
+        },
+    )
     """Tendency of CO2 concentration at the ABL height [ppm s-1]."""
-    dztend: Array = field(default_factory=lambda: jnp.array(0.0))
+    dztend: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={"description": "Tendency of transition layer thickness [m s-1]"},
+    )
     """Tendency of transition layer thickness [m s-1]."""
-    ws: Array = field(default_factory=lambda: jnp.array(0.0))
+    ws: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={
+            "description": "Large-scale vertical velocity (subsidence) [m s-1]"
+        },
+    )
     """Large-scale vertical velocity (subsidence) [m s-1]."""
-    wf: Array = field(default_factory=lambda: jnp.array(0.0))
+    wf: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={
+            "description": "Mixed-layer growth due to cloud top radiative divergence [m s-1]"
+        },
+    )
     """Mixed-layer growth due to cloud top radiative divergence [m s-1]."""
 
 

@@ -43,7 +43,20 @@ def main():
     state = abcoupler.init_state(rad_state, land_state, atmos_state)
 
     # run run run
-    abcmodel.integrate(state, abcoupler, inner_dt, outter_dt, runtime, tstart)
+    time, trajectory = abcmodel.integrate(
+        state, abcoupler, inner_dt, outter_dt, runtime, tstart
+    )
+
+    abcmodel.plotting.show(
+        time,
+        trajectory,
+        "atmos.mixed.h_abl",
+        "atmos.mixed.theta",
+        "atmos.mixed.q",
+        "atmos.clouds.cc_frac",
+        "land.surf_temp",  # Minimal land model has surf_temp
+        "land.wCO2",  # Minimal land model has wCO2
+    )
 
 
 if __name__ == "__main__":

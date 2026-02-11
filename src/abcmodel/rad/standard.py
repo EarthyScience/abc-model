@@ -17,16 +17,28 @@ from ..utils import PhysicalConstants as cst
 class StandardRadiationState(AbstractRadiationState):
     """Standard radiation model state."""
 
-    net_rad: Array
-    """Net surface rad [W m-2]."""
-    in_srad: Array = field(default_factory=lambda: jnp.array(0.0))
-    """Incoming solar rad [W m-2]."""
-    out_srad: Array = field(default_factory=lambda: jnp.array(0.0))
-    """Outgoing solar rad [W m-2]."""
-    in_lrad: Array = field(default_factory=lambda: jnp.array(0.0))
-    """Incoming longwave rad [W m-2]."""
-    out_lrad: Array = field(default_factory=lambda: jnp.array(0.0))
-    """Outgoing longwave rad [W m-2]."""
+    net_rad: Array = field(metadata={"description": "Net surface rad [W m-2]"})
+    """Net surface radiation [W m-2]."""
+    in_srad: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={"description": "Incoming solar rad [W m-2]"},
+    )
+    """Incoming solar radiation [W m-2]."""
+    out_srad: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={"description": "Outgoing solar rad [W m-2]"},
+    )
+    """Outgoing solar radiation [W m-2]."""
+    in_lrad: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={"description": "Incoming longwave rad [W m-2]"},
+    )
+    """Incoming longwave radiation [W m-2]."""
+    out_lrad: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={"description": "Outgoing longwave rad [W m-2]"},
+    )
+    """Outgoing longwave radiation [W m-2]."""
 
 
 StateAlias = AbstractCoupledState[StandardRadiationState, LandT, AtmosT]

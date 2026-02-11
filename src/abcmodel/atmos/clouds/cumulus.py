@@ -12,19 +12,40 @@ from ..abstracts import AbstractCloudModel, AbstractCloudState
 class CumulusState(AbstractCloudState):
     """Standard cumulus state."""
 
-    cc_frac: Array = field(default_factory=lambda: jnp.array(0.0))
+    cc_frac: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={"description": "Cloud core fraction [-], range 0 to 1"},
+    )
     """Cloud core fraction [-], range 0 to 1."""
-    cc_mf: Array = field(default_factory=lambda: jnp.array(0.0))
+    cc_mf: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={"description": "cloud core mass flux [m/s]"},
+    )
     """Cloud core mass flux [m/s]."""
-    cc_qf: Array = field(default_factory=lambda: jnp.array(0.0))
+    cc_qf: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={"description": "cloud core moisture flux [kg/kg/s]"},
+    )
     """Cloud core moisture flux [kg/kg/s]."""
-    cl_trans: Array = field(default_factory=lambda: jnp.array(1.0))
+    cl_trans: Array = field(
+        default_factory=lambda: jnp.array(1.0),
+        metadata={"description": "cloud layer transmittance [-]"},
+    )
     """Cloud layer transmittance [-], range 0 to 1."""
-    q2_h: Array = field(default_factory=lambda: jnp.array(0.0))
+    q2_h: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={"description": "humidity variance at mixed-layer top [kg²/kg²]"},
+    )
     """Humidity variance at mixed-layer top [kg²/kg²]."""
-    top_CO22: Array = field(default_factory=lambda: jnp.array(0.0))
+    top_CO22: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={"description": "CO2 variance at mixed-layer top [ppm²]"},
+    )
     """CO2 variance at mixed-layer top [ppm²]."""
-    wCO2M: Array = field(default_factory=lambda: jnp.array(0.0))
+    wCO2M: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={"description": "CO2 mass flux [mgC/m²/s]"},
+    )
     """CO2 mass flux [mgC/m²/s]."""
 
 
