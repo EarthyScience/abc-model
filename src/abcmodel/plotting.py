@@ -56,11 +56,7 @@ def show(time, trajectory, *var_paths: str):
             # Find the field in the class fields
             for f in fields(cls):
                 if f.name == field_name:
-                    if "description" in f.metadata:
-                        desc = f.metadata["description"]
-                        # heuristics to split unit?
-                        # The descriptions are "Label [Unit]"
-                        label = desc
+                    label = get_label_from_metadata(f.metadata, label)
                     break
         except Exception as e:
             print(f"Warning: Could not extract metadata for '{path}': {e}")
@@ -75,3 +71,19 @@ def show(time, trajectory, *var_paths: str):
             ax.text(0.5, 0.5, f"Data not found: {path}", ha="center", va="center")
 
     plt.show()
+
+
+def get_label_from_metadata(meta: dict, default_label: str) -> str:
+    """Extract label from field metadata."""
+    if "label" in meta:
+        label = meta["label"]
+        if "unit" in meta:
+            unit = meta["unit"]
+            # Heuristic: if unit contains math chars and isn't wrapped in $, wrap it
+            if any(c in unit for c in "^\\_") and not unit.startswith("$"):
+                unit = f"${unit}$"
+            label = f"{label} [{unit}]"
+        return label
+    elif "description" in meta:
+        return meta["description"]
+    return default_label

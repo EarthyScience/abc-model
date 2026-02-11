@@ -18,150 +18,279 @@ class StandardLandState(AbstractLandState):
     """Standard land surface model state."""
 
     alpha: Array = field(
-        metadata={"description": "Slope of the light response curve [mol J-1]"}
+        metadata={
+            "label": r"$\alpha$",
+            "unit": "-",
+            "description": "Slope of the light response curve",
+        }
     )
     """Slope of the light response curve [mol J-1]."""
     wg: Array = field(
-        metadata={"description": "Soil moisture content in the root zone [m3 m-3]"}
+        metadata={
+            "label": r"$w_g$",
+            "unit": "m^3 m^{-3}",
+            "description": "Soil moisture content",
+        }
     )
     """Soil moisture content in the root zone [m3 m-3]."""
-    temp_soil: Array = field(metadata={"description": "Soil temperature [K]"})
+    temp_soil: Array = field(
+        metadata={
+            "label": r"$T_{soil}$",
+            "unit": "K",
+            "description": "Soil temperature",
+        }
+    )
     """Soil temperature [K]."""
-    temp2: Array = field(metadata={"description": "Deep soil temperature [K]"})
+    temp2: Array = field(
+        metadata={
+            "label": r"$T_{soil,2}$",
+            "unit": "K",
+            "description": "Deep soil temperature",
+        }
+    )
     """Deep soil temperature [K]."""
-    surf_temp: Array = field(metadata={"description": "Surface temperature [K]"})
+    surf_temp: Array = field(
+        metadata={
+            "label": r"$T_{surf}$",
+            "unit": "K",
+            "description": "Surface temperature",
+        }
+    )
     """Surface temperature [K]."""
     wl: Array = field(
-        metadata={"description": "No water content in the canopy [m]"}
+        metadata={
+            "label": r"$W_l$",
+            "unit": "m",
+            "description": "Canopy water content",
+        }
     )
     """No water content in the canopy [m]."""
     wq: Array = field(
-        metadata={"description": "Kinematic moisture flux [kg/kg m/s]"}
+        metadata={
+            "label": r"$(w'q')_{s}$",
+            "unit": "kg kg^{-1} m s^{-1}",
+            "description": "Unknown - Kinematic moisture flux used for initialization?",
+        }
     )
     """Kinematic moisture flux [kg/kg m/s]."""
-    wtheta: Array = field(metadata={"description": "Kinematic heat flux [K m/s]"})
+    wtheta: Array = field(
+        metadata={
+            "label": r"$(w'\theta')_{s}$",
+            "unit": "K m s^{-1}",
+            "description": "Unknown - Kinematic heat flux used for initialization?",
+        }
+    )
     """Kinematic heat flux [K m/s]."""
 
     rs: Array = field(
         default_factory=lambda: jnp.array(1.0e6),
-        metadata={"description": "Surface resistance [m s-1]"},
+        metadata={
+            "label": r"$r_s$",
+            "unit": "s m^{-1}",
+            "description": "Surface resistance",
+        },
     )
     """Surface resistance [m s-1]."""
     rssoil: Array = field(
         default_factory=lambda: jnp.array(1.0e6),
-        metadata={"description": "Soil resistance [m s-1]"},
+        metadata={
+            "label": r"$r_{soil}$",
+            "unit": "s m^{-1}",
+            "description": "Soil resistance",
+        },
     )
     """Soil resistance [m s-1]."""
 
     # the following variables should be initialized to nan
     # the following variables should be initialized to nan
+    # the following variables should be initialized to nan
     esat: Array = field(
         default_factory=lambda: jnp.array(0.0),
-        metadata={"description": "Saturation vapor pressure [Pa]"},
+        metadata={
+            "label": r"$e_{sat}$",
+            "unit": "Pa",
+            "description": "Saturation vapor pressure",
+        },
     )
     """Saturation vapor pressure [Pa]."""
     qsat: Array = field(
         default_factory=lambda: jnp.array(0.0),
-        metadata={"description": "Saturation specific humidity [kg/kg]"},
+        metadata={
+            "label": r"$q_{sat}$",
+            "unit": "kg kg^{-1}",
+            "description": "Saturation specific humidity",
+        },
     )
     """Saturation specific humidity [kg/kg]."""
     dqsatdT: Array = field(
         default_factory=lambda: jnp.array(0.0),
         metadata={
-            "description": "Derivative of saturation specific humidity with respect to temperature [kg/kg/K]"
+            "label": r"$dq_{sat}/dT$",
+            "unit": "kg kg^{-1} K^{-1}",
+            "description": "Derivative of saturation specific humidity",
         },
     )
     """Derivative of saturation specific humidity with respect to temperature [kg/kg/K]."""
     e: Array = field(
         default_factory=lambda: jnp.array(0.0),
-        metadata={"description": "Vapor pressure [Pa]"},
+        metadata={
+            "label": r"$e$",
+            "unit": "Pa",
+            "description": "Vapor pressure",
+        },
     )
     """Vapor pressure [Pa]."""
     qsatsurf: Array = field(
         default_factory=lambda: jnp.array(0.0),
         metadata={
-            "description": "Saturation specific humidity at surface temperature [kg/kg]"
+            "label": r"$q_{sat}(T_s)$",
+            "unit": "kg kg^{-1}",
+            "description": "Saturation specific humidity at surface",
         },
     )
     """Saturation specific humidity at surface temperature [kg/kg]."""
     wCO2: Array = field(
         default_factory=lambda: jnp.array(0.0),
-        metadata={"description": "Kinematic CO2 flux [kg/kg m/s] or [mol m-2 s-1]"},
+        metadata={
+            "label": r"$w'CO_2'$",
+            "unit": "kg kg^{-1} m s^{-1}",
+            "description": "Kinematic CO2 flux",
+        },
     )
     """Kinematic CO2 flux [kg/kg m/s] or [mol m-2 s-1]."""
     cliq: Array = field(
         default_factory=lambda: jnp.array(0.0),
-        metadata={"description": "Wet fraction of the canopy [-]"},
+        metadata={
+            "label": r"$c_{liq}$",
+            "unit": "-",
+            "description": "Wet fraction of the canopy",
+        },
     )
     """Wet fraction of the canopy [-]."""
     temp_soil_tend: Array = field(
         default_factory=lambda: jnp.array(0.0),
-        metadata={"description": "Soil temperature tendency [K s-1]"},
+        metadata={
+            "label": r"$\partial T_{soil} / \partial t$",
+            "unit": "K s^{-1}",
+            "description": "Soil temperature tendency",
+        },
     )
     """Soil temperature tendency [K s-1]."""
     wgtend: Array = field(
         default_factory=lambda: jnp.array(0.0),
-        metadata={"description": "Soil moisture tendency [m3 m-3 s-1]"},
+        metadata={
+            "label": r"$\partial w_g / \partial t$",
+            "unit": "m^3 m^{-3} s^{-1}",
+            "description": "Soil moisture tendency",
+        },
     )
     """Soil moisture tendency [m3 m-3 s-1]."""
     wltend: Array = field(
         default_factory=lambda: jnp.array(0.0),
-        metadata={"description": "Canopy water storage tendency [m s-1]"},
+        metadata={
+            "label": r"$\partial W_l / \partial t$",
+            "unit": "m s^{-1}",
+            "description": "Canopy water storage tendency",
+        },
     )
     """Canopy water storage tendency [m s-1]."""
     le_veg: Array = field(
         default_factory=lambda: jnp.array(0.0),
-        metadata={"description": "Latent heat flux from vegetation [W m-2]"},
+        metadata={
+            "label": r"$LE_{veg}$",
+            "unit": "W m^{-2}",
+            "description": "Latent heat flux from vegetation",
+        },
     )
     """Latent heat flux from vegetation [W m-2]."""
     le_liq: Array = field(
         default_factory=lambda: jnp.array(0.0),
-        metadata={"description": "Latent heat flux from liquid water [W m-2]"},
+        metadata={
+            "label": r"$LE_{liq}$",
+            "unit": "W m^{-2}",
+            "description": "Latent heat flux from liquid water",
+        },
     )
     """Latent heat flux from liquid water [W m-2]."""
     le_soil: Array = field(
         default_factory=lambda: jnp.array(0.0),
-        metadata={"description": "Latent heat flux from soil [W m-2]"},
+        metadata={
+            "label": r"$LE_{soil}$",
+            "unit": "W m^{-2}",
+            "description": "Latent heat flux from soil",
+        },
     )
     """Latent heat flux from soil [W m-2]."""
     le: Array = field(
         default_factory=lambda: jnp.array(0.0),
-        metadata={"description": "Total latent heat flux [W m-2]"},
+        metadata={
+            "label": r"$LE$",
+            "unit": "W m^{-2}",
+            "description": "Total latent heat flux",
+        },
     )
     """Total latent heat flux [W m-2]."""
     hf: Array = field(
         default_factory=lambda: jnp.array(0.0),
-        metadata={"description": "Sensible heat flux [W m-2]"},
+        metadata={
+            "label": r"$H$",
+            "unit": "W m^{-2}",
+            "description": "Sensible heat flux",
+        },
     )
     """Sensible heat flux [W m-2]."""
     gf: Array = field(
         default_factory=lambda: jnp.array(0.0),
-        metadata={"description": "Ground heat flux [W m-2]"},
+        metadata={
+            "label": r"$G$",
+            "unit": "W m^{-2}",
+            "description": "Ground heat flux",
+        },
     )
     """Ground heat flux [W m-2]."""
     le_pot: Array = field(
         default_factory=lambda: jnp.array(0.0),
-        metadata={"description": "Potential latent heat flux [W m-2]"},
+        metadata={
+            "label": r"$LE_{pot}$",
+            "unit": "W m^{-2}",
+            "description": "Potential latent heat flux",
+        },
     )
     """Potential latent heat flux [W m-2]."""
     le_ref: Array = field(
         default_factory=lambda: jnp.array(0.0),
-        metadata={"description": "Reference latent heat flux [W m-2]"},
+        metadata={
+            "label": r"$LE_{ref}$",
+            "unit": "W m^{-2}",
+            "description": "Reference latent heat flux",
+        },
     )
     """Reference latent heat flux [W m-2]."""
     wtheta: Array = field(
         default_factory=lambda: jnp.array(0.0),
-        metadata={"description": "Kinematic heat flux [K m/s]"},
+        metadata={
+            "label": r"$(w'\theta')_s$",
+            "unit": "K m s^{-1}",
+            "description": "Kinematic heat flux",
+        },
     )
     """Kinematic heat flux [K m/s]."""
     wq: Array = field(
         default_factory=lambda: jnp.array(0.0),
-        metadata={"description": "Kinematic moisture flux [kg/kg m/s]"},
+        metadata={
+            "label": r"$(w'q')_s$",
+            "unit": "kg kg^{-1} m s^{-1}",
+            "description": "Kinematic moisture flux",
+        },
     )
     """Kinematic moisture flux [kg/kg m/s]."""
     wCO2: Array = field(
         default_factory=lambda: jnp.array(0.0),
-        metadata={"description": "Kinematic CO2 flux [kg/kg m/s] or [mol m-2 s-1]"},
+        metadata={
+            "label": r"$w'CO_2'$",
+            "unit": "kg kg^{-1} m s^{-1}",
+            "description": "Kinematic CO2 flux",
+        },
     )
     """Kinematic CO2 flux [kg/kg m/s] or [mol m-2 s-1]."""
 

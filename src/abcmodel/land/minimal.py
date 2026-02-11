@@ -13,67 +13,119 @@ class MinimalLandSurfaceState(AbstractLandState):
     """Minimal land surface model state."""
 
     alpha: Array = field(
-        metadata={"description": "surface albedo [-], range 0 to 1"}
+        metadata={
+            "label": r"$\alpha$",
+            "unit": "-",
+            "description": "Surface albedo",
+        }
     )
     """surface albedo [-], range 0 to 1."""
-    surf_temp: Array = field(metadata={"description": "Surface temperature [K]"})
+    surf_temp: Array = field(
+        metadata={
+            "label": r"$T_{surf}$",
+            "unit": "K",
+            "description": "Surface temperature",
+        }
+    )
     """Surface temperature [K]."""
-    rs: Array = field(metadata={"description": "Surface resistance [s m-1]"})
+    rs: Array = field(
+        metadata={
+            "label": r"$r_s$",
+            "unit": "s m^{-1}",
+            "description": "Surface resistance",
+        }
+    )
     """Surface resistance [s m-1]."""
     wg: Array = field(
         default_factory=lambda: jnp.array(0.0),
-        metadata={"description": "No moisture content in the root zone [m3 m-3]"},
+        metadata={
+            "label": r"$w_g$",
+            "unit": "m^3 m^{-3}",
+            "description": "Soil moisture content",
+        },
     )
     """No moisture content in the root zone [m3 m-3]."""
     wl: Array = field(
         default_factory=lambda: jnp.array(0.0),
-        metadata={"description": "No water content in the canopy [m]"},
+        metadata={
+            "label": r"$W_l$",
+            "unit": "m",
+            "description": "Canopy water content",
+        },
     )
     """No water content in the canopy [m]."""
 
     # the following variables are assigned during warmup/timestep
     esat: Array = field(
         default_factory=lambda: jnp.array(0.0),
-        metadata={"description": "Saturation vapor pressure [Pa]"},
+        metadata={
+            "label": r"$e_{sat}$",
+            "unit": "Pa",
+            "description": "Saturation vapor pressure",
+        },
     )
     """Saturation vapor pressure [Pa]."""
     qsat: Array = field(
         default_factory=lambda: jnp.array(0.0),
-        metadata={"description": "Saturation specific humidity [kg/kg]"},
+        metadata={
+            "label": r"$q_{sat}$",
+            "unit": "kg kg^{-1}",
+            "description": "Saturation specific humidity",
+        },
     )
     """Saturation specific humidity [kg/kg]."""
     dqsatdT: Array = field(
         default_factory=lambda: jnp.array(0.0),
         metadata={
-            "description": "Derivative of saturation specific humidity with respect to temperature [kg/kg/K]"
+            "label": r"$dq_{sat}/dT$",
+            "unit": "kg kg^{-1} K^{-1}",
+            "description": "Derivative of saturation specific humidity",
         },
     )
     """Derivative of saturation specific humidity with respect to temperature [kg/kg/K]."""
     e: Array = field(
         default_factory=lambda: jnp.array(0.0),
-        metadata={"description": "Vapor pressure [Pa]"},
+        metadata={
+            "label": r"$e$",
+            "unit": "Pa",
+            "description": "Vapor pressure",
+        },
     )
     """Vapor pressure [Pa]."""
     qsatsurf: Array = field(
         default_factory=lambda: jnp.array(0.0),
         metadata={
-            "description": "Saturation specific humidity at surface temperature [kg/kg]"
+            "label": r"$q_{sat}(T_s)$",
+            "unit": "kg kg^{-1}",
+            "description": "Saturation specific humidity at surface",
         },
     )
     """Saturation specific humidity at surface temperature [kg/kg]."""
     wtheta: Array = field(
         default_factory=lambda: jnp.array(0.0),
-        metadata={"description": "Kinematic heat flux [K m/s]"},
+        metadata={
+            "label": r"$(w'\theta')_{s}$",
+            "unit": "K m s^{-1}",
+            "description": "Kinematic heat flux",
+        },
     )
     """Kinematic heat flux [K m/s]."""
     wq: Array = field(
         default_factory=lambda: jnp.array(0.0),
-        metadata={"description": "Kinematic moisture flux [kg/kg m/s]"},
+        metadata={
+            "label": r"$(w'q')_{s}$",
+            "unit": "kg kg^{-1} m s^{-1}",
+            "description": "Kinematic moisture flux",
+        },
     )
     """Kinematic moisture flux [kg/kg m/s]."""
     wCO2: Array = field(
         default_factory=lambda: jnp.array(0.0),
-        metadata={"description": "Kinematic CO2 flux [kg/kg m/s] or [mol m-2 s-1]"},
+        metadata={
+            "label": r"$w'CO_2'$",
+            "unit": "kg kg^{-1} m s^{-1}",
+            "description": "Kinematic CO2 flux",
+        },
     )
     """Kinematic CO2 flux [kg/kg m/s] or [mol m-2 s-1]."""
 

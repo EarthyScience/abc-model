@@ -17,37 +17,65 @@ class AgsState(StandardLandState):
 
     rsCO2: Array = field(
         default_factory=lambda: jnp.array(0.0),
-        metadata={"description": "Stomatal resistance to CO2"},
+        metadata={
+            "label": r"$r_{s,CO2}$",
+            "unit": "s m^{-1}",
+            "description": "Stomatal resistance to CO2",
+        },
     )
     """Stomatal resistance to CO2."""
     gcco2: Array = field(
         default_factory=lambda: jnp.array(0.0),
-        metadata={"description": "Conductance to CO2"},
+        metadata={
+            "label": r"$g_{c,CO2}$",
+            "unit": "s m^{-1}",
+            "description": "Conductance to CO2",
+        },
     )
     """Conductance to CO2."""
     ci: Array = field(
         default_factory=lambda: jnp.array(0.0),
-        metadata={"description": "Intercellular CO2 concentration"},
+        metadata={
+            "label": r"$C_i$",
+            "unit": "ppm",
+            "description": "Intercellular CO2 concentration",
+        },
     )
     """Intercellular CO2 concentration."""
     co2abs: Array = field(
         default_factory=lambda: jnp.array(0.0),
-        metadata={"description": "CO2 assimilation rate"},
+        metadata={
+            "label": r"$CO_{2,abs}$",
+            "unit": "kg m^{-3}",
+            "description": "CO2 assimilation rate (or concentration?)",
+        },
     )
-    """CO2 assimilation rate."""
+    """CO2 assimilation rate / concentration."""
     wCO2A: Array = field(
         default_factory=lambda: jnp.array(0.0),
-        metadata={"description": "Net assimilation flux [mol m-2 s-1]"},
+        metadata={
+            "label": r"$A_n$",
+            "unit": "mol m^{-2} s^{-1}",
+            "description": "Net assimilation flux",
+        },
     )
     """Net assimilation flux [mol m-2 s-1]."""
     wCO2R: Array = field(
         default_factory=lambda: jnp.array(0.0),
-        metadata={"description": "Respiration flux [mol m-2 s-1]"},
+        metadata={
+            "label": r"$R_{soil}$",
+            "unit": "mol m^{-2} s^{-1}",
+            "description": "Respiration flux",
+        },
     )
     """Respiration flux [mol m-2 s-1]."""
     wCO2: Array = field(
         default_factory=lambda: jnp.array(0.0),
-        metadata={"description": "Total CO2 flux [mol m-2 s-1]"},
+        metadata={
+            "label": r"$w'CO_2'$",
+            "unit": "mol m^{-2} s^{-1}",
+            "description": "Total CO2 flux",
+        },
     )
     """Total CO2 flux [mol m-2 s-1]."""
 

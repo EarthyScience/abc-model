@@ -21,15 +21,27 @@ class ObukhovState(AbstractSurfaceLayerState):
     """Standard surface layer model state."""
 
     ustar: Array = field(
-        metadata={"description": "Surface friction velocity [m/s]"}
+        metadata={
+            "label": r"$u_*$",
+            "unit": "m s^{-1}",
+            "description": "Surface friction velocity",
+        }
     )
     """Surface friction velocity [m/s]."""
     z0m: Array = field(
-        metadata={"description": "Roughness length for momentum [m]"}
+        metadata={
+            "label": r"$z_{0m}$",
+            "unit": "m",
+            "description": "Roughness length for momentum",
+        }
     )
     """Roughness length for momentum [m]."""
     z0h: Array = field(
-        metadata={"description": "Roughness length for scalars [m]"}
+        metadata={
+            "label": r"$z_{0h}$",
+            "unit": "m",
+            "description": "Roughness length for scalars",
+        }
     )
     """Roughness length for scalars [m]."""
 
@@ -37,12 +49,20 @@ class ObukhovState(AbstractSurfaceLayerState):
     # are expected to converge to realistic values during warmup
     drag_m: Array = field(
         default_factory=lambda: jnp.array(1e12),
-        metadata={"description": "Drag coefficient for momentum [-]"},
+        metadata={
+            "label": r"$C_m$",
+            "unit": "-",
+            "description": "Drag coefficient for momentum",
+        },
     )
     """Drag coefficient for momentum [-]."""
     drag_s: Array = field(
         default_factory=lambda: jnp.array(1e12),
-        metadata={"description": "Drag coefficient for scalars [-]"},
+        metadata={
+            "label": r"$C_s$",
+            "unit": "-",
+            "description": "Drag coefficient for scalars",
+        },
     )
     """Drag coefficient for scalars [-]."""
 
@@ -50,72 +70,128 @@ class ObukhovState(AbstractSurfaceLayerState):
     # and are expected to be assigned during warmup
     uw: Array = field(
         default_factory=lambda: jnp.array(0.0),
-        metadata={"description": "Surface momentum flux u [m2 s-2]"},
+        metadata={
+            "label": r"$\overline{u'w'}$",
+            "unit": "m^2 s^{-2}",
+            "description": "Surface momentum flux u",
+        },
     )
     """Surface momentum flux u [m2 s-2]."""
     vw: Array = field(
         default_factory=lambda: jnp.array(0.0),
-        metadata={"description": "Surface momentum flux v [m2 s-2]"},
+        metadata={
+            "label": r"$\overline{v'w'}$",
+            "unit": "m^2 s^{-2}",
+            "description": "Surface momentum flux v",
+        },
     )
     """Surface momentum flux v [m2 s-2]."""
     temp_2m: Array = field(
         default_factory=lambda: jnp.array(0.0),
-        metadata={"description": "2m temperature [K]"},
+        metadata={
+            "label": r"$T_{2m}$",
+            "unit": "K",
+            "description": "2m temperature",
+        },
     )
     """2m temperature [K]."""
     q2m: Array = field(
         default_factory=lambda: jnp.array(0.0),
-        metadata={"description": "2m specific humidity [kg kg-1]"},
+        metadata={
+            "label": r"$q_{2m}$",
+            "unit": "kg kg^{-1}",
+            "description": "2m specific humidity",
+        },
     )
     """2m specific humidity [kg kg-1]."""
     u2m: Array = field(
         default_factory=lambda: jnp.array(0.0),
-        metadata={"description": "2m u-wind [m s-1]"},
+        metadata={
+            "label": r"$u_{2m}$",
+            "unit": "m s^{-1}",
+            "description": "2m u-wind",
+        },
     )
     """2m u-wind [m s-1]."""
     v2m: Array = field(
         default_factory=lambda: jnp.array(0.0),
-        metadata={"description": "2m v-wind [m s-1]"},
+        metadata={
+            "label": r"$v_{2m}$",
+            "unit": "m s^{-1}",
+            "description": "2m v-wind",
+        },
     )
     """2m v-wind [m s-1]."""
     e2m: Array = field(
         default_factory=lambda: jnp.array(0.0),
-        metadata={"description": "2m vapor pressure [Pa]"},
+        metadata={
+            "label": r"$e_{2m}$",
+            "unit": "Pa",
+            "description": "2m vapor pressure",
+        },
     )
     """2m vapor pressure [Pa]."""
     esat2m: Array = field(
         default_factory=lambda: jnp.array(0.0),
-        metadata={"description": "2m saturated vapor pressure [Pa]"},
+        metadata={
+            "label": r"$e_{sat,2m}$",
+            "unit": "Pa",
+            "description": "2m saturated vapor pressure",
+        },
     )
     """2m saturated vapor pressure [Pa]."""
     thetasurf: Array = field(
         default_factory=lambda: jnp.array(0.0),
-        metadata={"description": "Surface potential temperature [K]"},
+        metadata={
+            "label": r"$\theta_s$",
+            "unit": "K",
+            "description": "Surface potential temperature",
+        },
     )
     """Surface potential temperature [K]."""
     thetavsurf: Array = field(
         default_factory=lambda: jnp.array(0.0),
-        metadata={"description": "Surface virtual potential temperature [K]"},
+        metadata={
+            "label": r"$\theta_{v,s}$",
+            "unit": "K",
+            "description": "Surface virtual potential temperature",
+        },
     )
     """Surface virtual potential temperature [K]."""
     qsurf: Array = field(
         default_factory=lambda: jnp.array(0.0),
-        metadata={"description": "Surface specific humidity [kg kg-1]"},
+        metadata={
+            "label": r"$q_s$",
+            "unit": "kg kg^{-1}",
+            "description": "Surface specific humidity",
+        },
     )
     """Surface specific humidity [kg kg-1]."""
     obukhov_length: Array = field(
         default_factory=lambda: jnp.array(0.0),
-        metadata={"description": "Obukhov length [m]"},
+        metadata={
+            "label": r"$L$",
+            "unit": "m",
+            "description": "Obukhov length",
+        },
     )
     """Obukhov length [m]."""
     rib_number: Array = field(
         default_factory=lambda: jnp.array(0.0),
-        metadata={"description": "Bulk Richardson number [-]"},
+        metadata={
+            "label": r"$Ri_b$",
+            "unit": "-",
+            "description": "Bulk Richardson number",
+        },
     )
     """Bulk Richardson number [-]."""
     ra: Array = field(
         default_factory=lambda: jnp.array(0.0),
-        metadata={"description": "Aerodynamic resistance [s/m]"},
+        metadata={
+            "label": r"$r_a$",
+            "unit": "s m^{-1}",
+            "description": "Aerodynamic resistance",
+        },
     )
     """Aerodynamic resistance [s/m]."""
 

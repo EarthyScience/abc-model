@@ -18,22 +18,38 @@ class SimpleState(AbstractSurfaceLayerState):
     """Minimal surface layer model initial state."""
 
     ustar: Array = field(
-        metadata={"description": "Surface friction velocity [m/s]"}
+        metadata={
+            "label": r"$u_*$",
+            "unit": "m s^{-1}",
+            "description": "Surface friction velocity",
+        }
     )
     """Surface friction velocity [m/s]."""
     uw: Array = field(
         default_factory=lambda: jnp.array(0.0),
-        metadata={"description": "Zonal surface momentum flux [m2 s-2]"},
+        metadata={
+            "label": r"$\overline{u'w'}$",
+            "unit": "m^2 s^{-2}",
+            "description": "Zonal surface momentum flux",
+        },
     )
     """Zonal surface momentum flux [m2 s-2]."""
     vw: Array = field(
         default_factory=lambda: jnp.array(0.0),
-        metadata={"description": "Meridional surface momentum flux [m2 s-2]"},
+        metadata={
+            "label": r"$\overline{v'w'}$",
+            "unit": "m^2 s^{-2}",
+            "description": "Meridional surface momentum flux",
+        },
     )
     """Meridional surface momentum flux [m2 s-2]."""
     ra: Array = field(
         default_factory=lambda: jnp.array(0.0),
-        metadata={"description": "Aerodynamic resistance [s/m]"},
+        metadata={
+            "label": r"$r_a$",
+            "unit": "s m^{-1}",
+            "description": "Aerodynamic resistance",
+        },
     )
     """Aerodynamic resistance [s/m]."""
 
