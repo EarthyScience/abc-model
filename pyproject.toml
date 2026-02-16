@@ -14,8 +14,12 @@ dependencies = [
  "equinox>=0.13.4",
 ]
 
-[docs]
-dependencies = ["sphinx", "sphinx-book-theme", "sphinx-autodoc-typehints"]
+[project.optional-dependencies]
+docs = [
+    "sphinx",
+    "sphinx-book-theme",
+    "sphinx-autodoc-typehints",
+]
 
 [tool.ruff.lint]
 ignore = ["E731", "F722"]
