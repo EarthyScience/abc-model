@@ -34,7 +34,7 @@ html_logo = "../figs/logo.png"
 html_theme_options = {
     # "logo_only": True,
     # "display_version": False,
-    "repository_url": "https://github.com/limamau/abc-model",
+    "repository_url": "https://github.com/EarthyScience/abc-model",
     "use_repository_button": True,
     "use_fullscreen_button": False,
     "repository_provider": "github",

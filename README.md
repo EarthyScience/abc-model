@@ -5,7 +5,7 @@ A simple model coupling biosphere and atmosphere made fully differentiable using
 These instructions work on Linux and MacOS and assume that python with pip is installed already. Otherwise, install python and pip with the tool of your choice, such as [miniforge](https://conda-forge.org/download/) or [uv](https://docs.astral.sh/uv/), before you proceed. See below for full instructions to install on Windows.
 Install with
 ```
-pip install git@github.com:limamau/abc-model.git
+pip install git@github.com/EarthyScience/abc-model
 ```
 
 or clone the repo and make an editable install inside your local repo using
