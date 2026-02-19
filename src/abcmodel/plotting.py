@@ -1,4 +1,3 @@
-from dataclasses import fields
 from operator import attrgetter
 from typing import Any
 
@@ -76,11 +75,10 @@ def simple(
             cls = type(current_obj)
             field_name = parts[-1]
 
-            # find the field in the class fields (has to go over all the fields?)
-            for f in fields(cls):  # type: ignore
-                if f.name == field_name:
-                    label = get_label_from_metadata(f.metadata, label)  # type: ignore
-                    break
+            # find the field in the class fields using the
+            # __dataclass_fields__ dictionary which is pretty hacky :P
+            field_obj = getattr(cls, "__dataclass_fields__", {}).get(field_name)
+            label = get_label_from_metadata(field_obj.metadata, label)  # type: ignore
         except Exception:
             raise ValueError(f"Data not found: {path}")
 
