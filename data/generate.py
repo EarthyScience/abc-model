@@ -16,7 +16,6 @@ NUM_TRAJS = 1
 @jax.jit
 def run_simulation(h_abl, theta, q, deltatheta, u, v, wg, d1, temp_soil):
     # rad
-
     rad_model = abcmodel.rad.StandardRadiationModel()
     rad_state = rad_model.init_state()
 

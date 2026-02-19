@@ -50,41 +50,7 @@ def main():
     time, trajectory = abcmodel.integrate(
         state, abcoupler, inner_dt, outter_dt, runtime, tstart
     )
-
-    # plot output
-    plt.figure(figsize=(12, 8))
-
-    plt.subplot(231)
-    plt.plot(time, trajectory.atmos.mixed.h_abl)
-    plt.xlabel("time [h]")
-    plt.ylabel("h [m]")
-
-    plt.subplot(234)
-    plt.plot(time, trajectory.atmos.mixed.theta)
-    plt.xlabel("time [h]")
-    plt.ylabel("theta [K]")
-
-    plt.subplot(232)
-    plt.plot(time, trajectory.atmos.mixed.q * 1000.0)
-    plt.xlabel("time [h]")
-    plt.ylabel("q [g kg-1]")
-
-    plt.subplot(235)
-    plt.plot(time, trajectory.atmos.clouds.cc_frac)
-    plt.xlabel("time [h]")
-    plt.ylabel("cloud fraction [-]")
-
-    plt.subplot(233)
-    plt.plot(time, trajectory.land.le)
-    plt.xlabel("time [h]")
-    plt.ylabel("LE [W m-2]")
-
-    plt.subplot(236)
-    plt.plot(time, trajectory.atmos.co2)
-    plt.xlabel("time [h]")
-    plt.ylabel("CO2 [ppmv]")
-
-    plt.tight_layout()
+    abcmodel.plotting.simple(time, trajectory)
     plt.show()
 
 

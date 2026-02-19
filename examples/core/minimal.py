@@ -1,3 +1,5 @@
+import matplotlib.pyplot as plt
+
 import abcmodel
 
 
@@ -43,7 +45,11 @@ def main():
     state = abcoupler.init_state(rad_state, land_state, atmos_state)
 
     # run run run
-    abcmodel.integrate(state, abcoupler, inner_dt, outter_dt, runtime, tstart)
+    time, trajectory = abcmodel.integrate(
+        state, abcoupler, inner_dt, outter_dt, runtime, tstart
+    )
+    abcmodel.plotting.simple(time, trajectory)
+    plt.show()
 
 
 if __name__ == "__main__":

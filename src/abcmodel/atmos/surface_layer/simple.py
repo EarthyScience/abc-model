@@ -17,13 +17,40 @@ from ..dayonly import DayOnlyAtmosphereState
 class SimpleState(AbstractSurfaceLayerState):
     """Minimal surface layer model initial state."""
 
-    ustar: Array
+    ustar: Array = field(
+        metadata={
+            "label": r"$u_*$",
+            "unit": "m s^{-1}",
+            "description": "Surface friction velocity",
+        }
+    )
     """Surface friction velocity [m/s]."""
-    uw: Array = field(default_factory=lambda: jnp.array(0.0))
+    uw: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={
+            "label": r"$\overline{u'w'}$",
+            "unit": "m^2 s^{-2}",
+            "description": "Zonal surface momentum flux",
+        },
+    )
     """Zonal surface momentum flux [m2 s-2]."""
-    vw: Array = field(default_factory=lambda: jnp.array(0.0))
+    vw: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={
+            "label": r"$\overline{v'w'}$",
+            "unit": "m^2 s^{-2}",
+            "description": "Meridional surface momentum flux",
+        },
+    )
     """Meridional surface momentum flux [m2 s-2]."""
-    ra: Array = field(default_factory=lambda: jnp.array(0.0))
+    ra: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={
+            "label": r"$r_a$",
+            "unit": "s m^{-1}",
+            "description": "Aerodynamic resistance",
+        },
+    )
     """Aerodynamic resistance [s/m]."""
 
 

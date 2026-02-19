@@ -17,16 +17,50 @@ from ..utils import PhysicalConstants as cst
 class StandardRadiationState(AbstractRadiationState):
     """Standard radiation model state."""
 
-    net_rad: Array
-    """Net surface rad [W m-2]."""
-    in_srad: Array = field(default_factory=lambda: jnp.array(0.0))
-    """Incoming solar rad [W m-2]."""
-    out_srad: Array = field(default_factory=lambda: jnp.array(0.0))
-    """Outgoing solar rad [W m-2]."""
-    in_lrad: Array = field(default_factory=lambda: jnp.array(0.0))
-    """Incoming longwave rad [W m-2]."""
-    out_lrad: Array = field(default_factory=lambda: jnp.array(0.0))
-    """Outgoing longwave rad [W m-2]."""
+    net_rad: Array = field(
+        metadata={
+            "label": r"$R_{net}$",
+            "unit": "W m^{-2}",
+            "description": "Net surface radiation",
+        }
+    )
+    """Net surface radiation [W m-2]."""
+    in_srad: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={
+            "label": r"$SW_{in}$",
+            "unit": "W m^{-2}",
+            "description": "Incoming solar radiation",
+        },
+    )
+    """Incoming solar radiation [W m-2]."""
+    out_srad: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={
+            "label": r"$SW_{out}$",
+            "unit": "W m^{-2}",
+            "description": "Outgoing solar radiation",
+        },
+    )
+    """Outgoing solar radiation [W m-2]."""
+    in_lrad: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={
+            "label": r"$LW_{in}$",
+            "unit": "W m^{-2}",
+            "description": "Incoming longwave radiation",
+        },
+    )
+    """Incoming longwave radiation [W m-2]."""
+    out_lrad: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={
+            "label": r"$LW_{out}$",
+            "unit": "W m^{-2}",
+            "description": "Outgoing longwave radiation",
+        },
+    )
+    """Outgoing longwave radiation [W m-2]."""
 
 
 StateAlias = AbstractCoupledState[StandardRadiationState, LandT, AtmosT]

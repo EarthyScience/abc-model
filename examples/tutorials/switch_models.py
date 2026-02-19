@@ -116,45 +116,8 @@ def main():
     # Plot the output of both runs
     ##########################################################
 
-    plt.figure(figsize=(12, 8))
-
-    plt.subplot(231)
-    plt.plot(time, trajectory_default.atmos.mixed.h_abl)
-    plt.plot(time, trajectory_2xCO2.atmos.mixed.h_abl)
-    plt.xlabel("time [h]")
-    plt.ylabel("h [m]")
-
-    plt.subplot(234)
-    plt.plot(time, trajectory_default.atmos.mixed.theta)
-    plt.plot(time, trajectory_2xCO2.atmos.mixed.theta)
-    plt.xlabel("time [h]")
-    plt.ylabel("theta [K]")
-
-    plt.subplot(232)
-    plt.plot(time, trajectory_default.atmos.mixed.q * 1000.0)
-    plt.plot(time, trajectory_2xCO2.atmos.mixed.q * 1000.0)
-    plt.xlabel("time [h]")
-    plt.ylabel("q [g kg-1]")
-
-    plt.subplot(235)
-    plt.plot(time, trajectory_default.atmos.clouds.cc_frac)
-    plt.plot(time, trajectory_2xCO2.atmos.clouds.cc_frac)
-    plt.xlabel("time [h]")
-    plt.ylabel("cloud fraction [-]")
-
-    plt.subplot(233)
-    plt.plot(time, trajectory_default.land.le)
-    plt.plot(time, trajectory_2xCO2.land.le)
-    plt.xlabel("time [h]")
-    plt.ylabel("LE [W m-2]")
-
-    plt.subplot(236)
-    plt.plot(time, trajectory_default.atmos.co2)
-    plt.plot(time, trajectory_2xCO2.atmos.co2)
-    plt.xlabel("time [h]")
-    plt.ylabel("CO2 [ppmv]")
-
-    plt.tight_layout()
+    fig, axes = abcmodel.plotting.simple(time, trajectory_default)
+    abcmodel.plotting.simple(time, trajectory_2xCO2, axes=axes)
     plt.show()
 
 
