@@ -1,3 +1,5 @@
+import matplotlib.pyplot as plt
+
 import abcmodel
 
 
@@ -47,16 +49,8 @@ def main():
         state, abcoupler, inner_dt, outter_dt, runtime, tstart
     )
 
-    abcmodel.plotting.show(
-        time,
-        trajectory,
-        "atmos.mixed.h_abl",
-        "atmos.mixed.theta",
-        "atmos.mixed.q",
-        "atmos.clouds.cc_frac",
-        "land.surf_temp",  # Minimal land model has surf_temp
-        "land.wCO2",  # Minimal land model has wCO2
-    )
+    abcmodel.plotting.simple(time, trajectory)
+    plt.show()
 
 
 if __name__ == "__main__":

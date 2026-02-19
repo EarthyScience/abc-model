@@ -1,76 +1,95 @@
 from dataclasses import fields
 from operator import attrgetter
+from typing import Any
 
 import matplotlib.pyplot as plt
+from jax import Array
+
+from .abstracts import AbstractCoupledState
 
 
-def show(time, trajectory, *var_paths: str):
+def simple(
+    time: Array,
+    trajectory: AbstractCoupledState,
+    left_top_path: str = "atmos.mixed.h_abl",
+    mid_top_path: str = "atmos.mixed.theta",
+    right_top_path: str = "atmos.mixed.q",
+    left_bottom_path: str = "atmos.clouds.cc_frac",
+    mid_bottom_path: str = "land.le",
+    right_bottom_path: str = "land.wCO2",
+    axes: Any = None,
+    **kwargs,
+):
     """
     Plot trajectories of variables against time.
 
     Args:
-        time: Array of time points.
-        trajectory: The state trajectory object (nested dataclass/PyTree).
-        *var_paths: Strings representing the path to the variable within the trajectory object,
-                    e.g., "atmos.mixed.h_abl". Exactly 6 paths should be provided.
+        time: time array.
+        trajectory: coupled state trajectory.
+        left_top_path: path to the variable within the trajectory object
+        to be plotted on the left top subplot. Default is `"atmos.mixed.h_abl"`.
+        mid_top_path: path to the variable within the trajectory object
+        to be plotted on the mid top subplot. Default is `"atmos.mixed.theta"`.
+        right_top_path: path to the variable within the trajectory object
+        to be plotted on the right top subplot. Default is `"atmos.mixed.q"`.
+        left_bottom_path: path to the variable within the trajectory object
+        to be plotted on the left bottom subplot. Default is `"atmos.clouds.cc_frac"`.
+        mid_bottom_path: path to the variable within the trajectory object
+        to be plotted on the mid bottom subplot. Default is `"land.le"`.
+        right_bottom_path: path to the variable within the trajectory object
+        to be plotted on the right bottom subplot. Default is `"land.wCO2"`.
+        axes: optional matplotlib axes to plot on.
+        **kwargs: additional keyword arguments to pass to matplotlib's plot function.
     """
-    if len(var_paths) != 6:
-        raise ValueError(
-            f"Expected exactly 6 variable paths, but got {len(var_paths)}: {var_paths}"
-        )
-
-    fig, axes = plt.subplots(2, 3, figsize=(14, 8), constrained_layout=True)
+    if axes is None:
+        fig, axes = plt.subplots(2, 3, figsize=(12, 8), constrained_layout=True)
+    else:
+        fig = None
     axes = axes.flatten()
+
+    var_paths = [
+        left_top_path,
+        mid_top_path,
+        right_top_path,
+        left_bottom_path,
+        mid_bottom_path,
+        right_bottom_path,
+    ]
 
     for i, path in enumerate(var_paths):
         ax = axes[i]
-
-        # 1. Retrieve data
         try:
             getter = attrgetter(path)
             data = getter(trajectory)
         except AttributeError:
-            print(f"Warning: Could not access path '{path}' in trajectory.")
-            data = None
-
-        # 2. Retrieve label from metadata
-        # We need to traverse the CLASS structure, not the instance, to get field metadata reliably?
-        # Actually, `trajectory` is likely a PyTree of arrays. The metadata is on the class fields.
-        # We need to traverse the *type* of trajectory to find the field definition.
-
-        label = path  # Default label is the path itself
-
+            raise ValueError(f"Could not access path '{path}' in trajectory.")
+        label = path
         parts = path.split(".")
         current_obj = trajectory
 
         try:
-            # We traverse the objects to find the leaf's parent
+            # we traverse the objects to find the leaf's parent
             for part in parts[:-1]:
                 current_obj = getattr(current_obj, part)
-
-            # Now current_obj is the *instance* holding the field.
-            # We need its class to inspect fields.
+            # now current_obj is the *instance* holding the field
+            # we need its class to inspect fields.
             cls = type(current_obj)
             field_name = parts[-1]
 
-            # Find the field in the class fields
-            for f in fields(cls):
+            # find the field in the class fields (has to go over all the fields?)
+            for f in fields(cls):  # type: ignore
                 if f.name == field_name:
-                    label = get_label_from_metadata(f.metadata, label)
+                    label = get_label_from_metadata(f.metadata, label)  # type: ignore
                     break
-        except Exception as e:
-            print(f"Warning: Could not extract metadata for '{path}': {e}")
+        except Exception:
+            raise ValueError(f"Data not found: {path}")
 
-        # 3. Plot
-        if data is not None:
-            ax.plot(time, data)
-            ax.set_ylabel(label)
+        ax.plot(time, data, **kwargs)
+        ax.set_title(label)
+        if i > 2:
             ax.set_xlabel("time [h]")
-            ax.grid(True)
-        else:
-            ax.text(0.5, 0.5, f"Data not found: {path}", ha="center", va="center")
 
-    plt.show()
+    return fig, axes
 
 
 def get_label_from_metadata(meta: dict, default_label: str) -> str:
@@ -79,7 +98,7 @@ def get_label_from_metadata(meta: dict, default_label: str) -> str:
         label = meta["label"]
         if "unit" in meta:
             unit = meta["unit"]
-            # Heuristic: if unit contains math chars and isn't wrapped in $, wrap it
+            # if unit contains math chars and isn't wrapped in $, wrap it
             if any(c in unit for c in "^\\_") and not unit.startswith("$"):
                 unit = f"${unit}$"
             label = f"{label} [{unit}]"

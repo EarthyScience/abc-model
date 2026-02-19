@@ -1,3 +1,5 @@
+import matplotlib.pyplot as plt
+
 import abcmodel
 
 
@@ -48,16 +50,8 @@ def main():
     time, trajectory = abcmodel.integrate(
         state, abcoupler, inner_dt, outter_dt, runtime, tstart
     )
-    abcmodel.plotting.show(
-        time,
-        trajectory,
-        "atmos.mixed.h_abl",
-        "atmos.mixed.theta",
-        "atmos.mixed.q",
-        "atmos.clouds.cc_frac",
-        "land.le",
-        "land.wCO2",
-    )
+    abcmodel.plotting.simple(time, trajectory)
+    plt.show()
 
 
 if __name__ == "__main__":
