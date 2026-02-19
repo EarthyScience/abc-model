@@ -48,7 +48,6 @@ def main():
     time, trajectory = abcmodel.integrate(
         state, abcoupler, inner_dt, outter_dt, runtime, tstart
     )
-
     abcmodel.plotting.simple(time, trajectory)
     plt.show()
 

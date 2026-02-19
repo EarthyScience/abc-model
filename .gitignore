@@ -5,3 +5,4 @@ __pycache__/
 .DS_Store
 .zed
 docs/_build
+data/dataset.h5
