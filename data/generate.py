@@ -7,7 +7,6 @@ import numpy as np
 from jax import random
 from tqdm import tqdm
 
-import abcconfigs.class_model as cm
 import abcmodel
 from abcmodel.utils import get_path_string
 
@@ -17,20 +16,12 @@ NUM_TRAJS = 1
 @jax.jit
 def run_simulation(h_abl, theta, q, deltatheta, u, v, wg, d1, temp_soil):
     # rad
-    rad_model_kwargs = cm.standard_radiation.model_kwargs
-    # rad_model_kwargs["cc"] = cc
-    rad_model = abcmodel.rad.StandardRadiationModel(**rad_model_kwargs)
-    rad_state = rad_model.init_state(**cm.standard_radiation.state_kwargs)
+    rad_model = abcmodel.rad.StandardRadiationModel()
+    rad_state = rad_model.init_state()
 
     # land
-    ags_model_kwargs = cm.ags.model_kwargs
-    ags_model_kwargs["d1"] = d1
-    land_model = abcmodel.land.AgsModel(**ags_model_kwargs)
-
-    ags_state_kwargs = cm.ags.state_kwargs
-    ags_state_kwargs["wg"] = wg
-    ags_state_kwargs["temp_soil"] = temp_soil
-    land_state = land_model.init_state(**ags_state_kwargs)
+    land_model = abcmodel.land.AgsModel(d1=d1)
+    land_state = land_model.init_state(wg=wg, temp_soil=temp_soil)
 
     # surface layer
     surface_layer_model = abcmodel.atmos.surface_layer.ObukhovModel()
