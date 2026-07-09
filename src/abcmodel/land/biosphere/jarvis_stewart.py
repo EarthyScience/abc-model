@@ -11,12 +11,55 @@ from ..abstracts import AbstractBiosphereModel, AbstractBiosphereState
 class JarvisStewartState(AbstractBiosphereState):
     """Jarvis-Stewart biosphere state."""
 
-    rs: Array
-    wl: Array
-    wltend: Array = field(default_factory=lambda: jnp.array(0.0))
-    cliq: Array = field(default_factory=lambda: jnp.array(0.0))
-    wCO2: Array = field(default_factory=lambda: jnp.array(0.0))
-    cveg: Array = field(default_factory=lambda: jnp.array(0.85))
+    rs: Array = field(
+        metadata={
+            "label": r"$r_s$",
+            "unit": "s m^{-1}",
+            "description": "Surface resistance",
+        },
+    )
+    """Surface resistance [s m-1]."""
+    wl: Array = field(
+        metadata={
+            "label": r"$w_l$",
+            "unit": "m",
+            "description": "Canopy water content",
+        },
+    )
+    """Canopy water content [m]."""
+    cliq: Array = field(
+        metadata={
+            "label": r"$dw_l$",
+            "unit": "-",
+            "description": "Wet fraction of canopy",
+        },
+    )
+    """Wet fraction of canopy [-]."""
+    wCO2: Array = field(
+        metadata={
+            "label": r"$w_{CO_2}$",
+            "unit": "mol m-2 s-1",
+            "description": "Kinematic CO2 flux",
+        },
+    )
+    """Kinematic CO2 flux [mol m-2 s-1]."""
+    cveg: Array = field(
+        metadata={
+            "label": r"$c_{veg}$",
+            "unit": "-",
+            "description": "Vegetation fraction",
+        },
+    )
+    """Vegetation fraction [-]."""
+    wltend: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={
+            "label": r"$dw_l$",
+            "unit": "m",
+            "description": "Canopy water content tendency",
+        },
+    )
+    """Canopy water content tendency [m]."""
 
 
 class JarvisStewartModel(AbstractBiosphereModel[JarvisStewartState]):
@@ -26,7 +69,6 @@ class JarvisStewartModel(AbstractBiosphereModel[JarvisStewartState]):
         rsmin: minimum stomatal resistance [s m-1]. Default is 110.0.
         lai: leaf area index [m2 m-2]. Default is 2.0.
         gD: canopy rad extinction coefficient [-]. Default is 0.0.
-        cveg: vegetation fraction [-]. Default is 0.85.
         wmax: maximum water storage capacity of the canopy [m]. Default is 0.0002.
         wwilt: soil moisture content at wilting point [m3 m-3]. Default is 0.171.
         wfc: soil moisture content at field capacity [m3 m-3]. Default is 0.323.
@@ -47,11 +89,11 @@ class JarvisStewartModel(AbstractBiosphereModel[JarvisStewartState]):
         self.rsmin = rsmin
         self.lai = lai
         self.gD = gD
-        self.cveg = cveg
         self.wmax = wmax
         self.wwilt = wwilt
         self.wfc = wfc
         self.w2 = w2
+        self.cveg = cveg
 
     def init_state(
         self,
@@ -67,6 +109,7 @@ class JarvisStewartModel(AbstractBiosphereModel[JarvisStewartState]):
             wl: Canopy water content [m]. Default is 0.0.
             cliq: Wet fraction of canopy [-]. Default is 0.0.
             wCO2: Kinematic CO2 flux [mol m-2 s-1]. Default is 0.0.
+            cveg: vegetation fraction [-]. Default is 0.85.
 
         Returns:
             The initialized JarvisStewartState.
@@ -76,7 +119,7 @@ class JarvisStewartModel(AbstractBiosphereModel[JarvisStewartState]):
             wl=jnp.array(wl),
             cliq=jnp.array(cliq),
             wCO2=jnp.array(wCO2),
-            cveg=jnp.array(self.cveg),
+            cveg=jnp.array(self.cveg),  # this is a dirty move...
         )
 
     def run(self, state: AbstractCoupledState) -> JarvisStewartState:

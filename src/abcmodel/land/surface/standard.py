@@ -13,24 +13,166 @@ from ..abstracts import AbstractSurfaceModel, AbstractSurfaceState
 class StandardSurfaceState(AbstractSurfaceState):
     """Standard surface state."""
 
-    alpha: Array
-    surf_temp: Array
-    esat: Array = field(default_factory=lambda: jnp.array(0.0))
-    qsat: Array = field(default_factory=lambda: jnp.array(0.0))
-    dqsatdT: Array = field(default_factory=lambda: jnp.array(0.0))
-    e: Array = field(default_factory=lambda: jnp.array(0.0))
-    qsatsurf: Array = field(default_factory=lambda: jnp.array(0.0))
-    le_veg: Array = field(default_factory=lambda: jnp.array(0.0))
-    le_liq: Array = field(default_factory=lambda: jnp.array(0.0))
-    le_soil: Array = field(default_factory=lambda: jnp.array(0.0))
-    le: Array = field(default_factory=lambda: jnp.array(0.0))
-    hf: Array = field(default_factory=lambda: jnp.array(0.0))
-    gf: Array = field(default_factory=lambda: jnp.array(0.0))
-    le_pot: Array = field(default_factory=lambda: jnp.array(0.0))
-    le_ref: Array = field(default_factory=lambda: jnp.array(0.0))
-    vpd: Array = field(default_factory=lambda: jnp.array(0.0))
-    wtheta: Array = field(default_factory=lambda: jnp.array(0.0))
-    wq: Array = field(default_factory=lambda: jnp.array(0.0))
+    alpha: Array = field(
+        metadata={
+            "label": r"$\alpha$",
+            "unit": "-",
+            "description": "Surface albedo",
+        }
+    )
+    """Surface albedo [-]."""
+    surf_temp: Array = field(
+        metadata={
+            "label": r"$T_{surf}$",
+            "unit": "K",
+            "description": "Surface temperature",
+        }
+    )
+    """Surface temperature [K]."""
+    esat: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={
+            "label": r"$e_{sat}$",
+            "unit": "Pa",
+            "description": "Saturation vapor pressure",
+        },
+    )
+    """Saturation vapor pressure [Pa]."""
+    qsat: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={
+            "label": r"$q_{sat}$",
+            "unit": "kg kg^{-1}",
+            "description": "Saturation specific humidity",
+        },
+    )
+    """Saturation specific humidity [kg/kg]."""
+    dqsatdT: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={
+            "label": r"$dq_{sat}/dT$",
+            "unit": "kg kg^{-1} K^{-1}",
+            "description": "Derivative of saturation specific humidity",
+        },
+    )
+    """Derivative of saturation specific humidity with respect to temperature [kg/kg/K]."""
+    e: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={
+            "label": r"$e$",
+            "unit": "Pa",
+            "description": "Vapor pressure",
+        },
+    )
+    """Vapor pressure [Pa]."""
+    qsatsurf: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={
+            "label": r"$q_{sat}(T_s)$",
+            "unit": "kg kg^{-1}",
+            "description": "Saturation specific humidity at surface",
+        },
+    )
+    """Saturation specific humidity at surface temperature [kg/kg]."""
+    le_veg: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={
+            "label": r"$LE_{veg}$",
+            "unit": "W m^{-2}",
+            "description": "Latent heat flux from vegetation",
+        },
+    )
+    """Latent heat flux from vegetation [W m-2]."""
+    le_liq: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={
+            "label": r"$LE_{liq}$",
+            "unit": "W m^{-2}",
+            "description": "Latent heat flux from liquid water",
+        },
+    )
+    """Latent heat flux from liquid water [W m-2]."""
+    le_soil: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={
+            "label": r"$LE_{soil}$",
+            "unit": "W m^{-2}",
+            "description": "Latent heat flux from soil",
+        },
+    )
+    """Latent heat flux from soil [W m-2]."""
+    le: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={
+            "label": r"$LE$",
+            "unit": "W m^{-2}",
+            "description": "Total latent heat flux",
+        },
+    )
+    """Total latent heat flux [W m-2]."""
+    hf: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={
+            "label": r"$H$",
+            "unit": "W m^{-2}",
+            "description": "Sensible heat flux",
+        },
+    )
+    """Sensible heat flux [W m-2]."""
+    gf: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={
+            "label": r"$G$",
+            "unit": "W m^{-2}",
+            "description": "Ground heat flux",
+        },
+    )
+    """Ground heat flux [W m-2]."""
+    le_pot: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={
+            "label": r"$LE_{pot}$",
+            "unit": "W m^{-2}",
+            "description": "Potential latent heat flux",
+        },
+    )
+    """Potential latent heat flux [W m-2]."""
+    le_ref: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={
+            "label": r"$LE_{ref}$",
+            "unit": "W m^{-2}",
+            "description": "Reference latent heat flux",
+        },
+    )
+    """Reference latent heat flux [W m-2]."""
+    vpd: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={
+            "label": r"$VPD$",
+            "unit": "Pa",
+            "description": "Vapor pressure deficit",
+        },
+    )
+    """Vapor pressure deficit [Pa]."""
+    wtheta: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={
+            "label": r"$(w'\theta')_s$",
+            "unit": "K m s^{-1}",
+            "description": "Kinematic heat flux",
+        },
+    )
+    """Kinematic heat flux [K m/s]."""
+    wq: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={
+            "label": r"$(w'q')_s$",
+            "unit": "kg kg^{-1} m s^{-1}",
+            "description": "Kinematic moisture flux",
+        },
+    )
+    """Kinematic moisture flux [kg/kg m/s]."""
 
 
 class StandardSurfaceModel(AbstractSurfaceModel[StandardSurfaceState]):

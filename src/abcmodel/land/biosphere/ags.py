@@ -15,18 +15,109 @@ from ..abstracts import AbstractBiosphereModel, AbstractBiosphereState
 class AgsState(AbstractBiosphereState):
     """A-gs biosphere state."""
 
-    rs: Array
-    wl: Array
-    wltend: Array = field(default_factory=lambda: jnp.array(0.0))
-    cliq: Array = field(default_factory=lambda: jnp.array(0.0))
-    wCO2: Array = field(default_factory=lambda: jnp.array(0.0))
-    cveg: Array = field(default_factory=lambda: jnp.array(0.85))
-    rsCO2: Array = field(default_factory=lambda: jnp.array(0.0))
-    gcco2: Array = field(default_factory=lambda: jnp.array(0.0))
-    ci: Array = field(default_factory=lambda: jnp.array(0.0))
-    co2abs: Array = field(default_factory=lambda: jnp.array(0.0))
-    wCO2A: Array = field(default_factory=lambda: jnp.array(0.0))
-    wCO2R: Array = field(default_factory=lambda: jnp.array(0.0))
+    rs: Array = field(
+        metadata={
+            "label": r"$r_s$",
+            "unit": "s m^{-1}",
+            "description": "Surface resistance",
+        },
+    )
+    """Surface resistance [s m-1]."""
+    wl: Array = field(
+        metadata={
+            "label": r"$w_l$",
+            "unit": "m",
+            "description": "Canopy water content",
+        },
+    )
+    """Canopy water content [m]."""
+    cliq: Array = field(
+        metadata={
+            "label": r"$dw_l$",
+            "unit": "-",
+            "description": "Wet fraction of canopy",
+        },
+    )
+    """Wet fraction of canopy [-]."""
+    wCO2: Array = field(
+        metadata={
+            "label": r"$w'CO_2'$",
+            "unit": "mol m^{-2} s^{-1}",
+            "description": "Total CO2 flux",
+        },
+    )
+    """Total CO2 flux [mol m-2 s-1]."""
+    cveg: Array = field(
+        metadata={
+            "label": r"$c_{veg}$",
+            "unit": "-",
+            "description": "Vegetation fraction",
+        },
+    )
+    """Vegetation fraction [-]."""
+    rsCO2: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={
+            "label": r"$r_{s,CO2}$",
+            "unit": "s m^{-1}",
+            "description": "Stomatal resistance to CO2",
+        },
+    )
+    """Stomatal resistance to CO2."""
+    gcco2: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={
+            "label": r"$g_{c,CO2}$",
+            "unit": "s m^{-1}",
+            "description": "Conductance to CO2",
+        },
+    )
+    """Conductance to CO2."""
+    ci: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={
+            "label": r"$C_i$",
+            "unit": "ppm",
+            "description": "Intercellular CO2 concentration",
+        },
+    )
+    """Intercellular CO2 concentration."""
+    co2abs: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={
+            "label": r"$CO_{2,abs}$",
+            "unit": "kg m^{-3}",
+            "description": "CO2 assimilation rate (or concentration?)",
+        },
+    )
+    """CO2 assimilation rate / concentration."""
+    wCO2A: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={
+            "label": r"$A_n$",
+            "unit": "mol m^{-2} s^{-1}",
+            "description": "Net assimilation flux",
+        },
+    )
+    """Net assimilation flux [mol m-2 s-1]."""
+    wCO2R: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={
+            "label": r"$R_{soil}$",
+            "unit": "mol m^{-2} s^{-1}",
+            "description": "Respiration flux",
+        },
+    )
+    """Respiration flux [mol m-2 s-1]."""
+    wltend: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={
+            "label": r"$dw_l$",
+            "unit": "m",
+            "description": "Canopy water content tendency",
+        },
+    )
+    """Canopy water content tendency [m]."""
 
 
 class AgsModel(AbstractBiosphereModel[AgsState]):
@@ -112,7 +203,7 @@ class AgsModel(AbstractBiosphereModel[AgsState]):
             wl=jnp.array(wl),
             cliq=jnp.array(cliq),
             wCO2=jnp.array(wCO2),
-            cveg=jnp.array(self.cveg),
+            cveg=jnp.array(self.cveg),  # this is a dirty move...
         )
 
     def run(self, state: AbstractCoupledState) -> AgsState:

@@ -28,54 +28,67 @@ class StandardLandState(AbstractLandState, Generic[BiosphereT, SoilT, SurfaceT])
 
     @property
     def alpha(self) -> Array:
+        """Surface albedo [-], range 0 to 1."""
         return self.surface.alpha
 
     @property
     def surf_temp(self) -> Array:
+        """Surface temperature [K]."""
         return self.surface.surf_temp
 
     @property
     def rs(self) -> Array:
+        """Surface resistance [s m-1]."""
         return self.biosphere.rs
 
     @property
     def wg(self) -> Array:
+        """Ground water storage [m]."""
         return self.soil.wg
 
     @property
     def wl(self) -> Array:
+        """Land water storage [m]."""
         return self.biosphere.wl
 
     @property
     def esat(self) -> Array:
+        """Saturation vapor pressure [Pa]."""
         return self.surface.esat
 
     @property
     def qsat(self) -> Array:
+        """Saturation specific humidity [kg kg-1]."""
         return self.surface.qsat
 
     @property
     def dqsatdT(self) -> Array:
+        """Derivative of saturation specific humidity with respect to temperature [kg kg-1 K-1]."""
         return self.surface.dqsatdT
 
     @property
     def e(self) -> Array:
+        """Vapor pressure [Pa]."""
         return self.surface.e
 
     @property
     def qsatsurf(self) -> Array:
+        """Saturation specific humidity at the surface [kg kg-1]."""
         return self.surface.qsatsurf
 
     @property
     def wtheta(self) -> Array:
+        """Kinematic heat flux [K m/s]."""
         return self.surface.wtheta
 
     @property
     def wq(self) -> Array:
+        """Kinematic moisture flux [kg kg-1 m/s]."""
         return self.surface.wq
 
     @property
     def wCO2(self) -> Array:
+        """Kinematic CO2 flux [kg m/s]."""
         return self.biosphere.wCO2
 
 

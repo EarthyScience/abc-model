@@ -14,8 +14,22 @@ def run_model(theta0: float) -> Array:
     rad_model = abcmodel.rad.StandardRadiationModel()
     rad_state = rad_model.init_state()
 
-    land_model = abcmodel.land.JarvisStewartModel()
-    land_state = land_model.init_state()
+    bio_model = abcmodel.land.biosphere.AgsModel()
+    bio_state = bio_model.init_state()
+    soil_model = abcmodel.land.soil.StandardSoilModel()
+    soil_state = soil_model.init_state()
+    surface_model = abcmodel.land.surface.StandardSurfaceModel()
+    surface_state = surface_model.init_state()
+    land_model = abcmodel.land.StandardLandModel(
+        biosphere=bio_model,
+        soil=soil_model,
+        surface=surface_model,
+    )
+    land_state = land_model.init_state(
+        biosphere_state=bio_state,
+        soil_state=soil_state,
+        surface_state=surface_state,
+    )
 
     surface_layer_model = abcmodel.atmos.surface_layer.ObukhovModel()
     surface_layer_state = surface_layer_model.init_state()

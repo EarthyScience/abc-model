@@ -4,6 +4,7 @@ import jax.numpy as jnp
 from jax import Array
 
 from ...abstracts import AbstractCoupledState
+from ...utils import PhysicalConstants as cst
 from ..abstracts import AbstractSoilModel, AbstractSoilState
 
 
@@ -11,12 +12,57 @@ from ..abstracts import AbstractSoilModel, AbstractSoilState
 class StandardSoilState(AbstractSoilState):
     """Standard soil state."""
 
-    wg: Array
-    temp_soil: Array
-    temp2: Array
-    rssoil: Array
-    wgtend: Array = field(default_factory=lambda: jnp.array(0.0))
-    temp_soil_tend: Array = field(default_factory=lambda: jnp.array(0.0))
+    wg: Array = field(
+        metadata={
+            "label": r"$w_g$",
+            "unit": "m^3 m^{-3}",
+            "description": "Soil moisture content",
+        }
+    )
+    """Soil moisture content in the root zone [m3 m-3]."""
+    temp_soil: Array = field(
+        metadata={
+            "label": r"$T_{soil}$",
+            "unit": "K",
+            "description": "Soil temperature",
+        }
+    )
+    """Soil temperature [K]."""
+    temp2: Array = field(
+        metadata={
+            "label": r"$T_{soil,2}$",
+            "unit": "K",
+            "description": "Deep soil temperature",
+        }
+    )
+    """Deep soil temperature [K]."""
+    rssoil: Array = field(
+        default_factory=lambda: jnp.array(1.0e6),
+        metadata={
+            "label": r"$r_{soil}$",
+            "unit": "s m^{-1}",
+            "description": "Soil resistance",
+        },
+    )
+    """Soil resistance [m s-1]."""
+    temp_soil_tend: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={
+            "label": r"$\partial T_{soil} / \partial t$",
+            "unit": "K s^{-1}",
+            "description": "Soil temperature tendency",
+        },
+    )
+    """Soil temperature tendency [K s-1]."""
+    wgtend: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={
+            "label": r"$\partial w_g / \partial t$",
+            "unit": "m^3 m^{-3} s^{-1}",
+            "description": "Soil moisture tendency",
+        },
+    )
+    """Soil moisture tendency [m3 m-3 s-1]."""
 
 
 class StandardSoilModel(AbstractSoilModel[StandardSoilState]):
@@ -113,7 +159,6 @@ class StandardSoilModel(AbstractSoilModel[StandardSoilState]):
 
     def compute_wgtend(self, wg: Array, le_soil: Array) -> Array:
         """Compute the soil moisture tendency."""
-        from ...utils import PhysicalConstants as cst
         c1 = self.c1sat * (self.wsat / wg) ** (self.b / 2.0 + 1.0)
         c2 = self.c2ref * (self.w2 / (self.wsat - self.w2))
         wgeq = self.w2 - self.wsat * self.a * (
