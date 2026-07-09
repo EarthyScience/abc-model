@@ -558,13 +558,8 @@ class BulkModel(AbstractMixedLayerModel[BulkState]):
         w_th_ft = self.compute_w_th_ft(ws)
         w_q_ft = self.compute_w_q_ft(ws)
         w_CO2_ft = self.compute_w_CO2_ft(ws)
-
-        # compute virtual heat flux at surface
-        wthetav = (
-            land_state.wtheta * (1.0 + 0.61 * ml_state.q)
-            + 0.61 * ml_state.theta * land_state.wq
-        )
-
+        # this is repeated somehow?
+        wthetav = self.compute_wthetav(land_state.wtheta, ml_state.theta, land_state.wq)
         wstar = self.compute_wstar(
             ml_state.h_abl,
             wthetav,
