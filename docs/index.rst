@@ -3,10 +3,10 @@ ABC Model
 
 A simple model coupling biosphere and atmosphere made fully differentiable using JAX built up on the `CLASS model <https://github.com/classmodel/modelpy>`_.
 
-Installation
-------------
+Installation (MacOS and Linux)
+------------------------------
 
-These instructions work on Linux and MacOS and assume that python with pip is installed already. Otherwise, install python and pip with the tool of your choice, such as `miniforge <https://conda-forge.org/download/>`_ or `uv <https://docs.astral.sh/uv/>`_, before you proceed. See below for full instructions to install on Windows.
+These instructions work on Linux and MacOS and assume that python with pip is installed already.
 
 Install with
 
@@ -23,8 +23,8 @@ or clone the repo and make an editable install inside your local repo using
 If you want to use JAX on GPUs, please re-install JAX using the ``[gpu]`` tag in an environment with GPUs installed,
 but this is not necessary to run the examples in this repository.
 
-Windows installation
-~~~~~~~~~~~~~~~~~~~~
+Installation (Windows)
+----------------------
 
 On Windows we need some more utilities for JAX to work properly, also installing python is not as straigforward. For JAX to run, you first need the Microsoft Visual C++ redistributable found `here <https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170#visual-studio-2015-2017-2019-and-2022>`_, which will require a system restart to function. Note that you might want to install uv before the restart, as the PATH update might require a restart as well (see below).
 
@@ -148,8 +148,8 @@ Which should give us something like the figure below.
    :alt: readme_example
 
 
-ABC Model
----------
+Components and Functionalities
+------------------------------
 
 The model's components are supposed to be documented in a structured way.
 In each model page, we can see two main classes: ``InitConds`` and ``Model``.
@@ -168,7 +168,7 @@ used for the modularity of our models (models inheriting other models). In that 
 of updates of the parent model, but all methods of the child model overwrite the original ones.
 
 Components
------------
+~~~~~~~~~~
 
 .. toctree::
     :maxdepth: 1
@@ -178,7 +178,7 @@ Components
     Atmosphere <source/api/abcmodel.atmos>
 
 Functionalities
----------------
+~~~~~~~~~~~~~~~
 
 .. toctree::
     :maxdepth: 1
