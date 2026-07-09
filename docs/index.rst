@@ -23,6 +23,43 @@ or clone the repo and make an editable install inside your local repo using
 If you want to use JAX on GPUs, please re-install JAX using the ``[gpu]`` tag in an environment with GPUs installed,
 but this is not necessary to run the examples in this repository.
 
+Windows installation
+~~~~~~~~~~~~~~~~~~~~
+
+On Windows we need some more utilities for JAX to work properly, also installing python is not as straigforward. For JAX to run, you first need the Microsoft Visual C++ redistributable found `here <https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170#visual-studio-2015-2017-2019-and-2022>`_, which will require a system restart to function. Note that you might want to install uv before the restart, as the PATH update might require a restart as well (see below).
+
+Now clone the repo and cd into it. The following section shows how to set up a python environment with `uv <https://docs.astral.sh/uv/>`_, if you have python with pip running you can skip it.
+
+UV environment
+~~~~~~~~~~~~~~
+
+First install uv via the terminal with
+
+.. code-block:: bash
+
+   powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+
+You can check that uv is available and running by typing ``uv`` in your terminal, if you receive an error, you will have to add uv to your path manually or `restart your computer <https://github.com/astral-sh/uv/issues/10014>`_. Here, or when executing uv scripts to activate environments windows `execution policiy <https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-7.4#powershell-execution-policies>`_ might stop you, if that is the case you need to change or bypass it.
+
+After uv is installed and running, create a virtual environment in the abc-model directory by running
+
+.. code-block:: bash
+
+   uv venv --python 3.13.0
+
+this will also show you the command needed to activate the venv, which should look similar to
+
+.. code-block:: bash
+
+   .venv\Scripts\activate
+
+Lastly, while in the abc-model directory, install the abc-model with uv:
+
+.. code-block:: bash
+
+   uv pip install -e .
+
+
 Quick example
 -------------
 
@@ -110,49 +147,50 @@ Which should give us something like the figure below.
 .. image:: ../figs/readme-example.png
    :alt: readme_example
 
-Windows installation
---------------------
 
-On Windows we need some more utilities for JAX to work properly, also installing python is not as straigforward. For JAX to run, you first need the Microsoft Visual C++ redistributable found `here <https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170#visual-studio-2015-2017-2019-and-2022>`_, which will require a system restart to function. Note that you might want to install uv before the restart, as the PATH update might require a restart as well (see below).
+ABC Model
+---------
 
-Now clone the repo and cd into it. The following section shows how to set up a python environment with `uv <https://docs.astral.sh/uv/>`_, if you have python with pip running you can skip it.
+The model's components are supposed to be documented in a structured way.
+In each model page, we can see two main classes: ``InitConds`` and ``Model``.
 
-UV environment
-~~~~~~~~~~~~~~
+``InitConds`` is a data class containing all the variables that make part of the ``state`` of the model
+(and thereby of the ``CoupledState``) and will be updated by the model during ``run`` (diagnostics)
+or ``integrate`` (prognostics, if any).
 
-First install uv via the terminal with
+The ``Model`` class contains parameters, the ``run`` method and sometimes an ``integrate`` method.
+Inside ``run``, variables ``x``, ``y``, etc, are updated using methods ``compute_x``, ``compute_y``, etc; and these
+methods are documented in the order that they are called. The goal is that a reader can essentially read the
+equations of each variable computation as they are done by our models and learn how things work from that.
 
-.. code-block:: bash
+Somemtimes, the ``state`` is updated inside a more complicated method like ``update_something``. This is sometimes
+used for the modularity of our models (models inheriting other models). In that case, the models follow the same order
+of updates of the parent model, but all methods of the child model overwrite the original ones.
 
-   powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+Components
+-----------
 
-You can check that uv is available and running by typing ``uv`` in your terminal, if you receive an error, you will have to add uv to your path manually or `restart your computer <https://github.com/astral-sh/uv/issues/10014>`_. Here, or when executing uv scripts to activate environments windows `execution policiy <https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-7.4#powershell-execution-policies>`_ might stop you, if that is the case you need to change or bypass it.
+.. toctree::
+    :maxdepth: 1
 
-After uv is installed and running, create a virtual environment in the abc-model directory by running
+    Radiation <source/api/abcmodel.rad>
+    Land <source/api/abcmodel.land>
+    Atmosphere <source/api/abcmodel.atmos>
 
-.. code-block:: bash
+Functionalities
+---------------
 
-   uv venv --python 3.13.0
+.. toctree::
+    :maxdepth: 1
 
-this will also show you the command needed to activate the venv, which should look similar to
+    Abstracts <source/api/abcmodel.abstracts>
+    Coupling <source/api/abcmodel.coupling>
+    Integration <source/api/abcmodel.integration>
+    Plotting <source/api/abcmodel.plotting>
+    Utils <source/api/abcmodel.utils>
 
-.. code-block:: bash
-
-   .venv\Scripts\activate
-
-Lastly, while in the abc-model directory, install the abc-model with uv:
-
-.. code-block:: bash
-
-   uv pip install -e .
 
 See also
 --------
 
 For a more advanced model, see `ClimaLand.jl <https://github.com/CliMA/ClimaLand.jl>`_.
-
-
-.. toctree::
-    :hidden:
-
-    ABC Model <source/api/abcmodel>
