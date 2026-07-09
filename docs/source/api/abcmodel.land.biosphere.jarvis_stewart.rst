@@ -2,7 +2,7 @@
 Jarvis Stewart
 ==============
 
-.. automodule:: abcmodel.land.jarvis_stewart
+.. automodule:: abcmodel.land.biosphere.jarvis_stewart
    :members:
    :show-inheritance:
    :undoc-members:

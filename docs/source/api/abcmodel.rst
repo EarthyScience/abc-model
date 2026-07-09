@@ -37,4 +37,5 @@ Functionalities
    abcmodel.abstracts
    abcmodel.coupling
    abcmodel.integration
+   abcmodel.plotting
    abcmodel.utils

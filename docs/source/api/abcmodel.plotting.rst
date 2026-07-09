@@ -1,8 +1,8 @@
 
-Minimal
-=======
+Plotting
+========
 
-.. automodule:: abcmodel.land.minimal
+.. automodule:: abcmodel.plotting
    :members:
    :show-inheritance:
    :undoc-members:
