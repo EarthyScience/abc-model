@@ -4,7 +4,7 @@ A simple model coupling biosphere and atmosphere made fully differentiable using
 ## Documentation
 Detailed documentation of the model can be accessed [here](https://earthyscience.github.io/abc-model/).
 
-## Installation
+## Installation (MacOS and Linux)
 These instructions work on Linux and MacOS and assume that python with pip is installed already. Otherwise, install python and pip with the tool of your choice, such as [miniforge](https://conda-forge.org/download/) or [uv](https://docs.astral.sh/uv/), before you proceed. See below for full instructions to install on Windows.
 Install with
 ```
@@ -19,7 +19,7 @@ pip install -e .
 If you want to use jax on GPUs, change the tag from `[cpu]` to `[gpu]` in an environment with GPUs installed.
 This is not necessary to run the examples in this repository.
 
-## Windows installation
+## Installation (Windows)
 On Windows we need some more utilities for jax to work properly, also installing python is not as straigforward. For jax to run, you first need the Microsoft Visual C++ redistributable found [here](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170#visual-studio-2015-2017-2019-and-2022), which will require a system restart to function. Note that you might want to install uv before the restart, as the PATH update might require a restart as well (see below).
 
 Now clone the repo and cd into it. The following section shows how to set up a python environment with [uv](https://docs.astral.sh/uv/), if you have python with pip running you can skip it.
