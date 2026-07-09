@@ -2,7 +2,7 @@
 Standard
 ========
 
-.. automodule:: abcconfigs.aridities.standard
+.. automodule:: abcmodel.land.surface.standard
    :members:
    :show-inheritance:
    :undoc-members:

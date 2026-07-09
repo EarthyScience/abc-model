@@ -1,8 +1,8 @@
 
-Humid
-=====
+Ags
+===
 
-.. automodule:: abcconfigs.aridities.humid
+.. automodule:: abcmodel.land.biosphere.ags
    :members:
    :show-inheritance:
    :undoc-members:
