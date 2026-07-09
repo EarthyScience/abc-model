@@ -130,8 +130,6 @@ class BulkState(AbstractMixedLayerState):
         }
     )
     """Surface pressure, which is actually not updated (not a state), it's only here for simplicity [Pa]."""
-
-    # initialized to zero by default
     wstar: Array = field(
         default_factory=lambda: jnp.array(0.0),
         metadata={
@@ -150,8 +148,6 @@ class BulkState(AbstractMixedLayerState):
         },
     )
     """Entrainment velocity [m s-1]."""
-
-    # diagnostic variables
     thetav: Array = field(
         default_factory=lambda: jnp.array(0.0),
         metadata={

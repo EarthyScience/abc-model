@@ -50,13 +50,29 @@ def main():
     if use_ags:
         # you can use the ags model, that includes
         # CO2-induced stomatal closure
-        land_model = abcmodel.land.AgsModel()
-        land_state = land_model.init_state()
+        bio_model = abcmodel.land.biosphere.AgsModel()
+        land_state = bio_model.init_state()
 
     else:
         # otherwise use the jarvis stewart model for simpler representation
-        land_model = abcmodel.land.JarvisStewartModel()
-        land_state = land_model.init_state()
+        bio_model = abcmodel.land.biosphere.JarvisStewartModel()
+        land_state = bio_model.init_state()
+
+    # land
+    soil_model = abcmodel.land.soil.StandardSoilModel()
+    soil_state = soil_model.init_state()
+    surface_model = abcmodel.land.surface.StandardSurfaceModel()
+    surface_state = surface_model.init_state()
+    land_model = abcmodel.land.StandardLandModel(
+        biosphere=bio_model,
+        soil=soil_model,
+        surface=surface_model,
+    )
+    land_state = land_model.init_state(
+        biosphere_state=land_state,
+        soil_state=soil_state,
+        surface_state=surface_state,
+    )
 
     ##########################################################
     # define atmos model with all its components

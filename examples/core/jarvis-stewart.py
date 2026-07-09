@@ -14,23 +14,31 @@ def main():
     rad_model = abcmodel.rad.StandardRadiationModel()
     rad_state = rad_model.init_state()
 
-    # land surface
-    land_model = abcmodel.land.JarvisStewartModel()
-    land_state = land_model.init_state()
-
-    # surface layer
-    surface_layer_model = abcmodel.atmos.surface_layer.ObukhovModel()
-    surface_layer_state = surface_layer_model.init_state()
-
-    # mixed layer
-    mixed_layer_model = abcmodel.atmos.mixed_layer.BulkModel()
-    mixed_layer_state = mixed_layer_model.init_state()
-
-    # clouds
-    cloud_model = abcmodel.atmos.clouds.CumulusModel()
-    cloud_state = cloud_model.init_state()
+    # land
+    biosphere_model = abcmodel.land.biosphere.JarvisStewartModel()
+    biosphere_state = biosphere_model.init_state()
+    soil_model = abcmodel.land.soil.StandardSoilModel()
+    soil_state = soil_model.init_state()
+    surface_model = abcmodel.land.surface.StandardSurfaceModel()
+    surface_state = surface_model.init_state()
+    land_model = abcmodel.land.StandardLandModel(
+        biosphere=biosphere_model,
+        soil=soil_model,
+        surface=surface_model,
+    )
+    land_state = land_model.init_state(
+        biosphere_state=biosphere_state,
+        soil_state=soil_state,
+        surface_state=surface_state,
+    )
 
     # atmos
+    surface_layer_model = abcmodel.atmos.surface_layer.ObukhovModel()
+    surface_layer_state = surface_layer_model.init_state()
+    mixed_layer_model = abcmodel.atmos.mixed_layer.BulkModel()
+    mixed_layer_state = mixed_layer_model.init_state()
+    cloud_model = abcmodel.atmos.clouds.CumulusModel()
+    cloud_state = cloud_model.init_state()
     atmos_model = abcmodel.atmos.DayOnlyAtmosphereModel(
         surface_layer=surface_layer_model,
         mixed_layer=mixed_layer_model,

@@ -1,7 +1,6 @@
-from abc import abstractmethod
-from dataclasses import dataclass, field, replace
+from dataclasses import dataclass, replace
+from typing import Generic
 
-import jax.numpy as jnp
 from jax import Array
 
 from ..abstracts import (
@@ -9,1092 +8,146 @@ from ..abstracts import (
     AbstractLandModel,
     AbstractLandState,
 )
-from ..utils import PhysicalConstants as cst
-from ..utils import compute_esat, compute_qsat
+from .abstracts import (
+    AbstractBiosphereModel,
+    AbstractSoilModel,
+    AbstractSurfaceModel,
+    BiosphereT,
+    SoilT,
+    SurfaceT,
+)
 
 
 @dataclass
-class StandardLandState(AbstractLandState):
-    """Standard land surface model state."""
+class StandardLandState(AbstractLandState, Generic[BiosphereT, SoilT, SurfaceT]):
+    """Standard land surface model state aggregating biosphere, soil, and surface."""
 
-    alpha: Array = field(
-        metadata={
-            "label": r"$\alpha$",
-            "unit": "-",
-            "description": "Slope of the light response curve",
-        }
-    )
-    """Slope of the light response curve [mol J-1]."""
-    wg: Array = field(
-        metadata={
-            "label": r"$w_g$",
-            "unit": "m^3 m^{-3}",
-            "description": "Soil moisture content",
-        }
-    )
-    """Soil moisture content in the root zone [m3 m-3]."""
-    temp_soil: Array = field(
-        metadata={
-            "label": r"$T_{soil}$",
-            "unit": "K",
-            "description": "Soil temperature",
-        }
-    )
-    """Soil temperature [K]."""
-    temp2: Array = field(
-        metadata={
-            "label": r"$T_{soil,2}$",
-            "unit": "K",
-            "description": "Deep soil temperature",
-        }
-    )
-    """Deep soil temperature [K]."""
-    surf_temp: Array = field(
-        metadata={
-            "label": r"$T_{surf}$",
-            "unit": "K",
-            "description": "Surface temperature",
-        }
-    )
-    """Surface temperature [K]."""
-    wl: Array = field(
-        metadata={
-            "label": r"$W_l$",
-            "unit": "m",
-            "description": "Canopy water content",
-        }
-    )
-    """No water content in the canopy [m]."""
-    wq: Array = field(
-        metadata={
-            "label": r"$(w'q')_{s}$",
-            "unit": "kg kg^{-1} m s^{-1}",
-            "description": "Unknown - Kinematic moisture flux used for initialization?",
-        }
-    )
-    """Kinematic moisture flux [kg/kg m/s]."""
-    wtheta: Array = field(
-        metadata={
-            "label": r"$(w'\theta')_{s}$",
-            "unit": "K m s^{-1}",
-            "description": "Unknown - Kinematic heat flux used for initialization?",
-        }
-    )
-    """Kinematic heat flux [K m/s]."""
+    biosphere: BiosphereT
+    soil: SoilT
+    surface: SurfaceT
 
-    rs: Array = field(
-        default_factory=lambda: jnp.array(1.0e6),
-        metadata={
-            "label": r"$r_s$",
-            "unit": "s m^{-1}",
-            "description": "Surface resistance",
-        },
-    )
-    """Surface resistance [m s-1]."""
-    rssoil: Array = field(
-        default_factory=lambda: jnp.array(1.0e6),
-        metadata={
-            "label": r"$r_{soil}$",
-            "unit": "s m^{-1}",
-            "description": "Soil resistance",
-        },
-    )
-    """Soil resistance [m s-1]."""
+    @property
+    def alpha(self) -> Array:
+        return self.surface.alpha
 
-    # the following variables should be initialized to nan
-    # the following variables should be initialized to nan
-    # the following variables should be initialized to nan
-    esat: Array = field(
-        default_factory=lambda: jnp.array(0.0),
-        metadata={
-            "label": r"$e_{sat}$",
-            "unit": "Pa",
-            "description": "Saturation vapor pressure",
-        },
-    )
-    """Saturation vapor pressure [Pa]."""
-    qsat: Array = field(
-        default_factory=lambda: jnp.array(0.0),
-        metadata={
-            "label": r"$q_{sat}$",
-            "unit": "kg kg^{-1}",
-            "description": "Saturation specific humidity",
-        },
-    )
-    """Saturation specific humidity [kg/kg]."""
-    dqsatdT: Array = field(
-        default_factory=lambda: jnp.array(0.0),
-        metadata={
-            "label": r"$dq_{sat}/dT$",
-            "unit": "kg kg^{-1} K^{-1}",
-            "description": "Derivative of saturation specific humidity",
-        },
-    )
-    """Derivative of saturation specific humidity with respect to temperature [kg/kg/K]."""
-    e: Array = field(
-        default_factory=lambda: jnp.array(0.0),
-        metadata={
-            "label": r"$e$",
-            "unit": "Pa",
-            "description": "Vapor pressure",
-        },
-    )
-    """Vapor pressure [Pa]."""
-    qsatsurf: Array = field(
-        default_factory=lambda: jnp.array(0.0),
-        metadata={
-            "label": r"$q_{sat}(T_s)$",
-            "unit": "kg kg^{-1}",
-            "description": "Saturation specific humidity at surface",
-        },
-    )
-    """Saturation specific humidity at surface temperature [kg/kg]."""
-    wCO2: Array = field(
-        default_factory=lambda: jnp.array(0.0),
-        metadata={
-            "label": r"$w'CO_2'$",
-            "unit": "kg kg^{-1} m s^{-1}",
-            "description": "Kinematic CO2 flux",
-        },
-    )
-    """Kinematic CO2 flux [kg/kg m/s] or [mol m-2 s-1]."""
-    cliq: Array = field(
-        default_factory=lambda: jnp.array(0.0),
-        metadata={
-            "label": r"$c_{liq}$",
-            "unit": "-",
-            "description": "Wet fraction of the canopy",
-        },
-    )
-    """Wet fraction of the canopy [-]."""
-    temp_soil_tend: Array = field(
-        default_factory=lambda: jnp.array(0.0),
-        metadata={
-            "label": r"$\partial T_{soil} / \partial t$",
-            "unit": "K s^{-1}",
-            "description": "Soil temperature tendency",
-        },
-    )
-    """Soil temperature tendency [K s-1]."""
-    wgtend: Array = field(
-        default_factory=lambda: jnp.array(0.0),
-        metadata={
-            "label": r"$\partial w_g / \partial t$",
-            "unit": "m^3 m^{-3} s^{-1}",
-            "description": "Soil moisture tendency",
-        },
-    )
-    """Soil moisture tendency [m3 m-3 s-1]."""
-    wltend: Array = field(
-        default_factory=lambda: jnp.array(0.0),
-        metadata={
-            "label": r"$\partial W_l / \partial t$",
-            "unit": "m s^{-1}",
-            "description": "Canopy water storage tendency",
-        },
-    )
-    """Canopy water storage tendency [m s-1]."""
-    le_veg: Array = field(
-        default_factory=lambda: jnp.array(0.0),
-        metadata={
-            "label": r"$LE_{veg}$",
-            "unit": "W m^{-2}",
-            "description": "Latent heat flux from vegetation",
-        },
-    )
-    """Latent heat flux from vegetation [W m-2]."""
-    le_liq: Array = field(
-        default_factory=lambda: jnp.array(0.0),
-        metadata={
-            "label": r"$LE_{liq}$",
-            "unit": "W m^{-2}",
-            "description": "Latent heat flux from liquid water",
-        },
-    )
-    """Latent heat flux from liquid water [W m-2]."""
-    le_soil: Array = field(
-        default_factory=lambda: jnp.array(0.0),
-        metadata={
-            "label": r"$LE_{soil}$",
-            "unit": "W m^{-2}",
-            "description": "Latent heat flux from soil",
-        },
-    )
-    """Latent heat flux from soil [W m-2]."""
-    le: Array = field(
-        default_factory=lambda: jnp.array(0.0),
-        metadata={
-            "label": r"$LE$",
-            "unit": "W m^{-2}",
-            "description": "Total latent heat flux",
-        },
-    )
-    """Total latent heat flux [W m-2]."""
-    hf: Array = field(
-        default_factory=lambda: jnp.array(0.0),
-        metadata={
-            "label": r"$H$",
-            "unit": "W m^{-2}",
-            "description": "Sensible heat flux",
-        },
-    )
-    """Sensible heat flux [W m-2]."""
-    gf: Array = field(
-        default_factory=lambda: jnp.array(0.0),
-        metadata={
-            "label": r"$G$",
-            "unit": "W m^{-2}",
-            "description": "Ground heat flux",
-        },
-    )
-    """Ground heat flux [W m-2]."""
-    le_pot: Array = field(
-        default_factory=lambda: jnp.array(0.0),
-        metadata={
-            "label": r"$LE_{pot}$",
-            "unit": "W m^{-2}",
-            "description": "Potential latent heat flux",
-        },
-    )
-    """Potential latent heat flux [W m-2]."""
-    le_ref: Array = field(
-        default_factory=lambda: jnp.array(0.0),
-        metadata={
-            "label": r"$LE_{ref}$",
-            "unit": "W m^{-2}",
-            "description": "Reference latent heat flux",
-        },
-    )
-    """Reference latent heat flux [W m-2]."""
-    vpd: Array = field(
-        default_factory=lambda: jnp.array(0.0),
-        metadata={
-            "label": r"$VPD$",
-            "unit": "Pa",
-            "description": "Vapor pressure deficit",
-        },
-    )
-    """Vapor pressure deficit [Pa]."""
-    wtheta: Array = field(
-        default_factory=lambda: jnp.array(0.0),
-        metadata={
-            "label": r"$(w'\theta')_s$",
-            "unit": "K m s^{-1}",
-            "description": "Kinematic heat flux",
-        },
-    )
-    """Kinematic heat flux [K m/s]."""
-    wq: Array = field(
-        default_factory=lambda: jnp.array(0.0),
-        metadata={
-            "label": r"$(w'q')_s$",
-            "unit": "kg kg^{-1} m s^{-1}",
-            "description": "Kinematic moisture flux",
-        },
-    )
-    """Kinematic moisture flux [kg/kg m/s]."""
-    wCO2: Array = field(
-        default_factory=lambda: jnp.array(0.0),
-        metadata={
-            "label": r"$w'CO_2'$",
-            "unit": "kg kg^{-1} m s^{-1}",
-            "description": "Kinematic CO2 flux",
-        },
-    )
-    """Kinematic CO2 flux [kg/kg m/s] or [mol m-2 s-1]."""
+    @property
+    def surf_temp(self) -> Array:
+        return self.surface.surf_temp
+
+    @property
+    def rs(self) -> Array:
+        return self.biosphere.rs
+
+    @property
+    def wg(self) -> Array:
+        return self.soil.wg
+
+    @property
+    def wl(self) -> Array:
+        return self.biosphere.wl
+
+    @property
+    def esat(self) -> Array:
+        return self.surface.esat
+
+    @property
+    def qsat(self) -> Array:
+        return self.surface.qsat
+
+    @property
+    def dqsatdT(self) -> Array:
+        return self.surface.dqsatdT
+
+    @property
+    def e(self) -> Array:
+        return self.surface.e
+
+    @property
+    def qsatsurf(self) -> Array:
+        return self.surface.qsatsurf
+
+    @property
+    def wtheta(self) -> Array:
+        return self.surface.wtheta
+
+    @property
+    def wq(self) -> Array:
+        return self.surface.wq
+
+    @property
+    def wCO2(self) -> Array:
+        return self.biosphere.wCO2
 
 
-class AbstractStandardLandModel(AbstractLandModel):
-    """Abstract standard land surface model with comprehensive soil-vegetation dynamics.
-
-    Args:
-        a: Clapp and Hornberger (1978) retention curve parameter. Default is 0.219.
-        b: Clapp and Hornberger (1978) retention curve parameter. Default is 4.90.
-        p: Clapp and Hornberger (1978) retention curve parameter. Default is 4.0.
-        cgsat: saturated soil heat capacity [J m-3 K-1]. Default is 3.56e-6.
-        wsat: saturated soil moisture content [m3 m-3]. Default is 0.472.
-        wfc: soil moisture content at field capacity [m3 m-3]. Default is 0.323.
-        wwilt: soil moisture content at wilting point [m3 m-3]. Default is 0.171.
-        w2: soil moisture content at the second layer [m3 m-3]. Default is 0.21.
-        d1: depth of the top soil layer [m]. Default is 0.1.
-        c1sat: saturated soil hydraulic conductivity parameter [-]. Default is 0.132.
-        c2ref: reference soil hydraulic conductivity parameter [-]. Default is 1.8.
-        lai: leaf area index [m2 m-2]. Default is 2.0.
-        gD: canopy rad extinction coefficient [-]. Default is 0.0.
-        rsmin: minimum stomatal resistance [s m-1]. Default is 110.0.
-        rssoilmin: minimum soil resistance [s m-1]. Default is 50.0.
-        cveg: vegetation fraction [-]. Default is 0.85.
-        wmax: maximum water storage capacity of the canopy [m]. Default is 0.0002.
-        lam: thermal diffusivity of the soil [W m-1 K-1]. Default is 5.9.
-    """
+class StandardLandModel(AbstractLandModel[StandardLandState]):
+    """Standard land model coordinating biosphere, soil, and surface models."""
 
     def __init__(
         self,
-        a: float = 0.219,
-        b: float = 4.90,
-        p: float = 4.0,
-        cgsat: float = 3.56e-6,
-        wsat: float = 0.472,
-        wfc: float = 0.323,
-        wwilt: float = 0.171,
-        w2: float = 0.21,
-        d1: float = 0.1,
-        c1sat: float = 0.132,
-        c2ref: float = 1.8,
-        lai: float = 2.0,
-        gD: float = 0.0,
-        rsmin: float = 110.0,
-        rssoilmin: float = 50.0,
-        cveg: float = 0.85,
-        wmax: float = 0.0002,
-        lam: float = 5.9,
+        biosphere: AbstractBiosphereModel,
+        soil: AbstractSoilModel,
+        surface: AbstractSurfaceModel,
     ):
-        self.a = a
-        self.b = b
-        self.p = p
-        self.cgsat = cgsat
-        self.wsat = wsat
-        self.wfc = wfc
-        self.wwilt = wwilt
-        self.w2 = w2
-        self.d1 = d1
-        self.c1sat = c1sat
-        self.c2ref = c2ref
-        self.lai = lai
-        self.gD = gD
-        self.rsmin = rsmin
-        self.rssoilmin = rssoilmin
-        self.cveg = cveg
-        self.wmax = wmax
-        self.lam = lam
-        self.c_beta = 0.0
+        self.biosphere = biosphere
+        self.soil = soil
+        self.surface = surface
 
     def init_state(
         self,
-        alpha: float = 0.25,
-        wg: float = 0.21,
-        temp_soil: float = 285.0,
-        temp2: float = 286.0,
-        surf_temp: float = 290.0,
-        wl: float = 0.0000,
-        wq: float = 1e-4,
-        wtheta: float = 0.1,
-        rs: float = 1.0e6,
-        rssoil: float = 1.0e6,
-    ) -> StandardLandState:
-        """Initialize the model state.
-
-        Args:
-            alpha: albedo [-]. Default is 0.25.
-            wg: Volumetric soil moisture [m3 m-3]. Default is 0.21.
-            temp_soil: Soil temperature [K]. Default is 285.0.
-            temp2: Deep soil temperature [K]. Default is 286.0.
-            surf_temp: Surface temperature [K]. Default is 290.0.
-            wl: Canopy water content [m]. Default is 0.0000.
-            wq: Kinematic moisture flux [kg/kg m/s]. Default is 1e-4.
-            wtheta: Kinematic heat flux [K m/s]. Default is 0.1.
-            rs: Surface resistance [s m-1]. Default is 1.0e6.
-            rssoil: Soil resistance [s m-1]. Default is 1.0e6.
-
-        Returns:
-            The initial land state.
-        """
+        biosphere_state: BiosphereT,
+        soil_state: SoilT,
+        surface_state: SurfaceT,
+    ) -> StandardLandState[BiosphereT, SoilT, SurfaceT]:
+        """Initialize standard land state."""
         return StandardLandState(
-            alpha=jnp.array(alpha),
-            wg=jnp.array(wg),
-            temp_soil=jnp.array(temp_soil),
-            temp2=jnp.array(temp2),
-            surf_temp=jnp.array(surf_temp),
-            wl=jnp.array(wl),
-            wq=jnp.array(wq),
-            wtheta=jnp.array(wtheta),
-            rs=jnp.array(rs),
-            rssoil=jnp.array(rssoil),
+            biosphere=biosphere_state,
+            soil=soil_state,
+            surface=surface_state,
+        )
+
+    def run(self, state: AbstractCoupledState) -> StandardLandState:
+        """Run standard land components sequentially.
+
+        Execution order:
+          1. biosphere diagnostics
+          2. soil diagnostics
+          3. surface fluxes and surf_temp
+          4. biosphere tendencies
+          5. soil tendencies
+        """
+        # biosphere
+        bio_state = self.biosphere.run(state)
+        land_state = replace(state.land, biosphere=bio_state)
+        state = state.replace(land=land_state)
+
+        # soil
+        soil_state = self.soil.run(state)
+        land_state = replace(land_state, soil=soil_state)
+        state = state.replace(land=land_state)
+
+        # surface
+        surf_state = self.surface.run(state)
+        land_state = replace(land_state, surface=surf_state)
+        state = state.replace(land=land_state)
+
+        # tendencies (require surface fluxes computed above)
+        bio_state = self.biosphere.run_tends(bio_state, surf_state)
+        soil_state = self.soil.run_tends(soil_state, surf_state)
+
+        return StandardLandState(
+            biosphere=bio_state,
+            soil=soil_state,
+            surface=surf_state,
         )
 
     def integrate(self, state: StandardLandState, dt: float) -> StandardLandState:
-        """Integrate model forward in time.
-
-        Args:
-            state: the state object carrying all variables.
-            dt: the time step.
-
-        Returns:
-            The updated state object.
-        """
-        temp_soil = state.temp_soil + dt * state.temp_soil_tend
-        wg = state.wg + dt * state.wgtend
-        wl = state.wl + dt * state.wltend
-
-        return replace(state, temp_soil=temp_soil, wg=wg, wl=wl)
-
-    def run(
-        self,
-        state: AbstractCoupledState,
-    ) -> StandardLandState:
-        """Run the full land surface model for one time step.
-
-        Args:
-            state: CoupledState.
-
-        Returns:
-            The updated land state object.
-        """
-        land_state = state.land
-        atmos = state.atmos
-        ra = atmos.ra
-        esat = compute_esat(atmos.theta)
-        qsat = compute_qsat(atmos.theta, atmos.surf_pressure)
-        dqsatdT = self.compute_dqsatdT(esat, atmos.theta, atmos.surf_pressure)
-        e = self.compute_e(atmos.q, atmos.surf_pressure)
-        land_state = land_state.replace(esat=esat, qsat=qsat, dqsatdT=dqsatdT, e=e)
-        state = state.replace(land=land_state)
-        state = self.update_surface_resistance(state)
-        state = self.update_co2_flux(state)
-        land_state = state.land
-        rssoil = self.compute_soil_resistance(land_state.wg)
-        cliq = self.compute_cliq(land_state.wl)
-        surf_temp = self.compute_skin_temperature(
-            state.net_rad,
-            atmos.theta,
-            atmos.q,
-            land_state.qsat,
-            land_state.dqsatdT,
-            ra,
-            land_state.rs,
-            rssoil,
-            cliq,
-            land_state.temp_soil,
+        """Integrate biosphere, soil, and surface states forward in time."""
+        biosphere = self.biosphere.integrate(state.biosphere, dt)
+        soil = self.soil.integrate(state.soil, dt)
+        surface = self.surface.integrate(state.surface, dt)
+        return replace(
+            state,
+            biosphere=biosphere,
+            soil=soil,
+            surface=surface,
         )
-        qsatsurf = compute_qsat(surf_temp, atmos.surf_pressure)
-        le_veg = self.compute_le_veg(
-            surf_temp,
-            atmos.theta,
-            atmos.q,
-            land_state.qsat,
-            land_state.dqsatdT,
-            ra,
-            land_state.rs,
-            cliq,
-        )
-        le_liq = self.compute_le_liq(
-            surf_temp,
-            atmos.theta,
-            atmos.q,
-            land_state.qsat,
-            land_state.dqsatdT,
-            ra,
-            cliq,
-        )
-        le_soil = self.compute_le_soil(
-            surf_temp,
-            atmos.theta,
-            atmos.q,
-            land_state.qsat,
-            land_state.dqsatdT,
-            ra,
-            rssoil,
-        )
-        wltend = self.compute_wltend(le_liq)
-        le = self.compute_le(le_soil, le_veg, le_liq)
-        hf = self.compute_hf(surf_temp, atmos.theta, ra)
-        gf = self.compute_gf(surf_temp, land_state.temp_soil)
-        le_pot = self.compute_le_pot(
-            state.net_rad,
-            gf,
-            land_state.dqsatdT,
-            land_state.qsat,
-            atmos.q,
-            ra,
-        )
-        le_ref = self.compute_le_ref(
-            state.net_rad,
-            gf,
-            land_state.dqsatdT,
-            land_state.qsat,
-            atmos.q,
-            ra,
-        )
-        temp_soil_tend = self.compute_temp_soil_tend(
-            gf, land_state.temp_soil, land_state.temp2
-        )
-        wgtend = self.compute_wgtend(land_state.wg, le_soil)
-        wtheta = self.compute_wtheta(hf)
-        wq = self.compute_wq(le)
-        vpd = self.compute_vpd(atmos.q, land_state.qsat)
-        return land_state.replace(
-            rssoil=rssoil,
-            cliq=cliq,
-            surf_temp=surf_temp,
-            qsatsurf=qsatsurf,
-            le_veg=le_veg,
-            le_liq=le_liq,
-            le_soil=le_soil,
-            wltend=wltend,
-            le=le,
-            hf=hf,
-            gf=gf,
-            le_pot=le_pot,
-            le_ref=le_ref,
-            temp_soil_tend=temp_soil_tend,
-            wgtend=wgtend,
-            wtheta=wtheta,
-            wq=wq,
-            vpd=vpd,
-        )
-
-    def compute_dqsatdT(self, esat: Array, theta: float, surf_pressure: float) -> Array:
-        """Compute the derivative of saturation vapor pressure with respect to temperature ``dqsatdT``.
-
-        Notes:
-            Using :meth:`~abcmodel.utils.compute_esat`, the derivative of the saturated vapor pressure
-            :math:`e_\\text{sat}` with respect to temperature :math:`T` is given by
-
-            .. math::
-                \\frac{\\text{d}e_\\text{sat}}{\\text{d} T} =
-                e_\\text{sat}\\frac{17.2694(T-237.16)}{(T-35.86)^2},
-
-            which combined with :meth:`~abcmodel.utils.compute_qsat` can be used to get
-
-            .. math::
-                \\frac{\\text{d}q_{\\text{sat}}}{\\text{d} T} \\approx \\epsilon \\frac{\\frac{\\text{d}e_\\text{sat}}{\\text{d} T}}{p}.
-        """
-        num = 17.2694 * (theta - 273.16)
-        den = (theta - 35.86) ** 2.0
-        mult = num / den
-        desatdT = esat * mult
-        return 0.622 * desatdT / surf_pressure
-
-    def compute_e(self, q: Array, surf_pressure: Array) -> Array:
-        """Compute the vapor pressure ``e``.
-
-        Notes:
-            This function uses the same formula used in :meth:`~abcmodel.utils.compute_esat`,
-            but now factoring the vapor pressure :math:`e` as a function of specific humidity :math:`q`
-            and surface pressure :math:`p`, which give us
-
-            .. math::
-                e = q \\cdot p / 0.622.
-        """
-        return q * surf_pressure / 0.622
-
-    @abstractmethod
-    def update_surface_resistance(
-        self,
-        state: AbstractCoupledState,
-    ) -> AbstractCoupledState:
-        """Abstract method to update surface resistance."""
-        raise NotImplementedError
-
-    @abstractmethod
-    def update_co2_flux(
-        self,
-        state: AbstractCoupledState,
-    ) -> AbstractCoupledState:
-        """Abstract method to update CO2 flux."""
-        raise NotImplementedError
-
-    def compute_soil_resistance(self, wg: Array) -> Array:
-        """Compute the soil resistance ``rssoil``.
-
-        Notes:
-            The soil resistance is calculated as
-
-            .. math::
-                r_\\text{soil} = r_\\text{soil,min} \\cdot f_2,
-
-            where the parameter :math:`r_\\text{soil,min}` is the minimum surface resistance and
-            the correction function :math:`f_2` is given by
-
-            .. math::
-                f_2 =
-                    \\begin{cases}
-                        \\frac{w_\\text{fc} - w_\\text{wilt}}{w_g - w_\\text{wilt}}, & \\text{if } w_g > w_\\text{wilt} \\\\
-                        10^8, & \\text{otherwise},
-                    \\end{cases}
-
-            where the model parameters :math:`w_\\text{fc}` and :math:`w_\\text{wilt}`
-            are the field capacity and wilting point, respectively,
-            and the variable :math:`w_g` is the soil water content.
-
-        References:
-            Equations 9.28 and 9.31 from the CLASS book.
-        """
-        f2 = jnp.where(
-            wg > self.wwilt,
-            (self.wfc - self.wwilt) / (wg - self.wwilt),
-            1.0e8,
-        )
-        assert isinstance(f2, Array)
-        return self.rssoilmin * f2
-
-    def compute_cliq(self, wl: Array) -> Array:
-        """Compute the wet fraction ``cliq``.
-
-        Notes:
-            The wet fraction is defined as
-
-            .. math::
-                c_{\\text{liq}} = \\frac{W_l}{\\text{LAI}\\cdot W_{\\text{max}}},
-
-            where :math:`W_l` is the water layer depth,
-            :math:`\\text{LAI}` is the leaf area index and
-            :math:`W_{\\text{max}}` is the thickness of the water layer on wet vegetation.
-            In case :math:`W_l > \\text{LAI}\\cdot W_{\\text{max}}`, the wet fraction is set to 1.
-
-        References:
-            Equation 9.19 from the CLASS book.
-        """
-        wlmx = self.lai * self.wmax
-        return jnp.minimum(1.0, wl / wlmx)
-
-    def compute_skin_temperature(
-        self,
-        net_rad: Array,
-        theta: Array,
-        q: Array,
-        qsat: Array,
-        dqsatdT: Array,
-        ra: Array,
-        rs: Array,
-        rssoil: Array,
-        cliq: Array,
-        temp_soil: Array,
-    ) -> Array:
-        """Compute the skin temperature ``surf_temp``.
-
-        Notes:
-            The skin temperature is obtained by solving the surface energy balance
-
-            .. math::
-                R_n = H + LE_{\\text{veg}} + LE_{\\text{liq}} + LE_{\\text{soil}} + G
-
-            where :math:`R_n` is the net rad,
-            :math:`H` is the sensible heat flux (see :meth:`compute_hf`),
-            :math:`LE_{\\text{veg}}` is the latent heat flux from vegetation (see :meth:`compute_le_veg`),
-            :math:`LE_{\\text{liq}}` is the latent heat flux from dew on leaves (see :meth:`compute_le_liq`),
-            :math:`LE_{\\text{soil}}` is the latent heat flux from the soil (see :meth:`compute_le_soil`)
-            and :math:`G` is the ground heat flux (see :meth:`compute_gf`).
-
-            The equation is solved for the skin temperature :math:`T_s`
-            by factoring out :math:`T_s` from the above, giving us
-
-            .. math::
-                T_s = \\frac{
-                    R_n + \\frac{\\rho c_p}{r_a} \\theta
-                    + c_{\\text{veg}} (1-c_{\\text{liq}}) \\frac{\\rho L_v}{r_a + r_s} (\\frac{\\text{d}q_{\\text{sat}}}{\\text{d}T} \\theta - q_{\\text{sat}} + q)
-                    + (1-c_{\\text{veg}}) \\frac{\\rho L_v}{r_a + r_{s,\\text{soil}}} (\\frac{\\text{d}q_{\\text{sat}}}{\\text{d}T} \\theta - q_{\\text{sat}} + q)
-                    + c_{\\text{veg}} c_{\\text{liq}} \\frac{\\rho L_v}{r_a} (\\frac{\\text{d}q_{\\text{sat}}}{\\text{d}T} \\theta - q_{\\text{sat}} + q)
-                    + \\Lambda T_{\\text{soil}}
-                }{
-                    \\frac{\\rho c_p}{r_a}
-                    + c_{\\text{veg}} (1-c_{\\text{liq}}) \\frac{\\rho L_v}{r_a + r_s} \\frac{\\text{d}q_{\\text{sat}}}{\\text{d}T}
-                    + (1-c_{\\text{veg}}) \\frac{\\rho L_v}{r_a + r_{s,\\text{soil}}} \\frac{\\text{d}q_{\\text{sat}}}{\\text{d}T}
-                    + c_{\\text{veg}} c_{\\text{liq}} \\frac{\\rho L_v}{r_a} \\frac{\\text{d}q_{\\text{sat}}}{\\text{d}T}
-                    + \\Lambda
-                }.
-
-            The terms computed in the equation above in each related function energy flux related method.
-            This approach ensures that the computed skin temperature is consistent with the partitioning of
-            energy fluxes as calculated by the other methods in this class.
-        """
-        return (
-            net_rad
-            + cst.rho * cst.cp / ra * theta
-            + self.cveg
-            * (1.0 - cliq)
-            * cst.rho
-            * cst.lv
-            / (ra + rs)
-            * (dqsatdT * theta - qsat + q)
-            + (1.0 - self.cveg)
-            * cst.rho
-            * cst.lv
-            / (ra + rssoil)
-            * (dqsatdT * theta - qsat + q)
-            + self.cveg * cliq * cst.rho * cst.lv / ra * (dqsatdT * theta - qsat + q)
-            + self.lam * temp_soil
-        ) / (
-            cst.rho * cst.cp / ra
-            + self.cveg * (1.0 - cliq) * cst.rho * cst.lv / (ra + rs) * dqsatdT
-            + (1.0 - self.cveg) * cst.rho * cst.lv / (ra + rssoil) * dqsatdT
-            + self.cveg * cliq * cst.rho * cst.lv / ra * dqsatdT
-            + self.lam
-        )
-
-    def compute_le_veg(
-        self,
-        surf_temp: Array,
-        theta: Array,
-        q: Array,
-        qsat: Array,
-        dqsatdT: Array,
-        ra: Array,
-        rs: Array,
-        cliq: Array,
-    ) -> Array:
-        """Compute the latent heat flux (transpiration) from vegetation ``le_veg``.
-
-        Notes:
-            The latent heat flux is given by
-
-            .. math::
-                LE_{\\text{veg}} = \\frac{\\rho L_v}{r_a+r_s}(q_{\\text{sat}}(T_s)-⟨q⟩),
-
-            where :math:`\\rho` is the density of air, :math:`L_v` is the latent heat of vaporization,
-            :math:`r_a` is the aerodynamic resistance, :math:`r_s` is the soil resistance,
-            :math:`q_{\\text{sat}}(T_s)` is the saturation specific humidity at surface temperature,
-            :math:`⟨q⟩` is the specific humidity at the surface.
-
-            :math:`q_{\\text{sat}}(T_s)` has very short time-scales because of the small heat capacity
-            (excluding vegetation) of the surface layer and is hard to measure. Consequently,
-            we get :math:`q_{\\text{sat}}(T_s)` implicitly using
-
-            .. math::
-                q_{\\text{sat}}(T_s) = \\frac{\\text{d}q_{\\text{sat}}}{\\text{d}T}(\\theta_s-\\theta),
-
-            where :math:`\\theta_s` and :math:`\\theta` are the potential temperature of the surface layer and mixed layer, respectively.
-
-            In the end, we scale the latent heat flux by the vegetation cover fraction :math:`c_{\\text{veg}}`
-            and the liquid water content :math:`c_{\\text{liq}}` and return
-
-            .. math::
-                c_{\\text{veg}}(1-c_{\\text{liq}})LE_{\\text{veg}}.
-
-        References:
-            Equation 9.15 from the CLASS book.
-        """
-        term = dqsatdT * (surf_temp - theta) + qsat - q
-        le_veg = cst.rho * cst.lv / (ra + rs) * term
-        frac = (1.0 - cliq) * self.cveg
-        return frac * le_veg
-
-    def compute_le_liq(
-        self,
-        surf_temp: Array,
-        theta: Array,
-        q: Array,
-        qsat: Array,
-        dqsatdT: Array,
-        ra: Array,
-        cliq: Array,
-    ) -> Array:
-        """Compute the latent heat flux on the leaf (dew) ``le_liq``.
-
-        Notes:
-            We proceed just like in :meth:`compute_le_veg`, but omitting vegetation's resistance :math:`r_s`,
-            with the assumption that water at the leaf is ready to be evaporated, giving us
-
-        .. math::
-            LE_{\\text{liq}} = \\frac{\\rho L_v}{r_a}(q_{\\text{sat}}(T_s)-⟨q⟩).
-
-        In the end, we scale the result by the fraction of liquid water content :math:`c_{\\text{liq}}`
-        and the fraction of vegetation :math:`c_{\\text{veg}}`.
-
-        References:
-            Equation 9.18 from the CLASS book.
-        """
-        term = dqsatdT * (surf_temp - theta) + qsat - q
-        le_liq = cst.rho * cst.lv / ra * term
-        frac = cliq * self.cveg
-        return frac * le_liq
-
-    def compute_le_soil(
-        self,
-        surf_temp: Array,
-        theta: Array,
-        q: Array,
-        qsat: Array,
-        dqsatdT: Array,
-        ra: Array,
-        rssoil: Array,
-    ) -> Array:
-        """Compute the latent heat flux on the soil (evaporation) ``le_soil``.
-
-        Notes:
-            We proceed just like in :meth:`compute_le_veg`, but instead of considering resistance from
-            the vegetation, we consider the resistance from the soil :math:`r_{soil}`, giving us
-
-        .. math::
-            LE_{\\text{soil}} = \\frac{\\rho L_v}{r_a + r_{soil}}(q_{\\text{sat}}(T_s)-⟨q⟩)
-
-        In the end, we scale the result by the fraction of soil :math:`c_{\\text{soil}} = 1 - c_{\\text{veg}}`.
-
-        References:
-            Equation 9.21 from the CLASS book.
-        """
-        term = dqsatdT * (surf_temp - theta) + qsat - q
-        le_soil = cst.rho * cst.lv / (ra + rssoil) * term
-        frac = 1.0 - self.cveg
-        return frac * le_soil
-
-    def compute_wltend(self, le_liq: Array) -> Array:
-        """Compute the water layer depth tendency tendency ``wltend``.
-
-        Notes:
-            The water layer depth tendency is the rate at which water is added to or taken from the vegetation,
-            described by
-
-            .. math::
-                \\frac{\\text{d} w}{\\text{d} t} = -\\frac{LE_{\\text{liq}}}{\\rho_w L_v},
-
-            where :math:`LE_{\\text{liq}}` is dew, :math:`\\rho_w` is water density and :math:`L_v` is the latent heat of vaporization.
-
-        References:
-            Equation 9.20 from the CLASS book, with sign convention.
-        """
-        return -le_liq / (cst.rhow * cst.lv)
-
-    def compute_le(self, le_soil: Array, le_veg: Array, le_liq: Array) -> Array:
-        """Compute the evapotranspiration (latent heat flux) ``le``.
-
-        Notes:
-            The sum of
-
-            - transpiration from vegetation in :meth:`compute_le_veg`;
-            - evaporation from bare soil in :meth:`compute_le_soil`;
-            - evaporation from wet leaves (dew) in :meth:`compute_le_liq`.
-        """
-        return jnp.clip(le_soil + le_veg + le_liq, 0.0, None)
-
-    def compute_hf(
-        self,
-        surf_temp: Array,
-        theta: Array,
-        ra: Array,
-    ) -> Array:
-        """Compute the sensible heat flux ``hf``.
-
-        Notes:
-            The sensible heat flux is given by
-
-            .. math::
-
-                H = \\frac{\\rho c_p}{r_a} (T_s - \\theta),
-
-            where :math:`\\rho` is the air density, :math:`c_p` is the specific heat capacity of air,
-            :math:`r_a` is the aerodynamic resistance, :math:`T_s` is the surface temperature and
-            :math:`\\theta` is the mixed layer air potential temperature.
-
-        References:
-            Equation 9.13 from the CLASS book, but why are we using :math:`T_s` instead of :math:`\\theta_s`?
-            Probably because the variations of pressure are not significant enough.
-        """
-        return cst.rho * cst.cp / ra * (surf_temp - theta)
-
-    def compute_gf(self, surf_temp: Array, temp_soil: Array) -> Array:
-        """Compute the ground heat flux ``gf``.
-
-        Notes:
-            The ground heat flux is given by
-
-            .. math::
-
-                G = \\Lambda (T_s - T_{soil}),
-
-            where :math:`\\Lambda` is the conductivity of the skin layer,
-            :math:`T_s` is the surface temperature and
-            :math:`T_{soil}` is the soil temperature.
-
-        References:
-            Equation 9.33 from the CLASS book.
-        """
-        return self.lam * (surf_temp - temp_soil)
-
-    def compute_le_pot(
-        self,
-        net_rad: Array,
-        gf: Array,
-        dqsatdT: Array,
-        qsat: Array,
-        q: Array,
-        ra: Array,
-    ) -> Array:
-        """Compute the potential latent heat flux ``le_pot``.
-
-        Notes:
-            The potential latent heat flux is given by
-
-            .. math::
-
-                LE_{\\text{pot}} = \\frac{
-                \\frac{\\text{d}q_{sat}}{\\text{d} T} (R_n - G)
-                + \\frac{\\rho c_p}{r_a} (q_{\\text{sat}} - q)
-                }{
-                \\frac{\\text{d}q_{sat}}{\\text{d} T} + \\frac{\\rho c_p}{L_v}
-                },
-
-            which is the Penman-Monteith equation assuming no soil resistance.
-
-        References:
-            Equation 9.16 from the CLASS book.
-        """
-        rad_term = dqsatdT * (net_rad - gf)
-        aerodynamic_term = cst.rho * cst.cp / ra * (qsat - q)
-        denominator = dqsatdT + cst.cp / cst.lv
-        return (rad_term + aerodynamic_term) / denominator
-
-    def compute_le_ref(
-        self,
-        net_rad: Array,
-        gf: Array,
-        dqsatdT: Array,
-        qsat: Array,
-        q: Array,
-        ra: Array,
-    ) -> Array:
-        """Compute the reference latent heat flux ``le_ref``.
-
-        Notes:
-            The reference latent heat flux is given by
-
-            .. math::
-
-                LE_{\\text{ref}} = \\frac{
-                \\frac{\\text{d}q_{sat}}{\\text{d} T} (R_n - G)
-                + \\frac{\\rho c_p}{r_a} (q_{\\text{sat}} - q)
-                }{
-                \\frac{\\text{d}q_{sat}}{\\text{d} T} + \\frac{\\rho c_p}{L_v}(
-                1 + \\frac{r_{s,\\text{min}}}{\\text{LAI} \\cdot r_a}
-                )
-                },
-
-            which is the Penman-Monteith equation assuming that the soil resistance is given by
-            :math:`r_{s,\\text{min}} / \\text{LAI}`, i.e., no correction functions are applied.
-
-        References:
-            Equation 9.16 from the CLASS book.
-        """
-        rad_term = dqsatdT * (net_rad - gf)
-        aerodynamic_term = cst.rho * cst.cp / ra * (qsat - q)
-        den1 = dqsatdT
-        den2 = cst.cp / cst.lv * (1.0 + self.rsmin / self.lai / ra)
-        return (rad_term + aerodynamic_term) / (den1 + den2)
-
-    def compute_temp_soil_tend(
-        self, gf: Array, temp_soil: Array, temp2: Array
-    ) -> Array:
-        """Compute the soil temperature tendency ``temp_soil_tend``.
-
-        Notes:
-            The dynamics of heat transport in the soil is given by
-
-            .. math::
-                \\frac{\\text{d}T_s}{\\text{d}t}
-                =
-                C_T G - \\frac{2\\pi}{\\tau} (T_s - T_2),
-
-            :math:`T_2` is the temperature of the second layer in the soil,
-            :math:`T_s` is the soil temperature,
-            where :math:`\\tau` is the time constant of one day (86400s),
-            :math:`G` is the ground the heat flux and
-            and :math:`C_T` is the surface soil/vegetation heat capacity, which can be parametrized as
-
-            .. math::
-                C_T = C_{T,\\text{sat}} \\left(\\frac{w_{\\text{sat}}}{w_2}\\right)^{\\frac{b}{2\\log(10)}}
-
-            where :math:`C_{T,\\text{sat}}` is the saturated heat capacity,
-            :math:`w_{\\text{sat}}` is the saturation water content,
-            :math:`w_2` is the water content at the second layer
-            and :math:`b` is a parameter from Clapp and Hornberger (1978).
-            I have no idea where this log comes from.
-
-        References:
-            Equation 9.32 of the CLASS book.
-        """
-        cg = self.cgsat * (self.wsat / self.w2) ** (self.b / (2.0 * jnp.log(10.0)))
-        return cg * gf - 2.0 * jnp.pi / 86400.0 * (temp_soil - temp2)
-
-    def compute_wgtend(self, wg: Array, le_soil: Array) -> Array:
-        """Compute the soil moisture tendency ``wgtend``.
-
-        Notes:
-            The dynamics of soil moisture in the top soil layer is described by
-
-            .. math::
-                \\frac{\\mathrm{d}w_g}{\\mathrm{d}t}
-                =
-                -\\frac{C_1}{\\rho_w d_1} \\frac{LE_{\\text{soil}}}{L_v}
-                - \\frac{C_2}{\\tau} (w_g - w_{eq}),
-                :label: dynamics
-
-            where the coefficients :math:`C_1` and :math:`C_2` are calculated as
-
-            .. math::
-                C_1 = C_{1,\\text{sat}} \\left(\\frac{w_{sat}}{w_g}\\right)^{b/2 + 1},
-            .. math::
-                C_2 = C_{2,\\text{ref}} \\left(\\frac{w_2}{w_{sat} - w_2}\\right),
-
-            where :math:`C_{1,\\text{sat}}` and :math:`C_{2,\\text{sat}}` are parameters from Clapp-Hornberger (1978)
-            and the equilibrium soil moisture is given by
-
-            .. math::
-                w_{eq} = w_2 - w_{sat} a \\left(\\left(\\frac{w_2}{w_{sat}}\\right)^p
-                \\left[1 - \\left(\\frac{w_2}{w_{sat}}\\right)^{8p}\\right]\\right).
-
-            In these equations, :math:`w_g` is the volumetric soil moisture in the top layer,
-            :math:`LE_{\\text{soil}}` is the latent heat flux from the soil,
-            :math:`L_v` is the latent heat of vaporization,
-            :math:`\\rho_w` is the density of water,
-            :math:`d_1` is the depth of the first soil layer,
-            :math:`\\tau` is a time constant (here, 86400 s = 1 day),
-            :math:`w_2` is the soil moisture in the second layer,
-            :math:`w_{sat}` is the saturated soil moisture, and
-            :math:`a`, :math:`b` and :math:`p` are parameters from Clapp-Hornberger (1978).
-
-            In :eq:`dynamics`, the first term represents the loss of soil moisture due to evaporation,
-            and the second term represents the relaxation of soil moisture toward equilibrium with the lower layer.
-
-        References:
-            - (9.34)–(9.37) in the CLASS book.
-            - Clapp, R. B., & Hornberger, G. M. (1978). Empirical equations for some soil hydraulic properties. Water resources research, 14(4), 601-604.
-
-        """
-        c1 = self.c1sat * (self.wsat / wg) ** (self.b / 2.0 + 1.0)
-        c2 = self.c2ref * (self.w2 / (self.wsat - self.w2))
-        wgeq = self.w2 - self.wsat * self.a * (
-            (self.w2 / self.wsat) ** self.p
-            * (1.0 - (self.w2 / self.wsat) ** (8.0 * self.p))
-        )
-        evap_loss = -c1 / (cst.rhow * self.d1) * le_soil / cst.lv
-        deep_grad = c2 / 86400.0 * (wg - wgeq)
-        return evap_loss + deep_grad
-
-    def compute_wtheta(self, hf: Array) -> Array:
-        """Compute the kinematic heat flux ``wtheta``.
-
-        Notes:
-            The kinematic heat flux :math:`\\overline{(w'\\theta')}_s` is directly related to the
-            sensible heat flux :math:`H` through
-
-            .. math::
-                \\overline{(w'\\theta')}_s = \\frac{H}{\\rho c_p},
-
-            where :math:`\\rho` is the density of air and
-            :math:`c_p` is the specific heat capacity of air at constant pressure.
-        """
-        return hf / (cst.rho * cst.cp)
-
-    def compute_wq(self, le: Array) -> Array:
-        """Compute the kinematic moisture flux ``wq``.
-
-        Notes:
-            The kinematic moisture flux :math:`\\overline{(w'q')}_s` is directly related to the
-            latent heat flux :math:`LE` through
-
-            .. math::
-                \\overline{(w'q')}_s = \\frac{LE}{\\rho L_v},
-
-            where :math:`\\rho` is the density of air and
-            :math:`L_v` is the latent heat of vaporization.
-        """
-        return le / (cst.rho * cst.lv)
-
-    def compute_vpd(self, q: Array, qsat: Array) -> Array:
-        """Compute the vapor pressure deficit ``vpd``.
-
-        Notes:
-            The vapor pressure deficit :math:`\\d_q` is defined as the difference between the
-            saturation vapor pressure :math:`\\q_{sat}` and the actual vapor pressure :math:`e`.
-        """
-        return qsat - q

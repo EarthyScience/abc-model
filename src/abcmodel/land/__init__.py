@@ -1,18 +1,13 @@
-from .ags import AgsModel, AgsState
-from .jarvis_stewart import (
-    JarvisStewartModel,
-    JarvisStewartState,
-)
-from .minimal import (
-    MinimalLandSurfaceModel,
-    MinimalLandSurfaceState,
+from . import biosphere, soil, surface
+from .standard import (
+    StandardLandModel,
+    StandardLandState,
 )
 
 __all__ = [
-    "AgsModel",
-    "AgsState",
-    "JarvisStewartModel",
-    "JarvisStewartState",
-    "MinimalLandSurfaceModel",
-    "MinimalLandSurfaceState",
+    "biosphere",
+    "soil",
+    "surface",
+    "StandardLandModel",
+    "StandardLandState",
 ]

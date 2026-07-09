@@ -14,7 +14,7 @@ def simple(
     mid_top_path: str = "atmos.mixed.theta",
     right_top_path: str = "atmos.mixed.q",
     left_bottom_path: str = "atmos.clouds.cc_frac",
-    mid_bottom_path: str = "land.le",
+    mid_bottom_path: str = "land.surface.le",
     right_bottom_path: str = "land.wCO2",
     axes: Any = None,
     **kwargs,
@@ -78,7 +78,20 @@ def simple(
             # find the field in the class fields using the
             # __dataclass_fields__ dictionary which is pretty hacky :P
             field_obj = getattr(cls, "__dataclass_fields__", {}).get(field_name)
-            label = get_label_from_metadata(field_obj.metadata, label)  # type: ignore
+            if field_obj is None:
+                # If it's a property delegating to sub-components, check them for metadata
+                for sub_name in ["biosphere", "soil", "surface", "mixed", "clouds"]:
+                    sub_obj = getattr(current_obj, sub_name, None)
+                    if sub_obj is not None:
+                        sub_cls = type(sub_obj)
+                        sub_field = getattr(sub_cls, "__dataclass_fields__", {}).get(
+                            field_name
+                        )
+                        if sub_field is not None:
+                            field_obj = sub_field
+                            break
+            if field_obj is not None:
+                label = get_label_from_metadata(field_obj.metadata, label)  # type: ignore
         except Exception:
             raise ValueError(f"Data not found: {path}")
 

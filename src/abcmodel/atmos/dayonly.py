@@ -185,7 +185,10 @@ class DayOnlyAtmosphereModel(AbstractAtmosphereModel[DayOnlyAtmosphereState]):
         self.clouds = clouds
 
     def init_state(
-        self, surface: SurfT, mixed: MixedT, clouds: CloudT
+        self,
+        surface: SurfT,
+        mixed: MixedT,
+        clouds: CloudT,
     ) -> DayOnlyAtmosphereState[SurfT, MixedT, CloudT]:
         """Initialize the model state.
 
@@ -203,14 +206,20 @@ class DayOnlyAtmosphereModel(AbstractAtmosphereModel[DayOnlyAtmosphereState]):
         self,
         state: StateAlias,
     ) -> DayOnlyAtmosphereState:
+        # surface layer
         sl_state = self.surface_layer.run(state)
         atmostate = replace(state.atmos, surface=sl_state)
         state = state.replace(atmos=atmostate)
+
+        # clouds
         cl_state = self.clouds.run(state)
         atmostate = replace(atmostate, clouds=cl_state)
         state = state.replace(atmos=atmostate)
+
+        # mixed layer
         ml_state = self.mixed_layer.run(state)
         atmostate = replace(atmostate, mixed=ml_state)
+
         return atmostate
 
     def statistics(self, state: StateAlias, t: Array) -> DayOnlyAtmosphereState:

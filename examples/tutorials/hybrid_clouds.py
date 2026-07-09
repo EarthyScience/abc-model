@@ -72,23 +72,45 @@ def load_model_and_template_state(key: Array):
     rad_state = rad_model.init_state()
 
     # land
-    land_model = abcmodel.land.AgsModel()
-    land_state = land_model.init_state()
+    # 1) biosphere
+    biosphere_model = abcmodel.land.biosphere.JarvisStewartModel()
+    biosphere_state = biosphere_model.init_state()
 
-    # surface layer
+    # 2) soil
+    soil_model = abcmodel.land.soil.StandardSoilModel()
+    soil_state = soil_model.init_state()
+
+    # 3) surface
+    surface_model = abcmodel.land.surface.StandardSurfaceModel()
+    surface_state = surface_model.init_state()
+
+    # then put things together
+    land_model = abcmodel.land.StandardLandModel(
+        biosphere=biosphere_model,
+        soil=soil_model,
+        surface=surface_model,
+    )
+    land_state = land_model.init_state(
+        biosphere_state=biosphere_state,
+        soil_state=soil_state,
+        surface_state=surface_state,
+    )
+
+    # atmosphere
+    # 1) surface layer
     surface_layer_model = abcmodel.atmos.surface_layer.ObukhovModel()
     surface_layer_state = surface_layer_model.init_state()
 
-    # mixed layer
+    # 2) mixed layer
     mixed_layer_model = abcmodel.atmos.mixed_layer.BulkModel()
     mixed_layer_state = mixed_layer_model.init_state()
 
-    # clouds
+    # 3) clouds
     net = NeuralNetwork(rngs=nnx.Rngs(key))
     cloud_model = HybridCumulusModel(net)
     cloud_state = cloud_model.init_state()
 
-    # atmosphere
+    # then put things together
     atmos_model = abcmodel.atmos.DayOnlyAtmosphereModel(
         surface_layer=surface_layer_model,
         mixed_layer=mixed_layer_model,
@@ -314,23 +336,45 @@ def benchmark_plot(
     rad_model = abcmodel.rad.CloudyRadiationModel()
     rad_state = rad_model.init_state()
 
-    # land surface
-    land_model = abcmodel.land.AgsModel()
-    land_state = land_model.init_state()
+    # land
+    # 1) biosphere
+    biosphere_model = abcmodel.land.biosphere.JarvisStewartModel()
+    biosphere_state = biosphere_model.init_state()
 
-    # surface layer
+    # 2) soil
+    soil_model = abcmodel.land.soil.StandardSoilModel()
+    soil_state = soil_model.init_state()
+
+    # 3) surface
+    surface_model = abcmodel.land.surface.StandardSurfaceModel()
+    surface_state = surface_model.init_state()
+
+    # then put things together
+    land_model = abcmodel.land.StandardLandModel(
+        biosphere=biosphere_model,
+        soil=soil_model,
+        surface=surface_model,
+    )
+    land_state = land_model.init_state(
+        biosphere_state=biosphere_state,
+        soil_state=soil_state,
+        surface_state=surface_state,
+    )
+
+    # atmos
+    # 1) surface layer
     surface_layer_model = abcmodel.atmos.surface_layer.ObukhovModel()
     surface_layer_state = surface_layer_model.init_state()
 
-    # mixed layer
+    # 2) mixed layer
     mixed_layer_model = abcmodel.atmos.mixed_layer.BulkModel()
     mixed_layer_state = mixed_layer_model.init_state()
 
-    # clouds
+    # 3) clouds
     cloud_model = abcmodel.atmos.clouds.CumulusModel()
     cloud_state = cloud_model.init_state()
 
-    # atmos
+    # then put things together
     atmos_model = abcmodel.atmos.DayOnlyAtmosphereModel(
         surface_layer=surface_layer_model,
         mixed_layer=mixed_layer_model,

@@ -33,32 +33,84 @@ class AbstractRadiationState(AbstractState):
 class AbstractLandState(AbstractState):
     """Abstract land state."""
 
-    alpha: Array
-    """surface albedo [-], range 0 to 1."""
-    surf_temp: Array
-    """Surface temperature [K]."""
-    rs: Array
-    """Surface resistance [s m-1]."""
-    wg: Array
-    """No moisture content in the root zone [m3 m-3]."""
-    wl: Array
-    """No water content in the canopy [m]."""
-    esat: Array
-    """Saturation vapor pressure [Pa]."""
-    qsat: Array
-    """Saturation specific humidity [kg/kg]."""
-    dqsatdT: Array
-    """Derivative of saturation specific humidity with respect to temperature [kg/kg/K]."""
-    e: Array
-    """Vapor pressure [Pa]."""
-    qsatsurf: Array
-    """Saturation specific humidity at surface temperature [kg/kg]."""
-    wtheta: Array
-    """Kinematic heat flux [K m/s]."""
-    wq: Array
-    """Kinematic moisture flux [kg/kg m/s]."""
-    wCO2: Array
-    """Kinematic CO2 flux [kg/kg m/s] or [mol m-2 s-1]."""
+    @property
+    @abstractmethod
+    def alpha(self) -> Array:
+        """surface albedo [-], range 0 to 1."""
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def surf_temp(self) -> Array:
+        """Surface temperature [K]."""
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def rs(self) -> Array:
+        """Surface resistance [s m-1]."""
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def wg(self) -> Array:
+        """No moisture content in the root zone [m3 m-3]."""
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def wl(self) -> Array:
+        """No water content in the canopy [m]."""
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def esat(self) -> Array:
+        """Saturation vapor pressure [Pa]."""
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def qsat(self) -> Array:
+        """Saturation specific humidity [kg/kg]."""
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def dqsatdT(self) -> Array:
+        """Derivative of saturation specific humidity with respect to temperature [kg/kg/K]."""
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def e(self) -> Array:
+        """Vapor pressure [Pa]."""
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def qsatsurf(self) -> Array:
+        """Saturation specific humidity at surface temperature [kg/kg]."""
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def wtheta(self) -> Array:
+        """Kinematic heat flux [K m/s]."""
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def wq(self) -> Array:
+        """Kinematic moisture flux [kg/kg m/s]."""
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def wCO2(self) -> Array:
+        """Kinematic CO2 flux [kg/kg m/s] or [mol m-2 s-1]."""
+        raise NotImplementedError
+
 
 
 class AbstractAtmosphereState(AbstractState):
