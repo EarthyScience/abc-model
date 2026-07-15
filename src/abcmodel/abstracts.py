@@ -112,7 +112,6 @@ class AbstractLandState(AbstractState):
         raise NotImplementedError
 
 
-
 class AbstractAtmosphereState(AbstractState):
     """Abstract atmos state."""
 

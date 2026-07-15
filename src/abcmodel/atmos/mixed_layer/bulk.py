@@ -740,10 +740,9 @@ class BulkModel(AbstractMixedLayerModel[BulkState]):
         :math:`(\\overline{w'\\theta_v'})_s` is the virtual heat flux at the surface and :math:`\\theta_v` is
         the virtual potential temperature.
         """
-        buoyancy_term = g * h_abl * wthetav / thetav
+        buoyancy_term = jnp.where(wthetav > 0.0, g * h_abl * wthetav / thetav, 1.0)
         wstar_positive = buoyancy_term ** (1.0 / 3.0)
-        # clip to 1e-6 in case wthetav is negative
-        return jnp.where(wthetav > 0.0, wstar_positive, 1e-6)
+        return jnp.where(wthetav > 0.0, wstar_positive, 0.0)
 
     def compute_wthetave(self, wthetav: Array) -> Array:
         """Compute the entrainment virtual heat flux as

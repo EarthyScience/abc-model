@@ -84,6 +84,9 @@ class AbstractCloudState(AbstractState):
 SurfT = TypeVar("SurfT", bound=AbstractSurfaceLayerState)
 MixedT = TypeVar("MixedT", bound=AbstractMixedLayerState)
 CloudT = TypeVar("CloudT", bound=AbstractCloudState)
+StableT = TypeVar("StableT", bound=AbstractState)
+ResidualT = TypeVar("ResidualT", bound=AbstractState)
+ActiveBLT = TypeVar("ActiveBLT", bound=AbstractState)
 
 
 class AbstractSurfaceLayerModel(AbstractModel, Generic[SurfT]):
