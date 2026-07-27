@@ -22,7 +22,7 @@ class BulkState(AbstractMixedLayerState):
         metadata={
             "label": r"$h_{abl}$",
             "unit": "m",
-            "description": "Initial atmospheric boundary layer (ABL) height",
+            "description": "Boundary layer (ABL) height",
         }
     )
     """Initial atmospheric boundary layer (ABL) height [m]."""

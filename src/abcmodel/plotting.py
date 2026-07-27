@@ -90,6 +90,21 @@ def simple(
                         if sub_field is not None:
                             field_obj = sub_field
                             break
+            if field_obj is None:
+                # DayAndNightAtmosphereState exposes properties (h_abl, theta, q, ...)
+                # that delegate to active_bl.mixed or active_bl.sbl - we check those.
+                active_bl = getattr(current_obj, "active_bl", None)
+                if active_bl is not None:
+                    for sub_name in ["mixed", "sbl"]:
+                        sub_obj = getattr(active_bl, sub_name, None)
+                        if sub_obj is not None:
+                            sub_cls = type(sub_obj)
+                            sub_field = getattr(
+                                sub_cls, "__dataclass_fields__", {}
+                            ).get(field_name)
+                            if sub_field is not None:
+                                field_obj = sub_field
+                                break
             if field_obj is not None:
                 label = get_label_from_metadata(field_obj.metadata, label)  # type: ignore
         except Exception:

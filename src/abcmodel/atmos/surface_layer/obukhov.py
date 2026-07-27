@@ -532,7 +532,7 @@ class ObukhovModel(AbstractSurfaceLayerModel):
         max_oblen = 1e4
 
         def body_fun_scan(carry, _):
-            oblen, oblen0 = carry
+            oblen, _ = carry
 
             # calculate function value at current estimate
             fx = self.compute_rib_function(zsl, oblen, rib_number, z0h, z0m)
@@ -546,8 +546,7 @@ class ObukhovModel(AbstractSurfaceLayerModel):
 
             fxdif = (fx_start - fx_end) / (oblen_start - oblen_end)
 
-            # Newton–Raphson update
-            # clamp update to avoid exploding values
+            # clamp update to avoid exploding values (Newton–Raphson update)
             update = fx / fxdif
             # simple clamping logic if needed, but bounded iterations help safety
             oblen_new = oblen - update
@@ -965,7 +964,7 @@ class ObukhovModel(AbstractSurfaceLayerModel):
 
         # unstable conditions (zeta <= 0)
         x_arg = jnp.where(zeta <= 0, 1.0 - 16.0 * zeta, 1.0)
-        x = x_arg ** 0.25
+        x = x_arg**0.25
         arctan_term = 2.0 * jnp.arctan(x)
         log_numerator = (1.0 + x) ** 2.0 * (1.0 + x**2.0)
         log_term = jnp.log(log_numerator / 8.0)
@@ -1026,14 +1025,14 @@ class ObukhovModel(AbstractSurfaceLayerModel):
 
         # unstable conditions (zeta <= 0)
         x_arg = jnp.where(zeta <= 0, 1.0 - 16.0 * zeta, 1.0)
-        x = x_arg ** 0.25
+        x = x_arg**0.25
         log_argument = (1.0 + x * x) / 2.0
         psih_unstable = 2.0 * jnp.log(log_argument)
 
         # stable conditions (zeta > 0)
         exponential_term = (zeta - beta) * jnp.exp(-alpha * zeta)
         power_arg = jnp.where(zeta > 0, 1.0 + (2.0 / 3.0) * zeta, 1.0)
-        power_term = power_arg ** 1.5
+        power_term = power_arg**1.5
         psih_stable = -2.0 / 3.0 * exponential_term - power_term - gamma + 1.0
 
         # select based on stability condition
