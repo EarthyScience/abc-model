@@ -324,7 +324,21 @@ class StandardSurfaceModel(AbstractSurfaceModel[StandardSurfaceState]):
         )
 
     def compute_dqsatdT(self, esat: Array, theta: float, surf_pressure: float) -> Array:
-        """Compute derivative of saturation vapor pressure with respect to temperature."""
+        """Compute the derivative of saturation vapor pressure with respect to temperature ``dqsatdT``.
+
+        Notes:
+            Using :func:`~abcmodel.utils.compute_esat`, the derivative of the saturated vapor pressure
+            :math:`e_\\text{sat}` with respect to temperature :math:`T` is given by
+
+            .. math::
+                \\frac{\\text{d}e_\\text{sat}}{\\text{d} T} =
+                e_\\text{sat}\\frac{17.2694(T-237.16)}{(T-35.86)^2},
+
+            which combined with :func:`~abcmodel.utils.compute_qsat` can be used to get
+
+            .. math::
+                \\frac{\\text{d}q_{\\text{sat}}}{\\text{d} T} \\approx \\epsilon \\frac{\\frac{\\text{d}e_\\text{sat}}{\\text{d} T}}{p}.
+        """
         num = 17.2694 * (theta - 273.16)
         den = (theta - 35.86) ** 2.0
         mult = num / den
@@ -332,7 +346,16 @@ class StandardSurfaceModel(AbstractSurfaceModel[StandardSurfaceState]):
         return 0.622 * desatdT / surf_pressure
 
     def compute_e(self, q: Array, surf_pressure: Array) -> Array:
-        """Compute the vapor pressure."""
+        """Compute the vapor pressure ``e``.
+
+        Notes:
+            This function uses the same formula used in :func:`~abcmodel.utils.compute_esat`,
+            but now factoring the vapor pressure :math:`e` as a function of specific humidity :math:`q`
+            and surface pressure :math:`p`, which give us
+
+            .. math::
+                e = q \\cdot p / 0.622.
+        """
         return q * surf_pressure / 0.622
 
     def compute_skin_temperature(
@@ -349,7 +372,43 @@ class StandardSurfaceModel(AbstractSurfaceModel[StandardSurfaceState]):
         temp_soil: Array,
         cveg: Array,
     ) -> Array:
-        """Compute skin temperature surf_temp."""
+        """Compute the skin temperature ``surf_temp``.
+
+        Notes:
+            The skin temperature is obtained by solving the surface energy balance
+
+            .. math::
+                R_n = H + LE_{\\text{veg}} + LE_{\\text{liq}} + LE_{\\text{soil}} + G
+
+            where :math:`R_n` is the net rad,
+            :math:`H` is the sensible heat flux (see :meth:`~.StandardSurfaceModel.compute_hf`),
+            :math:`LE_{\\text{veg}}` is the latent heat flux from vegetation (see :meth:`~.StandardSurfaceModel.compute_le_veg`),
+            :math:`LE_{\\text{liq}}` is the latent heat flux from dew on leaves (see :meth:`~.StandardSurfaceModel.compute_le_liq`),
+            :math:`LE_{\\text{soil}}` is the latent heat flux from the soil (see :meth:`~.StandardSurfaceModel.compute_le_soil`)
+            and :math:`G` is the ground heat flux (see :meth:`~.StandardSurfaceModel.compute_gf`).
+
+            The equation is solved for the skin temperature :math:`T_s`
+            by factoring out :math:`T_s` from the above, giving us
+
+            .. math::
+                T_s = \\frac{
+                    R_n + \\frac{\\rho c_p}{r_a} \\theta
+                    + c_{\\text{veg}} (1-c_{\\text{liq}}) \\frac{\\rho L_v}{r_a + r_s} (\\frac{\\text{d}q_{\\text{sat}}}{\\text{d}T} \\theta - q_{\\text{sat}} + q)
+                    + (1-c_{\\text{veg}}) \\frac{\\rho L_v}{r_a + r_{s,\\text{soil}}} (\\frac{\\text{d}q_{\\text{sat}}}{\\text{d}T} \\theta - q_{\\text{sat}} + q)
+                    + c_{\\text{veg}} c_{\\text{liq}} \\frac{\\rho L_v}{r_a} (\\frac{\\text{d}q_{\\text{sat}}}{\\text{d}T} \\theta - q_{\\text{sat}} + q)
+                    + \\Lambda T_{\\text{soil}}
+                }{
+                    \\frac{\\rho c_p}{r_a}
+                    + c_{\\text{veg}} (1-c_{\\text{liq}}) \\frac{\\rho L_v}{r_a + r_s} \\frac{\\text{d}q_{\\text{sat}}}{\\text{d}T}
+                    + (1-c_{\\text{veg}}) \\frac{\\rho L_v}{r_a + r_{s,\\text{soil}}} \\frac{\\text{d}q_{\\text{sat}}}{\\text{d}T}
+                    + c_{\\text{veg}} c_{\\text{liq}} \\frac{\\rho L_v}{r_a} \\frac{\\text{d}q_{\\text{sat}}}{\\text{d}T}
+                    + \\Lambda
+                }.
+
+            The terms computed in the equation above in each related function energy flux related method.
+            This approach ensures that the computed skin temperature is consistent with the partitioning of
+            energy fluxes as calculated by the other methods in this class.
+        """
         return (
             net_rad
             + cst.rho * cst.cp / ra * theta
@@ -386,7 +445,37 @@ class StandardSurfaceModel(AbstractSurfaceModel[StandardSurfaceState]):
         cliq: Array,
         cveg: Array,
     ) -> Array:
-        """Compute latent heat flux (transpiration) from vegetation."""
+        """Compute the latent heat flux (transpiration) from vegetation ``le_veg``.
+
+        Notes:
+            The latent heat flux is given by
+
+            .. math::
+                LE_{\\text{veg}} = \\frac{\\rho L_v}{r_a+r_s}(q_{\\text{sat}}(T_s)-⟨q⟩),
+
+            where :math:`\\rho` is the density of air, :math:`L_v` is the latent heat of vaporization,
+            :math:`r_a` is the aerodynamic resistance, :math:`r_s` is the soil resistance,
+            :math:`q_{\\text{sat}}(T_s)` is the saturation specific humidity at surface temperature,
+            :math:`⟨q⟩` is the specific humidity at the surface.
+
+            :math:`q_{\\text{sat}}(T_s)` has very short time-scales because of the small heat capacity
+            (excluding vegetation) of the surface layer and is hard to measure. Consequently,
+            we get :math:`q_{\\text{sat}}(T_s)` implicitly using
+
+            .. math::
+                q_{\\text{sat}}(T_s) = \\frac{\\text{d}q_{\\text{sat}}}{\\text{d}T}(\\theta_s-\\theta),
+
+            where :math:`\\theta_s` and :math:`\\theta` are the potential temperature of the surface layer and mixed layer, respectively.
+
+            In the end, we scale the latent heat flux by the vegetation cover fraction :math:`c_{\\text{veg}}`
+            and the liquid water content :math:`c_{\\text{liq}}` and return
+
+            .. math::
+                c_{\\text{veg}}(1-c_{\\text{liq}})LE_{\\text{veg}}.
+
+        References:
+            Equation 9.15 from the CLASS book.
+        """
         term = dqsatdT * (surf_temp - theta) + qsat - q
         le_veg = cst.rho * cst.lv / (ra + rs) * term
         frac = (1.0 - cliq) * cveg
@@ -403,7 +492,21 @@ class StandardSurfaceModel(AbstractSurfaceModel[StandardSurfaceState]):
         cliq: Array,
         cveg: Array,
     ) -> Array:
-        """Compute latent heat flux on the leaf (dew) le_liq."""
+        """Compute the latent heat flux on the leaf (dew) ``le_liq``.
+
+        Notes:
+            We proceed just like in :meth:`~.StandardSurfaceModel.compute_le_veg`, but omitting vegetation's resistance :math:`r_s`,
+            with the assumption that water at the leaf is ready to be evaporated, giving us
+
+        .. math::
+            LE_{\\text{liq}} = \\frac{\\rho L_v}{r_a}(q_{\\text{sat}}(T_s)-⟨q⟩).
+
+        In the end, we scale the result by the fraction of liquid water content :math:`c_{\\text{liq}}`
+        and the fraction of vegetation :math:`c_{\\text{veg}}`.
+
+        References:
+            Equation 9.18 from the CLASS book.
+        """
         term = dqsatdT * (surf_temp - theta) + qsat - q
         le_liq = cst.rho * cst.lv / ra * term
         frac = cliq * cveg
@@ -420,22 +523,74 @@ class StandardSurfaceModel(AbstractSurfaceModel[StandardSurfaceState]):
         rssoil: Array,
         cveg: Array,
     ) -> Array:
-        """Compute latent heat flux on the soil (evaporation) le_soil."""
+        """Compute the latent heat flux on the soil (evaporation) ``le_soil``.
+
+        Notes:
+            We proceed just like in :meth:`~.StandardSurfaceModel.compute_le_veg`, but instead of considering resistance from
+            the vegetation, we consider the resistance from the soil :math:`r_{soil}`, giving us
+
+        .. math::
+            LE_{\\text{soil}} = \\frac{\\rho L_v}{r_a + r_{soil}}(q_{\\text{sat}}(T_s)-⟨q⟩)
+
+        In the end, we scale the result by the fraction of soil :math:`c_{\\text{soil}} = 1 - c_{\\text{veg}}`.
+
+        References:
+            Equation 9.21 from the CLASS book.
+        """
         term = dqsatdT * (surf_temp - theta) + qsat - q
         le_soil = cst.rho * cst.lv / (ra + rssoil) * term
         frac = 1.0 - cveg
         return frac * le_soil
 
     def compute_le(self, le_soil: Array, le_veg: Array, le_liq: Array) -> Array:
-        """Compute the total evapotranspiration (latent heat flux) le."""
+        """Compute the evapotranspiration (latent heat flux) ``le``.
+
+        Notes:
+            The sum of
+
+            - transpiration from vegetation in :meth:`~.StandardSurfaceModel.compute_le_veg`;
+            - evaporation from bare soil in :meth:`~.StandardSurfaceModel.compute_le_soil`;
+            - evaporation from wet leaves (dew) in :meth:`~.StandardSurfaceModel.compute_le_liq`.
+        """
         return jnp.clip(le_soil + le_veg + le_liq, 0.0, None)
 
     def compute_hf(self, surf_temp: Array, theta: Array, ra: Array) -> Array:
-        """Compute sensible heat flux hf."""
+        """Compute the sensible heat flux ``hf``.
+
+        Notes:
+            The sensible heat flux is given by
+
+            .. math::
+
+                H = \\frac{\\rho c_p}{r_a} (T_s - \\theta),
+
+            where :math:`\\rho` is the air density, :math:`c_p` is the specific heat capacity of air,
+            :math:`r_a` is the aerodynamic resistance, :math:`T_s` is the surface temperature and
+            :math:`\\theta` is the mixed layer air potential temperature.
+
+        References:
+            Equation 9.13 from the CLASS book, but why are we using :math:`T_s` instead of :math:`\\theta_s`?
+            Probably because the variations of pressure are not significant enough.
+        """
         return cst.rho * cst.cp / ra * (surf_temp - theta)
 
     def compute_gf(self, surf_temp: Array, temp_soil: Array) -> Array:
-        """Compute ground heat flux gf."""
+        """Compute the ground heat flux ``gf``.
+
+        Notes:
+            The ground heat flux is given by
+
+            .. math::
+
+                G = \\Lambda (T_s - T_{soil}),
+
+            where :math:`\\Lambda` is the conductivity of the skin layer,
+            :math:`T_s` is the surface temperature and
+            :math:`T_{soil}` is the soil temperature.
+
+        References:
+            Equation 9.33 from the CLASS book.
+        """
         return self.lam * (surf_temp - temp_soil)
 
     def compute_le_pot(
@@ -447,7 +602,25 @@ class StandardSurfaceModel(AbstractSurfaceModel[StandardSurfaceState]):
         q: Array,
         ra: Array,
     ) -> Array:
-        """Compute potential latent heat flux."""
+        """Compute the potential latent heat flux ``le_pot``.
+
+        Notes:
+            The potential latent heat flux is given by
+
+            .. math::
+
+                LE_{\\text{pot}} = \\frac{
+                \\frac{\\text{d}q_{sat}}{\\text{d} T} (R_n - G)
+                + \\frac{\\rho c_p}{r_a} (q_{\\text{sat}} - q)
+                }{
+                \\frac{\\text{d}q_{sat}}{\\text{d} T} + \\frac{\\rho c_p}{L_v}
+                },
+
+            which is the Penman-Monteith equation assuming no soil resistance.
+
+        References:
+            Equation 9.16 from the CLASS book.
+        """
         rad_term = dqsatdT * (net_rad - gf)
         aerodynamic_term = cst.rho * cst.cp / ra * (qsat - q)
         denominator = dqsatdT + cst.cp / cst.lv
@@ -462,7 +635,28 @@ class StandardSurfaceModel(AbstractSurfaceModel[StandardSurfaceState]):
         q: Array,
         ra: Array,
     ) -> Array:
-        """Compute reference latent heat flux."""
+        """Compute the reference latent heat flux ``le_ref``.
+
+        Notes:
+            The reference latent heat flux is given by
+
+            .. math::
+
+                LE_{\\text{ref}} = \\frac{
+                \\frac{\\text{d}q_{sat}}{\\text{d} T} (R_n - G)
+                + \\frac{\\rho c_p}{r_a} (q_{\\text{sat}} - q)
+                }{
+                \\frac{\\text{d}q_{sat}}{\\text{d} T} + \\frac{\\rho c_p}{L_v}(
+                1 + \\frac{r_{s,\\text{min}}}{\\text{LAI} \\cdot r_a}
+                )
+                },
+
+            which is the Penman-Monteith equation assuming that the soil resistance is given by
+            :math:`r_{s,\\text{min}} / \\text{LAI}`, i.e., no correction functions are applied.
+
+        References:
+            Equation 9.16 from the CLASS book.
+        """
         rad_term = dqsatdT * (net_rad - gf)
         aerodynamic_term = cst.rho * cst.cp / ra * (qsat - q)
         den1 = dqsatdT
@@ -470,13 +664,40 @@ class StandardSurfaceModel(AbstractSurfaceModel[StandardSurfaceState]):
         return (rad_term + aerodynamic_term) / (den1 + den2)
 
     def compute_wtheta(self, hf: Array) -> Array:
-        """Compute kinematic heat flux."""
+        """Compute the kinematic heat flux ``wtheta``.
+
+        Notes:
+            The kinematic heat flux :math:`\\overline{(w'\\theta')}_s` is directly related to the
+            sensible heat flux :math:`H` through
+
+            .. math::
+                \\overline{(w'\\theta')}_s = \\frac{H}{\\rho c_p},
+
+            where :math:`\\rho` is the density of air and
+            :math:`c_p` is the specific heat capacity of air at constant pressure.
+        """
         return hf / (cst.rho * cst.cp)
 
     def compute_wq(self, le: Array) -> Array:
-        """Compute kinematic moisture flux."""
+        """Compute the kinematic moisture flux ``wq``.
+
+        Notes:
+            The kinematic moisture flux :math:`\\overline{(w'q')}_s` is directly related to the
+            latent heat flux :math:`LE` through
+
+            .. math::
+                \\overline{(w'q')}_s = \\frac{LE}{\\rho L_v},
+
+            where :math:`\\rho` is the density of air and
+            :math:`L_v` is the latent heat of vaporization.
+        """
         return le / (cst.rho * cst.lv)
 
     def compute_vpd(self, q: Array, qsat: Array) -> Array:
-        """Compute vapor pressure deficit."""
+        """Compute the vapor pressure deficit ``vpd``.
+
+        Notes:
+            The vapor pressure deficit :math:`\\d_q` is defined as the difference between the
+            saturation vapor pressure :math:`\\q_{sat}` and the actual vapor pressure :math:`e`.
+        """
         return qsat - q
