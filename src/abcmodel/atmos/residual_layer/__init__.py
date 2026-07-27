@@ -1,3 +1,3 @@
-from .residual import FrozenResidualModel, FrozenResidualState
+from .frozen import FrozenResidualModel, FrozenResidualState
 
 __all__ = ["FrozenResidualModel", "FrozenResidualState"]

@@ -69,7 +69,7 @@ def main():
         right_top_path="atmos.q",
         left_bottom_path="atmos.active_bl.is_night",
         mid_bottom_path="land.surface.le",
-        right_bottom_path="land.wCO2",
+        right_bottom_path="land.wg",
     )
     plt.show()
 

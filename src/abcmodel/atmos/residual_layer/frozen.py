@@ -3,7 +3,7 @@ from dataclasses import dataclass, field
 import jax.numpy as jnp
 from jax import Array
 
-from ...abstracts import AbstractState
+from ...abstracts import AbstractCoupledState, AbstractState
 
 
 @dataclass
@@ -151,4 +151,20 @@ class FrozenResidualModel:
             delta_q=jnp.array(delta_q),
             delta_co2=jnp.array(delta_co2),
             dz_h=jnp.array(dz_h),
+        )
+
+    def run(self, state: AbstractCoupledState) -> FrozenResidualState:
+        """Run the residual layer model."""
+        ml_state = state.atmos.mixed
+        return FrozenResidualState(
+            theta=ml_state.theta,
+            q=ml_state.q,
+            co2=ml_state.co2,
+            u=ml_state.u,
+            v=ml_state.v,
+            h=ml_state.h_abl,
+            delta_theta=ml_state.deltatheta,
+            delta_q=ml_state.dq,
+            delta_co2=ml_state.deltaCO2,
+            dz_h=ml_state.dz_h,
         )

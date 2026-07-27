@@ -81,12 +81,19 @@ class AbstractCloudState(AbstractState):
     """Cloud core fraction [-]."""
 
 
+class AbstractStableState(AbstractState):
+    """Abstract stable layer state."""
+
+
+class AbstractResidualState(AbstractState):
+    """Abstract residual layer state."""
+
+
 SurfT = TypeVar("SurfT", bound=AbstractSurfaceLayerState)
 MixedT = TypeVar("MixedT", bound=AbstractMixedLayerState)
 CloudT = TypeVar("CloudT", bound=AbstractCloudState)
 StableT = TypeVar("StableT", bound=AbstractState)
 ResidualT = TypeVar("ResidualT", bound=AbstractState)
-ActiveBLT = TypeVar("ActiveBLT", bound=AbstractState)
 
 
 class AbstractSurfaceLayerModel(AbstractModel, Generic[SurfT]):
@@ -118,4 +125,20 @@ class AbstractCloudModel(AbstractModel, Generic[CloudT]):
 
     @abstractmethod
     def run(self, state: AbstractCoupledState) -> CloudT:
+        raise NotImplementedError
+
+
+class AbstractStableModel(AbstractModel, Generic[StableT]):
+    """Abstract stable model class to define the interface for all stable models."""
+
+    @abstractmethod
+    def run(self, state: AbstractCoupledState) -> StableT:
+        raise NotImplementedError
+
+
+class AbstractResidualModel(AbstractModel, Generic[ResidualT]):
+    """Abstract residual model class to define the interface for all residual models."""
+
+    @abstractmethod
+    def run(self, state: AbstractCoupledState) -> ResidualT:
         raise NotImplementedError

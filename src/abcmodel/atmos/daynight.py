@@ -26,7 +26,7 @@ from .abstracts import (
 from .clouds import NoCloudModel
 from .dayonly import DayOnlyAtmosphereState
 from .mixed_layer.bulk import BulkState
-from .residual_layer.residual import FrozenResidualModel, FrozenResidualState
+from .residual_layer.frozen import FrozenResidualModel, FrozenResidualState
 from .stable_layer.zilitinkevich import ZilitinkevichModel, ZilitinkevichState
 
 
@@ -354,21 +354,10 @@ class DayAndNightAtmosphereModel(AbstractAtmosphereModel[DayAndNightAtmosphereSt
         # clouds
         cl_state = self.clouds.run(temp_state)
 
-        # residual
+        # residual — capture the mixed layer state at sunset
         residual = jax.lax.cond(
             just_became_night,
-            lambda _: FrozenResidualState(
-                theta=ml_state.theta,
-                q=ml_state.q,
-                co2=ml_state.co2,
-                u=ml_state.u,
-                v=ml_state.v,
-                h=ml_state.h_abl,
-                delta_theta=ml_state.deltatheta,
-                delta_q=ml_state.dq,
-                delta_co2=ml_state.deltaCO2,
-                dz_h=ml_state.dz_h,
-            ),
+            lambda _: self.residual_layer.run(temp_state),
             lambda _: state.atmos.residual,
             None,
         )
