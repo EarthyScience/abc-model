@@ -142,7 +142,31 @@ class StandardSoilModel(AbstractSoilModel[StandardSoilState]):
         return replace(state.land.soil, rssoil=rssoil)
 
     def compute_soil_resistance(self, wg: Array) -> Array:
-        """Compute the soil resistance rssoil."""
+        """Compute the soil resistance ``rssoil``.
+
+        Notes:
+            The soil resistance is calculated as
+
+            .. math::
+                r_\\text{soil} = r_\\text{soil,min} \\cdot f_2,
+
+            where the parameter :math:`r_\\text{soil,min}` is the minimum surface resistance and
+            the correction function :math:`f_2` is given by
+
+            .. math::
+                f_2 =
+                    \\begin{cases}
+                        \\frac{w_\\text{fc} - w_\\text{wilt}}{w_g - w_\\text{wilt}}, & \\text{if } w_g > w_\\text{wilt} \\\\
+                        10^8, & \\text{otherwise},
+                    \\end{cases}
+
+            where the model parameters :math:`w_\\text{fc}` and :math:`w_\\text{wilt}`
+            are the field capacity and wilting point, respectively,
+            and the variable :math:`w_g` is the soil water content.
+
+        References:
+            Equations 9.28 and 9.31 from the CLASS book.
+        """
         f2 = jnp.where(
             wg > self.wwilt,
             (self.wfc - self.wwilt) / (wg - self.wwilt),
@@ -153,12 +177,82 @@ class StandardSoilModel(AbstractSoilModel[StandardSoilState]):
     def compute_temp_soil_tend(
         self, gf: Array, temp_soil: Array, temp2: Array
     ) -> Array:
-        """Compute the soil temperature tendency."""
+        """Compute the soil temperature tendency ``temp_soil_tend``.
+
+        Notes:
+            The dynamics of heat transport in the soil is given by
+
+            .. math::
+                \\frac{\\text{d}T_s}{\\text{d}t}
+                =
+                C_T G - \\frac{2\\pi}{\\tau} (T_s - T_2),
+
+            :math:`T_2` is the temperature of the second layer in the soil,
+            :math:`T_s` is the soil temperature,
+            where :math:`\\tau` is the time constant of one day (86400s),
+            :math:`G` is the ground the heat flux and
+            and :math:`C_T` is the surface soil/vegetation heat capacity, which can be parametrized as
+
+            .. math::
+                C_T = C_{T,\\text{sat}} \\left(\\frac{w_{\\text{sat}}}{w_2}\\right)^{\\frac{b}{2\\log(10)}}
+
+            where :math:`C_{T,\\text{sat}}` is the saturated heat capacity,
+            :math:`w_{\\text{sat}}` is the saturation water content,
+            :math:`w_2` is the water content at the second layer
+            and :math:`b` is a parameter from Clapp and Hornberger (1978).
+            I have no idea where this log comes from.
+
+        References:
+            Equation 9.32 of the CLASS book.
+        """
         cg = self.cgsat * (self.wsat / self.w2) ** (self.b / (2.0 * jnp.log(10.0)))
         return cg * gf - 2.0 * jnp.pi / 86400.0 * (temp_soil - temp2)
 
     def compute_wgtend(self, wg: Array, le_soil: Array) -> Array:
-        """Compute the soil moisture tendency."""
+        """Compute the soil moisture tendency ``wgtend``.
+
+        Notes:
+            The dynamics of soil moisture in the top soil layer is described by
+
+            .. math::
+                \\frac{\\mathrm{d}w_g}{\\mathrm{d}t}
+                =
+                -\\frac{C_1}{\\rho_w d_1} \\frac{LE_{\\text{soil}}}{L_v}
+                - \\frac{C_2}{\\tau} (w_g - w_{eq}),
+
+            where the coefficients :math:`C_1` and :math:`C_2` are calculated as
+
+            .. math::
+                C_1 = C_{1,\\text{sat}} \\left(\\frac{w_{sat}}{w_g}\\right)^{b/2 + 1},
+
+            .. math::
+                C_2 = C_{2,\\text{ref}} \\left(\\frac{w_2}{w_{sat} - w_2}\\right),
+
+            where :math:`C_{1,\\text{sat}}` and :math:`C_{2,\\text{sat}}` are parameters from Clapp-Hornberger (1978)
+            and the equilibrium soil moisture is given by
+
+            .. math::
+                w_{eq} = w_2 - w_{sat} a \\left(\\left(\\frac{w_2}{w_{sat}}\\right)^p
+                \\left[1 - \\left(\\frac{w_2}{w_{sat}}\\right)^{8p}\\right]\\right).
+
+            In these equations, :math:`w_g` is the volumetric soil moisture in the top layer,
+            :math:`LE_{\\text{soil}}` is the latent heat flux from the soil,
+            :math:`L_v` is the latent heat of vaporization,
+            :math:`\\rho_w` is the density of water,
+            :math:`d_1` is the depth of the first soil layer,
+            :math:`\\tau` is a time constant (here, 86400 s = 1 day),
+            :math:`w_2` is the soil moisture in the second layer,
+            :math:`w_{sat}` is the saturated soil moisture, and
+            :math:`a`, :math:`b` and :math:`p` are parameters from Clapp-Hornberger (1978).
+
+            The first term represents the loss of soil moisture due to evaporation,
+            and the second term represents the relaxation of soil moisture toward equilibrium with the lower layer.
+
+        References:
+            - (9.34)–(9.37) in the CLASS book.
+            - Clapp, R. B., & Hornberger, G. M. (1978). Empirical equations for some soil hydraulic properties. Water resources research, 14(4), 601-604.
+
+        """
         c1 = self.c1sat * (self.wsat / wg) ** (self.b / 2.0 + 1.0)
         c2 = self.c2ref * (self.w2 / (self.wsat - self.w2))
         wgeq = self.w2 - self.wsat * self.a * (

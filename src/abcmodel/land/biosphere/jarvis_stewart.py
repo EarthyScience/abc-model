@@ -167,12 +167,40 @@ class JarvisStewartModel(AbstractBiosphereModel[JarvisStewartState]):
         return f4
 
     def compute_cliq(self, wl: Array) -> Array:
-        """Compute wet fraction of canopy cliq."""
+        """Compute the wet fraction ``cliq``.
+
+        Notes:
+            The wet fraction is defined as
+
+            .. math::
+                c_{\\text{liq}} = \\frac{W_l}{\\text{LAI}\\cdot W_{\\text{max}}},
+
+            where :math:`W_l` is the water layer depth,
+            :math:`\\text{LAI}` is the leaf area index and
+            :math:`W_{\\text{max}}` is the thickness of the water layer on wet vegetation.
+            In case :math:`W_l > \\text{LAI}\\cdot W_{\\text{max}}`, the wet fraction is set to 1.
+
+        References:
+            Equation 9.19 from the CLASS book.
+        """
         wlmx = self.lai * self.wmax
         return jnp.minimum(1.0, wl / wlmx)
 
     def compute_wltend(self, le_liq: Array) -> Array:
-        """Compute canopy water storage tendency."""
+        """Compute the water layer depth tendency ``wltend``.
+
+        Notes:
+            The water layer depth tendency is the rate at which water is added to or taken from the vegetation,
+            described by
+
+            .. math::
+                \\frac{\\text{d} w}{\\text{d} t} = -\\frac{LE_{\\text{liq}}}{\\rho_w L_v},
+
+            where :math:`LE_{\\text{liq}}` is dew, :math:`\\rho_w` is water density and :math:`L_v` is the latent heat of vaporization.
+
+        References:
+            Equation 9.20 from the CLASS book, with sign convention.
+        """
         from ...utils import PhysicalConstants as cst
 
         return -le_liq / (cst.rhow * cst.lv)

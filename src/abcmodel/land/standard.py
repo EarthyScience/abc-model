@@ -20,7 +20,13 @@ from .abstracts import (
 
 @dataclass
 class StandardLandState(AbstractLandState, Generic[BiosphereT, SoilT, SurfaceT]):
-    """Standard land surface model state aggregating biosphere, soil, and surface."""
+    """Standard land surface model state aggregating biosphere, soil, and surface.
+
+    Args:
+        biosphere: The biosphere component state.
+        soil: The soil component state.
+        surface: The surface component state.
+    """
 
     biosphere: BiosphereT
     soil: SoilT
@@ -93,7 +99,14 @@ class StandardLandState(AbstractLandState, Generic[BiosphereT, SoilT, SurfaceT])
 
 
 class StandardLandModel(AbstractLandModel[StandardLandState]):
-    """Standard land model coordinating biosphere, soil, and surface models."""
+    """Standard land model coordinating biosphere, soil, and surface models.
+
+    Args:
+        biosphere: Biosphere model instance (e.g., :class:`~abcmodel.land.biosphere.ags.AgsModel` or
+            :class:`~abcmodel.land.biosphere.jarvis_stewart.JarvisStewartModel`).
+        soil: Soil model instance (e.g., :class:`~abcmodel.land.soil.standard.StandardSoilModel`).
+        surface: Surface model instance (e.g., :class:`~abcmodel.land.surface.standard.StandardSurfaceModel`).
+    """
 
     def __init__(
         self,
@@ -111,7 +124,16 @@ class StandardLandModel(AbstractLandModel[StandardLandState]):
         soil_state: SoilT,
         surface_state: SurfaceT,
     ) -> StandardLandState[BiosphereT, SoilT, SurfaceT]:
-        """Initialize standard land state."""
+        """Initialize standard land state.
+
+        Args:
+            biosphere_state: Initialized biosphere state.
+            soil_state: Initialized soil state.
+            surface_state: Initialized surface state.
+
+        Returns:
+            The aggregated :class:`StandardLandState`.
+        """
         return StandardLandState(
             biosphere=biosphere_state,
             soil=soil_state,
@@ -119,14 +141,20 @@ class StandardLandModel(AbstractLandModel[StandardLandState]):
         )
 
     def run(self, state: AbstractCoupledState) -> StandardLandState:
-        """Run standard land components sequentially.
+        """Run the full land surface model for one time step.
 
         Execution order:
-          1. biosphere diagnostics
-          2. soil diagnostics
-          3. surface fluxes and surf_temp
-          4. biosphere tendencies
-          5. soil tendencies
+          1. biosphere diagnostics (stomatal resistance, CO2 fluxes, wet fraction)
+          2. soil diagnostics (soil resistance)
+          3. surface fluxes and skin temperature (energy balance, latent/sensible/ground heat)
+          4. biosphere tendencies (canopy water)
+          5. soil tendencies (moisture and temperature)
+
+        Args:
+            state: CoupledState carrying atmos, land, and radiation state.
+
+        Returns:
+            The updated land state object with all computed fluxes and diagnostics.
         """
         # biosphere
         bio_state = self.biosphere.run(state)
@@ -154,7 +182,15 @@ class StandardLandModel(AbstractLandModel[StandardLandState]):
         )
 
     def integrate(self, state: StandardLandState, dt: float) -> StandardLandState:
-        """Integrate biosphere, soil, and surface states forward in time."""
+        """Integrate biosphere, soil, and surface states forward in time.
+
+        Args:
+            state: the land state object carrying all variables.
+            dt: the time step [s].
+
+        Returns:
+            The updated land state object.
+        """
         biosphere = self.biosphere.integrate(state.biosphere, dt)
         soil = self.soil.integrate(state.soil, dt)
         surface = self.surface.integrate(state.surface, dt)
