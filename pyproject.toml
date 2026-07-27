@@ -22,4 +22,4 @@ docs = [
 ]
 
 [tool.ruff.lint]
-ignore = ["E731", "F722"]
+ignore = ["E731", "F722", "UP046"]

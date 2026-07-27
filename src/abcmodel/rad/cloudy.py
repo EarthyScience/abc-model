@@ -11,8 +11,6 @@ from .standard import StandardRadiationModel, StandardRadiationState
 class CloudyRadiationState(StandardRadiationState):
     """Standard radiation model with clouds state."""
 
-    pass
-
 
 StateAlias = AbstractCoupledState[StandardRadiationState, LandT, AtmosT]
 
