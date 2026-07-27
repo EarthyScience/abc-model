@@ -1,3 +1,3 @@
-from .residual import ResidualLayerModel, ResidualLayerState
+from .residual import FrozenResidualModel, FrozenResidualState
 
-__all__ = ["ResidualLayerModel", "ResidualLayerState"]
+__all__ = ["FrozenResidualModel", "FrozenResidualState"]

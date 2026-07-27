@@ -26,8 +26,8 @@ from .abstracts import (
 from .clouds import NoCloudModel
 from .dayonly import DayOnlyAtmosphereState
 from .mixed_layer.bulk import BulkState
-from .residual_layer.residual import ResidualLayerModel, ResidualLayerState
-from .stable_layer.sbl import SBLModel, SBLState
+from .residual_layer.residual import FrozenResidualModel, FrozenResidualState
+from .stable_layer.zilitinkevich import ZilitinkevichModel, ZilitinkevichState
 
 
 @dataclass
@@ -39,7 +39,7 @@ class ActiveBLState(AbstractState):
 
     is_night: Array
     mixed: BulkState
-    sbl: SBLState
+    sbl: ZilitinkevichState
 
 
 @dataclass
@@ -53,7 +53,7 @@ class DayAndNightAtmosphereState(AbstractAtmosphereState, Generic[SurfT, CloudT]
 
     surface: SurfT
     active_bl: ActiveBLState
-    residual: ResidualLayerState
+    residual: FrozenResidualState
     clouds: CloudT
 
     # same for day and night
@@ -226,8 +226,8 @@ class DayAndNightAtmosphereModel(AbstractAtmosphereModel[DayAndNightAtmosphereSt
         self,
         surface_layer: AbstractSurfaceLayerModel,
         mixed_layer: AbstractMixedLayerModel,
-        sbl_layer: SBLModel,
-        residual_layer: ResidualLayerModel,
+        sbl_layer: ZilitinkevichModel,
+        residual_layer: FrozenResidualModel,
         clouds: AbstractCloudModel,
     ):
         self.surface_layer = surface_layer
@@ -240,8 +240,8 @@ class DayAndNightAtmosphereModel(AbstractAtmosphereModel[DayAndNightAtmosphereSt
         self,
         surface: SurfT,
         mixed: BulkState,
-        sbl: SBLState,
-        residual: ResidualLayerState,
+        sbl: ZilitinkevichState,
+        residual: FrozenResidualState,
         clouds: CloudT,
         is_night: bool = False,
     ) -> DayAndNightAtmosphereState[SurfT, CloudT]:
@@ -357,7 +357,7 @@ class DayAndNightAtmosphereModel(AbstractAtmosphereModel[DayAndNightAtmosphereSt
         # residual
         residual = jax.lax.cond(
             just_became_night,
-            lambda _: ResidualLayerState(
+            lambda _: FrozenResidualState(
                 theta=ml_state.theta,
                 q=ml_state.q,
                 co2=ml_state.co2,

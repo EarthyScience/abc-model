@@ -7,7 +7,7 @@ from ...abstracts import AbstractCoupledState, AbstractState
 
 
 @dataclass
-class SBLState(AbstractState):
+class ZilitinkevichState(AbstractState):
     """Stable boundary layer (SBL) state.
 
     Fields with `default_factory` are diagnostic and are populated during ``run()``;
@@ -154,7 +154,7 @@ class SBLState(AbstractState):
     )
 
 
-class SBLModel:
+class ZilitinkevichModel:
     """Stable boundary layer model.
 
     Computes the SBL height using the Zilitinkevich (1972) formula
@@ -200,7 +200,7 @@ class SBLModel:
         u: float = 6.0,
         v: float = -4.0,
         surf_pressure: float = 101300.0,
-    ) -> SBLState:
+    ) -> ZilitinkevichState:
         """Initialize the SBL state.
 
         Args:
@@ -212,7 +212,7 @@ class SBLModel:
             v: SBL meridional wind [m/s]. Default -4.0.
             surf_pressure: Surface pressure [Pa]. Default 101300.0.
         """
-        return SBLState(
+        return ZilitinkevichState(
             h_sbl=jnp.array(h_sbl),
             theta=jnp.array(theta),
             q=jnp.array(q),
@@ -226,7 +226,7 @@ class SBLModel:
         self,
         state: AbstractCoupledState,
         h_residual: Array,
-    ) -> SBLState:
+    ) -> ZilitinkevichState:
         """Run the SBL model.
 
         Computes SBL height via Zilitinkevich and tendencies.
@@ -272,7 +272,7 @@ class SBLModel:
     def statistics(
         self,
         state: AbstractCoupledState,
-    ) -> SBLState:
+    ) -> ZilitinkevichState:
         """Compute SBL diagnostic statistics.
 
         Args:
@@ -285,7 +285,7 @@ class SBLModel:
         thetav = self.compute_thetav(sbl_state.theta, sbl_state.q)
         return sbl_state.replace(thetav=thetav)
 
-    def integrate(self, state: SBLState, dt: float) -> SBLState:
+    def integrate(self, state: ZilitinkevichState, dt: float) -> ZilitinkevichState:
         """Integrate SBL state forward in time.
 
         Args:

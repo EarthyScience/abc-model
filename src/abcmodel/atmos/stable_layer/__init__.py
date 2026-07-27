@@ -1,3 +1,3 @@
-from .sbl import SBLModel, SBLState
+from .zilitinkevich import ZilitinkevichModel, ZilitinkevichState
 
-__all__ = ["SBLModel", "SBLState"]
+__all__ = ["ZilitinkevichModel", "ZilitinkevichState"]

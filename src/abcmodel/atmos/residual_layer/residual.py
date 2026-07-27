@@ -7,7 +7,7 @@ from ...abstracts import AbstractState
 
 
 @dataclass
-class ResidualLayerState(AbstractState):
+class FrozenResidualState(AbstractState):
     """Residual layer state — the "frozen" daytime mixed layer aloft at night.
 
     Captured from the convective mixed layer at sunset, preserved
@@ -103,7 +103,7 @@ class ResidualLayerState(AbstractState):
     )
 
 
-class ResidualLayerModel:
+class FrozenResidualModel:
     """Residual layer model — a passive container for the frozen daytime mixed layer.
 
     The residual layer is captured from the convective mixed layer at
@@ -122,7 +122,7 @@ class ResidualLayerModel:
         delta_q: float = -0.001,
         delta_co2: float = -44.0,
         dz_h: float = 150.0,
-    ) -> ResidualLayerState:
+    ) -> FrozenResidualState:
         """Initialize the residual layer state.
 
         Args:
@@ -140,7 +140,7 @@ class ResidualLayerModel:
         Returns:
             The initial residual layer state.
         """
-        return ResidualLayerState(
+        return FrozenResidualState(
             theta=jnp.array(theta),
             q=jnp.array(q),
             co2=jnp.array(co2),
@@ -151,20 +151,4 @@ class ResidualLayerModel:
             delta_q=jnp.array(delta_q),
             delta_co2=jnp.array(delta_co2),
             dz_h=jnp.array(dz_h),
-        )
-
-    def compute_thetav(self, theta: Array, q: Array) -> Array:
-        """Compute virtual potential temperature."""
-        return theta * (1.0 + 0.61 * q)
-
-    def compute_deltathetav(
-        self,
-        theta: Array,
-        delta_theta: Array,
-        q: Array,
-        delta_q: Array,
-    ) -> Array:
-        """Compute virtual potential temperature jump at top."""
-        return (theta + delta_theta) * (1.0 + 0.61 * (q + delta_q)) - theta * (
-            1.0 + 0.61 * q
         )

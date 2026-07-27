@@ -5,8 +5,8 @@ from .daynight import (
     DayAndNightAtmosphereState,
 )
 from .dayonly import DayOnlyAtmosphereModel, DayOnlyAtmosphereState
-from .residual_layer import ResidualLayerModel, ResidualLayerState
-from .stable_layer import SBLModel, SBLState
+from .residual_layer import FrozenResidualModel, FrozenResidualState
+from .stable_layer import ZilitinkevichModel, ZilitinkevichState
 
 __all__ = [
     "ActiveBLState",
@@ -14,10 +14,10 @@ __all__ = [
     "DayAndNightAtmosphereState",
     "DayOnlyAtmosphereModel",
     "DayOnlyAtmosphereState",
-    "ResidualLayerModel",
-    "ResidualLayerState",
-    "SBLModel",
-    "SBLState",
+    "FrozenResidualModel",
+    "FrozenResidualState",
+    "ZilitinkevichModel",
+    "ZilitinkevichState",
     "clouds",
     "mixed_layer",
     "residual_layer",
