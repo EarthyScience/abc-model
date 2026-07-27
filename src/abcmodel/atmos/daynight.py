@@ -305,12 +305,12 @@ class DayAndNightAtmosphereModel(AbstractAtmosphereModel[DayAndNightAtmosphereSt
         sl_state = self.surface_layer.run(state)
 
         # determine whether it's day or night
+        in_srad = state.rad.in_srad
         net_rad = state.rad.net_rad
         was_night = state.atmos.active_bl.is_night
-        clearly_night = net_rad <= -20.0
-        clearly_day = (net_rad > 50.0) | (state.land.wtheta > 0.01)
-        # in the ambiguous zone (-20 < net_rad ≤ 50),
-        # stay in the current regime
+        clearly_night = (net_rad <= -20.0) & (in_srad < 10.0)
+        clearly_day = (in_srad > 20.0) | (net_rad > 20.0) | (state.land.wtheta > 0.001)
+        # in the ambiguous zone, stay in the current regime
         is_night = clearly_night | (was_night & ~clearly_day)
         just_became_night = is_night & ~was_night
         just_became_day = ~is_night & was_night
