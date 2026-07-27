@@ -400,15 +400,6 @@ class BulkState(AbstractMixedLayerState):
         },
     )
     """Tendency of transition layer thickness [m s-1]."""
-    ws: Array = field(
-        default_factory=lambda: jnp.array(0.0),
-        metadata={
-            "label": r"$w_s$",
-            "unit": "m s^{-1}",
-            "description": "Large-scale vertical velocity (subsidence)",
-        },
-    )
-    """Large-scale vertical velocity (subsidence) [m s-1]."""
     wf: Array = field(
         default_factory=lambda: jnp.array(0.0),
         metadata={
@@ -1170,7 +1161,7 @@ class BulkModel(AbstractMixedLayerModel[BulkState]):
 
         # now we have a fixed number of iterations
         n_iter = 30
-        (final_lcl, final_rhlcl), _ = jax.lax.scan(
+        (final_lcl, _), _ = jax.lax.scan(
             lcl_iteration_body, (initial_lcl, initial_rhlcl), None, length=n_iter
         )
 
