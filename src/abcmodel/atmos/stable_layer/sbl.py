@@ -333,8 +333,8 @@ class SBLModel:
         Returns:
             SBL height [m].
         """
-        L_pos = jnp.maximum(obukhov, 0.1)
-        product = ustar * L_pos
+        ob_len_pos = jnp.maximum(obukhov, 0.1)
+        product = ustar * ob_len_pos
         safe_product = jnp.maximum(product, 1e-4)
         f_safe = jnp.maximum(self.coriolis_param, 1e-8)
         h_raw = self.zilitinkevich_const * jnp.sqrt(safe_product / f_safe)
