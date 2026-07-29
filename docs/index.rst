@@ -21,7 +21,7 @@ or clone the repo and make an editable install inside your local repo using
    pip install -e .
 
 If you want to use JAX on GPUs, please re-install JAX using the ``[gpu]`` tag in an environment with GPUs installed,
-but this is not necessary to run the examples in this repository!
+but this is not necessary to run the examples in this repository!!
 
 Installation (Windows)
 ----------------------
