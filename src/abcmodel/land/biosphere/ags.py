@@ -263,13 +263,45 @@ class AgsModel(AbstractBiosphereModel[AgsState]):
         )
 
     def compute_co2comp(self, thetasurf: Array) -> Array:
-        """Compute the CO₂ compensation concentration."""
+        """Compute the CO₂ compensation concentration ``co2comp``.
+
+        Notes:
+            The CO₂ compensation point :math:`\\Gamma` is the CO₂
+            concentration at which net photosynthesis is zero. It follows
+            a Q₁₀ temperature response:
+
+            .. math::
+                \\Gamma = \\Gamma_{298} \\cdot \\rho \\cdot
+                    Q_{10}^{\\,0.1\\,(\\theta_s - 298)}
+
+            where :math:`\\Gamma_{298}` is the compensation point at 298 K,
+            :math:`\\rho` is the air density, :math:`Q_{10}` is the relative
+            increase per 10 K, and :math:`\\theta_s` is the surface potential
+            temperature.
+        """
         temp_diff = 0.1 * (thetasurf - 298.0)
         exp_term = jnp.power(self.net_rad10CO2, temp_diff)
         return self.co2comp298 * cst.rho * exp_term
 
     def compute_gm(self, thetasurf: Array) -> Array:
-        """Compute the mesophyll conductance."""
+        """Compute the mesophyll conductance ``gm``.
+
+        Notes:
+            Mesophyll conductance :math:`g_m` controls the diffusion of
+            CO₂ from intercellular spaces to the sites of carboxylation.
+            It follows a temperature response with a Q₁₀ factor and high/
+            low temperature inhibition:
+
+            .. math::
+                g_m = \\frac{g_{m,298} \\cdot
+                    Q_{10}^{\\,0.1\\,(\\theta_s - 298)}}
+                    {\\bigl(1 + e^{0.3\\,(T_1 - \\theta_s)}\\bigr)
+                     \\bigl(1 + e^{0.3\\,(\\theta_s - T_2)}\\bigr)}
+
+            where :math:`g_{m,298}` is the mesophyll conductance at 298 K,
+            :math:`\\theta_s` is the surface potential temperature, and
+            :math:`T_1, T_2` are temperature thresholds.
+        """
         temp_diff = 0.1 * (thetasurf - 298.0)
         exp_term = jnp.power(self.net_rad10gm, temp_diff)
         temp_factor1 = 1.0 + jnp.exp(0.3 * (self.temp1gm - thetasurf))
@@ -278,19 +310,58 @@ class AgsModel(AbstractBiosphereModel[AgsState]):
         return gm / 1000.0
 
     def compute_fmin(self, gm: Array) -> Array:
-        """Compute minimum stomatal conductance factor."""
+        """Compute the minimum stomatal conductance factor ``fmin``.
+
+        Notes:
+            The minimum conductance factor :math:`f_{\\min}` is derived
+            from the quadratic relation between minimum stomatal
+            conductance :math:`g_{\\min}` and mesophyll conductance
+            :math:`g_m`:
+
+            .. math::
+                f_{\\min} = \\frac{-f_0 + \\sqrt{f_0^2 +
+                    \\dfrac{4 g_{\\min} g_m}{\\nu}}}{2 g_m},
+                \\qquad
+                f_0 = \\frac{g_{\\min}}{\\nu} - \\frac{g_m}{9},
+
+            where :math:`\\nu = 1.6` is the ratio of diffusivity of water
+            vapour to CO₂, and :math:`g_{\\min}` is the minimum stomatal
+            conductance.
+        """
         fmin0 = self.gmin / self.nuco2q - 1.0 / 9.0 * gm
         fmin_sq_term = jnp.power(fmin0, 2.0) + 4 * self.gmin / self.nuco2q * gm
         fmin = -fmin0 + jnp.power(fmin_sq_term, 0.5) / (2.0 * gm)
         return fmin
 
     def compute_ds(self, surf_temp: Array, e: Array) -> Array:
-        """Compute vapor pressure deficit (ds) in kPa."""
+        """Compute the vapour pressure deficit ``ds``.
+
+        Notes:
+            The vapour pressure deficit at the surface is given by
+
+            .. math::
+                D_s = \\frac{e_{\\text{sat}}(T_s) - e}{1000},
+
+            where :math:`e_{\\text{sat}}` is the saturation vapour pressure
+            at the surface temperature :math:`T_s` and :math:`e` is the
+            actual vapour pressure.             The result is in kPa.
+        """
         ds = (compute_esat(surf_temp) - e) / 1000.0  # kPa
         return ds
 
     def compute_d0(self, fmin: Array) -> Array:
-        """Compute reference vapor pressure deficit."""
+        """Compute the reference vapour pressure deficit ``d0``.
+
+        Notes:
+            The reference VPD is derived from the minimum conductance
+            factor:
+
+            .. math::
+                D_0 = \\frac{f_0 - f_{\\min}}{a_d},
+
+            where :math:`f_0` is a shape parameter and :math:`a_d` is
+            the sensitivity of the VPD response.
+        """
         d0 = (self.f0 - fmin) / self.ad
         return d0
 
@@ -302,14 +373,52 @@ class AgsModel(AbstractBiosphereModel[AgsState]):
         co2: Array,
         co2comp: Array,
     ) -> tuple[Array, Array]:
-        """Compute cfrac, co2abs, and ci (internal CO2 concentration)."""
+        """Compute the intercellular CO₂ concentration ``ci``.
+
+        Notes:
+            The intercellular CO₂ concentration :math:`C_i` is computed
+            from the CO₂ absorption concentration and the compensation
+            point:
+
+            .. math::
+                c_f &= f_0 \\left(1 - \\frac{D_s}{D_0}\\right) +
+                      f_{\\min} \\frac{D_s}{D_0} \\\\
+                \\text{CO}_{2,\\text{abs}} &=
+                    \\text{CO}_2 \\frac{M_{\\text{CO}_2}}
+                                     {M_{\\text{air}}} \\rho \\\\
+                C_i &= c_f (\\text{CO}_{2,\\text{abs}} - \\Gamma) + \\Gamma
+
+            where :math:`c_f` is the fractional reduction factor,
+            :math:`\\text{CO}_2` is the atmospheric CO₂ concentration,
+            :math:`M_{\\text{CO}_2}` and :math:`M_{\\text{air}}` are the
+            molar masses of CO₂ and dry air, and :math:`\\rho` is the
+            air density.
+
+        Returns:
+            A tuple ``(ci, co2abs)``.
+        """
         cfrac = self.f0 * (1.0 - (ds / d0)) + fmin * (ds / d0)
         co2abs = co2 * (cst.mco2 / cst.mair) * cst.rho
         ci = cfrac * (co2abs - co2comp) + co2comp
         return ci, co2abs
 
     def compute_max_gross_primary_production(self, thetasurf: Array) -> Array:
-        """Compute maximal gross primary production."""
+        """Compute the maximal gross primary production ``ammax``.
+
+        Notes:
+            The maximum gross primary production :math:`A_{m,\\max}`
+            follows a temperature response identical in structure to
+            mesophyll conductance:
+
+            .. math::
+                A_{m,\\max} = \\frac{A_{m,298} \\cdot
+                    Q_{10}^{\\,0.1\\,(\\theta_s - 298)}}
+                    {\\bigl(1 + e^{0.3\\,(T_1 - \\theta_s)}\\bigr)
+                     \\bigl(1 + e^{0.3\\,(\\theta_s - T_2)}\\bigr)}
+
+            where :math:`A_{m,298}` is the value at 298 K and
+            :math:`\\theta_s` is the surface potential temperature.
+        """
         temp_diff = 0.1 * (thetasurf - 298.0)
         exp_term = jnp.power(self.net_rad10Am, temp_diff)
         temp_factor1 = 1.0 + jnp.exp(0.3 * (self.temp1Am - thetasurf))
@@ -318,7 +427,29 @@ class AgsModel(AbstractBiosphereModel[AgsState]):
         return ammax
 
     def compute_soil_moisture_stress_factor(self, w2: float) -> Array:
-        """Compute effect of soil moisture stress."""
+        """Compute the soil moisture stress factor ``fstr``.
+
+        Notes:
+            The soil moisture stress factor :math:`\\beta_w` is computed
+            from the relative soil moisture:
+
+            .. math::
+                \\beta_w = \\frac{w_2 - w_{\\text{wilt}}}
+                               {w_{\\text{fc}} - w_{\\text{wilt}}}
+
+            clipped to :math:`[\\varepsilon, 1]`. The stress factor is then
+            adjusted using a piecewise function depending on the parameter
+            :math:`c_{\\beta}`:
+
+            .. math::
+                f_{\\text{str}} = \\begin{cases}
+                    \\beta_w & c_\\beta = 0 \\\\[4pt]
+                    \\dfrac{1 - e^{-p \\beta_w}}{1 - e^{-p}} & c_\\beta > 0
+                \\end{cases}
+
+            where the shape parameter :math:`p` increases with
+            :math:`c_{\\beta}`.
+        """
         soil_moisture_ratio = (w2 - self.wwilt) / (self.wfc - self.wwilt)
         betaw = jnp.clip(soil_moisture_ratio, 1e-3, 1.0)
 
@@ -361,18 +492,56 @@ class AgsModel(AbstractBiosphereModel[AgsState]):
         ci: Array,
         co2comp: Array,
     ) -> Array:
-        """Compute gross assimilation rate."""
+        """Compute the gross assimilation rate ``am``.
+
+        Notes:
+            The gross assimilation rate follows an exponential approach
+            to saturation (Collatz et al., 1991):
+
+            .. math::
+                A_m = A_{m,\\max} \\left(1 - \\exp\\!\\left(
+                    -\\frac{g_m\\,(C_i - \\Gamma)}{A_{m,\\max}}
+                \\right)\\right)
+
+            where :math:`A_{m,\\max}` is the maximal gross primary
+            production, :math:`g_m` is the mesophyll conductance,
+            :math:`C_i` is the intercellular CO₂ concentration, and
+            :math:`\\Gamma` is the CO₂ compensation concentration.
+        """
         assimilation_factor = -(gm * (ci - co2comp) / ammax)
         am = ammax * (1.0 - jnp.exp(assimilation_factor))
         return am
 
     def compute_dark_respiration(self, am: Array) -> Array:
-        """Compute dark respiration."""
+        """Compute the dark respiration rate ``rdark``.
+
+        Notes:
+            Dark respiration is proportional to the gross assimilation
+            rate:
+
+            .. math::
+                R_{\\text{dark}} = \\frac{A_m}{9}
+
+            where :math:`A_m` is the gross assimilation rate.
+        """
         rdark = (1.0 / 9.0) * am
         return rdark
 
     def compute_absorbed_par(self, in_srad: Array) -> Array:
-        """Compute absorbed photosynthetically active rad."""
+        """Compute the absorbed photosynthetically active radiation ``par``.
+
+        Notes:
+            The absorbed PAR is estimated as 50% of the incoming solar
+            radiation, scaled by the vegetation fraction, with a lower
+            bound:
+
+            .. math::
+                \\text{PAR} = \\max\\!\\left(0.5 \\cdot R_s \\cdot
+                    c_{\\text{veg}},\\, 0.1\\right)
+
+            where :math:`R_s` is the incoming solar radiation and
+            :math:`c_{\\text{veg}}` is the vegetation fraction.
+        """
         par = 0.5 * jnp.maximum(1e-1, in_srad * self.cveg)
         return par
 
@@ -389,7 +558,31 @@ class AgsModel(AbstractBiosphereModel[AgsState]):
         d0: Array,
         fmin: Array,
     ) -> Array:
-        """Compute CO2 conductance at canopy level."""
+        """Compute the canopy CO₂ conductance ``gcco2``.
+
+        Notes:
+            The canopy CO₂ conductance :math:`g_{c,\\text{CO}_2}` is
+            computed by scaling leaf-level photosynthesis to the canopy
+            using the big-leaf approach with the exponential integral
+            :math:`E_1` (Sellers et al., 1996):
+
+            .. math::
+                y &= \\frac{\\alpha_c k_x \\text{PAR}}{A_m + R_{\\text{dark}}}
+                \\\\
+                A_n &= (A_m + R_{\\text{dark}})
+                    \\left(1 - \\frac{E_1(y e^{-k_x L}) - E_1(y)}{k_x L}
+                    \\right) \\\\
+                D_* &= \\frac{D_0}{a_1 (f_0 - f_{\\min})} \\\\
+                g_{c,\\text{CO}_2} &=
+                    L \\left(\\frac{g_{\\min}}{\\nu} +
+                    \\frac{a_1 f_{\\text{str}} A_n}
+                         {(\\text{CO}_{2,\\text{abs}} - \\Gamma)
+                          (1 + D_s / D_*)}\\right)
+
+            where :math:`L` is the leaf area index, :math:`k_x` is the
+            extinction coefficient, :math:`\\nu = 1.6` is the diffusivity
+            ratio, and :math:`a_1 = 1 / (1 - f_0)`.
+        """
         y = alphac * self.kx * par / (am + rdark)
         exp1_arg1 = jnp.array([y * jnp.exp(-self.kx * self.lai)])
         exp1_arg2 = jnp.array([y])
@@ -403,7 +596,19 @@ class AgsModel(AbstractBiosphereModel[AgsState]):
         return gcco2
 
     def compute_rs(self, gcco2: Array) -> Array:
-        """Compute surface resistance."""
+        """Compute the surface resistance ``rs``.
+
+        Notes:
+            The surface (stomatal) resistance is related to the canopy
+            CO₂ conductance by
+
+            .. math::
+                r_s = \\frac{1}{1.6 \\, g_{c,\\text{CO}_2}}
+
+            where the factor :math:`1.6` is the ratio of diffusivity of
+            water vapour to CO₂, and :math:`g_{c,\\text{CO}_2}` is the
+            canopy CO₂ conductance.
+        """
         return 1.0 / (1.6 * gcco2)
 
     def compute_light_use_efficiency(
@@ -411,23 +616,70 @@ class AgsModel(AbstractBiosphereModel[AgsState]):
         co2abs: Array,
         co2comp: Array,
     ) -> Array:
-        """Compute light use efficiency."""
+        """Compute the light use efficiency ``alphac``.
+
+        Notes:
+            The light use efficiency depends on the CO₂ concentration:
+
+            .. math::
+                \\alpha_c = \\alpha_0 \\,
+                    \\frac{\\text{CO}_{2,\\text{abs}} - \\Gamma}
+                         {\\text{CO}_{2,\\text{abs}} + 2\\Gamma}
+
+            where :math:`\\alpha_0` is the quantum efficiency and
+            :math:`\\Gamma` is the CO₂ compensation concentration.
+        """
         co2_ratio = (co2abs - co2comp) / (co2abs + 2.0 * co2comp)
         alphac = self.alpha0 * co2_ratio
         return alphac
 
     def compute_surface_co2_resistance(self, gcco2: Array) -> Array:
-        """Compute surface resistance to CO₂."""
+        """Compute the surface resistance to CO₂ ``rsCO2``.
+
+        Notes:
+            The surface resistance to CO₂ is the reciprocal of the
+            canopy CO₂ conductance:
+
+            .. math::
+                r_{s,\\text{CO}_2} = \\frac{1}{g_{c,\\text{CO}_2}}
+
+            where :math:`g_{c,\\text{CO}_2}` is the canopy CO₂ conductance.
+        """
         return 1.0 / gcco2
 
     def compute_net_assimilation(
         self, co2abs: Array, ci: Array, ra: Array, rsCO2: Array
     ) -> Array:
-        """Compute net CO₂ assimilation rate."""
+        """Compute the net CO₂ assimilation rate ``an``.
+
+        Notes:
+            The net assimilation rate follows Fick's law of diffusion:
+
+            .. math::
+                A_n = -\\frac{\\text{CO}_{2,\\text{abs}} - C_i}
+                             {r_a + r_{s,\\text{CO}_2}}
+
+            where :math:`\\text{CO}_{2,\\text{abs}}` is the CO₂ absorption
+            concentration, :math:`C_i` is the intercellular CO₂
+            concentration, :math:`r_a` is the aerodynamic resistance,
+            and :math:`r_{s,\\text{CO}_2}` is the surface resistance to
+            CO₂.
+        """
         return -(co2abs - ci) / (ra + rsCO2)
 
     def compute_soil_water_fraction(self, wg: Array) -> Array:
-        """Compute soil water fraction."""
+        """Compute the soil water fraction ``fw``.
+
+        Notes:
+            The soil water fraction used for respiration scaling is
+
+            .. math::
+                f_w = \\frac{c_w \\, w_{\\max}}{w_g + w_{\\min}}
+
+            where :math:`w_g` is the surface soil moisture,
+            :math:`w_{\\max}` and :math:`w_{\\min}` are empirical
+            parameters, and :math:`c_w` is a scaling constant.
+        """
         return self.cw * self.wmax / (wg + self.wmin)
 
     def compute_respiration(
@@ -435,7 +687,23 @@ class AgsModel(AbstractBiosphereModel[AgsState]):
         temp_soil: Array,
         fw: Array,
     ) -> Array:
-        """Compute soil respiration."""
+        """Compute the soil respiration rate ``resp``.
+
+        Notes:
+            Soil respiration follows an Arrhenius-type temperature
+            response with a moisture limitation:
+
+            .. math::
+                R = R_{10} \\cdot (1 - f_w) \\cdot
+                    \\exp\\!\\left(\\frac{E_0}{283.15 \\cdot R}
+                        \\left(1 - \\frac{283.15}{T_{\\text{soil}}}
+                        \\right)\\right)
+
+            where :math:`R_{10}` is the respiration rate at 283.15 K,
+            :math:`f_w` is the soil water fraction, :math:`E_0` is the
+            activation energy, and :math:`T_{\\text{soil}}` is the soil
+            temperature.
+        """
         temp_ratio = 1.0 - 283.15 / temp_soil
         resp_factor = jnp.exp(self.e0 / (283.15 * 8.314) * temp_ratio)
         resp = self.r10 * (1.0 - fw) * resp_factor

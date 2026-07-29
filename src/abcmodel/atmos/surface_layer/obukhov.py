@@ -321,16 +321,7 @@ class ObukhovModel(AbstractSurfaceLayerModel):
         )
 
     def compute_ra(self, u: Array, v: Array, wstar: Array, drag_s: Array) -> Array:
-        """Calculate aerodynamic resistance from wind speed and drag coefficient.
-
-        Args:
-            u: zonal wind speed [m s-1].
-            v: meridional wind speed [m s-1].
-            wstar: convective velocity scale [m s-1].
-            drag_s: drag coefficient for scalars [-].
-
-        Returns:
-            Aerodynamic resistance [s m-1].
+        """Compute the aerodynamic resistance ``ra``.
 
         Notes:
             The aerodynamic resistance is given by

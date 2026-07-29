@@ -546,11 +546,13 @@ class StandardSurfaceModel(AbstractSurfaceModel[StandardSurfaceState]):
         """Compute the evapotranspiration (latent heat flux) ``le``.
 
         Notes:
-            The sum of
+            The latent heat flux is the sum of transpiration from
+            vegetation, bare soil evaporation, and wet-leaf evaporation,
+            clipped to non-negative values
 
-            - transpiration from vegetation in :meth:`~.StandardSurfaceModel.compute_le_veg`;
-            - evaporation from bare soil in :meth:`~.StandardSurfaceModel.compute_le_soil`;
-            - evaporation from wet leaves (dew) in :meth:`~.StandardSurfaceModel.compute_le_liq`.
+            .. math::
+                \\text{LE} = \\max\bigl(\\text{LE}_{\\text{soil}} +
+                    \\text{LE}_{\\text{veg}} + \\text{LE}_{\\text{liq}},; 0\\bigr)
         """
         return jnp.clip(le_soil + le_veg + le_liq, 0.0, None)
 
@@ -694,10 +696,16 @@ class StandardSurfaceModel(AbstractSurfaceModel[StandardSurfaceState]):
         return le / (cst.rho * cst.lv)
 
     def compute_vpd(self, q: Array, qsat: Array) -> Array:
-        """Compute the vapor pressure deficit ``vpd``.
+        """Compute the vapour pressure deficit ``vpd``.
 
         Notes:
-            The vapor pressure deficit :math:`\\d_q` is defined as the difference between the
-            saturation vapor pressure :math:`\\q_{sat}` and the actual vapor pressure :math:`e`.
+            The vapour pressure deficit is the difference between the
+            saturation specific humidity and the actual specific humidity
+
+            .. math::
+                D_q = q_{\text{sat}} - q
+
+            where :math:`q_{\text{sat}}` is the saturation specific
+            humidity and :math:`q` is the actual specific humidity.
         """
         return qsat - q

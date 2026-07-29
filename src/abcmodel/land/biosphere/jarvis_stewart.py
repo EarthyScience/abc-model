@@ -140,13 +140,39 @@ class JarvisStewartModel(AbstractBiosphereModel[JarvisStewartState]):
         )
 
     def compute_f1(self, in_srad: Array) -> Array:
-        """Compute rad factor f1."""
+        """Compute the radiation stress factor ``f1``.
+
+        Notes:
+            The radiation factor follows the Jarvis (1976) formulation:
+
+            .. math::
+                f_1 = \\frac{1}{\\min\\!\\left(1,\\,
+                    \\dfrac{0.004\\,R_s + 0.05}{0.81\\,(0.004\\,R_s + 1)}\\right)}
+
+            where :math:`R_s` is the incoming solar radiation.
+        """
         ratio = (0.004 * in_srad + 0.05) / (0.81 * (0.004 * in_srad + 1.0))
         f1 = 1.0 / jnp.minimum(1.0, ratio)
         return f1
 
     def compute_f2(self, wg: Array) -> Array:
-        """Compute soil moisture factor f2."""
+        """Compute the soil moisture stress factor ``f2``.
+
+        Notes:
+            The soil moisture factor follows the Jarvis (1976) formulation:
+
+            .. math::
+                f_2 = \\max\\!\\left(1,\\,
+                    \\frac{w_{\\text{fc}} - w_{\\text{wilt}}}
+                         {w_g - w_{\\text{wilt}}}\\right)
+
+            where :math:`w_g` is the surface soil moisture,
+            :math:`w_{\\text{fc}}` is the field capacity and
+            :math:`w_{\\text{wilt}}` is the wilting point.
+            When the second-layer soil moisture :math:`w_2` drops below the
+            wilting point, the factor is set to a large value (effectively
+            closing the stomata).
+        """
         f2 = jnp.where(
             self.w2 > self.wwilt,
             (self.wfc - self.wwilt) / (wg - self.wwilt),
@@ -156,13 +182,34 @@ class JarvisStewartModel(AbstractBiosphereModel[JarvisStewartState]):
         return f2
 
     def compute_f3(self, esat: Array, e: Array) -> Array:
-        """Compute VPD factor f3."""
+        """Compute the vapour pressure deficit stress factor ``f3``.
+
+        Notes:
+            The VPD factor follows the Jarvis (1976) formulation:
+
+            .. math::
+                f_3 = \\exp\\!\\left(\\frac{g_D \\, D}{100}\\right)
+
+            where :math:`D = e_{\\text{sat}} - e` is the vapour pressure
+            deficit, :math:`e_{\\text{sat}}` is the saturation vapour
+            pressure, :math:`e` is the actual vapour pressure, and
+            :math:`g_D` is the canopy radiation extinction coefficient.
+        """
         vpd = esat - e
         f3 = 1.0 / jnp.exp(-self.gD * vpd / 100.0)
         return f3
 
     def compute_f4(self, theta: Array) -> Array:
-        """Compute temperature factor f4."""
+        """Compute the temperature stress factor ``f4``.
+
+        Notes:
+            The temperature factor follows the Jarvis (1976) formulation:
+
+            .. math::
+                f_4 = \\frac{1}{1 - 0.0016\\,(298 - \\theta)^2}
+
+            where :math:`\\theta` is the potential temperature [K].
+        """
         f4 = 1.0 / (1.0 - 0.0016 * (298.0 - theta) ** 2.0)
         return f4
 

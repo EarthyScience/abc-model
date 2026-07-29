@@ -103,7 +103,18 @@ class SimpleModel(AbstractSurfaceLayerModel[SimpleState]):
 
 
 def compute_uw(u: Array, v: Array, ustar: Array) -> Array:
-    """Calculate the zonal momentum flux from wind components and friction velocity."""
+    """Compute the zonal momentum flux ``uw``.
+
+    Notes:
+        The zonal momentum flux is given by
+
+        .. math::
+            \\overline{u'w'} = -\\frac{u\\,u_*^2}{\\sqrt{u^2 + v^2}}
+
+        where :math:`u` and :math:`v` are the zonal and meridional wind
+        components, and :math:`u_*` is the friction velocity. The special
+        case :math:`u = 0` returns zero.
+    """
     return jnp.where(
         u == 0.0,
         0.0,
@@ -112,7 +123,18 @@ def compute_uw(u: Array, v: Array, ustar: Array) -> Array:
 
 
 def compute_vw(u: Array, v: Array, ustar: Array) -> Array:
-    """Calculate the meridional momentum flux from wind components and friction velocity."""
+    """Compute the meridional momentum flux ``vw``.
+
+    Notes:
+        The meridional momentum flux is given by
+
+        .. math::
+            \\overline{v'w'} = -\\frac{v\\,u_*^2}{\\sqrt{u^2 + v^2}}
+
+        where :math:`u` and :math:`v` are the zonal and meridional wind
+        components, and :math:`u_*` is the friction velocity. The special
+        case :math:`v = 0` returns zero.
+    """
     return jnp.where(
         v == 0.0,
         0.0,
@@ -121,6 +143,20 @@ def compute_vw(u: Array, v: Array, ustar: Array) -> Array:
 
 
 def compute_ra(u: Array, v: Array, wstar: Array, ustar: Array) -> Array:
-    """Calculate aerodynamic resistance from wind speed and friction velocity."""
+    """Compute the aerodynamic resistance ``ra``.
+
+    Notes:
+        The aerodynamic resistance is given by
+
+        .. math::
+            r_a = \\frac{u_{\\text{eff}}}{u_*^2},
+
+        where the effective wind speed is
+
+        .. math::
+            u_{\\text{eff}} = \\sqrt{u^2 + v^2 + w_*^2}
+
+        and :math:`u_*` is the friction velocity.
+    """
     ueff = jnp.sqrt(u**2.0 + v**2.0 + wstar**2.0)
     return ueff / jnp.maximum(1.0e-3, ustar) ** 2.0

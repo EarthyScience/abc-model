@@ -1132,9 +1132,19 @@ class BulkModel(AbstractMixedLayerModel[BulkState]):
         q: Array,
         t: Array,
     ) -> Array:
-        """Compute the lifting condensation level (LCL).
+        """Compute the lifting condensation level ``lcl``.
 
-        The LCL is found iteratively by finding the height where the relative humidity is 100%.
+        Notes:
+            The LCL is the height at which a lifted air parcel becomes
+            saturated (RH = 100%). It is found iteratively via
+
+            .. math::
+                z_{\\text{LCL}}^{(n+1)} = z_{\\text{LCL}}^{(n)} +
+                    \\bigl(1 - \\text{RH}(z_{\\text{LCL}}^{(n)})\\bigr) \\cdot 1000,
+
+            where :math:`\\text{RH}(z)` is the relative humidity at height
+            :math:`z`, and successive iterations converge to the height
+            where :math:`\\text{RH} = 1`.
         """
         # find lifting condensation level iteratively using JAX
         # initialize lcl and rhlcl based on timestep
