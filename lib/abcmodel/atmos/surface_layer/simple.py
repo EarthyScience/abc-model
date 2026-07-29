@@ -1,0 +1,162 @@
+from dataclasses import dataclass, field, replace
+
+import jax.numpy as jnp
+from jax import Array
+
+from ...abstracts import AbstractCoupledState, LandT, RadT
+from ..abstracts import (
+    AbstractSurfaceLayerModel,
+    AbstractSurfaceLayerState,
+    CloudT,
+    MixedT,
+)
+from ..dayonly import DayOnlyAtmosphereState
+
+
+@dataclass
+class SimpleState(AbstractSurfaceLayerState):
+    """Minimal surface layer model initial state."""
+
+    ustar: Array = field(
+        metadata={
+            "label": r"$u_*$",
+            "unit": "m s^{-1}",
+            "description": "Surface friction velocity",
+        }
+    )
+    """Surface friction velocity [m/s]."""
+    uw: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={
+            "label": r"$\overline{u'w'}$",
+            "unit": "m^2 s^{-2}",
+            "description": "Zonal surface momentum flux",
+        },
+    )
+    """Zonal surface momentum flux [m2 s-2]."""
+    vw: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={
+            "label": r"$\overline{v'w'}$",
+            "unit": "m^2 s^{-2}",
+            "description": "Meridional surface momentum flux",
+        },
+    )
+    """Meridional surface momentum flux [m2 s-2]."""
+    ra: Array = field(
+        default_factory=lambda: jnp.array(0.0),
+        metadata={
+            "label": r"$r_a$",
+            "unit": "s m^{-1}",
+            "description": "Aerodynamic resistance",
+        },
+    )
+    """Aerodynamic resistance [s/m]."""
+
+
+# limamau: maybe these type variables could be abstracts...
+StateAlias = AbstractCoupledState[
+    RadT,
+    LandT,
+    DayOnlyAtmosphereState[
+        SimpleState,
+        MixedT,
+        CloudT,
+    ],
+]
+
+
+class SimpleModel(AbstractSurfaceLayerModel[SimpleState]):
+    """Simple surface layer model with constant friction velocity."""
+
+    def __init__(self):
+        pass
+
+    def init_state(self, ustar: float) -> SimpleState:
+        """Initialize the model state.
+
+        Args:
+            ustar: Friction velocity [m/s].
+
+        Returns:
+            The initial surface layer state.
+        """
+        return SimpleState(
+            ustar=jnp.array(ustar),
+        )
+
+    def run(self, state: StateAlias):
+        """Run the model.
+
+        Args:
+            state:
+
+        Returns:
+            The updated surface layer state.
+        """
+        atmos = state.atmos
+        sl_state = atmos.surface
+        uw = compute_uw(atmos.u, atmos.v, sl_state.ustar)
+        vw = compute_vw(atmos.u, atmos.v, sl_state.ustar)
+        ra = compute_ra(atmos.u, atmos.v, atmos.wstar, sl_state.ustar)
+        return replace(sl_state, uw=uw, vw=vw, ra=ra)
+
+
+def compute_uw(u: Array, v: Array, ustar: Array) -> Array:
+    """Compute the zonal momentum flux ``uw``.
+
+    Notes:
+        The zonal momentum flux is given by
+
+        .. math::
+            \\overline{u'w'} = -\\frac{u\\,u_*^2}{\\sqrt{u^2 + v^2}}
+
+        where :math:`u` and :math:`v` are the zonal and meridional wind
+        components, and :math:`u_*` is the friction velocity. The special
+        case :math:`u = 0` returns zero.
+    """
+    return jnp.where(
+        u == 0.0,
+        0.0,
+        -jnp.sign(u) * (ustar**4.0 / (v**2.0 / u**2.0 + 1.0)) ** (0.5),
+    )
+
+
+def compute_vw(u: Array, v: Array, ustar: Array) -> Array:
+    """Compute the meridional momentum flux ``vw``.
+
+    Notes:
+        The meridional momentum flux is given by
+
+        .. math::
+            \\overline{v'w'} = -\\frac{v\\,u_*^2}{\\sqrt{u^2 + v^2}}
+
+        where :math:`u` and :math:`v` are the zonal and meridional wind
+        components, and :math:`u_*` is the friction velocity. The special
+        case :math:`v = 0` returns zero.
+    """
+    return jnp.where(
+        v == 0.0,
+        0.0,
+        -jnp.sign(v) * (ustar**4.0 / (u**2.0 / v**2.0 + 1.0)) ** (0.5),
+    )
+
+
+def compute_ra(u: Array, v: Array, wstar: Array, ustar: Array) -> Array:
+    """Compute the aerodynamic resistance ``ra``.
+
+    Notes:
+        The aerodynamic resistance is given by
+
+        .. math::
+            r_a = \\frac{u_{\\text{eff}}}{u_*^2},
+
+        where the effective wind speed is
+
+        .. math::
+            u_{\\text{eff}} = \\sqrt{u^2 + v^2 + w_*^2}
+
+        and :math:`u_*` is the friction velocity.
+    """
+    ueff = jnp.sqrt(u**2.0 + v**2.0 + wstar**2.0)
+    return ueff / jnp.maximum(1.0e-3, ustar) ** 2.0

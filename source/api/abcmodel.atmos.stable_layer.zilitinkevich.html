@@ -1,0 +1,930 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Zilitinkevich &#8212; abc-model 0.1.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=4418a689" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../../_static/documentation_options.js?v=a1637f0b"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'source/api/abcmodel.atmos.stable_layer.zilitinkevich';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Residual Layer" href="abcmodel.atmos.residual_layer.html" />
+    <link rel="prev" title="Stable Layer" href="abcmodel.atmos.stable_layer.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../../_static/searchtools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/logo.png" class="logo__image only-light" alt="abc-model 0.1.0 documentation - Home"/>
+    <img src="../../_static/logo.png" class="logo__image only-dark pst-js-only" alt="abc-model 0.1.0 documentation - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="abcmodel.rad.html">Radiation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.rad.standard.html">Standard</a></li>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.rad.cloudy.html">Cloudy</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="abcmodel.land.html">Land</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.land.standard.html">Standard</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="abcmodel.land.biosphere.html">Biosphere</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.ags.html">Ags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.jarvis_stewart.html">Jarvis Stewart</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="abcmodel.land.soil.html">Soil</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.soil.standard.html">Standard</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="abcmodel.land.surface.html">Surface</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.surface.standard.html">Standard</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.land.abstracts.html">Abstracts</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="abcmodel.atmos.html">Atmosphere</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.atmos.dayonly.html">Dayonly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.atmos.daynight.html">Daynight</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="abcmodel.atmos.surface_layer.html">Surface Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.atmos.surface_layer.simple.html">Simple</a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.atmos.surface_layer.obukhov.html">Obukhov</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="abcmodel.atmos.mixed_layer.html">Mixed Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.atmos.mixed_layer.bulk.html">Bulk</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="abcmodel.atmos.clouds.html">Clouds</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.atmos.clouds.cumulus.html">Cumulus</a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.atmos.clouds.no_clouds.html">No Clouds</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="abcmodel.atmos.stable_layer.html">Stable Layer</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3 current active"><a class="current reference internal" href="#">Zilitinkevich</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="abcmodel.atmos.residual_layer.html">Residual Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.atmos.residual_layer.frozen.html">Frozen</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.atmos.abstracts.html">Abstracts</a></li>
+</ul>
+</details></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="abcmodel.abstracts.html">Abstracts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abcmodel.coupling.html">Coupling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abcmodel.integration.html">Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abcmodel.plotting.html">Plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abcmodel.utils.html">Utils</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/EarthyScience/abc-model" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/source/api/abcmodel.atmos.stable_layer.zilitinkevich.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Zilitinkevich</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichState</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.h_sbl"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichState.h_sbl</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.theta"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichState.theta</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.q"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichState.q</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.co2"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichState.co2</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.u"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichState.u</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.v"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichState.v</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.surf_pressure"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichState.surf_pressure</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.thetav"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichState.thetav</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.ustar"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichState.ustar</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.obukhov"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichState.obukhov</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.wtheta"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichState.wtheta</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.wq"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichState.wq</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.wCO2"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichState.wCO2</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.thetatend"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichState.thetatend</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.qtend"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichState.qtend</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.co2tend"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichState.co2tend</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.utend"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichState.utend</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.vtend"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichState.vtend</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichModel"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichModel</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichModel.init_state"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichModel.init_state()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichModel.run"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichModel.run()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichModel.statistics"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichModel.statistics()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichModel.integrate"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichModel.integrate()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichModel.compute_sbl_height"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichModel.compute_sbl_height()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichModel.compute_thetatend"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichModel.compute_thetatend()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichModel.compute_qtend"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichModel.compute_qtend()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichModel.compute_co2tend"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichModel.compute_co2tend()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichModel.compute_utend"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichModel.compute_utend()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichModel.compute_vtend"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichModel.compute_vtend()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichModel.compute_thetav"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichModel.compute_thetav()</span></code></a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="module-abcmodel.atmos.stable_layer.zilitinkevich">
+<span id="zilitinkevich"></span><h1>Zilitinkevich<a class="headerlink" href="#module-abcmodel.atmos.stable_layer.zilitinkevich" title="Link to this heading">#</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">abcmodel.atmos.stable_layer.zilitinkevich.</span></span><span class="sig-name descname"><span class="pre">ZilitinkevichState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">h_sbl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">co2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surf_pressure</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thetav</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ustar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obukhov</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wtheta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wCO2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thetatend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qtend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">co2tend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">utend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vtend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/atmos/stable_layer/zilitinkevich.html#ZilitinkevichState"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="abcmodel.abstracts.html#abcmodel.abstracts.AbstractState" title="abcmodel.abstracts.AbstractState"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractState</span></code></a></p>
+<p>Stable boundary layer (SBL) state.</p>
+<p>Fields with <cite>default_factory</cite> are diagnostic and are populated during <code class="docutils literal notranslate"><span class="pre">run()</span></code>;
+user-provided fields are set at initialization.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.h_sbl">
+<span class="sig-name descname"><span class="pre">h_sbl</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.h_sbl" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.theta">
+<span class="sig-name descname"><span class="pre">theta</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.theta" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.q">
+<span class="sig-name descname"><span class="pre">q</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.q" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.co2">
+<span class="sig-name descname"><span class="pre">co2</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.co2" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.u">
+<span class="sig-name descname"><span class="pre">u</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.u" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.v">
+<span class="sig-name descname"><span class="pre">v</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.v" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.surf_pressure">
+<span class="sig-name descname"><span class="pre">surf_pressure</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.surf_pressure" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.thetav">
+<span class="sig-name descname"><span class="pre">thetav</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.thetav" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.ustar">
+<span class="sig-name descname"><span class="pre">ustar</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.ustar" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.obukhov">
+<span class="sig-name descname"><span class="pre">obukhov</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.obukhov" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.wtheta">
+<span class="sig-name descname"><span class="pre">wtheta</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.wtheta" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.wq">
+<span class="sig-name descname"><span class="pre">wq</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.wq" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.wCO2">
+<span class="sig-name descname"><span class="pre">wCO2</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.wCO2" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.thetatend">
+<span class="sig-name descname"><span class="pre">thetatend</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.thetatend" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.qtend">
+<span class="sig-name descname"><span class="pre">qtend</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.qtend" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.co2tend">
+<span class="sig-name descname"><span class="pre">co2tend</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.co2tend" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.utend">
+<span class="sig-name descname"><span class="pre">utend</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.utend" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.vtend">
+<span class="sig-name descname"><span class="pre">vtend</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.vtend" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichModel">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">abcmodel.atmos.stable_layer.zilitinkevich.</span></span><span class="sig-name descname"><span class="pre">ZilitinkevichModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coriolis_param</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zilitinkevich_const</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_wind_prog</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma_theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.006</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma_q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma_co2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gammau</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gammav</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/atmos/stable_layer/zilitinkevich.html#ZilitinkevichModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichModel" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Stable boundary layer model.</p>
+<p>Computes the SBL height using the Zilitinkevich (1972) formula
+and provides tendencies for thermodynamic variables.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>coriolis_param</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Coriolis parameter [s-1]. Default is 1e-4.</p></li>
+<li><p><strong>zilitinkevich_const</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Zilitinkevich constant [-]. Default is 0.4.</p></li>
+<li><p><strong>is_wind_prog</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span>) – Prognostic wind switch. Default is True.</p></li>
+<li><p><strong>gamma_theta</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Free-atmosphere theta lapse rate [K/m]. Default is 0.006.</p></li>
+<li><p><strong>gamma_q</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Free-atmosphere q lapse rate [kg/kg/m]. Default is 0.0.</p></li>
+<li><p><strong>gamma_co2</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Free-atmosphere CO2 lapse rate [ppm/m]. Default is 0.0.</p></li>
+<li><p><strong>gammau</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Free-atmosphere u lapse rate [s-1]. Default is 0.0.</p></li>
+<li><p><strong>gammav</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Free-atmosphere v lapse rate [s-1]. Default is 0.0.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichModel.init_state">
+<span class="sig-name descname"><span class="pre">init_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">h_sbl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">288.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.008</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">co2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">422.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-4.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surf_pressure</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">101300.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/atmos/stable_layer/zilitinkevich.html#ZilitinkevichModel.init_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichModel.init_state" title="Link to this definition">#</a></dt>
+<dd><p>Initialize the SBL state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>h_sbl</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – SBL height [m]. Default 100.0.</p></li>
+<li><p><strong>theta</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – SBL potential temperature [K]. Default 288.0.</p></li>
+<li><p><strong>q</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – SBL specific humidity [kg/kg]. Default 0.008.</p></li>
+<li><p><strong>co2</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – SBL CO2 [ppm]. Default 422.0.</p></li>
+<li><p><strong>u</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – SBL zonal wind [m/s]. Default 6.0.</p></li>
+<li><p><strong>v</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – SBL meridional wind [m/s]. Default -4.0.</p></li>
+<li><p><strong>surf_pressure</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Surface pressure [Pa]. Default 101300.0.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichModel.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h_residual</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/atmos/stable_layer/zilitinkevich.html#ZilitinkevichModel.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichModel.run" title="Link to this definition">#</a></dt>
+<dd><p>Run the SBL model.</p>
+<p>Computes SBL height via Zilitinkevich and tendencies.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>state</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="abcmodel.abstracts.html#abcmodel.abstracts.AbstractCoupledState" title="abcmodel.abstracts.AbstractCoupledState"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractCoupledState</span></code></a></span>) – The coupled state.</p></li>
+<li><p><strong>h_residual</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></span>) – Residual layer height [m] (upper bound for SBL).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Updated SBL state.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichModel.statistics">
+<span class="sig-name descname"><span class="pre">statistics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/atmos/stable_layer/zilitinkevich.html#ZilitinkevichModel.statistics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichModel.statistics" title="Link to this definition">#</a></dt>
+<dd><p>Compute SBL diagnostic statistics.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>state</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="abcmodel.abstracts.html#abcmodel.abstracts.AbstractCoupledState" title="abcmodel.abstracts.AbstractCoupledState"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractCoupledState</span></code></a></span>) – Coupled state with SBL.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Updated SBL state with diagnostic fields.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichModel.integrate">
+<span class="sig-name descname"><span class="pre">integrate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/atmos/stable_layer/zilitinkevich.html#ZilitinkevichModel.integrate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichModel.integrate" title="Link to this definition">#</a></dt>
+<dd><p>Integrate SBL state forward in time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>state</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState" title="abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState"><code class="xref py py-class docutils literal notranslate"><span class="pre">ZilitinkevichState</span></code></a></span>) – SBL state.</p></li>
+<li><p><strong>dt</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Time step [s].</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Updated SBL state.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichModel.compute_sbl_height">
+<span class="sig-name descname"><span class="pre">compute_sbl_height</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ustar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obukhov</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h_residual</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/atmos/stable_layer/zilitinkevich.html#ZilitinkevichModel.compute_sbl_height"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichModel.compute_sbl_height" title="Link to this definition">#</a></dt>
+<dd><p>Compute SBL height using the Zilitinkevich (1972) formula.</p>
+<div class="math notranslate nohighlight">
+\[h_{sbl} = C_z \, \sqrt{\frac{u_* \, L}{f}}\]</div>
+<p>where <span class="math notranslate nohighlight">\(C_z\)</span> is the Zilitinkevich constant, <span class="math notranslate nohighlight">\(u_*\)</span> is the
+friction velocity, <span class="math notranslate nohighlight">\(L\)</span> is the Obukhov length (positive in
+stable conditions), and <span class="math notranslate nohighlight">\(f\)</span> is the Coriolis parameter.</p>
+<p>The result is clamped between 10 m and <code class="docutils literal notranslate"><span class="pre">h_residual</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ustar</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></span>) – Friction velocity [m/s].</p></li>
+<li><p><strong>obukhov</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></span>) – Obukhov length [m] (positive in stable conditions).</p></li>
+<li><p><strong>h_residual</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></span>) – Residual layer height [m] (upper bound).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>SBL height [m].</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichModel.compute_thetatend">
+<span class="sig-name descname"><span class="pre">compute_thetatend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">h_sbl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wtheta</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/atmos/stable_layer/zilitinkevich.html#ZilitinkevichModel.compute_thetatend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichModel.compute_thetatend" title="Link to this definition">#</a></dt>
+<dd><p>Compute potential temperature tendency for SBL.</p>
+<div class="math notranslate nohighlight">
+\[\frac{d\theta}{dt} = \frac{w'\theta'}{h_{sbl}}\]</div>
+<p>where <span class="math notranslate nohighlight">\(w'\theta'\)</span> is the surface kinematic heat flux
+(negative at night, cooling the SBL).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>h_sbl</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></span>) – SBL height [m].</p></li>
+<li><p><strong>wtheta</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></span>) – Surface kinematic heat flux [K m/s].</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Potential temperature tendency [K/s].</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichModel.compute_qtend">
+<span class="sig-name descname"><span class="pre">compute_qtend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">h_sbl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wq</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/atmos/stable_layer/zilitinkevich.html#ZilitinkevichModel.compute_qtend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichModel.compute_qtend" title="Link to this definition">#</a></dt>
+<dd><p>Compute specific humidity tendency for SBL.</p>
+<div class="math notranslate nohighlight">
+\[\frac{dq}{dt} = \frac{w'q'}{h_{sbl}}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>h_sbl</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></span>) – SBL height [m].</p></li>
+<li><p><strong>wq</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></span>) – Surface kinematic moisture flux [kg/kg m/s].</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Specific humidity tendency [kg/kg/s].</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichModel.compute_co2tend">
+<span class="sig-name descname"><span class="pre">compute_co2tend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">h_sbl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wCO2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/atmos/stable_layer/zilitinkevich.html#ZilitinkevichModel.compute_co2tend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichModel.compute_co2tend" title="Link to this definition">#</a></dt>
+<dd><p>Compute CO2 tendency for SBL.</p>
+<div class="math notranslate nohighlight">
+\[\frac{dCO_2}{dt} = \frac{w'CO_2'}{h_{sbl}}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>h_sbl</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></span>) – SBL height [m].</p></li>
+<li><p><strong>wCO2</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></span>) – Surface kinematic CO2 flux [mgC/m²/s].</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>CO2 tendency [ppm/s].</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichModel.compute_utend">
+<span class="sig-name descname"><span class="pre">compute_utend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">h_sbl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uw</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">du</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dv</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/atmos/stable_layer/zilitinkevich.html#ZilitinkevichModel.compute_utend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichModel.compute_utend" title="Link to this definition">#</a></dt>
+<dd><p>Compute zonal wind tendency for the SBL.</p>
+<div class="math notranslate nohighlight">
+\[\frac{du}{dt} = -f \, dv - \frac{\overline{u'w'}}{h_{sbl}}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\overline{u'w'}\)</span> is the surface momentum flux and
+<span class="math notranslate nohighlight">\(f\)</span> is the Coriolis parameter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>h_sbl</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></span>) – SBL height [m].</p></li>
+<li><p><strong>uw</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></span>) – Surface zonal momentum flux [m²/s²].</p></li>
+<li><p><strong>du</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></span>) – Zonal wind jump at SBL top [m/s].</p></li>
+<li><p><strong>dv</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></span>) – Meridional wind jump at SBL top [m/s].</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Zonal wind tendency [m/s²].</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichModel.compute_vtend">
+<span class="sig-name descname"><span class="pre">compute_vtend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">h_sbl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vw</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">du</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dv</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/atmos/stable_layer/zilitinkevich.html#ZilitinkevichModel.compute_vtend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichModel.compute_vtend" title="Link to this definition">#</a></dt>
+<dd><p>Compute meridional wind tendency for the SBL.</p>
+<div class="math notranslate nohighlight">
+\[\frac{dv}{dt} = f \, du - \frac{\overline{v'w'}}{h_{sbl}}\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>h_sbl</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></span>) – SBL height [m].</p></li>
+<li><p><strong>vw</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></span>) – Surface meridional momentum flux [m²/s²].</p></li>
+<li><p><strong>du</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></span>) – Zonal wind jump at SBL top [m/s].</p></li>
+<li><p><strong>dv</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></span>) – Meridional wind jump at SBL top [m/s].</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Meridional wind tendency [m/s²].</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichModel.compute_thetav">
+<span class="sig-name descname"><span class="pre">compute_thetav</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/atmos/stable_layer/zilitinkevich.html#ZilitinkevichModel.compute_thetav"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichModel.compute_thetav" title="Link to this definition">#</a></dt>
+<dd><p>Compute virtual potential temperature.</p>
+<div class="math notranslate nohighlight">
+\[\theta_v = \theta (1 + 0.61 q)\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>theta</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></span>) – Potential temperature [K].</p></li>
+<li><p><strong>q</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Array</span></code></span>) – Specific humidity [kg/kg].</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Virtual potential temperature [K].</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="abcmodel.atmos.stable_layer.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Stable Layer</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="abcmodel.atmos.residual_layer.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Residual Layer</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichState</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.h_sbl"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichState.h_sbl</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.theta"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichState.theta</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.q"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichState.q</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.co2"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichState.co2</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.u"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichState.u</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.v"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichState.v</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.surf_pressure"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichState.surf_pressure</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.thetav"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichState.thetav</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.ustar"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichState.ustar</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.obukhov"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichState.obukhov</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.wtheta"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichState.wtheta</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.wq"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichState.wq</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.wCO2"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichState.wCO2</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.thetatend"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichState.thetatend</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.qtend"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichState.qtend</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.co2tend"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichState.co2tend</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.utend"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichState.utend</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichState.vtend"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichState.vtend</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichModel"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichModel</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichModel.init_state"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichModel.init_state()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichModel.run"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichModel.run()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichModel.statistics"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichModel.statistics()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichModel.integrate"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichModel.integrate()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichModel.compute_sbl_height"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichModel.compute_sbl_height()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichModel.compute_thetatend"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichModel.compute_thetatend()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichModel.compute_qtend"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichModel.compute_qtend()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichModel.compute_co2tend"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichModel.compute_co2tend()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichModel.compute_utend"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichModel.compute_utend()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichModel.compute_vtend"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichModel.compute_vtend()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.atmos.stable_layer.zilitinkevich.ZilitinkevichModel.compute_thetav"><code class="docutils literal notranslate"><span class="pre">ZilitinkevichModel.compute_thetav()</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By ABC³ Group
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright ABC³ Group.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

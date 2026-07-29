@@ -1,0 +1,795 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Soil &#8212; abc-model 0.1.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=4418a689" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../../_static/documentation_options.js?v=a1637f0b"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'source/api/abcmodel.land.soil';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Standard" href="abcmodel.land.soil.standard.html" />
+    <link rel="prev" title="Jarvis Stewart" href="abcmodel.land.biosphere.jarvis_stewart.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../../_static/searchtools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/logo.png" class="logo__image only-light" alt="abc-model 0.1.0 documentation - Home"/>
+    <img src="../../_static/logo.png" class="logo__image only-dark pst-js-only" alt="abc-model 0.1.0 documentation - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="abcmodel.rad.html">Radiation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.rad.standard.html">Standard</a></li>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.rad.cloudy.html">Cloudy</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="abcmodel.land.html">Land</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.land.standard.html">Standard</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="abcmodel.land.biosphere.html">Biosphere</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.ags.html">Ags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.jarvis_stewart.html">Jarvis Stewart</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 current active has-children"><a class="current reference internal" href="#">Soil</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.soil.standard.html">Standard</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="abcmodel.land.surface.html">Surface</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.surface.standard.html">Standard</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.land.abstracts.html">Abstracts</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="abcmodel.atmos.html">Atmosphere</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.atmos.dayonly.html">Dayonly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.atmos.daynight.html">Daynight</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="abcmodel.atmos.surface_layer.html">Surface Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.atmos.surface_layer.simple.html">Simple</a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.atmos.surface_layer.obukhov.html">Obukhov</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="abcmodel.atmos.mixed_layer.html">Mixed Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.atmos.mixed_layer.bulk.html">Bulk</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="abcmodel.atmos.clouds.html">Clouds</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.atmos.clouds.cumulus.html">Cumulus</a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.atmos.clouds.no_clouds.html">No Clouds</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="abcmodel.atmos.stable_layer.html">Stable Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.atmos.stable_layer.zilitinkevich.html">Zilitinkevich</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="abcmodel.atmos.residual_layer.html">Residual Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.atmos.residual_layer.frozen.html">Frozen</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.atmos.abstracts.html">Abstracts</a></li>
+</ul>
+</details></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="abcmodel.abstracts.html">Abstracts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abcmodel.coupling.html">Coupling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abcmodel.integration.html">Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abcmodel.plotting.html">Plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abcmodel.utils.html">Utils</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/EarthyScience/abc-model" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/source/api/abcmodel.land.soil.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Soil</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submodules">Submodules</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-abcmodel.land.soil">Module contents</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.soil.StandardSoilModel"><code class="docutils literal notranslate"><span class="pre">StandardSoilModel</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.soil.StandardSoilModel.init_state"><code class="docutils literal notranslate"><span class="pre">StandardSoilModel.init_state()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.soil.StandardSoilModel.run"><code class="docutils literal notranslate"><span class="pre">StandardSoilModel.run()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.soil.StandardSoilModel.compute_soil_resistance"><code class="docutils literal notranslate"><span class="pre">StandardSoilModel.compute_soil_resistance()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.soil.StandardSoilModel.compute_temp_soil_tend"><code class="docutils literal notranslate"><span class="pre">StandardSoilModel.compute_temp_soil_tend()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.soil.StandardSoilModel.compute_wgtend"><code class="docutils literal notranslate"><span class="pre">StandardSoilModel.compute_wgtend()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.soil.StandardSoilModel.run_tends"><code class="docutils literal notranslate"><span class="pre">StandardSoilModel.run_tends()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.soil.StandardSoilModel.integrate"><code class="docutils literal notranslate"><span class="pre">StandardSoilModel.integrate()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.soil.StandardSoilState"><code class="docutils literal notranslate"><span class="pre">StandardSoilState</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.soil.StandardSoilState.wg"><code class="docutils literal notranslate"><span class="pre">StandardSoilState.wg</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.soil.StandardSoilState.temp_soil"><code class="docutils literal notranslate"><span class="pre">StandardSoilState.temp_soil</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.soil.StandardSoilState.temp2"><code class="docutils literal notranslate"><span class="pre">StandardSoilState.temp2</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.soil.StandardSoilState.rssoil"><code class="docutils literal notranslate"><span class="pre">StandardSoilState.rssoil</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.soil.StandardSoilState.temp_soil_tend"><code class="docutils literal notranslate"><span class="pre">StandardSoilState.temp_soil_tend</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.soil.StandardSoilState.wgtend"><code class="docutils literal notranslate"><span class="pre">StandardSoilState.wgtend</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="soil">
+<h1>Soil<a class="headerlink" href="#soil" title="Link to this heading">#</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">#</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="abcmodel.land.soil.standard.html">Standard</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.land.soil.standard.html#abcmodel.land.soil.standard.StandardSoilState"><code class="docutils literal notranslate"><span class="pre">StandardSoilState</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.soil.standard.html#abcmodel.land.soil.standard.StandardSoilState.wg"><code class="docutils literal notranslate"><span class="pre">StandardSoilState.wg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.soil.standard.html#abcmodel.land.soil.standard.StandardSoilState.temp_soil"><code class="docutils literal notranslate"><span class="pre">StandardSoilState.temp_soil</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.soil.standard.html#abcmodel.land.soil.standard.StandardSoilState.temp2"><code class="docutils literal notranslate"><span class="pre">StandardSoilState.temp2</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.soil.standard.html#abcmodel.land.soil.standard.StandardSoilState.rssoil"><code class="docutils literal notranslate"><span class="pre">StandardSoilState.rssoil</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.soil.standard.html#abcmodel.land.soil.standard.StandardSoilState.temp_soil_tend"><code class="docutils literal notranslate"><span class="pre">StandardSoilState.temp_soil_tend</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.soil.standard.html#abcmodel.land.soil.standard.StandardSoilState.wgtend"><code class="docutils literal notranslate"><span class="pre">StandardSoilState.wgtend</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.land.soil.standard.html#abcmodel.land.soil.standard.StandardSoilModel"><code class="docutils literal notranslate"><span class="pre">StandardSoilModel</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.soil.standard.html#abcmodel.land.soil.standard.StandardSoilModel.init_state"><code class="docutils literal notranslate"><span class="pre">StandardSoilModel.init_state()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.soil.standard.html#abcmodel.land.soil.standard.StandardSoilModel.run"><code class="docutils literal notranslate"><span class="pre">StandardSoilModel.run()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.soil.standard.html#abcmodel.land.soil.standard.StandardSoilModel.compute_soil_resistance"><code class="docutils literal notranslate"><span class="pre">StandardSoilModel.compute_soil_resistance()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.soil.standard.html#abcmodel.land.soil.standard.StandardSoilModel.compute_temp_soil_tend"><code class="docutils literal notranslate"><span class="pre">StandardSoilModel.compute_temp_soil_tend()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.soil.standard.html#abcmodel.land.soil.standard.StandardSoilModel.compute_wgtend"><code class="docutils literal notranslate"><span class="pre">StandardSoilModel.compute_wgtend()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.soil.standard.html#abcmodel.land.soil.standard.StandardSoilModel.run_tends"><code class="docutils literal notranslate"><span class="pre">StandardSoilModel.run_tends()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.soil.standard.html#abcmodel.land.soil.standard.StandardSoilModel.integrate"><code class="docutils literal notranslate"><span class="pre">StandardSoilModel.integrate()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="module-abcmodel.land.soil">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-abcmodel.land.soil" title="Link to this heading">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="abcmodel.land.soil.StandardSoilModel">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">abcmodel.land.soil.</span></span><span class="sig-name descname"><span class="pre">StandardSoilModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.219</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cgsat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3.56e-06</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wsat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.472</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wfc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.323</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wwilt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.171</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.21</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c1sat</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.132</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c2ref</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rssoilmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/soil/standard.html#StandardSoilModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.soil.StandardSoilModel" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="abcmodel.land.abstracts.html#abcmodel.land.abstracts.AbstractSoilModel" title="abcmodel.land.abstracts.AbstractSoilModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractSoilModel</span></code></a>[<a class="reference internal" href="abcmodel.land.soil.standard.html#abcmodel.land.soil.standard.StandardSoilState" title="abcmodel.land.soil.standard.StandardSoilState"><code class="xref py py-class docutils literal notranslate"><span class="pre">StandardSoilState</span></code></a>]</p>
+<p>Standard soil model with moisture and temperature dynamics.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Clapp and Hornberger (1978) retention curve parameter. Default is 0.219.</p></li>
+<li><p><strong>b</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Clapp and Hornberger (1978) retention curve parameter. Default is 4.90.</p></li>
+<li><p><strong>p</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Clapp and Hornberger (1978) retention curve parameter. Default is 4.0.</p></li>
+<li><p><strong>cgsat</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – saturated soil heat capacity [J m-3 K-1]. Default is 3.56e-6.</p></li>
+<li><p><strong>wsat</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – saturated soil moisture content [m3 m-3]. Default is 0.472.</p></li>
+<li><p><strong>wfc</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – soil moisture content at field capacity [m3 m-3]. Default is 0.323.</p></li>
+<li><p><strong>wwilt</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – soil moisture content at wilting point [m3 m-3]. Default is 0.171.</p></li>
+<li><p><strong>w2</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – soil moisture content at the second layer [m3 m-3]. Default is 0.21.</p></li>
+<li><p><strong>d1</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – depth of the top soil layer [m]. Default is 0.1.</p></li>
+<li><p><strong>c1sat</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – saturated soil hydraulic conductivity parameter [-]. Default is 0.132.</p></li>
+<li><p><strong>c2ref</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – reference soil hydraulic conductivity parameter [-]. Default is 1.8.</p></li>
+<li><p><strong>rssoilmin</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – minimum soil resistance [s m-1]. Default is 50.0.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land.soil.StandardSoilModel.init_state">
+<span class="sig-name descname"><span class="pre">init_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.21</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp_soil</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">285.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">286.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rssoil</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000000.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/soil/standard.html#StandardSoilModel.init_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.soil.StandardSoilModel.init_state" title="Link to this definition">#</a></dt>
+<dd><p>Initialize the soil state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>wg</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Volumetric soil moisture [m3 m-3]. Default is 0.21.</p></li>
+<li><p><strong>temp_soil</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Soil temperature [K]. Default is 285.0.</p></li>
+<li><p><strong>temp2</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Deep soil temperature [K]. Default is 286.0.</p></li>
+<li><p><strong>rssoil</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Soil resistance [s m-1]. Default is 1.0e6.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The initialized StandardSoilState.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land.soil.StandardSoilModel.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/soil/standard.html#StandardSoilModel.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.soil.StandardSoilModel.run" title="Link to this definition">#</a></dt>
+<dd><p>Compute soil surface resistance.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land.soil.StandardSoilModel.compute_soil_resistance">
+<span class="sig-name descname"><span class="pre">compute_soil_resistance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/soil/standard.html#StandardSoilModel.compute_soil_resistance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.soil.StandardSoilModel.compute_soil_resistance" title="Link to this definition">#</a></dt>
+<dd><p>Compute the soil resistance <code class="docutils literal notranslate"><span class="pre">rssoil</span></code>.</p>
+<p class="rubric">Notes</p>
+<p>The soil resistance is calculated as</p>
+<div class="math notranslate nohighlight">
+\[r_\text{soil} = r_\text{soil,min} \cdot f_2,\]</div>
+<p>where the parameter <span class="math notranslate nohighlight">\(r_\text{soil,min}\)</span> is the minimum surface resistance and
+the correction function <span class="math notranslate nohighlight">\(f_2\)</span> is given by</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}f_2 =
+    \begin{cases}
+        \frac{w_\text{fc} - w_\text{wilt}}{w_g - w_\text{wilt}}, &amp; \text{if } w_g &gt; w_\text{wilt} \\
+        10^8, &amp; \text{otherwise},
+    \end{cases}\end{split}\]</div>
+<p>where the model parameters <span class="math notranslate nohighlight">\(w_\text{fc}\)</span> and <span class="math notranslate nohighlight">\(w_\text{wilt}\)</span>
+are the field capacity and wilting point, respectively,
+and the variable <span class="math notranslate nohighlight">\(w_g\)</span> is the soil water content.</p>
+<p class="rubric">References</p>
+<p>Equations 9.28 and 9.31 from the CLASS book.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land.soil.StandardSoilModel.compute_temp_soil_tend">
+<span class="sig-name descname"><span class="pre">compute_temp_soil_tend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp_soil</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/soil/standard.html#StandardSoilModel.compute_temp_soil_tend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.soil.StandardSoilModel.compute_temp_soil_tend" title="Link to this definition">#</a></dt>
+<dd><p>Compute the soil temperature tendency <code class="docutils literal notranslate"><span class="pre">temp_soil_tend</span></code>.</p>
+<p class="rubric">Notes</p>
+<p>The dynamics of heat transport in the soil is given by</p>
+<div class="math notranslate nohighlight">
+\[\frac{\text{d}T_s}{\text{d}t}
+=
+C_T G - \frac{2\pi}{\tau} (T_s - T_2),\]</div>
+<p><span class="math notranslate nohighlight">\(T_2\)</span> is the temperature of the second layer in the soil,
+<span class="math notranslate nohighlight">\(T_s\)</span> is the soil temperature,
+where <span class="math notranslate nohighlight">\(\tau\)</span> is the time constant of one day (86400s),
+<span class="math notranslate nohighlight">\(G\)</span> is the ground the heat flux and
+and <span class="math notranslate nohighlight">\(C_T\)</span> is the surface soil/vegetation heat capacity, which can be parametrized as</p>
+<div class="math notranslate nohighlight">
+\[C_T = C_{T,\text{sat}} \left(\frac{w_{\text{sat}}}{w_2}\right)^{\frac{b}{2\log(10)}}\]</div>
+<p>where <span class="math notranslate nohighlight">\(C_{T,\text{sat}}\)</span> is the saturated heat capacity,
+<span class="math notranslate nohighlight">\(w_{\text{sat}}\)</span> is the saturation water content,
+<span class="math notranslate nohighlight">\(w_2\)</span> is the water content at the second layer
+and <span class="math notranslate nohighlight">\(b\)</span> is a parameter from Clapp and Hornberger (1978).
+I have no idea where this log comes from.</p>
+<p class="rubric">References</p>
+<p>Equation 9.32 of the CLASS book.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land.soil.StandardSoilModel.compute_wgtend">
+<span class="sig-name descname"><span class="pre">compute_wgtend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">le_soil</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/soil/standard.html#StandardSoilModel.compute_wgtend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.soil.StandardSoilModel.compute_wgtend" title="Link to this definition">#</a></dt>
+<dd><p>Compute the soil moisture tendency <code class="docutils literal notranslate"><span class="pre">wgtend</span></code>.</p>
+<p class="rubric">Notes</p>
+<p>The dynamics of soil moisture in the top soil layer is described by</p>
+<div class="math notranslate nohighlight">
+\[\frac{\mathrm{d}w_g}{\mathrm{d}t}
+=
+-\frac{C_1}{\rho_w d_1} \frac{LE_{\text{soil}}}{L_v}
+- \frac{C_2}{\tau} (w_g - w_{eq}),\]</div>
+<p>where the coefficients <span class="math notranslate nohighlight">\(C_1\)</span> and <span class="math notranslate nohighlight">\(C_2\)</span> are calculated as</p>
+<div class="math notranslate nohighlight">
+\[C_1 = C_{1,\text{sat}} \left(\frac{w_{sat}}{w_g}\right)^{b/2 + 1},\]</div>
+<div class="math notranslate nohighlight">
+\[C_2 = C_{2,\text{ref}} \left(\frac{w_2}{w_{sat} - w_2}\right),\]</div>
+<p>where <span class="math notranslate nohighlight">\(C_{1,\text{sat}}\)</span> and <span class="math notranslate nohighlight">\(C_{2,\text{sat}}\)</span> are parameters from Clapp-Hornberger (1978)
+and the equilibrium soil moisture is given by</p>
+<div class="math notranslate nohighlight">
+\[w_{eq} = w_2 - w_{sat} a \left(\left(\frac{w_2}{w_{sat}}\right)^p
+\left[1 - \left(\frac{w_2}{w_{sat}}\right)^{8p}\right]\right).\]</div>
+<p>In these equations, <span class="math notranslate nohighlight">\(w_g\)</span> is the volumetric soil moisture in the top layer,
+<span class="math notranslate nohighlight">\(LE_{\text{soil}}\)</span> is the latent heat flux from the soil,
+<span class="math notranslate nohighlight">\(L_v\)</span> is the latent heat of vaporization,
+<span class="math notranslate nohighlight">\(\rho_w\)</span> is the density of water,
+<span class="math notranslate nohighlight">\(d_1\)</span> is the depth of the first soil layer,
+<span class="math notranslate nohighlight">\(\tau\)</span> is a time constant (here, 86400 s = 1 day),
+<span class="math notranslate nohighlight">\(w_2\)</span> is the soil moisture in the second layer,
+<span class="math notranslate nohighlight">\(w_{sat}\)</span> is the saturated soil moisture, and
+<span class="math notranslate nohighlight">\(a\)</span>, <span class="math notranslate nohighlight">\(b\)</span> and <span class="math notranslate nohighlight">\(p\)</span> are parameters from Clapp-Hornberger (1978).</p>
+<p>The first term represents the loss of soil moisture due to evaporation,
+and the second term represents the relaxation of soil moisture toward equilibrium with the lower layer.</p>
+<p class="rubric">References</p>
+<ul class="simple">
+<li><p>(9.34)–(9.37) in the CLASS book.</p></li>
+<li><p>Clapp, R. B., &amp; Hornberger, G. M. (1978). Empirical equations for some soil hydraulic properties. Water resources research, 14(4), 601-604.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land.soil.StandardSoilModel.run_tends">
+<span class="sig-name descname"><span class="pre">run_tends</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surf_state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/soil/standard.html#StandardSoilModel.run_tends"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.soil.StandardSoilModel.run_tends" title="Link to this definition">#</a></dt>
+<dd><p>Compute soil tendencies that depend on surface fluxes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land.soil.StandardSoilModel.integrate">
+<span class="sig-name descname"><span class="pre">integrate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/soil/standard.html#StandardSoilModel.integrate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.soil.StandardSoilModel.integrate" title="Link to this definition">#</a></dt>
+<dd><p>Integrate soil moisture and temperature forward in time.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="abcmodel.land.soil.StandardSoilState">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">abcmodel.land.soil.</span></span><span class="sig-name descname"><span class="pre">StandardSoilState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp_soil</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rssoil</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp_soil_tend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wgtend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/soil/standard.html#StandardSoilState"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.soil.StandardSoilState" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="abcmodel.land.abstracts.html#abcmodel.land.abstracts.AbstractSoilState" title="abcmodel.land.abstracts.AbstractSoilState"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractSoilState</span></code></a></p>
+<p>Standard soil state.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.soil.StandardSoilState.wg">
+<span class="sig-name descname"><span class="pre">wg</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.soil.StandardSoilState.wg" title="Link to this definition">#</a></dt>
+<dd><p>Soil moisture content in the root zone [m3 m-3].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.soil.StandardSoilState.temp_soil">
+<span class="sig-name descname"><span class="pre">temp_soil</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.soil.StandardSoilState.temp_soil" title="Link to this definition">#</a></dt>
+<dd><p>Soil temperature [K].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.soil.StandardSoilState.temp2">
+<span class="sig-name descname"><span class="pre">temp2</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.soil.StandardSoilState.temp2" title="Link to this definition">#</a></dt>
+<dd><p>Deep soil temperature [K].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.soil.StandardSoilState.rssoil">
+<span class="sig-name descname"><span class="pre">rssoil</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.soil.StandardSoilState.rssoil" title="Link to this definition">#</a></dt>
+<dd><p>Soil resistance [m s-1].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.soil.StandardSoilState.temp_soil_tend">
+<span class="sig-name descname"><span class="pre">temp_soil_tend</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.soil.StandardSoilState.temp_soil_tend" title="Link to this definition">#</a></dt>
+<dd><p>Soil temperature tendency [K s-1].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.soil.StandardSoilState.wgtend">
+<span class="sig-name descname"><span class="pre">wgtend</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.soil.StandardSoilState.wgtend" title="Link to this definition">#</a></dt>
+<dd><p>Soil moisture tendency [m3 m-3 s-1].</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="abcmodel.land.biosphere.jarvis_stewart.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Jarvis Stewart</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="abcmodel.land.soil.standard.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Standard</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submodules">Submodules</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-abcmodel.land.soil">Module contents</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.soil.StandardSoilModel"><code class="docutils literal notranslate"><span class="pre">StandardSoilModel</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.soil.StandardSoilModel.init_state"><code class="docutils literal notranslate"><span class="pre">StandardSoilModel.init_state()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.soil.StandardSoilModel.run"><code class="docutils literal notranslate"><span class="pre">StandardSoilModel.run()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.soil.StandardSoilModel.compute_soil_resistance"><code class="docutils literal notranslate"><span class="pre">StandardSoilModel.compute_soil_resistance()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.soil.StandardSoilModel.compute_temp_soil_tend"><code class="docutils literal notranslate"><span class="pre">StandardSoilModel.compute_temp_soil_tend()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.soil.StandardSoilModel.compute_wgtend"><code class="docutils literal notranslate"><span class="pre">StandardSoilModel.compute_wgtend()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.soil.StandardSoilModel.run_tends"><code class="docutils literal notranslate"><span class="pre">StandardSoilModel.run_tends()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.soil.StandardSoilModel.integrate"><code class="docutils literal notranslate"><span class="pre">StandardSoilModel.integrate()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.soil.StandardSoilState"><code class="docutils literal notranslate"><span class="pre">StandardSoilState</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.soil.StandardSoilState.wg"><code class="docutils literal notranslate"><span class="pre">StandardSoilState.wg</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.soil.StandardSoilState.temp_soil"><code class="docutils literal notranslate"><span class="pre">StandardSoilState.temp_soil</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.soil.StandardSoilState.temp2"><code class="docutils literal notranslate"><span class="pre">StandardSoilState.temp2</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.soil.StandardSoilState.rssoil"><code class="docutils literal notranslate"><span class="pre">StandardSoilState.rssoil</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.soil.StandardSoilState.temp_soil_tend"><code class="docutils literal notranslate"><span class="pre">StandardSoilState.temp_soil_tend</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.soil.StandardSoilState.wgtend"><code class="docutils literal notranslate"><span class="pre">StandardSoilState.wgtend</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By ABC³ Group
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright ABC³ Group.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

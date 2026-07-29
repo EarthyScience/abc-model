@@ -1,0 +1,1406 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Biosphere &#8212; abc-model 0.1.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=4418a689" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../../_static/documentation_options.js?v=a1637f0b"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'source/api/abcmodel.land.biosphere';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Ags" href="abcmodel.land.biosphere.ags.html" />
+    <link rel="prev" title="Standard" href="abcmodel.land.standard.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../../_static/searchtools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/logo.png" class="logo__image only-light" alt="abc-model 0.1.0 documentation - Home"/>
+    <img src="../../_static/logo.png" class="logo__image only-dark pst-js-only" alt="abc-model 0.1.0 documentation - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="abcmodel.rad.html">Radiation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.rad.standard.html">Standard</a></li>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.rad.cloudy.html">Cloudy</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="abcmodel.land.html">Land</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.land.standard.html">Standard</a></li>
+<li class="toctree-l2 current active has-children"><a class="current reference internal" href="#">Biosphere</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.ags.html">Ags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.jarvis_stewart.html">Jarvis Stewart</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="abcmodel.land.soil.html">Soil</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.soil.standard.html">Standard</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="abcmodel.land.surface.html">Surface</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.surface.standard.html">Standard</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.land.abstracts.html">Abstracts</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="abcmodel.atmos.html">Atmosphere</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.atmos.dayonly.html">Dayonly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.atmos.daynight.html">Daynight</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="abcmodel.atmos.surface_layer.html">Surface Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.atmos.surface_layer.simple.html">Simple</a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.atmos.surface_layer.obukhov.html">Obukhov</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="abcmodel.atmos.mixed_layer.html">Mixed Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.atmos.mixed_layer.bulk.html">Bulk</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="abcmodel.atmos.clouds.html">Clouds</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.atmos.clouds.cumulus.html">Cumulus</a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.atmos.clouds.no_clouds.html">No Clouds</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="abcmodel.atmos.stable_layer.html">Stable Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.atmos.stable_layer.zilitinkevich.html">Zilitinkevich</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="abcmodel.atmos.residual_layer.html">Residual Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.atmos.residual_layer.frozen.html">Frozen</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.atmos.abstracts.html">Abstracts</a></li>
+</ul>
+</details></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="abcmodel.abstracts.html">Abstracts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abcmodel.coupling.html">Coupling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abcmodel.integration.html">Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abcmodel.plotting.html">Plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abcmodel.utils.html">Utils</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/EarthyScience/abc-model" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/source/api/abcmodel.land.biosphere.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Biosphere</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submodules">Submodules</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-abcmodel.land.biosphere">Module contents</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.JarvisStewartModel"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.JarvisStewartModel.init_state"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.init_state()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.JarvisStewartModel.run"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.run()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.JarvisStewartModel.compute_f1"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.compute_f1()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.JarvisStewartModel.compute_f2"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.compute_f2()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.JarvisStewartModel.compute_f3"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.compute_f3()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.JarvisStewartModel.compute_f4"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.compute_f4()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.JarvisStewartModel.compute_cliq"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.compute_cliq()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.JarvisStewartModel.compute_wltend"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.compute_wltend()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.JarvisStewartModel.run_tends"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.run_tends()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.JarvisStewartModel.integrate"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.integrate()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.JarvisStewartState"><code class="docutils literal notranslate"><span class="pre">JarvisStewartState</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.JarvisStewartState.rs"><code class="docutils literal notranslate"><span class="pre">JarvisStewartState.rs</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.JarvisStewartState.wl"><code class="docutils literal notranslate"><span class="pre">JarvisStewartState.wl</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.JarvisStewartState.cliq"><code class="docutils literal notranslate"><span class="pre">JarvisStewartState.cliq</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.JarvisStewartState.wCO2"><code class="docutils literal notranslate"><span class="pre">JarvisStewartState.wCO2</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.JarvisStewartState.cveg"><code class="docutils literal notranslate"><span class="pre">JarvisStewartState.cveg</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.JarvisStewartState.wltend"><code class="docutils literal notranslate"><span class="pre">JarvisStewartState.wltend</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsModel"><code class="docutils literal notranslate"><span class="pre">AgsModel</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsModel.init_state"><code class="docutils literal notranslate"><span class="pre">AgsModel.init_state()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsModel.run"><code class="docutils literal notranslate"><span class="pre">AgsModel.run()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsModel.compute_co2comp"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_co2comp()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsModel.compute_gm"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_gm()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsModel.compute_fmin"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_fmin()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsModel.compute_ds"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_ds()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsModel.compute_d0"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_d0()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsModel.compute_internal_co2"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_internal_co2()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsModel.compute_max_gross_primary_production"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_max_gross_primary_production()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsModel.compute_soil_moisture_stress_factor"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_soil_moisture_stress_factor()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsModel.compute_gross_assimilation"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_gross_assimilation()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsModel.compute_dark_respiration"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_dark_respiration()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsModel.compute_absorbed_par"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_absorbed_par()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsModel.compute_canopy_co2_conductance"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_canopy_co2_conductance()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsModel.compute_rs"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_rs()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsModel.compute_light_use_efficiency"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_light_use_efficiency()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsModel.compute_surface_co2_resistance"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_surface_co2_resistance()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsModel.compute_net_assimilation"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_net_assimilation()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsModel.compute_soil_water_fraction"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_soil_water_fraction()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsModel.compute_respiration"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_respiration()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsModel.scale_flux_to_mol"><code class="docutils literal notranslate"><span class="pre">AgsModel.scale_flux_to_mol()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsModel.compute_cliq"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_cliq()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsModel.compute_wltend"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_wltend()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsModel.run_tends"><code class="docutils literal notranslate"><span class="pre">AgsModel.run_tends()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsModel.integrate"><code class="docutils literal notranslate"><span class="pre">AgsModel.integrate()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsState"><code class="docutils literal notranslate"><span class="pre">AgsState</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsState.rs"><code class="docutils literal notranslate"><span class="pre">AgsState.rs</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsState.wl"><code class="docutils literal notranslate"><span class="pre">AgsState.wl</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsState.cliq"><code class="docutils literal notranslate"><span class="pre">AgsState.cliq</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsState.wCO2"><code class="docutils literal notranslate"><span class="pre">AgsState.wCO2</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsState.cveg"><code class="docutils literal notranslate"><span class="pre">AgsState.cveg</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsState.rsCO2"><code class="docutils literal notranslate"><span class="pre">AgsState.rsCO2</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsState.gcco2"><code class="docutils literal notranslate"><span class="pre">AgsState.gcco2</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsState.ci"><code class="docutils literal notranslate"><span class="pre">AgsState.ci</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsState.co2abs"><code class="docutils literal notranslate"><span class="pre">AgsState.co2abs</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsState.wCO2A"><code class="docutils literal notranslate"><span class="pre">AgsState.wCO2A</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsState.wCO2R"><code class="docutils literal notranslate"><span class="pre">AgsState.wCO2R</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsState.wltend"><code class="docutils literal notranslate"><span class="pre">AgsState.wltend</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="biosphere">
+<h1>Biosphere<a class="headerlink" href="#biosphere" title="Link to this heading">#</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">#</a></h2>
+<p>There are two possible implementations of biosphere models:</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="abcmodel.land.biosphere.ags.html">Ags</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.land.biosphere.ags.html#abcmodel.land.biosphere.ags.AgsState"><code class="docutils literal notranslate"><span class="pre">AgsState</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.ags.html#abcmodel.land.biosphere.ags.AgsState.rs"><code class="docutils literal notranslate"><span class="pre">AgsState.rs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.ags.html#abcmodel.land.biosphere.ags.AgsState.wl"><code class="docutils literal notranslate"><span class="pre">AgsState.wl</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.ags.html#abcmodel.land.biosphere.ags.AgsState.cliq"><code class="docutils literal notranslate"><span class="pre">AgsState.cliq</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.ags.html#abcmodel.land.biosphere.ags.AgsState.wCO2"><code class="docutils literal notranslate"><span class="pre">AgsState.wCO2</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.ags.html#abcmodel.land.biosphere.ags.AgsState.cveg"><code class="docutils literal notranslate"><span class="pre">AgsState.cveg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.ags.html#abcmodel.land.biosphere.ags.AgsState.rsCO2"><code class="docutils literal notranslate"><span class="pre">AgsState.rsCO2</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.ags.html#abcmodel.land.biosphere.ags.AgsState.gcco2"><code class="docutils literal notranslate"><span class="pre">AgsState.gcco2</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.ags.html#abcmodel.land.biosphere.ags.AgsState.ci"><code class="docutils literal notranslate"><span class="pre">AgsState.ci</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.ags.html#abcmodel.land.biosphere.ags.AgsState.co2abs"><code class="docutils literal notranslate"><span class="pre">AgsState.co2abs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.ags.html#abcmodel.land.biosphere.ags.AgsState.wCO2A"><code class="docutils literal notranslate"><span class="pre">AgsState.wCO2A</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.ags.html#abcmodel.land.biosphere.ags.AgsState.wCO2R"><code class="docutils literal notranslate"><span class="pre">AgsState.wCO2R</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.ags.html#abcmodel.land.biosphere.ags.AgsState.wltend"><code class="docutils literal notranslate"><span class="pre">AgsState.wltend</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.land.biosphere.ags.html#abcmodel.land.biosphere.ags.AgsModel"><code class="docutils literal notranslate"><span class="pre">AgsModel</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.ags.html#abcmodel.land.biosphere.ags.AgsModel.init_state"><code class="docutils literal notranslate"><span class="pre">AgsModel.init_state()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.ags.html#abcmodel.land.biosphere.ags.AgsModel.run"><code class="docutils literal notranslate"><span class="pre">AgsModel.run()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.ags.html#abcmodel.land.biosphere.ags.AgsModel.compute_co2comp"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_co2comp()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.ags.html#abcmodel.land.biosphere.ags.AgsModel.compute_gm"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_gm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.ags.html#abcmodel.land.biosphere.ags.AgsModel.compute_fmin"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_fmin()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.ags.html#abcmodel.land.biosphere.ags.AgsModel.compute_ds"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_ds()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.ags.html#abcmodel.land.biosphere.ags.AgsModel.compute_d0"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_d0()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.ags.html#abcmodel.land.biosphere.ags.AgsModel.compute_internal_co2"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_internal_co2()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.ags.html#abcmodel.land.biosphere.ags.AgsModel.compute_max_gross_primary_production"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_max_gross_primary_production()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.ags.html#abcmodel.land.biosphere.ags.AgsModel.compute_soil_moisture_stress_factor"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_soil_moisture_stress_factor()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.ags.html#abcmodel.land.biosphere.ags.AgsModel.compute_gross_assimilation"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_gross_assimilation()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.ags.html#abcmodel.land.biosphere.ags.AgsModel.compute_dark_respiration"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_dark_respiration()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.ags.html#abcmodel.land.biosphere.ags.AgsModel.compute_absorbed_par"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_absorbed_par()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.ags.html#abcmodel.land.biosphere.ags.AgsModel.compute_canopy_co2_conductance"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_canopy_co2_conductance()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.ags.html#abcmodel.land.biosphere.ags.AgsModel.compute_rs"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_rs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.ags.html#abcmodel.land.biosphere.ags.AgsModel.compute_light_use_efficiency"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_light_use_efficiency()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.ags.html#abcmodel.land.biosphere.ags.AgsModel.compute_surface_co2_resistance"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_surface_co2_resistance()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.ags.html#abcmodel.land.biosphere.ags.AgsModel.compute_net_assimilation"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_net_assimilation()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.ags.html#abcmodel.land.biosphere.ags.AgsModel.compute_soil_water_fraction"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_soil_water_fraction()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.ags.html#abcmodel.land.biosphere.ags.AgsModel.compute_respiration"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_respiration()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.ags.html#abcmodel.land.biosphere.ags.AgsModel.scale_flux_to_mol"><code class="docutils literal notranslate"><span class="pre">AgsModel.scale_flux_to_mol()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.ags.html#abcmodel.land.biosphere.ags.AgsModel.compute_cliq"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_cliq()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.ags.html#abcmodel.land.biosphere.ags.AgsModel.compute_wltend"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_wltend()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.ags.html#abcmodel.land.biosphere.ags.AgsModel.run_tends"><code class="docutils literal notranslate"><span class="pre">AgsModel.run_tends()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.ags.html#abcmodel.land.biosphere.ags.AgsModel.integrate"><code class="docutils literal notranslate"><span class="pre">AgsModel.integrate()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="abcmodel.land.biosphere.jarvis_stewart.html">Jarvis Stewart</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.land.biosphere.jarvis_stewart.html#abcmodel.land.biosphere.jarvis_stewart.JarvisStewartState"><code class="docutils literal notranslate"><span class="pre">JarvisStewartState</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.jarvis_stewart.html#abcmodel.land.biosphere.jarvis_stewart.JarvisStewartState.rs"><code class="docutils literal notranslate"><span class="pre">JarvisStewartState.rs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.jarvis_stewart.html#abcmodel.land.biosphere.jarvis_stewart.JarvisStewartState.wl"><code class="docutils literal notranslate"><span class="pre">JarvisStewartState.wl</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.jarvis_stewart.html#abcmodel.land.biosphere.jarvis_stewart.JarvisStewartState.cliq"><code class="docutils literal notranslate"><span class="pre">JarvisStewartState.cliq</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.jarvis_stewart.html#abcmodel.land.biosphere.jarvis_stewart.JarvisStewartState.wCO2"><code class="docutils literal notranslate"><span class="pre">JarvisStewartState.wCO2</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.jarvis_stewart.html#abcmodel.land.biosphere.jarvis_stewart.JarvisStewartState.cveg"><code class="docutils literal notranslate"><span class="pre">JarvisStewartState.cveg</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.jarvis_stewart.html#abcmodel.land.biosphere.jarvis_stewart.JarvisStewartState.wltend"><code class="docutils literal notranslate"><span class="pre">JarvisStewartState.wltend</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.land.biosphere.jarvis_stewart.html#abcmodel.land.biosphere.jarvis_stewart.JarvisStewartModel"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.jarvis_stewart.html#abcmodel.land.biosphere.jarvis_stewart.JarvisStewartModel.init_state"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.init_state()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.jarvis_stewart.html#abcmodel.land.biosphere.jarvis_stewart.JarvisStewartModel.run"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.run()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.jarvis_stewart.html#abcmodel.land.biosphere.jarvis_stewart.JarvisStewartModel.compute_f1"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.compute_f1()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.jarvis_stewart.html#abcmodel.land.biosphere.jarvis_stewart.JarvisStewartModel.compute_f2"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.compute_f2()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.jarvis_stewart.html#abcmodel.land.biosphere.jarvis_stewart.JarvisStewartModel.compute_f3"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.compute_f3()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.jarvis_stewart.html#abcmodel.land.biosphere.jarvis_stewart.JarvisStewartModel.compute_f4"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.compute_f4()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.jarvis_stewart.html#abcmodel.land.biosphere.jarvis_stewart.JarvisStewartModel.compute_cliq"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.compute_cliq()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.jarvis_stewart.html#abcmodel.land.biosphere.jarvis_stewart.JarvisStewartModel.compute_wltend"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.compute_wltend()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.jarvis_stewart.html#abcmodel.land.biosphere.jarvis_stewart.JarvisStewartModel.run_tends"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.run_tends()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.jarvis_stewart.html#abcmodel.land.biosphere.jarvis_stewart.JarvisStewartModel.integrate"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.integrate()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="module-abcmodel.land.biosphere">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-abcmodel.land.biosphere" title="Link to this heading">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.JarvisStewartModel">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">abcmodel.land.biosphere.</span></span><span class="sig-name descname"><span class="pre">JarvisStewartModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rsmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">110.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lai</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gD</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cveg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.85</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0002</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wwilt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.171</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wfc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.323</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.21</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/biosphere/jarvis_stewart.html#JarvisStewartModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.biosphere.JarvisStewartModel" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="abcmodel.land.abstracts.html#abcmodel.land.abstracts.AbstractBiosphereModel" title="abcmodel.land.abstracts.AbstractBiosphereModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractBiosphereModel</span></code></a>[<a class="reference internal" href="abcmodel.land.biosphere.jarvis_stewart.html#abcmodel.land.biosphere.jarvis_stewart.JarvisStewartState" title="abcmodel.land.biosphere.jarvis_stewart.JarvisStewartState"><code class="xref py py-class docutils literal notranslate"><span class="pre">JarvisStewartState</span></code></a>]</p>
+<p>Jarvis-Stewart biosphere model with empirical surface resistance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rsmin</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – minimum stomatal resistance [s m-1]. Default is 110.0.</p></li>
+<li><p><strong>lai</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – leaf area index [m2 m-2]. Default is 2.0.</p></li>
+<li><p><strong>gD</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – canopy rad extinction coefficient [-]. Default is 0.0.</p></li>
+<li><p><strong>wmax</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – maximum water storage capacity of the canopy [m]. Default is 0.0002.</p></li>
+<li><p><strong>wwilt</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – soil moisture content at wilting point [m3 m-3]. Default is 0.171.</p></li>
+<li><p><strong>wfc</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – soil moisture content at field capacity [m3 m-3]. Default is 0.323.</p></li>
+<li><p><strong>w2</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – soil moisture content at the second layer [m3 m-3]. Default is 0.21.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.JarvisStewartModel.init_state">
+<span class="sig-name descname"><span class="pre">init_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cliq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wCO2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/biosphere/jarvis_stewart.html#JarvisStewartModel.init_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.biosphere.JarvisStewartModel.init_state" title="Link to this definition">#</a></dt>
+<dd><p>Initialize the biosphere state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rs</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Surface resistance [s m-1]. Default is 1.0e6.</p></li>
+<li><p><strong>wl</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Canopy water content [m]. Default is 0.0.</p></li>
+<li><p><strong>cliq</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Wet fraction of canopy [-]. Default is 0.0.</p></li>
+<li><p><strong>wCO2</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Kinematic CO2 flux [mol m-2 s-1]. Default is 0.0.</p></li>
+<li><p><strong>cveg</strong> – vegetation fraction [-]. Default is 0.85.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The initialized JarvisStewartState.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.JarvisStewartModel.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/biosphere/jarvis_stewart.html#JarvisStewartModel.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.biosphere.JarvisStewartModel.run" title="Link to this definition">#</a></dt>
+<dd><p>Compute biosphere surface resistance and canopy wet fraction.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.JarvisStewartModel.compute_f1">
+<span class="sig-name descname"><span class="pre">compute_f1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_srad</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/biosphere/jarvis_stewart.html#JarvisStewartModel.compute_f1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.biosphere.JarvisStewartModel.compute_f1" title="Link to this definition">#</a></dt>
+<dd><p>Compute the radiation stress factor <code class="docutils literal notranslate"><span class="pre">f1</span></code>.</p>
+<p class="rubric">Notes</p>
+<p>The radiation factor follows the Jarvis (1976) formulation:</p>
+<div class="math notranslate nohighlight">
+\[f_1 = \frac{1}{\min\!\left(1,\,
+    \dfrac{0.004\,R_s + 0.05}{0.81\,(0.004\,R_s + 1)}\right)}\]</div>
+<p>where <span class="math notranslate nohighlight">\(R_s\)</span> is the incoming solar radiation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.JarvisStewartModel.compute_f2">
+<span class="sig-name descname"><span class="pre">compute_f2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/biosphere/jarvis_stewart.html#JarvisStewartModel.compute_f2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.biosphere.JarvisStewartModel.compute_f2" title="Link to this definition">#</a></dt>
+<dd><p>Compute the soil moisture stress factor <code class="docutils literal notranslate"><span class="pre">f2</span></code>.</p>
+<p class="rubric">Notes</p>
+<p>The soil moisture factor follows the Jarvis (1976) formulation:</p>
+<div class="math notranslate nohighlight">
+\[f_2 = \max\!\left(1,\,
+    \frac{w_{\text{fc}} - w_{\text{wilt}}}
+         {w_g - w_{\text{wilt}}}\right)\]</div>
+<p>where <span class="math notranslate nohighlight">\(w_g\)</span> is the surface soil moisture,
+<span class="math notranslate nohighlight">\(w_{\text{fc}}\)</span> is the field capacity and
+<span class="math notranslate nohighlight">\(w_{\text{wilt}}\)</span> is the wilting point.
+When the second-layer soil moisture <span class="math notranslate nohighlight">\(w_2\)</span> drops below the
+wilting point, the factor is set to a large value (effectively
+closing the stomata).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.JarvisStewartModel.compute_f3">
+<span class="sig-name descname"><span class="pre">compute_f3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">esat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/biosphere/jarvis_stewart.html#JarvisStewartModel.compute_f3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.biosphere.JarvisStewartModel.compute_f3" title="Link to this definition">#</a></dt>
+<dd><p>Compute the vapour pressure deficit stress factor <code class="docutils literal notranslate"><span class="pre">f3</span></code>.</p>
+<p class="rubric">Notes</p>
+<p>The VPD factor follows the Jarvis (1976) formulation:</p>
+<div class="math notranslate nohighlight">
+\[f_3 = \exp\!\left(\frac{g_D \, D}{100}\right)\]</div>
+<p>where <span class="math notranslate nohighlight">\(D = e_{\text{sat}} - e\)</span> is the vapour pressure
+deficit, <span class="math notranslate nohighlight">\(e_{\text{sat}}\)</span> is the saturation vapour
+pressure, <span class="math notranslate nohighlight">\(e\)</span> is the actual vapour pressure, and
+<span class="math notranslate nohighlight">\(g_D\)</span> is the canopy radiation extinction coefficient.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.JarvisStewartModel.compute_f4">
+<span class="sig-name descname"><span class="pre">compute_f4</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">theta</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/biosphere/jarvis_stewart.html#JarvisStewartModel.compute_f4"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.biosphere.JarvisStewartModel.compute_f4" title="Link to this definition">#</a></dt>
+<dd><p>Compute the temperature stress factor <code class="docutils literal notranslate"><span class="pre">f4</span></code>.</p>
+<p class="rubric">Notes</p>
+<p>The temperature factor follows the Jarvis (1976) formulation:</p>
+<div class="math notranslate nohighlight">
+\[f_4 = \frac{1}{1 - 0.0016\,(298 - \theta)^2}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\theta\)</span> is the potential temperature [K].</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.JarvisStewartModel.compute_cliq">
+<span class="sig-name descname"><span class="pre">compute_cliq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wl</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/biosphere/jarvis_stewart.html#JarvisStewartModel.compute_cliq"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.biosphere.JarvisStewartModel.compute_cliq" title="Link to this definition">#</a></dt>
+<dd><p>Compute the wet fraction <code class="docutils literal notranslate"><span class="pre">cliq</span></code>.</p>
+<p class="rubric">Notes</p>
+<p>The wet fraction is defined as</p>
+<div class="math notranslate nohighlight">
+\[c_{\text{liq}} = \frac{W_l}{\text{LAI}\cdot W_{\text{max}}},\]</div>
+<p>where <span class="math notranslate nohighlight">\(W_l\)</span> is the water layer depth,
+<span class="math notranslate nohighlight">\(\text{LAI}\)</span> is the leaf area index and
+<span class="math notranslate nohighlight">\(W_{\text{max}}\)</span> is the thickness of the water layer on wet vegetation.
+In case <span class="math notranslate nohighlight">\(W_l &gt; \text{LAI}\cdot W_{\text{max}}\)</span>, the wet fraction is set to 1.</p>
+<p class="rubric">References</p>
+<p>Equation 9.19 from the CLASS book.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.JarvisStewartModel.compute_wltend">
+<span class="sig-name descname"><span class="pre">compute_wltend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">le_liq</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/biosphere/jarvis_stewart.html#JarvisStewartModel.compute_wltend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.biosphere.JarvisStewartModel.compute_wltend" title="Link to this definition">#</a></dt>
+<dd><p>Compute the water layer depth tendency <code class="docutils literal notranslate"><span class="pre">wltend</span></code>.</p>
+<p class="rubric">Notes</p>
+<p>The water layer depth tendency is the rate at which water is added to or taken from the vegetation,
+described by</p>
+<div class="math notranslate nohighlight">
+\[\frac{\text{d} w}{\text{d} t} = -\frac{LE_{\text{liq}}}{\rho_w L_v},\]</div>
+<p>where <span class="math notranslate nohighlight">\(LE_{\text{liq}}\)</span> is dew, <span class="math notranslate nohighlight">\(\rho_w\)</span> is water density and <span class="math notranslate nohighlight">\(L_v\)</span> is the latent heat of vaporization.</p>
+<p class="rubric">References</p>
+<p>Equation 9.20 from the CLASS book, with sign convention.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.JarvisStewartModel.run_tends">
+<span class="sig-name descname"><span class="pre">run_tends</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surf_state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/biosphere/jarvis_stewart.html#JarvisStewartModel.run_tends"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.biosphere.JarvisStewartModel.run_tends" title="Link to this definition">#</a></dt>
+<dd><p>Compute biosphere tendencies that depend on surface fluxes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.JarvisStewartModel.integrate">
+<span class="sig-name descname"><span class="pre">integrate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/biosphere/jarvis_stewart.html#JarvisStewartModel.integrate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.biosphere.JarvisStewartModel.integrate" title="Link to this definition">#</a></dt>
+<dd><p>Integrate canopy water content forward in time.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.JarvisStewartState">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">abcmodel.land.biosphere.</span></span><span class="sig-name descname"><span class="pre">JarvisStewartState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cliq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wCO2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cveg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wltend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/biosphere/jarvis_stewart.html#JarvisStewartState"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.biosphere.JarvisStewartState" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="abcmodel.land.abstracts.html#abcmodel.land.abstracts.AbstractBiosphereState" title="abcmodel.land.abstracts.AbstractBiosphereState"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractBiosphereState</span></code></a></p>
+<p>Jarvis-Stewart biosphere state.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.JarvisStewartState.rs">
+<span class="sig-name descname"><span class="pre">rs</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.biosphere.JarvisStewartState.rs" title="Link to this definition">#</a></dt>
+<dd><p>Surface resistance [s m-1].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.JarvisStewartState.wl">
+<span class="sig-name descname"><span class="pre">wl</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.biosphere.JarvisStewartState.wl" title="Link to this definition">#</a></dt>
+<dd><p>Canopy water content [m].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.JarvisStewartState.cliq">
+<span class="sig-name descname"><span class="pre">cliq</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.biosphere.JarvisStewartState.cliq" title="Link to this definition">#</a></dt>
+<dd><p>Wet fraction of canopy [-].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.JarvisStewartState.wCO2">
+<span class="sig-name descname"><span class="pre">wCO2</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.biosphere.JarvisStewartState.wCO2" title="Link to this definition">#</a></dt>
+<dd><p>Kinematic CO2 flux [mol m-2 s-1].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.JarvisStewartState.cveg">
+<span class="sig-name descname"><span class="pre">cveg</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.biosphere.JarvisStewartState.cveg" title="Link to this definition">#</a></dt>
+<dd><p>Vegetation fraction [-].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.JarvisStewartState.wltend">
+<span class="sig-name descname"><span class="pre">wltend</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.biosphere.JarvisStewartState.wltend" title="Link to this definition">#</a></dt>
+<dd><p>Canopy water content tendency [m].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.AgsModel">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">abcmodel.land.biosphere.</span></span><span class="sig-name descname"><span class="pre">AgsModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c3c4</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'c3'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lai</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cveg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.85</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0002</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wwilt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.171</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wfc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.323</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.21</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/biosphere/ags.html#AgsModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.biosphere.AgsModel" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="abcmodel.land.abstracts.html#abcmodel.land.abstracts.AbstractBiosphereModel" title="abcmodel.land.abstracts.AbstractBiosphereModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractBiosphereModel</span></code></a>[<a class="reference internal" href="abcmodel.land.biosphere.ags.html#abcmodel.land.biosphere.ags.AgsState" title="abcmodel.land.biosphere.ags.AgsState"><code class="xref py py-class docutils literal notranslate"><span class="pre">AgsState</span></code></a>]</p>
+<p>Ags land surface biosphere model with coupled photosynthesis and stomatal conductance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>c3c4</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></span>) – string indicating whether the model should use C3 or C4 photosynthesis. Default is “c3”.</p></li>
+<li><p><strong>lai</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – leaf area index [m2 m-2]. Default is 2.0.</p></li>
+<li><p><strong>cveg</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – vegetation fraction [-]. Default is 0.85.</p></li>
+<li><p><strong>wmax</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – maximum water storage capacity of the canopy [m]. Default is 0.0002.</p></li>
+<li><p><strong>wwilt</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – soil moisture content at wilting point [m3 m-3]. Default is 0.171.</p></li>
+<li><p><strong>wfc</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – soil moisture content at field capacity [m3 m-3]. Default is 0.323.</p></li>
+<li><p><strong>w2</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – soil moisture content at the second layer [m3 m-3]. Default is 0.21.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.AgsModel.init_state">
+<span class="sig-name descname"><span class="pre">init_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cliq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wCO2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/biosphere/ags.html#AgsModel.init_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.biosphere.AgsModel.init_state" title="Link to this definition">#</a></dt>
+<dd><p>Initialize the Ags state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rs</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Surface resistance [s m-1]. Default is 1.0e6.</p></li>
+<li><p><strong>wl</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Canopy water content [m]. Default is 0.0.</p></li>
+<li><p><strong>cliq</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Wet fraction of canopy [-]. Default is 0.0.</p></li>
+<li><p><strong>wCO2</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></span>) – Total CO2 flux [mol m-2 s-1]. Default is 0.0.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The initialized AgsState.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.AgsModel.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/biosphere/ags.html#AgsModel.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.biosphere.AgsModel.run" title="Link to this definition">#</a></dt>
+<dd><p>Compute stomatal resistance and CO2 fluxes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.AgsModel.compute_co2comp">
+<span class="sig-name descname"><span class="pre">compute_co2comp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">thetasurf</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/biosphere/ags.html#AgsModel.compute_co2comp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.biosphere.AgsModel.compute_co2comp" title="Link to this definition">#</a></dt>
+<dd><p>Compute the CO₂ compensation concentration <code class="docutils literal notranslate"><span class="pre">co2comp</span></code>.</p>
+<p class="rubric">Notes</p>
+<p>The CO₂ compensation point <span class="math notranslate nohighlight">\(\Gamma\)</span> is the CO₂
+concentration at which net photosynthesis is zero. It follows
+a Q₁₀ temperature response:</p>
+<div class="math notranslate nohighlight">
+\[\Gamma = \Gamma_{298} \cdot \rho \cdot
+    Q_{10}^{\,0.1\,(\theta_s - 298)}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\Gamma_{298}\)</span> is the compensation point at 298 K,
+<span class="math notranslate nohighlight">\(\rho\)</span> is the air density, <span class="math notranslate nohighlight">\(Q_{10}\)</span> is the relative
+increase per 10 K, and <span class="math notranslate nohighlight">\(\theta_s\)</span> is the surface potential
+temperature.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.AgsModel.compute_gm">
+<span class="sig-name descname"><span class="pre">compute_gm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">thetasurf</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/biosphere/ags.html#AgsModel.compute_gm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.biosphere.AgsModel.compute_gm" title="Link to this definition">#</a></dt>
+<dd><p>Compute the mesophyll conductance <code class="docutils literal notranslate"><span class="pre">gm</span></code>.</p>
+<p class="rubric">Notes</p>
+<p>Mesophyll conductance <span class="math notranslate nohighlight">\(g_m\)</span> controls the diffusion of
+CO₂ from intercellular spaces to the sites of carboxylation.
+It follows a temperature response with a Q₁₀ factor and high/
+low temperature inhibition:</p>
+<div class="math notranslate nohighlight">
+\[g_m = \frac{g_{m,298} \cdot
+    Q_{10}^{\,0.1\,(\theta_s - 298)}}
+    {\bigl(1 + e^{0.3\,(T_1 - \theta_s)}\bigr)
+     \bigl(1 + e^{0.3\,(\theta_s - T_2)}\bigr)}\]</div>
+<p>where <span class="math notranslate nohighlight">\(g_{m,298}\)</span> is the mesophyll conductance at 298 K,
+<span class="math notranslate nohighlight">\(\theta_s\)</span> is the surface potential temperature, and
+<span class="math notranslate nohighlight">\(T_1, T_2\)</span> are temperature thresholds.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.AgsModel.compute_fmin">
+<span class="sig-name descname"><span class="pre">compute_fmin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gm</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/biosphere/ags.html#AgsModel.compute_fmin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.biosphere.AgsModel.compute_fmin" title="Link to this definition">#</a></dt>
+<dd><p>Compute the minimum stomatal conductance factor <code class="docutils literal notranslate"><span class="pre">fmin</span></code>.</p>
+<p class="rubric">Notes</p>
+<p>The minimum conductance factor <span class="math notranslate nohighlight">\(f_{\min}\)</span> is derived
+from the quadratic relation between minimum stomatal
+conductance <span class="math notranslate nohighlight">\(g_{\min}\)</span> and mesophyll conductance
+<span class="math notranslate nohighlight">\(g_m\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[f_{\min} = \frac{-f_0 + \sqrt{f_0^2 +
+    \dfrac{4 g_{\min} g_m}{\nu}}}{2 g_m},
+\qquad
+f_0 = \frac{g_{\min}}{\nu} - \frac{g_m}{9},\]</div>
+<p>where <span class="math notranslate nohighlight">\(\nu = 1.6\)</span> is the ratio of diffusivity of water
+vapour to CO₂, and <span class="math notranslate nohighlight">\(g_{\min}\)</span> is the minimum stomatal
+conductance.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.AgsModel.compute_ds">
+<span class="sig-name descname"><span class="pre">compute_ds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">surf_temp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/biosphere/ags.html#AgsModel.compute_ds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.biosphere.AgsModel.compute_ds" title="Link to this definition">#</a></dt>
+<dd><p>Compute the vapour pressure deficit <code class="docutils literal notranslate"><span class="pre">ds</span></code>.</p>
+<p class="rubric">Notes</p>
+<p>The vapour pressure deficit at the surface is given by</p>
+<div class="math notranslate nohighlight">
+\[D_s = \frac{e_{\text{sat}}(T_s) - e}{1000},\]</div>
+<p>where <span class="math notranslate nohighlight">\(e_{\text{sat}}\)</span> is the saturation vapour pressure
+at the surface temperature <span class="math notranslate nohighlight">\(T_s\)</span> and <span class="math notranslate nohighlight">\(e\)</span> is the
+actual vapour pressure.             The result is in kPa.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.AgsModel.compute_d0">
+<span class="sig-name descname"><span class="pre">compute_d0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fmin</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/biosphere/ags.html#AgsModel.compute_d0"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.biosphere.AgsModel.compute_d0" title="Link to this definition">#</a></dt>
+<dd><p>Compute the reference vapour pressure deficit <code class="docutils literal notranslate"><span class="pre">d0</span></code>.</p>
+<p class="rubric">Notes</p>
+<p>The reference VPD is derived from the minimum conductance
+factor:</p>
+<div class="math notranslate nohighlight">
+\[D_0 = \frac{f_0 - f_{\min}}{a_d},\]</div>
+<p>where <span class="math notranslate nohighlight">\(f_0\)</span> is a shape parameter and <span class="math notranslate nohighlight">\(a_d\)</span> is
+the sensitivity of the VPD response.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.AgsModel.compute_internal_co2">
+<span class="sig-name descname"><span class="pre">compute_internal_co2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fmin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">co2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">co2comp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/biosphere/ags.html#AgsModel.compute_internal_co2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.biosphere.AgsModel.compute_internal_co2" title="Link to this definition">#</a></dt>
+<dd><p>Compute the intercellular CO₂ concentration <code class="docutils literal notranslate"><span class="pre">ci</span></code>.</p>
+<p class="rubric">Notes</p>
+<p>The intercellular CO₂ concentration <span class="math notranslate nohighlight">\(C_i\)</span> is computed
+from the CO₂ absorption concentration and the compensation
+point:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}c_f &amp;= f_0 \left(1 - \frac{D_s}{D_0}\right) +
+      f_{\min} \frac{D_s}{D_0} \\
+\text{CO}_{2,\text{abs}} &amp;=
+    \text{CO}_2 \frac{M_{\text{CO}_2}}
+                     {M_{\text{air}}} \rho \\
+C_i &amp;= c_f (\text{CO}_{2,\text{abs}} - \Gamma) + \Gamma\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(c_f\)</span> is the fractional reduction factor,
+<span class="math notranslate nohighlight">\(\text{CO}_2\)</span> is the atmospheric CO₂ concentration,
+<span class="math notranslate nohighlight">\(M_{\text{CO}_2}\)</span> and <span class="math notranslate nohighlight">\(M_{\text{air}}\)</span> are the
+molar masses of CO₂ and dry air, and <span class="math notranslate nohighlight">\(\rho\)</span> is the
+air density.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A tuple <code class="docutils literal notranslate"><span class="pre">(ci,</span> <span class="pre">co2abs)</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.AgsModel.compute_max_gross_primary_production">
+<span class="sig-name descname"><span class="pre">compute_max_gross_primary_production</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">thetasurf</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/biosphere/ags.html#AgsModel.compute_max_gross_primary_production"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.biosphere.AgsModel.compute_max_gross_primary_production" title="Link to this definition">#</a></dt>
+<dd><p>Compute the maximal gross primary production <code class="docutils literal notranslate"><span class="pre">ammax</span></code>.</p>
+<p class="rubric">Notes</p>
+<p>The maximum gross primary production <span class="math notranslate nohighlight">\(A_{m,\max}\)</span>
+follows a temperature response identical in structure to
+mesophyll conductance:</p>
+<div class="math notranslate nohighlight">
+\[A_{m,\max} = \frac{A_{m,298} \cdot
+    Q_{10}^{\,0.1\,(\theta_s - 298)}}
+    {\bigl(1 + e^{0.3\,(T_1 - \theta_s)}\bigr)
+     \bigl(1 + e^{0.3\,(\theta_s - T_2)}\bigr)}\]</div>
+<p>where <span class="math notranslate nohighlight">\(A_{m,298}\)</span> is the value at 298 K and
+<span class="math notranslate nohighlight">\(\theta_s\)</span> is the surface potential temperature.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.AgsModel.compute_soil_moisture_stress_factor">
+<span class="sig-name descname"><span class="pre">compute_soil_moisture_stress_factor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">w2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/biosphere/ags.html#AgsModel.compute_soil_moisture_stress_factor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.biosphere.AgsModel.compute_soil_moisture_stress_factor" title="Link to this definition">#</a></dt>
+<dd><p>Compute the soil moisture stress factor <code class="docutils literal notranslate"><span class="pre">fstr</span></code>.</p>
+<p class="rubric">Notes</p>
+<p>The soil moisture stress factor <span class="math notranslate nohighlight">\(\beta_w\)</span> is computed
+from the relative soil moisture:</p>
+<div class="math notranslate nohighlight">
+\[\beta_w = \frac{w_2 - w_{\text{wilt}}}
+               {w_{\text{fc}} - w_{\text{wilt}}}\]</div>
+<p>clipped to <span class="math notranslate nohighlight">\([\varepsilon, 1]\)</span>. The stress factor is then
+adjusted using a piecewise function depending on the parameter
+<span class="math notranslate nohighlight">\(c_{\beta}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}f_{\text{str}} = \begin{cases}
+    \beta_w &amp; c_\beta = 0 \\[4pt]
+    \dfrac{1 - e^{-p \beta_w}}{1 - e^{-p}} &amp; c_\beta &gt; 0
+\end{cases}\end{split}\]</div>
+<p>where the shape parameter <span class="math notranslate nohighlight">\(p\)</span> increases with
+<span class="math notranslate nohighlight">\(c_{\beta}\)</span>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.AgsModel.compute_gross_assimilation">
+<span class="sig-name descname"><span class="pre">compute_gross_assimilation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ammax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ci</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">co2comp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/biosphere/ags.html#AgsModel.compute_gross_assimilation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.biosphere.AgsModel.compute_gross_assimilation" title="Link to this definition">#</a></dt>
+<dd><p>Compute the gross assimilation rate <code class="docutils literal notranslate"><span class="pre">am</span></code>.</p>
+<p class="rubric">Notes</p>
+<p>The gross assimilation rate follows an exponential approach
+to saturation (Collatz et al., 1991):</p>
+<div class="math notranslate nohighlight">
+\[A_m = A_{m,\max} \left(1 - \exp\!\left(
+    -\frac{g_m\,(C_i - \Gamma)}{A_{m,\max}}
+\right)\right)\]</div>
+<p>where <span class="math notranslate nohighlight">\(A_{m,\max}\)</span> is the maximal gross primary
+production, <span class="math notranslate nohighlight">\(g_m\)</span> is the mesophyll conductance,
+<span class="math notranslate nohighlight">\(C_i\)</span> is the intercellular CO₂ concentration, and
+<span class="math notranslate nohighlight">\(\Gamma\)</span> is the CO₂ compensation concentration.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.AgsModel.compute_dark_respiration">
+<span class="sig-name descname"><span class="pre">compute_dark_respiration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">am</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/biosphere/ags.html#AgsModel.compute_dark_respiration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.biosphere.AgsModel.compute_dark_respiration" title="Link to this definition">#</a></dt>
+<dd><p>Compute the dark respiration rate <code class="docutils literal notranslate"><span class="pre">rdark</span></code>.</p>
+<p class="rubric">Notes</p>
+<p>Dark respiration is proportional to the gross assimilation
+rate:</p>
+<div class="math notranslate nohighlight">
+\[R_{\text{dark}} = \frac{A_m}{9}\]</div>
+<p>where <span class="math notranslate nohighlight">\(A_m\)</span> is the gross assimilation rate.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.AgsModel.compute_absorbed_par">
+<span class="sig-name descname"><span class="pre">compute_absorbed_par</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_srad</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/biosphere/ags.html#AgsModel.compute_absorbed_par"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.biosphere.AgsModel.compute_absorbed_par" title="Link to this definition">#</a></dt>
+<dd><p>Compute the absorbed photosynthetically active radiation <code class="docutils literal notranslate"><span class="pre">par</span></code>.</p>
+<p class="rubric">Notes</p>
+<p>The absorbed PAR is estimated as 50% of the incoming solar
+radiation, scaled by the vegetation fraction, with a lower
+bound:</p>
+<div class="math notranslate nohighlight">
+\[\text{PAR} = \max\!\left(0.5 \cdot R_s \cdot
+    c_{\text{veg}},\, 0.1\right)\]</div>
+<p>where <span class="math notranslate nohighlight">\(R_s\)</span> is the incoming solar radiation and
+<span class="math notranslate nohighlight">\(c_{\text{veg}}\)</span> is the vegetation fraction.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.AgsModel.compute_canopy_co2_conductance">
+<span class="sig-name descname"><span class="pre">compute_canopy_co2_conductance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alphac</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">par</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">am</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rdark</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fstr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">co2abs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">co2comp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ds</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fmin</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/biosphere/ags.html#AgsModel.compute_canopy_co2_conductance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.biosphere.AgsModel.compute_canopy_co2_conductance" title="Link to this definition">#</a></dt>
+<dd><p>Compute the canopy CO₂ conductance <code class="docutils literal notranslate"><span class="pre">gcco2</span></code>.</p>
+<p class="rubric">Notes</p>
+<p>The canopy CO₂ conductance <span class="math notranslate nohighlight">\(g_{c,\text{CO}_2}\)</span> is
+computed by scaling leaf-level photosynthesis to the canopy
+using the big-leaf approach with the exponential integral
+<span class="math notranslate nohighlight">\(E_1\)</span> (Sellers et al., 1996):</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}y &amp;= \frac{\alpha_c k_x \text{PAR}}{A_m + R_{\text{dark}}}
+\\
+A_n &amp;= (A_m + R_{\text{dark}})
+    \left(1 - \frac{E_1(y e^{-k_x L}) - E_1(y)}{k_x L}
+    \right) \\
+D_* &amp;= \frac{D_0}{a_1 (f_0 - f_{\min})} \\
+g_{c,\text{CO}_2} &amp;=
+    L \left(\frac{g_{\min}}{\nu} +
+    \frac{a_1 f_{\text{str}} A_n}
+         {(\text{CO}_{2,\text{abs}} - \Gamma)
+          (1 + D_s / D_*)}\right)\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(L\)</span> is the leaf area index, <span class="math notranslate nohighlight">\(k_x\)</span> is the
+extinction coefficient, <span class="math notranslate nohighlight">\(\nu = 1.6\)</span> is the diffusivity
+ratio, and <span class="math notranslate nohighlight">\(a_1 = 1 / (1 - f_0)\)</span>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.AgsModel.compute_rs">
+<span class="sig-name descname"><span class="pre">compute_rs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gcco2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/biosphere/ags.html#AgsModel.compute_rs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.biosphere.AgsModel.compute_rs" title="Link to this definition">#</a></dt>
+<dd><p>Compute the surface resistance <code class="docutils literal notranslate"><span class="pre">rs</span></code>.</p>
+<p class="rubric">Notes</p>
+<p>The surface (stomatal) resistance is related to the canopy
+CO₂ conductance by</p>
+<div class="math notranslate nohighlight">
+\[r_s = \frac{1}{1.6 \, g_{c,\text{CO}_2}}\]</div>
+<p>where the factor <span class="math notranslate nohighlight">\(1.6\)</span> is the ratio of diffusivity of
+water vapour to CO₂, and <span class="math notranslate nohighlight">\(g_{c,\text{CO}_2}\)</span> is the
+canopy CO₂ conductance.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.AgsModel.compute_light_use_efficiency">
+<span class="sig-name descname"><span class="pre">compute_light_use_efficiency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">co2abs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">co2comp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/biosphere/ags.html#AgsModel.compute_light_use_efficiency"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.biosphere.AgsModel.compute_light_use_efficiency" title="Link to this definition">#</a></dt>
+<dd><p>Compute the light use efficiency <code class="docutils literal notranslate"><span class="pre">alphac</span></code>.</p>
+<p class="rubric">Notes</p>
+<p>The light use efficiency depends on the CO₂ concentration:</p>
+<div class="math notranslate nohighlight">
+\[\alpha_c = \alpha_0 \,
+    \frac{\text{CO}_{2,\text{abs}} - \Gamma}
+         {\text{CO}_{2,\text{abs}} + 2\Gamma}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\alpha_0\)</span> is the quantum efficiency and
+<span class="math notranslate nohighlight">\(\Gamma\)</span> is the CO₂ compensation concentration.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.AgsModel.compute_surface_co2_resistance">
+<span class="sig-name descname"><span class="pre">compute_surface_co2_resistance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gcco2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/biosphere/ags.html#AgsModel.compute_surface_co2_resistance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.biosphere.AgsModel.compute_surface_co2_resistance" title="Link to this definition">#</a></dt>
+<dd><p>Compute the surface resistance to CO₂ <code class="docutils literal notranslate"><span class="pre">rsCO2</span></code>.</p>
+<p class="rubric">Notes</p>
+<p>The surface resistance to CO₂ is the reciprocal of the
+canopy CO₂ conductance:</p>
+<div class="math notranslate nohighlight">
+\[r_{s,\text{CO}_2} = \frac{1}{g_{c,\text{CO}_2}}\]</div>
+<p>where <span class="math notranslate nohighlight">\(g_{c,\text{CO}_2}\)</span> is the canopy CO₂ conductance.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.AgsModel.compute_net_assimilation">
+<span class="sig-name descname"><span class="pre">compute_net_assimilation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">co2abs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ci</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ra</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rsCO2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/biosphere/ags.html#AgsModel.compute_net_assimilation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.biosphere.AgsModel.compute_net_assimilation" title="Link to this definition">#</a></dt>
+<dd><p>Compute the net CO₂ assimilation rate <code class="docutils literal notranslate"><span class="pre">an</span></code>.</p>
+<p class="rubric">Notes</p>
+<p>The net assimilation rate follows Fick’s law of diffusion:</p>
+<div class="math notranslate nohighlight">
+\[A_n = -\frac{\text{CO}_{2,\text{abs}} - C_i}
+             {r_a + r_{s,\text{CO}_2}}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\text{CO}_{2,\text{abs}}\)</span> is the CO₂ absorption
+concentration, <span class="math notranslate nohighlight">\(C_i\)</span> is the intercellular CO₂
+concentration, <span class="math notranslate nohighlight">\(r_a\)</span> is the aerodynamic resistance,
+and <span class="math notranslate nohighlight">\(r_{s,\text{CO}_2}\)</span> is the surface resistance to
+CO₂.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.AgsModel.compute_soil_water_fraction">
+<span class="sig-name descname"><span class="pre">compute_soil_water_fraction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/biosphere/ags.html#AgsModel.compute_soil_water_fraction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.biosphere.AgsModel.compute_soil_water_fraction" title="Link to this definition">#</a></dt>
+<dd><p>Compute the soil water fraction <code class="docutils literal notranslate"><span class="pre">fw</span></code>.</p>
+<p class="rubric">Notes</p>
+<p>The soil water fraction used for respiration scaling is</p>
+<div class="math notranslate nohighlight">
+\[f_w = \frac{c_w \, w_{\max}}{w_g + w_{\min}}\]</div>
+<p>where <span class="math notranslate nohighlight">\(w_g\)</span> is the surface soil moisture,
+<span class="math notranslate nohighlight">\(w_{\max}\)</span> and <span class="math notranslate nohighlight">\(w_{\min}\)</span> are empirical
+parameters, and <span class="math notranslate nohighlight">\(c_w\)</span> is a scaling constant.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.AgsModel.compute_respiration">
+<span class="sig-name descname"><span class="pre">compute_respiration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">temp_soil</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fw</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/biosphere/ags.html#AgsModel.compute_respiration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.biosphere.AgsModel.compute_respiration" title="Link to this definition">#</a></dt>
+<dd><p>Compute the soil respiration rate <code class="docutils literal notranslate"><span class="pre">resp</span></code>.</p>
+<p class="rubric">Notes</p>
+<p>Soil respiration follows an Arrhenius-type temperature
+response with a moisture limitation:</p>
+<div class="math notranslate nohighlight">
+\[R = R_{10} \cdot (1 - f_w) \cdot
+    \exp\!\left(\frac{E_0}{283.15 \cdot R}
+        \left(1 - \frac{283.15}{T_{\text{soil}}}
+        \right)\right)\]</div>
+<p>where <span class="math notranslate nohighlight">\(R_{10}\)</span> is the respiration rate at 283.15 K,
+<span class="math notranslate nohighlight">\(f_w\)</span> is the soil water fraction, <span class="math notranslate nohighlight">\(E_0\)</span> is the
+activation energy, and <span class="math notranslate nohighlight">\(T_{\text{soil}}\)</span> is the soil
+temperature.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.AgsModel.scale_flux_to_mol">
+<span class="sig-name descname"><span class="pre">scale_flux_to_mol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flux</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/biosphere/ags.html#AgsModel.scale_flux_to_mol"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.biosphere.AgsModel.scale_flux_to_mol" title="Link to this definition">#</a></dt>
+<dd><p>Scale a flux to mol m⁻² s⁻¹.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.AgsModel.compute_cliq">
+<span class="sig-name descname"><span class="pre">compute_cliq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wl</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/biosphere/ags.html#AgsModel.compute_cliq"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.biosphere.AgsModel.compute_cliq" title="Link to this definition">#</a></dt>
+<dd><p>Compute the wet fraction <code class="docutils literal notranslate"><span class="pre">cliq</span></code>.</p>
+<p class="rubric">Notes</p>
+<p>The wet fraction is defined as</p>
+<div class="math notranslate nohighlight">
+\[c_{\text{liq}} = \frac{W_l}{\text{LAI}\cdot W_{\text{max}}},\]</div>
+<p>where <span class="math notranslate nohighlight">\(W_l\)</span> is the water layer depth,
+<span class="math notranslate nohighlight">\(\text{LAI}\)</span> is the leaf area index and
+<span class="math notranslate nohighlight">\(W_{\text{max}}\)</span> is the thickness of the water layer on wet vegetation.
+In case <span class="math notranslate nohighlight">\(W_l &gt; \text{LAI}\cdot W_{\text{max}}\)</span>, the wet fraction is set to 1.</p>
+<p class="rubric">References</p>
+<p>Equation 9.19 from the CLASS book.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.AgsModel.compute_wltend">
+<span class="sig-name descname"><span class="pre">compute_wltend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">le_liq</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/biosphere/ags.html#AgsModel.compute_wltend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.biosphere.AgsModel.compute_wltend" title="Link to this definition">#</a></dt>
+<dd><p>Compute the water layer depth tendency <code class="docutils literal notranslate"><span class="pre">wltend</span></code>.</p>
+<p class="rubric">Notes</p>
+<p>The water layer depth tendency is the rate at which water is added to or taken from the vegetation,
+described by</p>
+<div class="math notranslate nohighlight">
+\[\frac{\text{d} w}{\text{d} t} = -\frac{LE_{\text{liq}}}{\rho_w L_v},\]</div>
+<p>where <span class="math notranslate nohighlight">\(LE_{\text{liq}}\)</span> is dew, <span class="math notranslate nohighlight">\(\rho_w\)</span> is water density and <span class="math notranslate nohighlight">\(L_v\)</span> is the latent heat of vaporization.</p>
+<p class="rubric">References</p>
+<p>Equation 9.20 from the CLASS book, with sign convention.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.AgsModel.run_tends">
+<span class="sig-name descname"><span class="pre">run_tends</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surf_state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/biosphere/ags.html#AgsModel.run_tends"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.biosphere.AgsModel.run_tends" title="Link to this definition">#</a></dt>
+<dd><p>Compute biosphere tendencies that depend on surface fluxes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.AgsModel.integrate">
+<span class="sig-name descname"><span class="pre">integrate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/biosphere/ags.html#AgsModel.integrate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.biosphere.AgsModel.integrate" title="Link to this definition">#</a></dt>
+<dd><p>Integrate canopy water content forward in time.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.AgsState">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">abcmodel.land.biosphere.</span></span><span class="sig-name descname"><span class="pre">AgsState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cliq</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wCO2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cveg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rsCO2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gcco2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ci</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">co2abs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wCO2A</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wCO2R</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wltend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/biosphere/ags.html#AgsState"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.biosphere.AgsState" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="abcmodel.land.abstracts.html#abcmodel.land.abstracts.AbstractBiosphereState" title="abcmodel.land.abstracts.AbstractBiosphereState"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractBiosphereState</span></code></a></p>
+<p>A-gs biosphere state.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.AgsState.rs">
+<span class="sig-name descname"><span class="pre">rs</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.biosphere.AgsState.rs" title="Link to this definition">#</a></dt>
+<dd><p>Surface resistance [s m-1].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.AgsState.wl">
+<span class="sig-name descname"><span class="pre">wl</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.biosphere.AgsState.wl" title="Link to this definition">#</a></dt>
+<dd><p>Canopy water content [m].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.AgsState.cliq">
+<span class="sig-name descname"><span class="pre">cliq</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.biosphere.AgsState.cliq" title="Link to this definition">#</a></dt>
+<dd><p>Wet fraction of canopy [-].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.AgsState.wCO2">
+<span class="sig-name descname"><span class="pre">wCO2</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.biosphere.AgsState.wCO2" title="Link to this definition">#</a></dt>
+<dd><p>Total CO2 flux [mol m-2 s-1].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.AgsState.cveg">
+<span class="sig-name descname"><span class="pre">cveg</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.biosphere.AgsState.cveg" title="Link to this definition">#</a></dt>
+<dd><p>Vegetation fraction [-].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.AgsState.rsCO2">
+<span class="sig-name descname"><span class="pre">rsCO2</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.biosphere.AgsState.rsCO2" title="Link to this definition">#</a></dt>
+<dd><p>Stomatal resistance to CO2.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.AgsState.gcco2">
+<span class="sig-name descname"><span class="pre">gcco2</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.biosphere.AgsState.gcco2" title="Link to this definition">#</a></dt>
+<dd><p>Conductance to CO2.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.AgsState.ci">
+<span class="sig-name descname"><span class="pre">ci</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.biosphere.AgsState.ci" title="Link to this definition">#</a></dt>
+<dd><p>Intercellular CO2 concentration.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.AgsState.co2abs">
+<span class="sig-name descname"><span class="pre">co2abs</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.biosphere.AgsState.co2abs" title="Link to this definition">#</a></dt>
+<dd><p>CO2 assimilation rate / concentration.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.AgsState.wCO2A">
+<span class="sig-name descname"><span class="pre">wCO2A</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.biosphere.AgsState.wCO2A" title="Link to this definition">#</a></dt>
+<dd><p>Net assimilation flux [mol m-2 s-1].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.AgsState.wCO2R">
+<span class="sig-name descname"><span class="pre">wCO2R</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.biosphere.AgsState.wCO2R" title="Link to this definition">#</a></dt>
+<dd><p>Respiration flux [mol m-2 s-1].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.biosphere.AgsState.wltend">
+<span class="sig-name descname"><span class="pre">wltend</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.biosphere.AgsState.wltend" title="Link to this definition">#</a></dt>
+<dd><p>Canopy water content tendency [m].</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="abcmodel.land.standard.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Standard</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="abcmodel.land.biosphere.ags.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Ags</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#submodules">Submodules</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-abcmodel.land.biosphere">Module contents</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.JarvisStewartModel"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.JarvisStewartModel.init_state"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.init_state()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.JarvisStewartModel.run"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.run()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.JarvisStewartModel.compute_f1"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.compute_f1()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.JarvisStewartModel.compute_f2"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.compute_f2()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.JarvisStewartModel.compute_f3"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.compute_f3()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.JarvisStewartModel.compute_f4"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.compute_f4()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.JarvisStewartModel.compute_cliq"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.compute_cliq()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.JarvisStewartModel.compute_wltend"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.compute_wltend()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.JarvisStewartModel.run_tends"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.run_tends()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.JarvisStewartModel.integrate"><code class="docutils literal notranslate"><span class="pre">JarvisStewartModel.integrate()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.JarvisStewartState"><code class="docutils literal notranslate"><span class="pre">JarvisStewartState</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.JarvisStewartState.rs"><code class="docutils literal notranslate"><span class="pre">JarvisStewartState.rs</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.JarvisStewartState.wl"><code class="docutils literal notranslate"><span class="pre">JarvisStewartState.wl</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.JarvisStewartState.cliq"><code class="docutils literal notranslate"><span class="pre">JarvisStewartState.cliq</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.JarvisStewartState.wCO2"><code class="docutils literal notranslate"><span class="pre">JarvisStewartState.wCO2</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.JarvisStewartState.cveg"><code class="docutils literal notranslate"><span class="pre">JarvisStewartState.cveg</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.JarvisStewartState.wltend"><code class="docutils literal notranslate"><span class="pre">JarvisStewartState.wltend</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsModel"><code class="docutils literal notranslate"><span class="pre">AgsModel</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsModel.init_state"><code class="docutils literal notranslate"><span class="pre">AgsModel.init_state()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsModel.run"><code class="docutils literal notranslate"><span class="pre">AgsModel.run()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsModel.compute_co2comp"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_co2comp()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsModel.compute_gm"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_gm()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsModel.compute_fmin"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_fmin()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsModel.compute_ds"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_ds()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsModel.compute_d0"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_d0()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsModel.compute_internal_co2"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_internal_co2()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsModel.compute_max_gross_primary_production"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_max_gross_primary_production()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsModel.compute_soil_moisture_stress_factor"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_soil_moisture_stress_factor()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsModel.compute_gross_assimilation"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_gross_assimilation()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsModel.compute_dark_respiration"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_dark_respiration()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsModel.compute_absorbed_par"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_absorbed_par()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsModel.compute_canopy_co2_conductance"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_canopy_co2_conductance()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsModel.compute_rs"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_rs()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsModel.compute_light_use_efficiency"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_light_use_efficiency()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsModel.compute_surface_co2_resistance"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_surface_co2_resistance()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsModel.compute_net_assimilation"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_net_assimilation()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsModel.compute_soil_water_fraction"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_soil_water_fraction()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsModel.compute_respiration"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_respiration()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsModel.scale_flux_to_mol"><code class="docutils literal notranslate"><span class="pre">AgsModel.scale_flux_to_mol()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsModel.compute_cliq"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_cliq()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsModel.compute_wltend"><code class="docutils literal notranslate"><span class="pre">AgsModel.compute_wltend()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsModel.run_tends"><code class="docutils literal notranslate"><span class="pre">AgsModel.run_tends()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsModel.integrate"><code class="docutils literal notranslate"><span class="pre">AgsModel.integrate()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsState"><code class="docutils literal notranslate"><span class="pre">AgsState</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsState.rs"><code class="docutils literal notranslate"><span class="pre">AgsState.rs</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsState.wl"><code class="docutils literal notranslate"><span class="pre">AgsState.wl</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsState.cliq"><code class="docutils literal notranslate"><span class="pre">AgsState.cliq</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsState.wCO2"><code class="docutils literal notranslate"><span class="pre">AgsState.wCO2</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsState.cveg"><code class="docutils literal notranslate"><span class="pre">AgsState.cveg</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsState.rsCO2"><code class="docutils literal notranslate"><span class="pre">AgsState.rsCO2</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsState.gcco2"><code class="docutils literal notranslate"><span class="pre">AgsState.gcco2</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsState.ci"><code class="docutils literal notranslate"><span class="pre">AgsState.ci</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsState.co2abs"><code class="docutils literal notranslate"><span class="pre">AgsState.co2abs</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsState.wCO2A"><code class="docutils literal notranslate"><span class="pre">AgsState.wCO2A</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsState.wCO2R"><code class="docutils literal notranslate"><span class="pre">AgsState.wCO2R</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.biosphere.AgsState.wltend"><code class="docutils literal notranslate"><span class="pre">AgsState.wltend</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By ABC³ Group
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright ABC³ Group.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

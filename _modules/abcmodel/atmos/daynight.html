@@ -1,0 +1,902 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>abcmodel.atmos.daynight &#8212; abc-model 0.1.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=4418a689" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../../../_static/documentation_options.js?v=a1637f0b"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/abcmodel/atmos/daynight';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/logo.png" class="logo__image only-light" alt="abc-model 0.1.0 documentation - Home"/>
+    <img src="../../../_static/logo.png" class="logo__image only-dark pst-js-only" alt="abc-model 0.1.0 documentation - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../source/api/abcmodel.rad.html">Radiation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../source/api/abcmodel.rad.standard.html">Standard</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../source/api/abcmodel.rad.cloudy.html">Cloudy</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../source/api/abcmodel.land.html">Land</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../source/api/abcmodel.land.standard.html">Standard</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../source/api/abcmodel.land.biosphere.html">Biosphere</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../source/api/abcmodel.land.biosphere.ags.html">Ags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../source/api/abcmodel.land.biosphere.jarvis_stewart.html">Jarvis Stewart</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../source/api/abcmodel.land.soil.html">Soil</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../source/api/abcmodel.land.soil.standard.html">Standard</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../source/api/abcmodel.land.surface.html">Surface</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../source/api/abcmodel.land.surface.standard.html">Standard</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../source/api/abcmodel.land.abstracts.html">Abstracts</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../source/api/abcmodel.atmos.html">Atmosphere</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../source/api/abcmodel.atmos.dayonly.html">Dayonly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../source/api/abcmodel.atmos.daynight.html">Daynight</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../source/api/abcmodel.atmos.surface_layer.html">Surface Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../source/api/abcmodel.atmos.surface_layer.simple.html">Simple</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../source/api/abcmodel.atmos.surface_layer.obukhov.html">Obukhov</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../source/api/abcmodel.atmos.mixed_layer.html">Mixed Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../source/api/abcmodel.atmos.mixed_layer.bulk.html">Bulk</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../source/api/abcmodel.atmos.clouds.html">Clouds</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../source/api/abcmodel.atmos.clouds.cumulus.html">Cumulus</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../source/api/abcmodel.atmos.clouds.no_clouds.html">No Clouds</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../source/api/abcmodel.atmos.stable_layer.html">Stable Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../source/api/abcmodel.atmos.stable_layer.zilitinkevich.html">Zilitinkevich</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../source/api/abcmodel.atmos.residual_layer.html">Residual Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../source/api/abcmodel.atmos.residual_layer.frozen.html">Frozen</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../source/api/abcmodel.atmos.abstracts.html">Abstracts</a></li>
+</ul>
+</details></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../source/api/abcmodel.abstracts.html">Abstracts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/api/abcmodel.coupling.html">Coupling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/api/abcmodel.integration.html">Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/api/abcmodel.plotting.html">Plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../source/api/abcmodel.utils.html">Utils</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/EarthyScience/abc-model" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for abcmodel.atmos.daynight</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">replace</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Generic</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">jax</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">jax.numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">jnp</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jax</span><span class="w"> </span><span class="kn">import</span> <span class="n">Array</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..abstracts</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">AbstractAtmosphereModel</span><span class="p">,</span>
+    <span class="n">AbstractAtmosphereState</span><span class="p">,</span>
+    <span class="n">AbstractCoupledState</span><span class="p">,</span>
+    <span class="n">AbstractLandModel</span><span class="p">,</span>
+    <span class="n">AbstractRadiationModel</span><span class="p">,</span>
+    <span class="n">AbstractState</span><span class="p">,</span>
+    <span class="n">LandT</span><span class="p">,</span>
+    <span class="n">RadT</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">PhysicalConstants</span> <span class="k">as</span> <span class="n">cst</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.abstracts</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">AbstractCloudModel</span><span class="p">,</span>
+    <span class="n">AbstractMixedLayerModel</span><span class="p">,</span>
+    <span class="n">AbstractSurfaceLayerModel</span><span class="p">,</span>
+    <span class="n">CloudT</span><span class="p">,</span>
+    <span class="n">SurfT</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.clouds</span><span class="w"> </span><span class="kn">import</span> <span class="n">NoCloudModel</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.dayonly</span><span class="w"> </span><span class="kn">import</span> <span class="n">DayOnlyAtmosphereState</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.mixed_layer.bulk</span><span class="w"> </span><span class="kn">import</span> <span class="n">BulkState</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.residual_layer.frozen</span><span class="w"> </span><span class="kn">import</span> <span class="n">FrozenResidualModel</span><span class="p">,</span> <span class="n">FrozenResidualState</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.stable_layer.zilitinkevich</span><span class="w"> </span><span class="kn">import</span> <span class="n">ZilitinkevichModel</span><span class="p">,</span> <span class="n">ZilitinkevichState</span>
+
+
+<div class="viewcode-block" id="ActiveBLState">
+<a class="viewcode-back" href="../../../source/api/abcmodel.atmos.daynight.html#abcmodel.atmos.daynight.ActiveBLState">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ActiveBLState</span><span class="p">(</span><span class="n">AbstractState</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Wrapper combining daytime convective mixed layer and nighttime stable boundary layer.</span>
+
+<span class="sd">    The ``is_night`` flag determines which sub-state drives the dynamics.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">is_night</span><span class="p">:</span> <span class="n">Array</span>
+    <span class="n">mixed</span><span class="p">:</span> <span class="n">BulkState</span>
+    <span class="n">sbl</span><span class="p">:</span> <span class="n">ZilitinkevichState</span></div>
+
+
+
+<div class="viewcode-block" id="DayAndNightAtmosphereState">
+<a class="viewcode-back" href="../../../source/api/abcmodel.atmos.daynight.html#abcmodel.atmos.daynight.DayAndNightAtmosphereState">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">DayAndNightAtmosphereState</span><span class="p">(</span><span class="n">AbstractAtmosphereState</span><span class="p">,</span> <span class="n">Generic</span><span class="p">[</span><span class="n">SurfT</span><span class="p">,</span> <span class="n">CloudT</span><span class="p">]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Atmosphere state with day/night switching.</span>
+
+<span class="sd">    During daytime the ``active_bl.mixed`` (convective mixed layer) is active;</span>
+<span class="sd">    at night ``active_bl.sbl`` (stable boundary layer) takes over.</span>
+<span class="sd">    The ``residual`` preserves the daytime mixed-layer properties aloft overnight.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">surface</span><span class="p">:</span> <span class="n">SurfT</span>
+    <span class="n">active_bl</span><span class="p">:</span> <span class="n">ActiveBLState</span>
+    <span class="n">residual</span><span class="p">:</span> <span class="n">FrozenResidualState</span>
+    <span class="n">clouds</span><span class="p">:</span> <span class="n">CloudT</span>
+
+    <span class="c1"># same for day and night</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ra</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">surface</span><span class="o">.</span><span class="n">ra</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">thetasurf</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">surface</span><span class="o">.</span><span class="n">thetasurf</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ustar</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">surface</span><span class="o">.</span><span class="n">ustar</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">uw</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">surface</span><span class="o">.</span><span class="n">uw</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">vw</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">surface</span><span class="o">.</span><span class="n">vw</span>
+
+    <span class="c1"># these switch between day and night</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_night</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">is_night</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">theta</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">is_night</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">sbl</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">mixed</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">q</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">is_night</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">sbl</span><span class="o">.</span><span class="n">q</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">mixed</span><span class="o">.</span><span class="n">q</span>
+        <span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">co2</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">is_night</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">sbl</span><span class="o">.</span><span class="n">co2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">mixed</span><span class="o">.</span><span class="n">co2</span>
+        <span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">surf_pressure</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">is_night</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">sbl</span><span class="o">.</span><span class="n">surf_pressure</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">mixed</span><span class="o">.</span><span class="n">surf_pressure</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">u</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">is_night</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">sbl</span><span class="o">.</span><span class="n">u</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">mixed</span><span class="o">.</span><span class="n">u</span>
+        <span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">v</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">is_night</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">sbl</span><span class="o">.</span><span class="n">v</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">mixed</span><span class="o">.</span><span class="n">v</span>
+        <span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">h_abl</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">is_night</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">sbl</span><span class="o">.</span><span class="n">h_sbl</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">mixed</span><span class="o">.</span><span class="n">h_abl</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">wstar</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">is_night</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">mixed</span><span class="o">.</span><span class="n">wstar</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">thetav</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">is_night</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">sbl</span><span class="o">.</span><span class="n">thetav</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">mixed</span><span class="o">.</span><span class="n">thetav</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">top_T</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">is_night</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">sbl</span><span class="o">.</span><span class="n">theta</span> <span class="o">-</span> <span class="p">(</span><span class="n">cst</span><span class="o">.</span><span class="n">g</span> <span class="o">/</span> <span class="n">cst</span><span class="o">.</span><span class="n">cp</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">sbl</span><span class="o">.</span><span class="n">h_sbl</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">mixed</span><span class="o">.</span><span class="n">top_T</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">top_p</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">is_night</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">sbl</span><span class="o">.</span><span class="n">surf_pressure</span>
+            <span class="o">-</span> <span class="n">cst</span><span class="o">.</span><span class="n">rho</span> <span class="o">*</span> <span class="n">cst</span><span class="o">.</span><span class="n">g</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">sbl</span><span class="o">.</span><span class="n">h_sbl</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">mixed</span><span class="o">.</span><span class="n">top_p</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">wthetav</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+        <span class="n">sbl_wthetav</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">sbl</span><span class="o">.</span><span class="n">wtheta</span>
+            <span class="o">+</span> <span class="mf">0.61</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">sbl</span><span class="o">.</span><span class="n">theta</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">sbl</span><span class="o">.</span><span class="n">wq</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">is_night</span><span class="p">,</span> <span class="n">sbl_wthetav</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">mixed</span><span class="o">.</span><span class="n">wthetav</span>
+        <span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">wqe</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">is_night</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">mixed</span><span class="o">.</span><span class="n">wqe</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">dq</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">is_night</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">mixed</span><span class="o">.</span><span class="n">dq</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">dz_h</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">is_night</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">mixed</span><span class="o">.</span><span class="n">dz_h</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">deltaCO2</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">is_night</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">mixed</span><span class="o">.</span><span class="n">deltaCO2</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">wCO2e</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">is_night</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">mixed</span><span class="o">.</span><span class="n">wCO2e</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">cc_mf</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">is_night</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">clouds</span><span class="o">.</span><span class="n">cc_mf</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">cc_qf</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">is_night</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">clouds</span><span class="o">.</span><span class="n">cc_qf</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">wCO2M</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">is_night</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">clouds</span><span class="o">.</span><span class="n">wCO2M</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">cc_frac</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">is_night</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">clouds</span><span class="o">.</span><span class="n">cc_frac</span><span class="p">)</span></div>
+
+
+
+<span class="n">StateAlias</span> <span class="o">=</span> <span class="n">AbstractCoupledState</span><span class="p">[</span>
+    <span class="n">RadT</span><span class="p">,</span>
+    <span class="n">LandT</span><span class="p">,</span>
+    <span class="n">DayAndNightAtmosphereState</span><span class="p">[</span><span class="n">SurfT</span><span class="p">,</span> <span class="n">CloudT</span><span class="p">],</span>
+<span class="p">]</span>
+
+
+<div class="viewcode-block" id="DayAndNightAtmosphereModel">
+<a class="viewcode-back" href="../../../source/api/abcmodel.atmos.daynight.html#abcmodel.atmos.daynight.DayAndNightAtmosphereModel">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">DayAndNightAtmosphereModel</span><span class="p">(</span><span class="n">AbstractAtmosphereModel</span><span class="p">[</span><span class="n">DayAndNightAtmosphereState</span><span class="p">]):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Atmosphere model with day/night switching.</span>
+
+<span class="sd">    Wraps a surface-layer model, a convective mixed-layer model (day),</span>
+<span class="sd">    a stable boundary-layer model (night), a residual-layer container,</span>
+<span class="sd">    and a cloud model.  At sunset the mixed layer is copied to the</span>
+<span class="sd">    residual layer; at sunrise the mixed layer starts from the SBL height.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">surface_layer</span><span class="p">:</span> <span class="n">AbstractSurfaceLayerModel</span><span class="p">,</span>
+        <span class="n">mixed_layer</span><span class="p">:</span> <span class="n">AbstractMixedLayerModel</span><span class="p">,</span>
+        <span class="n">sbl_layer</span><span class="p">:</span> <span class="n">ZilitinkevichModel</span><span class="p">,</span>
+        <span class="n">residual_layer</span><span class="p">:</span> <span class="n">FrozenResidualModel</span><span class="p">,</span>
+        <span class="n">clouds</span><span class="p">:</span> <span class="n">AbstractCloudModel</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">surface_layer</span> <span class="o">=</span> <span class="n">surface_layer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mixed_layer</span> <span class="o">=</span> <span class="n">mixed_layer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sbl_layer</span> <span class="o">=</span> <span class="n">sbl_layer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">residual_layer</span> <span class="o">=</span> <span class="n">residual_layer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clouds</span> <span class="o">=</span> <span class="n">clouds</span>
+
+<div class="viewcode-block" id="DayAndNightAtmosphereModel.init_state">
+<a class="viewcode-back" href="../../../source/api/abcmodel.atmos.daynight.html#abcmodel.atmos.daynight.DayAndNightAtmosphereModel.init_state">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">init_state</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">surface</span><span class="p">:</span> <span class="n">SurfT</span><span class="p">,</span>
+        <span class="n">mixed</span><span class="p">:</span> <span class="n">BulkState</span><span class="p">,</span>
+        <span class="n">sbl</span><span class="p">:</span> <span class="n">ZilitinkevichState</span><span class="p">,</span>
+        <span class="n">residual</span><span class="p">:</span> <span class="n">FrozenResidualState</span><span class="p">,</span>
+        <span class="n">clouds</span><span class="p">:</span> <span class="n">CloudT</span><span class="p">,</span>
+        <span class="n">is_night</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DayAndNightAtmosphereState</span><span class="p">[</span><span class="n">SurfT</span><span class="p">,</span> <span class="n">CloudT</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the model state.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            surface: Initial surface-layer state.</span>
+<span class="sd">            mixed: Initial convective mixed-layer state.</span>
+<span class="sd">            sbl: Initial stable boundary-layer state.</span>
+<span class="sd">            residual: Initial residual-layer state.</span>
+<span class="sd">            clouds: Initial cloud state.</span>
+<span class="sd">            is_night: Whether the model starts at night. Default ``False``.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The initial atmosphere state.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">active_bl</span> <span class="o">=</span> <span class="n">ActiveBLState</span><span class="p">(</span>
+            <span class="n">is_night</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">is_night</span><span class="p">),</span>
+            <span class="n">mixed</span><span class="o">=</span><span class="n">mixed</span><span class="p">,</span>
+            <span class="n">sbl</span><span class="o">=</span><span class="n">sbl</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">DayAndNightAtmosphereState</span><span class="p">(</span>
+            <span class="n">surface</span><span class="o">=</span><span class="n">surface</span><span class="p">,</span>
+            <span class="n">active_bl</span><span class="o">=</span><span class="n">active_bl</span><span class="p">,</span>
+            <span class="n">residual</span><span class="o">=</span><span class="n">residual</span><span class="p">,</span>
+            <span class="n">clouds</span><span class="o">=</span><span class="n">clouds</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DayAndNightAtmosphereModel.statistics">
+<a class="viewcode-back" href="../../../source/api/abcmodel.atmos.daynight.html#abcmodel.atmos.daynight.DayAndNightAtmosphereModel.statistics">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">statistics</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">state</span><span class="p">:</span> <span class="n">StateAlias</span><span class="p">,</span>
+        <span class="n">t</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DayAndNightAtmosphereState</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Update diagnostic statistics for the active boundary layer.&quot;&quot;&quot;</span>
+        <span class="n">is_night</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">atmos</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">is_night</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">day_stats</span><span class="p">(</span><span class="n">abl</span><span class="p">):</span>
+            <span class="n">temp_atmos</span> <span class="o">=</span> <span class="n">DayOnlyAtmosphereState</span><span class="p">(</span>
+                <span class="n">surface</span><span class="o">=</span><span class="n">state</span><span class="o">.</span><span class="n">atmos</span><span class="o">.</span><span class="n">surface</span><span class="p">,</span>
+                <span class="n">mixed</span><span class="o">=</span><span class="n">abl</span><span class="o">.</span><span class="n">mixed</span><span class="p">,</span>
+                <span class="n">clouds</span><span class="o">=</span><span class="n">state</span><span class="o">.</span><span class="n">atmos</span><span class="o">.</span><span class="n">clouds</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">temp_state</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">atmos</span><span class="o">=</span><span class="n">temp_atmos</span><span class="p">)</span>
+            <span class="n">ml</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mixed_layer</span><span class="o">.</span><span class="n">statistics</span><span class="p">(</span><span class="n">temp_state</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">abl</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">mixed</span><span class="o">=</span><span class="n">ml</span><span class="p">)</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">night_stats</span><span class="p">(</span><span class="n">abl</span><span class="p">):</span>
+            <span class="n">sbl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sbl_layer</span><span class="o">.</span><span class="n">statistics</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">abl</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">sbl</span><span class="o">=</span><span class="n">sbl</span><span class="p">)</span>
+
+        <span class="n">active_bl</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">lax</span><span class="o">.</span><span class="n">cond</span><span class="p">(</span>
+            <span class="n">is_night</span><span class="p">,</span> <span class="n">night_stats</span><span class="p">,</span> <span class="n">day_stats</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">atmos</span><span class="o">.</span><span class="n">active_bl</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">state</span><span class="o">.</span><span class="n">atmos</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">active_bl</span><span class="o">=</span><span class="n">active_bl</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DayAndNightAtmosphereModel.run">
+<a class="viewcode-back" href="../../../source/api/abcmodel.atmos.daynight.html#abcmodel.atmos.daynight.DayAndNightAtmosphereModel.run">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">state</span><span class="p">:</span> <span class="n">StateAlias</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DayAndNightAtmosphereState</span><span class="p">:</span>
+        <span class="c1"># surface layer is always there</span>
+        <span class="n">sl_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">surface_layer</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+
+        <span class="c1"># determine whether it&#39;s day or night</span>
+        <span class="n">in_srad</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">rad</span><span class="o">.</span><span class="n">in_srad</span>
+        <span class="n">net_rad</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">rad</span><span class="o">.</span><span class="n">net_rad</span>
+        <span class="n">was_night</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">atmos</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">is_night</span>
+        <span class="n">clearly_night</span> <span class="o">=</span> <span class="p">(</span><span class="n">net_rad</span> <span class="o">&lt;=</span> <span class="o">-</span><span class="mf">20.0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">in_srad</span> <span class="o">&lt;</span> <span class="mf">10.0</span><span class="p">)</span>
+        <span class="n">clearly_day</span> <span class="o">=</span> <span class="p">(</span><span class="n">in_srad</span> <span class="o">&gt;</span> <span class="mf">20.0</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">net_rad</span> <span class="o">&gt;</span> <span class="mf">20.0</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">land</span><span class="o">.</span><span class="n">wtheta</span> <span class="o">&gt;</span> <span class="mf">0.001</span><span class="p">)</span>
+        <span class="c1"># in the ambiguous zone, stay in the current regime</span>
+        <span class="n">is_night</span> <span class="o">=</span> <span class="n">clearly_night</span> <span class="o">|</span> <span class="p">(</span><span class="n">was_night</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">clearly_day</span><span class="p">)</span>
+        <span class="n">just_became_night</span> <span class="o">=</span> <span class="n">is_night</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">was_night</span>
+        <span class="n">just_became_day</span> <span class="o">=</span> <span class="o">~</span><span class="n">is_night</span> <span class="o">&amp;</span> <span class="n">was_night</span>
+
+        <span class="c1"># mixed layer</span>
+        <span class="n">temp_atmos</span> <span class="o">=</span> <span class="n">DayOnlyAtmosphereState</span><span class="p">(</span>
+            <span class="n">surface</span><span class="o">=</span><span class="n">sl_state</span><span class="p">,</span>
+            <span class="n">mixed</span><span class="o">=</span><span class="n">state</span><span class="o">.</span><span class="n">atmos</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">mixed</span><span class="p">,</span>
+            <span class="n">clouds</span><span class="o">=</span><span class="n">state</span><span class="o">.</span><span class="n">atmos</span><span class="o">.</span><span class="n">clouds</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">temp_state</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">atmos</span><span class="o">=</span><span class="n">temp_atmos</span><span class="p">)</span>
+        <span class="n">ml_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mixed_layer</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">temp_state</span><span class="p">)</span>
+
+        <span class="c1"># sunrise</span>
+        <span class="n">h_residual</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">atmos</span><span class="o">.</span><span class="n">residual</span><span class="o">.</span><span class="n">h</span>
+        <span class="n">ml_state</span> <span class="o">=</span> <span class="n">ml_state</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+            <span class="n">h_abl</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+                <span class="n">just_became_day</span><span class="p">,</span>
+                <span class="n">jnp</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">atmos</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">sbl</span><span class="o">.</span><span class="n">h_sbl</span><span class="p">,</span> <span class="mf">100.0</span><span class="p">),</span>
+                <span class="n">ml_state</span><span class="o">.</span><span class="n">h_abl</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="c1"># stable boundary layer</span>
+        <span class="n">sbl_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sbl_layer</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">h_residual</span><span class="p">)</span>
+
+        <span class="c1"># sunset</span>
+        <span class="n">sbl_state</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">lax</span><span class="o">.</span><span class="n">cond</span><span class="p">(</span>
+            <span class="n">just_became_night</span><span class="p">,</span>
+            <span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+                <span class="n">theta</span><span class="o">=</span><span class="n">state</span><span class="o">.</span><span class="n">atmos</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">mixed</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span>
+                <span class="n">q</span><span class="o">=</span><span class="n">state</span><span class="o">.</span><span class="n">atmos</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">mixed</span><span class="o">.</span><span class="n">q</span><span class="p">,</span>
+                <span class="n">co2</span><span class="o">=</span><span class="n">state</span><span class="o">.</span><span class="n">atmos</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">mixed</span><span class="o">.</span><span class="n">co2</span><span class="p">,</span>
+                <span class="n">u</span><span class="o">=</span><span class="n">state</span><span class="o">.</span><span class="n">atmos</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">mixed</span><span class="o">.</span><span class="n">u</span><span class="p">,</span>
+                <span class="n">v</span><span class="o">=</span><span class="n">state</span><span class="o">.</span><span class="n">atmos</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">mixed</span><span class="o">.</span><span class="n">v</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="n">s</span><span class="p">,</span>
+            <span class="n">sbl_state</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># clouds</span>
+        <span class="n">cl_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">clouds</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">temp_state</span><span class="p">)</span>
+
+        <span class="c1"># residual — capture the mixed layer state at sunset</span>
+        <span class="n">residual</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">lax</span><span class="o">.</span><span class="n">cond</span><span class="p">(</span>
+            <span class="n">just_became_night</span><span class="p">,</span>
+            <span class="k">lambda</span> <span class="n">_</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">residual_layer</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">temp_state</span><span class="p">),</span>
+            <span class="k">lambda</span> <span class="n">_</span><span class="p">:</span> <span class="n">state</span><span class="o">.</span><span class="n">atmos</span><span class="o">.</span><span class="n">residual</span><span class="p">,</span>
+            <span class="kc">None</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># assemble</span>
+        <span class="n">active_bl</span> <span class="o">=</span> <span class="n">ActiveBLState</span><span class="p">(</span><span class="n">is_night</span><span class="o">=</span><span class="n">is_night</span><span class="p">,</span> <span class="n">mixed</span><span class="o">=</span><span class="n">ml_state</span><span class="p">,</span> <span class="n">sbl</span><span class="o">=</span><span class="n">sbl_state</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">DayAndNightAtmosphereState</span><span class="p">(</span>
+            <span class="n">surface</span><span class="o">=</span><span class="n">sl_state</span><span class="p">,</span>
+            <span class="n">active_bl</span><span class="o">=</span><span class="n">active_bl</span><span class="p">,</span>
+            <span class="n">residual</span><span class="o">=</span><span class="n">residual</span><span class="p">,</span>
+            <span class="n">clouds</span><span class="o">=</span><span class="n">cl_state</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DayAndNightAtmosphereModel.warmup">
+<a class="viewcode-back" href="../../../source/api/abcmodel.atmos.daynight.html#abcmodel.atmos.daynight.DayAndNightAtmosphereModel.warmup">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">warmup</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">radmodel</span><span class="p">:</span> <span class="n">AbstractRadiationModel</span><span class="p">,</span>
+        <span class="n">landmodel</span><span class="p">:</span> <span class="n">AbstractLandModel</span><span class="p">,</span>
+        <span class="n">state</span><span class="p">:</span> <span class="n">StateAlias</span><span class="p">,</span>
+        <span class="n">t</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">tstart</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StateAlias</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Warmup the atmos by running it for a few timesteps.&quot;&quot;&quot;</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">atmos</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">statistics</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">t</span><span class="p">))</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">rad</span><span class="o">=</span><span class="n">radmodel</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">tstart</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+            <span class="n">sl_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">surface_layer</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+            <span class="n">atmostate</span> <span class="o">=</span> <span class="n">replace</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">atmos</span><span class="p">,</span> <span class="n">surface</span><span class="o">=</span><span class="n">sl_state</span><span class="p">)</span>
+            <span class="n">state</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">atmos</span><span class="o">=</span><span class="n">atmostate</span><span class="p">)</span>
+        <span class="n">landstate</span> <span class="o">=</span> <span class="n">landmodel</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">land</span><span class="o">=</span><span class="n">landstate</span><span class="p">)</span>
+
+        <span class="n">net_rad</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">rad</span><span class="o">.</span><span class="n">net_rad</span>
+        <span class="n">is_night</span> <span class="o">=</span> <span class="p">((</span><span class="n">net_rad</span> <span class="o">&lt;=</span> <span class="o">-</span><span class="mf">20.0</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">land</span><span class="o">.</span><span class="n">wtheta</span> <span class="o">&lt;=</span> <span class="mf">0.001</span><span class="p">))</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+
+        <span class="n">active_bl</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">atmos</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">is_night</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">is_night</span><span class="p">))</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">atmos</span><span class="o">=</span><span class="n">state</span><span class="o">.</span><span class="n">atmos</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">active_bl</span><span class="o">=</span><span class="n">active_bl</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">is_night</span><span class="p">:</span>
+            <span class="n">temp_atmos</span> <span class="o">=</span> <span class="n">DayOnlyAtmosphereState</span><span class="p">(</span>
+                <span class="n">surface</span><span class="o">=</span><span class="n">state</span><span class="o">.</span><span class="n">atmos</span><span class="o">.</span><span class="n">surface</span><span class="p">,</span>
+                <span class="n">mixed</span><span class="o">=</span><span class="n">state</span><span class="o">.</span><span class="n">atmos</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">mixed</span><span class="p">,</span>
+                <span class="n">clouds</span><span class="o">=</span><span class="n">state</span><span class="o">.</span><span class="n">atmos</span><span class="o">.</span><span class="n">clouds</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">temp_state</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">atmos</span><span class="o">=</span><span class="n">temp_atmos</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clouds</span><span class="p">,</span> <span class="n">NoCloudModel</span><span class="p">):</span>
+                <span class="n">ml_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mixed_layer</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">temp_state</span><span class="p">)</span>
+                <span class="n">atmostate</span> <span class="o">=</span> <span class="n">replace</span><span class="p">(</span>
+                    <span class="n">state</span><span class="o">.</span><span class="n">atmos</span><span class="p">,</span>
+                    <span class="n">active_bl</span><span class="o">=</span><span class="n">state</span><span class="o">.</span><span class="n">atmos</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">mixed</span><span class="o">=</span><span class="n">ml_state</span><span class="p">),</span>
+                <span class="p">)</span>
+                <span class="n">state</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">atmos</span><span class="o">=</span><span class="n">atmostate</span><span class="p">)</span>
+                <span class="n">cl_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">clouds</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">temp_state</span><span class="p">)</span>
+                <span class="n">atmostate</span> <span class="o">=</span> <span class="n">replace</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">atmos</span><span class="p">,</span> <span class="n">clouds</span><span class="o">=</span><span class="n">cl_state</span><span class="p">)</span>
+                <span class="n">state</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">atmos</span><span class="o">=</span><span class="n">atmostate</span><span class="p">)</span>
+            <span class="n">ml_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mixed_layer</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">temp_state</span><span class="p">)</span>
+            <span class="n">atmostate</span> <span class="o">=</span> <span class="n">replace</span><span class="p">(</span>
+                <span class="n">state</span><span class="o">.</span><span class="n">atmos</span><span class="p">,</span>
+                <span class="n">active_bl</span><span class="o">=</span><span class="n">state</span><span class="o">.</span><span class="n">atmos</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">mixed</span><span class="o">=</span><span class="n">ml_state</span><span class="p">),</span>
+            <span class="p">)</span>
+            <span class="n">state</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">atmos</span><span class="o">=</span><span class="n">atmostate</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">h_residual</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">atmos</span><span class="o">.</span><span class="n">residual</span><span class="o">.</span><span class="n">h</span>
+            <span class="n">sbl_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sbl_layer</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">h_residual</span><span class="p">)</span>
+            <span class="n">sbl_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sbl_layer</span><span class="o">.</span><span class="n">integrate</span><span class="p">(</span><span class="n">sbl_state</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+            <span class="n">atmostate</span> <span class="o">=</span> <span class="n">replace</span><span class="p">(</span>
+                <span class="n">state</span><span class="o">.</span><span class="n">atmos</span><span class="p">,</span>
+                <span class="n">active_bl</span><span class="o">=</span><span class="n">state</span><span class="o">.</span><span class="n">atmos</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">sbl</span><span class="o">=</span><span class="n">sbl_state</span><span class="p">),</span>
+            <span class="p">)</span>
+            <span class="n">state</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">atmos</span><span class="o">=</span><span class="n">atmostate</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">state</span></div>
+
+
+<div class="viewcode-block" id="DayAndNightAtmosphereModel.integrate">
+<a class="viewcode-back" href="../../../source/api/abcmodel.atmos.daynight.html#abcmodel.atmos.daynight.DayAndNightAtmosphereModel.integrate">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">integrate</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">state</span><span class="p">:</span> <span class="n">DayAndNightAtmosphereState</span><span class="p">,</span>
+        <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DayAndNightAtmosphereState</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Integrate the active boundary layer forward in time.&quot;&quot;&quot;</span>
+        <span class="n">is_night</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">is_night</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">_integrate_day</span><span class="p">(</span><span class="n">abl</span><span class="p">):</span>
+            <span class="n">ml</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mixed_layer</span><span class="o">.</span><span class="n">integrate</span><span class="p">(</span><span class="n">abl</span><span class="o">.</span><span class="n">mixed</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">abl</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">mixed</span><span class="o">=</span><span class="n">ml</span><span class="p">)</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">_integrate_night</span><span class="p">(</span><span class="n">abl</span><span class="p">):</span>
+            <span class="n">sbl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sbl_layer</span><span class="o">.</span><span class="n">integrate</span><span class="p">(</span><span class="n">abl</span><span class="o">.</span><span class="n">sbl</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">abl</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">sbl</span><span class="o">=</span><span class="n">sbl</span><span class="p">)</span>
+
+        <span class="n">active_bl</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">lax</span><span class="o">.</span><span class="n">cond</span><span class="p">(</span>
+            <span class="n">is_night</span><span class="p">,</span> <span class="n">_integrate_night</span><span class="p">,</span> <span class="n">_integrate_day</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">active_bl</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">replace</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">active_bl</span><span class="o">=</span><span class="n">active_bl</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By ABC³ Group
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright ABC³ Group.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

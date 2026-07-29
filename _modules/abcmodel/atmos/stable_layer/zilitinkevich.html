@@ -1,0 +1,934 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>abcmodel.atmos.stable_layer.zilitinkevich &#8212; abc-model 0.1.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/styles/sphinx-book-theme.css?v=4418a689" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../../../../_static/documentation_options.js?v=a1637f0b"></script>
+    <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/abcmodel/atmos/stable_layer/zilitinkevich';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../../../../_static/searchtools.js"></script>
+    <script src="../../../../_static/language_data.js"></script>
+    <script src="../../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../../_static/logo.png" class="logo__image only-light" alt="abc-model 0.1.0 documentation - Home"/>
+    <img src="../../../../_static/logo.png" class="logo__image only-dark pst-js-only" alt="abc-model 0.1.0 documentation - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../source/api/abcmodel.rad.html">Radiation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../source/api/abcmodel.rad.standard.html">Standard</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../source/api/abcmodel.rad.cloudy.html">Cloudy</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../source/api/abcmodel.land.html">Land</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../source/api/abcmodel.land.standard.html">Standard</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../source/api/abcmodel.land.biosphere.html">Biosphere</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../source/api/abcmodel.land.biosphere.ags.html">Ags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../source/api/abcmodel.land.biosphere.jarvis_stewart.html">Jarvis Stewart</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../source/api/abcmodel.land.soil.html">Soil</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../source/api/abcmodel.land.soil.standard.html">Standard</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../source/api/abcmodel.land.surface.html">Surface</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../source/api/abcmodel.land.surface.standard.html">Standard</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../source/api/abcmodel.land.abstracts.html">Abstracts</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../source/api/abcmodel.atmos.html">Atmosphere</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../source/api/abcmodel.atmos.dayonly.html">Dayonly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../source/api/abcmodel.atmos.daynight.html">Daynight</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../source/api/abcmodel.atmos.surface_layer.html">Surface Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../source/api/abcmodel.atmos.surface_layer.simple.html">Simple</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../source/api/abcmodel.atmos.surface_layer.obukhov.html">Obukhov</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../source/api/abcmodel.atmos.mixed_layer.html">Mixed Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../source/api/abcmodel.atmos.mixed_layer.bulk.html">Bulk</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../source/api/abcmodel.atmos.clouds.html">Clouds</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../source/api/abcmodel.atmos.clouds.cumulus.html">Cumulus</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../source/api/abcmodel.atmos.clouds.no_clouds.html">No Clouds</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../source/api/abcmodel.atmos.stable_layer.html">Stable Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../source/api/abcmodel.atmos.stable_layer.zilitinkevich.html">Zilitinkevich</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../source/api/abcmodel.atmos.residual_layer.html">Residual Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../source/api/abcmodel.atmos.residual_layer.frozen.html">Frozen</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../source/api/abcmodel.atmos.abstracts.html">Abstracts</a></li>
+</ul>
+</details></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/api/abcmodel.abstracts.html">Abstracts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/api/abcmodel.coupling.html">Coupling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/api/abcmodel.integration.html">Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/api/abcmodel.plotting.html">Plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../source/api/abcmodel.utils.html">Utils</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/EarthyScience/abc-model" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for abcmodel.atmos.stable_layer.zilitinkevich</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">jax.numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">jnp</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">jax</span><span class="w"> </span><span class="kn">import</span> <span class="n">Array</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">...abstracts</span><span class="w"> </span><span class="kn">import</span> <span class="n">AbstractCoupledState</span><span class="p">,</span> <span class="n">AbstractState</span>
+
+
+<div class="viewcode-block" id="ZilitinkevichState">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.stable_layer.zilitinkevich.html#abcmodel.atmos.stable_layer.ZilitinkevichState">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ZilitinkevichState</span><span class="p">(</span><span class="n">AbstractState</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Stable boundary layer (SBL) state.</span>
+
+<span class="sd">    Fields with `default_factory` are diagnostic and are populated during ``run()``;</span>
+<span class="sd">    user-provided fields are set at initialization.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">h_sbl</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">metadata</span><span class="o">=</span><span class="p">{</span>
+            <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;$h_</span><span class="si">{sbl}</span><span class="s2">$&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;unit&quot;</span><span class="p">:</span> <span class="s2">&quot;m&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Stable boundary layer height&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="p">)</span>
+    <span class="n">theta</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">metadata</span><span class="o">=</span><span class="p">{</span>
+            <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;$\theta$&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;unit&quot;</span><span class="p">:</span> <span class="s2">&quot;K&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;SBL potential temperature&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="p">)</span>
+    <span class="n">q</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">metadata</span><span class="o">=</span><span class="p">{</span>
+            <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;$q$&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;unit&quot;</span><span class="p">:</span> <span class="s2">&quot;kg/kg&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;SBL specific humidity&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="p">)</span>
+    <span class="n">co2</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">metadata</span><span class="o">=</span><span class="p">{</span>
+            <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;$CO_2$&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;unit&quot;</span><span class="p">:</span> <span class="s2">&quot;ppm&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;SBL CO2 concentration&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="p">)</span>
+    <span class="n">u</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">metadata</span><span class="o">=</span><span class="p">{</span>
+            <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;$u$&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;unit&quot;</span><span class="p">:</span> <span class="s2">&quot;m/s&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;SBL zonal wind&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="p">)</span>
+    <span class="n">v</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">metadata</span><span class="o">=</span><span class="p">{</span>
+            <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;$v$&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;unit&quot;</span><span class="p">:</span> <span class="s2">&quot;m/s&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;SBL meridional wind&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="p">)</span>
+    <span class="n">surf_pressure</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">metadata</span><span class="o">=</span><span class="p">{</span>
+            <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;$p_</span><span class="si">{surf}</span><span class="s2">$&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;unit&quot;</span><span class="p">:</span> <span class="s2">&quot;Pa&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Surface pressure&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="p">)</span>
+
+    <span class="n">thetav</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">),</span>
+        <span class="n">metadata</span><span class="o">=</span><span class="p">{</span>
+            <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;$\theta_v$&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;unit&quot;</span><span class="p">:</span> <span class="s2">&quot;K&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Virtual potential temperature&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">)</span>
+    <span class="n">ustar</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">),</span>
+        <span class="n">metadata</span><span class="o">=</span><span class="p">{</span>
+            <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;$u_*$&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;unit&quot;</span><span class="p">:</span> <span class="s2">&quot;m/s&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Friction velocity&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">)</span>
+    <span class="n">obukhov</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">),</span>
+        <span class="n">metadata</span><span class="o">=</span><span class="p">{</span>
+            <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;$L$&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;unit&quot;</span><span class="p">:</span> <span class="s2">&quot;m&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Obukhov length&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">)</span>
+    <span class="n">wtheta</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">),</span>
+        <span class="n">metadata</span><span class="o">=</span><span class="p">{</span>
+            <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;$w&#39;</span><span class="se">\\</span><span class="s2">theta&#39;$&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;unit&quot;</span><span class="p">:</span> <span class="s2">&quot;K m/s&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Surface kinematic heat flux&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">)</span>
+    <span class="n">wq</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">),</span>
+        <span class="n">metadata</span><span class="o">=</span><span class="p">{</span>
+            <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;$w&#39;q&#39;$&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;unit&quot;</span><span class="p">:</span> <span class="s2">&quot;kg/kg m/s&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Surface kinematic moisture flux&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">)</span>
+    <span class="n">wCO2</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">),</span>
+        <span class="n">metadata</span><span class="o">=</span><span class="p">{</span>
+            <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;$w&#39;CO_2&#39;$&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;unit&quot;</span><span class="p">:</span> <span class="s2">&quot;mgC/m²/s&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Surface kinematic CO2 flux&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">)</span>
+    <span class="n">thetatend</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">),</span>
+        <span class="n">metadata</span><span class="o">=</span><span class="p">{</span>
+            <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;$</span><span class="se">\\</span><span class="s2">partial </span><span class="se">\\</span><span class="s2">theta / </span><span class="se">\\</span><span class="s2">partial t$&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;unit&quot;</span><span class="p">:</span> <span class="s2">&quot;K s^{-1}&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;SBL potential temperature tendency&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">)</span>
+    <span class="n">qtend</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">),</span>
+        <span class="n">metadata</span><span class="o">=</span><span class="p">{</span>
+            <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;$</span><span class="se">\\</span><span class="s2">partial q / </span><span class="se">\\</span><span class="s2">partial t$&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;unit&quot;</span><span class="p">:</span> <span class="s2">&quot;kg/kg s^{-1}&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;SBL specific humidity tendency&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">)</span>
+    <span class="n">co2tend</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">),</span>
+        <span class="n">metadata</span><span class="o">=</span><span class="p">{</span>
+            <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;$</span><span class="se">\\</span><span class="s2">partial CO_2 / </span><span class="se">\\</span><span class="s2">partial t$&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;unit&quot;</span><span class="p">:</span> <span class="s2">&quot;ppm s^{-1}&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;SBL CO2 tendency&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">)</span>
+    <span class="n">utend</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">),</span>
+        <span class="n">metadata</span><span class="o">=</span><span class="p">{</span>
+            <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;$</span><span class="se">\\</span><span class="s2">partial u / </span><span class="se">\\</span><span class="s2">partial t$&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;unit&quot;</span><span class="p">:</span> <span class="s2">&quot;m s^{-2}&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;SBL zonal wind tendency&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">)</span>
+    <span class="n">vtend</span><span class="p">:</span> <span class="n">Array</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">0.0</span><span class="p">),</span>
+        <span class="n">metadata</span><span class="o">=</span><span class="p">{</span>
+            <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="sa">r</span><span class="s2">&quot;$</span><span class="se">\\</span><span class="s2">partial v / </span><span class="se">\\</span><span class="s2">partial t$&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;unit&quot;</span><span class="p">:</span> <span class="s2">&quot;m s^{-2}&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;SBL meridional wind tendency&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="ZilitinkevichModel">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.stable_layer.zilitinkevich.html#abcmodel.atmos.stable_layer.ZilitinkevichModel">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ZilitinkevichModel</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Stable boundary layer model.</span>
+
+<span class="sd">    Computes the SBL height using the Zilitinkevich (1972) formula</span>
+<span class="sd">    and provides tendencies for thermodynamic variables.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        coriolis_param: Coriolis parameter [s-1]. Default is 1e-4.</span>
+<span class="sd">        zilitinkevich_const: Zilitinkevich constant [-]. Default is 0.4.</span>
+<span class="sd">        is_wind_prog: Prognostic wind switch. Default is True.</span>
+<span class="sd">        gamma_theta: Free-atmosphere theta lapse rate [K/m]. Default is 0.006.</span>
+<span class="sd">        gamma_q: Free-atmosphere q lapse rate [kg/kg/m]. Default is 0.0.</span>
+<span class="sd">        gamma_co2: Free-atmosphere CO2 lapse rate [ppm/m]. Default is 0.0.</span>
+<span class="sd">        gammau: Free-atmosphere u lapse rate [s-1]. Default is 0.0.</span>
+<span class="sd">        gammav: Free-atmosphere v lapse rate [s-1]. Default is 0.0.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">coriolis_param</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-4</span><span class="p">,</span>
+        <span class="n">zilitinkevich_const</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.4</span><span class="p">,</span>
+        <span class="n">is_wind_prog</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">gamma_theta</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.006</span><span class="p">,</span>
+        <span class="n">gamma_q</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">gamma_co2</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">gammau</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">gammav</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coriolis_param</span> <span class="o">=</span> <span class="n">coriolis_param</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">zilitinkevich_const</span> <span class="o">=</span> <span class="n">zilitinkevich_const</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_wind_prog</span> <span class="o">=</span> <span class="n">is_wind_prog</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gamma_theta</span> <span class="o">=</span> <span class="n">gamma_theta</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gamma_q</span> <span class="o">=</span> <span class="n">gamma_q</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gamma_co2</span> <span class="o">=</span> <span class="n">gamma_co2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gammau</span> <span class="o">=</span> <span class="n">gammau</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gammav</span> <span class="o">=</span> <span class="n">gammav</span>
+
+<div class="viewcode-block" id="ZilitinkevichModel.init_state">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.stable_layer.zilitinkevich.html#abcmodel.atmos.stable_layer.ZilitinkevichModel.init_state">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">init_state</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">h_sbl</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">100.0</span><span class="p">,</span>
+        <span class="n">theta</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">288.0</span><span class="p">,</span>
+        <span class="n">q</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.008</span><span class="p">,</span>
+        <span class="n">co2</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">422.0</span><span class="p">,</span>
+        <span class="n">u</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">6.0</span><span class="p">,</span>
+        <span class="n">v</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">-</span><span class="mf">4.0</span><span class="p">,</span>
+        <span class="n">surf_pressure</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">101300.0</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ZilitinkevichState</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the SBL state.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            h_sbl: SBL height [m]. Default 100.0.</span>
+<span class="sd">            theta: SBL potential temperature [K]. Default 288.0.</span>
+<span class="sd">            q: SBL specific humidity [kg/kg]. Default 0.008.</span>
+<span class="sd">            co2: SBL CO2 [ppm]. Default 422.0.</span>
+<span class="sd">            u: SBL zonal wind [m/s]. Default 6.0.</span>
+<span class="sd">            v: SBL meridional wind [m/s]. Default -4.0.</span>
+<span class="sd">            surf_pressure: Surface pressure [Pa]. Default 101300.0.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">ZilitinkevichState</span><span class="p">(</span>
+            <span class="n">h_sbl</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">h_sbl</span><span class="p">),</span>
+            <span class="n">theta</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">theta</span><span class="p">),</span>
+            <span class="n">q</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">q</span><span class="p">),</span>
+            <span class="n">co2</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">co2</span><span class="p">),</span>
+            <span class="n">u</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">u</span><span class="p">),</span>
+            <span class="n">v</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">v</span><span class="p">),</span>
+            <span class="n">surf_pressure</span><span class="o">=</span><span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">surf_pressure</span><span class="p">),</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ZilitinkevichModel.run">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.stable_layer.zilitinkevich.html#abcmodel.atmos.stable_layer.ZilitinkevichModel.run">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">state</span><span class="p">:</span> <span class="n">AbstractCoupledState</span><span class="p">,</span>
+        <span class="n">h_residual</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ZilitinkevichState</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Run the SBL model.</span>
+
+<span class="sd">        Computes SBL height via Zilitinkevich and tendencies.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            state: The coupled state.</span>
+<span class="sd">            h_residual: Residual layer height [m] (upper bound for SBL).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Updated SBL state.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sbl_state</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">atmos</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">sbl</span>
+        <span class="n">wtheta</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">land</span><span class="o">.</span><span class="n">wtheta</span>
+        <span class="n">wq</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">land</span><span class="o">.</span><span class="n">wq</span>
+        <span class="n">wCO2</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">land</span><span class="o">.</span><span class="n">wCO2</span>
+        <span class="n">ustar</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">atmos</span><span class="o">.</span><span class="n">ustar</span>
+        <span class="n">obukhov</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">atmos</span><span class="o">.</span><span class="n">surface</span><span class="o">.</span><span class="n">obukhov_length</span>
+        <span class="n">du</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">atmos</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">mixed</span><span class="o">.</span><span class="n">u</span> <span class="o">-</span> <span class="n">sbl_state</span><span class="o">.</span><span class="n">u</span>
+        <span class="n">dv</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">atmos</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">mixed</span><span class="o">.</span><span class="n">v</span> <span class="o">-</span> <span class="n">sbl_state</span><span class="o">.</span><span class="n">v</span>
+        <span class="n">uw</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">atmos</span><span class="o">.</span><span class="n">uw</span>
+        <span class="n">vw</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">atmos</span><span class="o">.</span><span class="n">vw</span>
+        <span class="n">h_sbl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_sbl_height</span><span class="p">(</span><span class="n">ustar</span><span class="p">,</span> <span class="n">obukhov</span><span class="p">,</span> <span class="n">h_residual</span><span class="p">)</span>
+        <span class="n">thetatend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_thetatend</span><span class="p">(</span><span class="n">h_sbl</span><span class="p">,</span> <span class="n">wtheta</span><span class="p">)</span>
+        <span class="n">qtend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_qtend</span><span class="p">(</span><span class="n">h_sbl</span><span class="p">,</span> <span class="n">wq</span><span class="p">)</span>
+        <span class="n">co2tend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_co2tend</span><span class="p">(</span><span class="n">h_sbl</span><span class="p">,</span> <span class="n">wCO2</span><span class="p">)</span>
+        <span class="n">utend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_utend</span><span class="p">(</span><span class="n">h_sbl</span><span class="p">,</span> <span class="n">uw</span><span class="p">,</span> <span class="n">du</span><span class="p">,</span> <span class="n">dv</span><span class="p">)</span>
+        <span class="n">vtend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_vtend</span><span class="p">(</span><span class="n">h_sbl</span><span class="p">,</span> <span class="n">vw</span><span class="p">,</span> <span class="n">du</span><span class="p">,</span> <span class="n">dv</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">sbl_state</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+            <span class="n">h_sbl</span><span class="o">=</span><span class="n">h_sbl</span><span class="p">,</span>
+            <span class="n">ustar</span><span class="o">=</span><span class="n">ustar</span><span class="p">,</span>
+            <span class="n">obukhov</span><span class="o">=</span><span class="n">obukhov</span><span class="p">,</span>
+            <span class="n">wtheta</span><span class="o">=</span><span class="n">wtheta</span><span class="p">,</span>
+            <span class="n">wq</span><span class="o">=</span><span class="n">wq</span><span class="p">,</span>
+            <span class="n">wCO2</span><span class="o">=</span><span class="n">wCO2</span><span class="p">,</span>
+            <span class="n">thetatend</span><span class="o">=</span><span class="n">thetatend</span><span class="p">,</span>
+            <span class="n">qtend</span><span class="o">=</span><span class="n">qtend</span><span class="p">,</span>
+            <span class="n">co2tend</span><span class="o">=</span><span class="n">co2tend</span><span class="p">,</span>
+            <span class="n">utend</span><span class="o">=</span><span class="n">utend</span><span class="p">,</span>
+            <span class="n">vtend</span><span class="o">=</span><span class="n">vtend</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ZilitinkevichModel.statistics">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.stable_layer.zilitinkevich.html#abcmodel.atmos.stable_layer.ZilitinkevichModel.statistics">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">statistics</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">state</span><span class="p">:</span> <span class="n">AbstractCoupledState</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ZilitinkevichState</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute SBL diagnostic statistics.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            state: Coupled state with SBL.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Updated SBL state with diagnostic fields.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sbl_state</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">atmos</span><span class="o">.</span><span class="n">active_bl</span><span class="o">.</span><span class="n">sbl</span>
+        <span class="n">thetav</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_thetav</span><span class="p">(</span><span class="n">sbl_state</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span> <span class="n">sbl_state</span><span class="o">.</span><span class="n">q</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">sbl_state</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">thetav</span><span class="o">=</span><span class="n">thetav</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ZilitinkevichModel.integrate">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.stable_layer.zilitinkevich.html#abcmodel.atmos.stable_layer.ZilitinkevichModel.integrate">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">integrate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="n">ZilitinkevichState</span><span class="p">,</span> <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ZilitinkevichState</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Integrate SBL state forward in time.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            state: SBL state.</span>
+<span class="sd">            dt: Time step [s].</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Updated SBL state.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">theta</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">theta</span> <span class="o">+</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">state</span><span class="o">.</span><span class="n">thetatend</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">q</span> <span class="o">+</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">state</span><span class="o">.</span><span class="n">qtend</span>
+        <span class="n">co2</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">co2</span> <span class="o">+</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">state</span><span class="o">.</span><span class="n">co2tend</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">is_wind_prog</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">u</span> <span class="o">+</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">state</span><span class="o">.</span><span class="n">utend</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">u</span><span class="p">)</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">is_wind_prog</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">v</span> <span class="o">+</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">state</span><span class="o">.</span><span class="n">vtend</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">v</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">state</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+            <span class="n">theta</span><span class="o">=</span><span class="n">theta</span><span class="p">,</span>
+            <span class="n">q</span><span class="o">=</span><span class="n">q</span><span class="p">,</span>
+            <span class="n">co2</span><span class="o">=</span><span class="n">co2</span><span class="p">,</span>
+            <span class="n">u</span><span class="o">=</span><span class="n">u</span><span class="p">,</span>
+            <span class="n">v</span><span class="o">=</span><span class="n">v</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ZilitinkevichModel.compute_sbl_height">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.stable_layer.zilitinkevich.html#abcmodel.atmos.stable_layer.ZilitinkevichModel.compute_sbl_height">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_sbl_height</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">ustar</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">obukhov</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">h_residual</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute SBL height using the Zilitinkevich (1972) formula.</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            h_{sbl} = C_z \\, \\sqrt{\\frac{u_* \\, L}{f}}</span>
+
+<span class="sd">        where :math:`C_z` is the Zilitinkevich constant, :math:`u_*` is the</span>
+<span class="sd">        friction velocity, :math:`L` is the Obukhov length (positive in</span>
+<span class="sd">        stable conditions), and :math:`f` is the Coriolis parameter.</span>
+
+<span class="sd">        The result is clamped between 10 m and ``h_residual``.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            ustar: Friction velocity [m/s].</span>
+<span class="sd">            obukhov: Obukhov length [m] (positive in stable conditions).</span>
+<span class="sd">            h_residual: Residual layer height [m] (upper bound).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            SBL height [m].</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ob_len_pos</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">obukhov</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
+        <span class="n">product</span> <span class="o">=</span> <span class="n">ustar</span> <span class="o">*</span> <span class="n">ob_len_pos</span>
+        <span class="n">safe_product</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">product</span><span class="p">,</span> <span class="mf">1e-4</span><span class="p">)</span>
+        <span class="n">f_safe</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coriolis_param</span><span class="p">,</span> <span class="mf">1e-8</span><span class="p">)</span>
+        <span class="n">h_raw</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">zilitinkevich_const</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">safe_product</span> <span class="o">/</span> <span class="n">f_safe</span><span class="p">)</span>
+        <span class="n">h_res</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">h_residual</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">h_raw</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="n">h_res</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ZilitinkevichModel.compute_thetatend">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.stable_layer.zilitinkevich.html#abcmodel.atmos.stable_layer.ZilitinkevichModel.compute_thetatend">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_thetatend</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">h_sbl</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">wtheta</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute potential temperature tendency for SBL.</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            \\frac{d\\theta}{dt} = \\frac{w&#39;\\theta&#39;}{h_{sbl}}</span>
+
+<span class="sd">        where :math:`w&#39;\\theta&#39;` is the surface kinematic heat flux</span>
+<span class="sd">        (negative at night, cooling the SBL).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            h_sbl: SBL height [m].</span>
+<span class="sd">            wtheta: Surface kinematic heat flux [K m/s].</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Potential temperature tendency [K/s].</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">wtheta</span> <span class="o">/</span> <span class="n">h_sbl</span></div>
+
+
+<div class="viewcode-block" id="ZilitinkevichModel.compute_qtend">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.stable_layer.zilitinkevich.html#abcmodel.atmos.stable_layer.ZilitinkevichModel.compute_qtend">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_qtend</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">h_sbl</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">wq</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute specific humidity tendency for SBL.</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            \\frac{dq}{dt} = \\frac{w&#39;q&#39;}{h_{sbl}}</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            h_sbl: SBL height [m].</span>
+<span class="sd">            wq: Surface kinematic moisture flux [kg/kg m/s].</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Specific humidity tendency [kg/kg/s].</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">wq</span> <span class="o">/</span> <span class="n">h_sbl</span></div>
+
+
+<div class="viewcode-block" id="ZilitinkevichModel.compute_co2tend">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.stable_layer.zilitinkevich.html#abcmodel.atmos.stable_layer.ZilitinkevichModel.compute_co2tend">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_co2tend</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">h_sbl</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">wCO2</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute CO2 tendency for SBL.</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            \\frac{dCO_2}{dt} = \\frac{w&#39;CO_2&#39;}{h_{sbl}}</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            h_sbl: SBL height [m].</span>
+<span class="sd">            wCO2: Surface kinematic CO2 flux [mgC/m²/s].</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            CO2 tendency [ppm/s].</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">wCO2</span> <span class="o">/</span> <span class="n">h_sbl</span></div>
+
+
+<div class="viewcode-block" id="ZilitinkevichModel.compute_utend">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.stable_layer.zilitinkevich.html#abcmodel.atmos.stable_layer.ZilitinkevichModel.compute_utend">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_utend</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">h_sbl</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">uw</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">du</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">dv</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute zonal wind tendency for the SBL.</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            \\frac{du}{dt} = -f \\, dv - \\frac{\\overline{u&#39;w&#39;}}{h_{sbl}}</span>
+
+<span class="sd">        where :math:`\\overline{u&#39;w&#39;}` is the surface momentum flux and</span>
+<span class="sd">        :math:`f` is the Coriolis parameter.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            h_sbl: SBL height [m].</span>
+<span class="sd">            uw: Surface zonal momentum flux [m²/s²].</span>
+<span class="sd">            du: Zonal wind jump at SBL top [m/s].</span>
+<span class="sd">            dv: Meridional wind jump at SBL top [m/s].</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Zonal wind tendency [m/s²].</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">coriolis</span> <span class="o">=</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">coriolis_param</span> <span class="o">*</span> <span class="n">dv</span>
+        <span class="n">drag</span> <span class="o">=</span> <span class="n">uw</span> <span class="o">/</span> <span class="n">h_sbl</span>
+        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">is_wind_prog</span><span class="p">,</span> <span class="n">coriolis</span> <span class="o">+</span> <span class="n">drag</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ZilitinkevichModel.compute_vtend">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.stable_layer.zilitinkevich.html#abcmodel.atmos.stable_layer.ZilitinkevichModel.compute_vtend">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_vtend</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">h_sbl</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">vw</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">du</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+        <span class="n">dv</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute meridional wind tendency for the SBL.</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            \\frac{dv}{dt} = f \\, du - \\frac{\\overline{v&#39;w&#39;}}{h_{sbl}}</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            h_sbl: SBL height [m].</span>
+<span class="sd">            vw: Surface meridional momentum flux [m²/s²].</span>
+<span class="sd">            du: Zonal wind jump at SBL top [m/s].</span>
+<span class="sd">            dv: Meridional wind jump at SBL top [m/s].</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Meridional wind tendency [m/s²].</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">coriolis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coriolis_param</span> <span class="o">*</span> <span class="n">du</span>
+        <span class="n">drag</span> <span class="o">=</span> <span class="n">vw</span> <span class="o">/</span> <span class="n">h_sbl</span>
+        <span class="k">return</span> <span class="n">jnp</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">is_wind_prog</span><span class="p">,</span> <span class="n">coriolis</span> <span class="o">+</span> <span class="n">drag</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ZilitinkevichModel.compute_thetav">
+<a class="viewcode-back" href="../../../../source/api/abcmodel.atmos.stable_layer.zilitinkevich.html#abcmodel.atmos.stable_layer.ZilitinkevichModel.compute_thetav">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_thetav</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">theta</span><span class="p">:</span> <span class="n">Array</span><span class="p">,</span> <span class="n">q</span><span class="p">:</span> <span class="n">Array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Compute virtual potential temperature.</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            \\theta_v = \\theta (1 + 0.61 q)</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            theta: Potential temperature [K].</span>
+<span class="sd">            q: Specific humidity [kg/kg].</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Virtual potential temperature [K].</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">theta</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="mf">0.61</span> <span class="o">*</span> <span class="n">q</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By ABC³ Group
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright ABC³ Group.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

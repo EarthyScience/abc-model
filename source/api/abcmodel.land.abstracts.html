@@ -1,0 +1,900 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Abstracts &#8212; abc-model 0.1.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=4418a689" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../../_static/documentation_options.js?v=a1637f0b"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'source/api/abcmodel.land.abstracts';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Atmosphere" href="abcmodel.atmos.html" />
+    <link rel="prev" title="Standard" href="abcmodel.land.surface.standard.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../../_static/searchtools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/logo.png" class="logo__image only-light" alt="abc-model 0.1.0 documentation - Home"/>
+    <img src="../../_static/logo.png" class="logo__image only-dark pst-js-only" alt="abc-model 0.1.0 documentation - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="abcmodel.rad.html">Radiation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.rad.standard.html">Standard</a></li>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.rad.cloudy.html">Cloudy</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="abcmodel.land.html">Land</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.land.standard.html">Standard</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="abcmodel.land.biosphere.html">Biosphere</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.ags.html">Ags</a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.biosphere.jarvis_stewart.html">Jarvis Stewart</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="abcmodel.land.soil.html">Soil</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.soil.standard.html">Standard</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="abcmodel.land.surface.html">Surface</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.land.surface.standard.html">Standard</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Abstracts</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="abcmodel.atmos.html">Atmosphere</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.atmos.dayonly.html">Dayonly</a></li>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.atmos.daynight.html">Daynight</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="abcmodel.atmos.surface_layer.html">Surface Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.atmos.surface_layer.simple.html">Simple</a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.atmos.surface_layer.obukhov.html">Obukhov</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="abcmodel.atmos.mixed_layer.html">Mixed Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.atmos.mixed_layer.bulk.html">Bulk</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="abcmodel.atmos.clouds.html">Clouds</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.atmos.clouds.cumulus.html">Cumulus</a></li>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.atmos.clouds.no_clouds.html">No Clouds</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="abcmodel.atmos.stable_layer.html">Stable Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.atmos.stable_layer.zilitinkevich.html">Zilitinkevich</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="abcmodel.atmos.residual_layer.html">Residual Layer</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="abcmodel.atmos.residual_layer.frozen.html">Frozen</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="abcmodel.atmos.abstracts.html">Abstracts</a></li>
+</ul>
+</details></li>
+</ul>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="abcmodel.abstracts.html">Abstracts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abcmodel.coupling.html">Coupling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abcmodel.integration.html">Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abcmodel.plotting.html">Plotting</a></li>
+<li class="toctree-l1"><a class="reference internal" href="abcmodel.utils.html">Utils</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/EarthyScience/abc-model" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/source/api/abcmodel.land.abstracts.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Abstracts</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractBiosphereState"><code class="docutils literal notranslate"><span class="pre">AbstractBiosphereState</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractBiosphereState.rs"><code class="docutils literal notranslate"><span class="pre">AbstractBiosphereState.rs</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractBiosphereState.wl"><code class="docutils literal notranslate"><span class="pre">AbstractBiosphereState.wl</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractBiosphereState.wltend"><code class="docutils literal notranslate"><span class="pre">AbstractBiosphereState.wltend</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractBiosphereState.cliq"><code class="docutils literal notranslate"><span class="pre">AbstractBiosphereState.cliq</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractBiosphereState.wCO2"><code class="docutils literal notranslate"><span class="pre">AbstractBiosphereState.wCO2</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractBiosphereState.cveg"><code class="docutils literal notranslate"><span class="pre">AbstractBiosphereState.cveg</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSoilState"><code class="docutils literal notranslate"><span class="pre">AbstractSoilState</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSoilState.wg"><code class="docutils literal notranslate"><span class="pre">AbstractSoilState.wg</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSoilState.temp_soil"><code class="docutils literal notranslate"><span class="pre">AbstractSoilState.temp_soil</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSoilState.temp2"><code class="docutils literal notranslate"><span class="pre">AbstractSoilState.temp2</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSoilState.rssoil"><code class="docutils literal notranslate"><span class="pre">AbstractSoilState.rssoil</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSoilState.wgtend"><code class="docutils literal notranslate"><span class="pre">AbstractSoilState.wgtend</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSoilState.temp_soil_tend"><code class="docutils literal notranslate"><span class="pre">AbstractSoilState.temp_soil_tend</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSurfaceState"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceState</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSurfaceState.alpha"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceState.alpha</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSurfaceState.surf_temp"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceState.surf_temp</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSurfaceState.qsatsurf"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceState.qsatsurf</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSurfaceState.le_veg"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceState.le_veg</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSurfaceState.le_liq"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceState.le_liq</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSurfaceState.le_soil"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceState.le_soil</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSurfaceState.le"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceState.le</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSurfaceState.hf"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceState.hf</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSurfaceState.gf"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceState.gf</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSurfaceState.le_pot"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceState.le_pot</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSurfaceState.le_ref"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceState.le_ref</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSurfaceState.vpd"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceState.vpd</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSurfaceState.wtheta"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceState.wtheta</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSurfaceState.wq"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceState.wq</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSurfaceState.esat"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceState.esat</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSurfaceState.qsat"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceState.qsat</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSurfaceState.dqsatdT"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceState.dqsatdT</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSurfaceState.e"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceState.e</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractBiosphereModel"><code class="docutils literal notranslate"><span class="pre">AbstractBiosphereModel</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractBiosphereModel.run"><code class="docutils literal notranslate"><span class="pre">AbstractBiosphereModel.run()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractBiosphereModel.run_tends"><code class="docutils literal notranslate"><span class="pre">AbstractBiosphereModel.run_tends()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractBiosphereModel.integrate"><code class="docutils literal notranslate"><span class="pre">AbstractBiosphereModel.integrate()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSoilModel"><code class="docutils literal notranslate"><span class="pre">AbstractSoilModel</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSoilModel.run"><code class="docutils literal notranslate"><span class="pre">AbstractSoilModel.run()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSoilModel.run_tends"><code class="docutils literal notranslate"><span class="pre">AbstractSoilModel.run_tends()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSoilModel.integrate"><code class="docutils literal notranslate"><span class="pre">AbstractSoilModel.integrate()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSurfaceModel"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceModel</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSurfaceModel.run"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceModel.run()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSurfaceModel.integrate"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceModel.integrate()</span></code></a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="module-abcmodel.land.abstracts">
+<span id="abstracts"></span><h1>Abstracts<a class="headerlink" href="#module-abcmodel.land.abstracts" title="Link to this heading">#</a></h1>
+<p>Abstract classes for land sub-modules.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="abcmodel.land.abstracts.AbstractBiosphereState">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">abcmodel.land.abstracts.</span></span><span class="sig-name descname"><span class="pre">AbstractBiosphereState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/abstracts.html#AbstractBiosphereState"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.abstracts.AbstractBiosphereState" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="abcmodel.abstracts.html#abcmodel.abstracts.AbstractState" title="abcmodel.abstracts.AbstractState"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractState</span></code></a></p>
+<p>Abstract biosphere state.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.abstracts.AbstractBiosphereState.rs">
+<span class="sig-name descname"><span class="pre">rs</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.abstracts.AbstractBiosphereState.rs" title="Link to this definition">#</a></dt>
+<dd><p>Surface resistance [s m-1].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.abstracts.AbstractBiosphereState.wl">
+<span class="sig-name descname"><span class="pre">wl</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.abstracts.AbstractBiosphereState.wl" title="Link to this definition">#</a></dt>
+<dd><p>Canopy water content [m].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.abstracts.AbstractBiosphereState.wltend">
+<span class="sig-name descname"><span class="pre">wltend</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.abstracts.AbstractBiosphereState.wltend" title="Link to this definition">#</a></dt>
+<dd><p>Canopy water storage tendency [m s-1].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.abstracts.AbstractBiosphereState.cliq">
+<span class="sig-name descname"><span class="pre">cliq</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.abstracts.AbstractBiosphereState.cliq" title="Link to this definition">#</a></dt>
+<dd><p>Wet fraction of the canopy [-].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.abstracts.AbstractBiosphereState.wCO2">
+<span class="sig-name descname"><span class="pre">wCO2</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.abstracts.AbstractBiosphereState.wCO2" title="Link to this definition">#</a></dt>
+<dd><p>Kinematic CO2 flux [kg/kg m/s] or [mol m-2 s-1].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.abstracts.AbstractBiosphereState.cveg">
+<span class="sig-name descname"><span class="pre">cveg</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.abstracts.AbstractBiosphereState.cveg" title="Link to this definition">#</a></dt>
+<dd><p>Vegetation fraction [-].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="abcmodel.land.abstracts.AbstractSoilState">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">abcmodel.land.abstracts.</span></span><span class="sig-name descname"><span class="pre">AbstractSoilState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/abstracts.html#AbstractSoilState"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.abstracts.AbstractSoilState" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="abcmodel.abstracts.html#abcmodel.abstracts.AbstractState" title="abcmodel.abstracts.AbstractState"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractState</span></code></a></p>
+<p>Abstract soil state.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.abstracts.AbstractSoilState.wg">
+<span class="sig-name descname"><span class="pre">wg</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.abstracts.AbstractSoilState.wg" title="Link to this definition">#</a></dt>
+<dd><p>Soil moisture content in the root zone [m3 m-3].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.abstracts.AbstractSoilState.temp_soil">
+<span class="sig-name descname"><span class="pre">temp_soil</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.abstracts.AbstractSoilState.temp_soil" title="Link to this definition">#</a></dt>
+<dd><p>Soil temperature [K].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.abstracts.AbstractSoilState.temp2">
+<span class="sig-name descname"><span class="pre">temp2</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.abstracts.AbstractSoilState.temp2" title="Link to this definition">#</a></dt>
+<dd><p>Deep soil temperature [K].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.abstracts.AbstractSoilState.rssoil">
+<span class="sig-name descname"><span class="pre">rssoil</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.abstracts.AbstractSoilState.rssoil" title="Link to this definition">#</a></dt>
+<dd><p>Soil resistance [s m-1].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.abstracts.AbstractSoilState.wgtend">
+<span class="sig-name descname"><span class="pre">wgtend</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.abstracts.AbstractSoilState.wgtend" title="Link to this definition">#</a></dt>
+<dd><p>Soil moisture tendency [m3 m-3 s-1].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.abstracts.AbstractSoilState.temp_soil_tend">
+<span class="sig-name descname"><span class="pre">temp_soil_tend</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.abstracts.AbstractSoilState.temp_soil_tend" title="Link to this definition">#</a></dt>
+<dd><p>Soil temperature tendency [K s-1].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="abcmodel.land.abstracts.AbstractSurfaceState">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">abcmodel.land.abstracts.</span></span><span class="sig-name descname"><span class="pre">AbstractSurfaceState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/abstracts.html#AbstractSurfaceState"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.abstracts.AbstractSurfaceState" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="abcmodel.abstracts.html#abcmodel.abstracts.AbstractState" title="abcmodel.abstracts.AbstractState"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractState</span></code></a></p>
+<p>Abstract surface state.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.abstracts.AbstractSurfaceState.alpha">
+<span class="sig-name descname"><span class="pre">alpha</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.abstracts.AbstractSurfaceState.alpha" title="Link to this definition">#</a></dt>
+<dd><p>Surface albedo [-].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.abstracts.AbstractSurfaceState.surf_temp">
+<span class="sig-name descname"><span class="pre">surf_temp</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.abstracts.AbstractSurfaceState.surf_temp" title="Link to this definition">#</a></dt>
+<dd><p>Surface temperature [K].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.abstracts.AbstractSurfaceState.qsatsurf">
+<span class="sig-name descname"><span class="pre">qsatsurf</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.abstracts.AbstractSurfaceState.qsatsurf" title="Link to this definition">#</a></dt>
+<dd><p>Saturation specific humidity at surface temperature [kg/kg].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.abstracts.AbstractSurfaceState.le_veg">
+<span class="sig-name descname"><span class="pre">le_veg</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.abstracts.AbstractSurfaceState.le_veg" title="Link to this definition">#</a></dt>
+<dd><p>Latent heat flux from vegetation [W m-2].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.abstracts.AbstractSurfaceState.le_liq">
+<span class="sig-name descname"><span class="pre">le_liq</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.abstracts.AbstractSurfaceState.le_liq" title="Link to this definition">#</a></dt>
+<dd><p>Latent heat flux from liquid water [W m-2].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.abstracts.AbstractSurfaceState.le_soil">
+<span class="sig-name descname"><span class="pre">le_soil</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.abstracts.AbstractSurfaceState.le_soil" title="Link to this definition">#</a></dt>
+<dd><p>Latent heat flux from soil [W m-2].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.abstracts.AbstractSurfaceState.le">
+<span class="sig-name descname"><span class="pre">le</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.abstracts.AbstractSurfaceState.le" title="Link to this definition">#</a></dt>
+<dd><p>Total latent heat flux [W m-2].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.abstracts.AbstractSurfaceState.hf">
+<span class="sig-name descname"><span class="pre">hf</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.abstracts.AbstractSurfaceState.hf" title="Link to this definition">#</a></dt>
+<dd><p>Sensible heat flux [W m-2].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.abstracts.AbstractSurfaceState.gf">
+<span class="sig-name descname"><span class="pre">gf</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.abstracts.AbstractSurfaceState.gf" title="Link to this definition">#</a></dt>
+<dd><p>Ground heat flux [W m-2].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.abstracts.AbstractSurfaceState.le_pot">
+<span class="sig-name descname"><span class="pre">le_pot</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.abstracts.AbstractSurfaceState.le_pot" title="Link to this definition">#</a></dt>
+<dd><p>Potential latent heat flux [W m-2].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.abstracts.AbstractSurfaceState.le_ref">
+<span class="sig-name descname"><span class="pre">le_ref</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.abstracts.AbstractSurfaceState.le_ref" title="Link to this definition">#</a></dt>
+<dd><p>Reference latent heat flux [W m-2].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.abstracts.AbstractSurfaceState.vpd">
+<span class="sig-name descname"><span class="pre">vpd</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.abstracts.AbstractSurfaceState.vpd" title="Link to this definition">#</a></dt>
+<dd><p>Vapor pressure deficit [Pa].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.abstracts.AbstractSurfaceState.wtheta">
+<span class="sig-name descname"><span class="pre">wtheta</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.abstracts.AbstractSurfaceState.wtheta" title="Link to this definition">#</a></dt>
+<dd><p>Kinematic heat flux [K m/s].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.abstracts.AbstractSurfaceState.wq">
+<span class="sig-name descname"><span class="pre">wq</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.abstracts.AbstractSurfaceState.wq" title="Link to this definition">#</a></dt>
+<dd><p>Kinematic moisture flux [kg/kg m/s].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.abstracts.AbstractSurfaceState.esat">
+<span class="sig-name descname"><span class="pre">esat</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.abstracts.AbstractSurfaceState.esat" title="Link to this definition">#</a></dt>
+<dd><p>Saturation vapor pressure [Pa].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.abstracts.AbstractSurfaceState.qsat">
+<span class="sig-name descname"><span class="pre">qsat</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.abstracts.AbstractSurfaceState.qsat" title="Link to this definition">#</a></dt>
+<dd><p>Saturation specific humidity [kg/kg].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.abstracts.AbstractSurfaceState.dqsatdT">
+<span class="sig-name descname"><span class="pre">dqsatdT</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.abstracts.AbstractSurfaceState.dqsatdT" title="Link to this definition">#</a></dt>
+<dd><p>Derivative of saturation specific humidity with respect to temperature [kg/kg/K].</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="abcmodel.land.abstracts.AbstractSurfaceState.e">
+<span class="sig-name descname"><span class="pre">e</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Array</span></span><a class="headerlink" href="#abcmodel.land.abstracts.AbstractSurfaceState.e" title="Link to this definition">#</a></dt>
+<dd><p>Vapor pressure [Pa].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="abcmodel.land.abstracts.AbstractBiosphereModel">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">abcmodel.land.abstracts.</span></span><span class="sig-name descname"><span class="pre">AbstractBiosphereModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/abstracts.html#AbstractBiosphereModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.abstracts.AbstractBiosphereModel" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="abcmodel.abstracts.html#abcmodel.abstracts.AbstractModel" title="abcmodel.abstracts.AbstractModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Generic</span></code>[<code class="xref py py-obj docutils literal notranslate"><span class="pre">BiosphereT</span></code>]</p>
+<p>Abstract biosphere model class.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land.abstracts.AbstractBiosphereModel.run">
+<span class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/abstracts.html#AbstractBiosphereModel.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.abstracts.AbstractBiosphereModel.run" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land.abstracts.AbstractBiosphereModel.run_tends">
+<span class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">run_tends</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surf_state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/abstracts.html#AbstractBiosphereModel.run_tends"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.abstracts.AbstractBiosphereModel.run_tends" title="Link to this definition">#</a></dt>
+<dd><p>Compute and store biosphere tendencies that depend on surface fluxes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land.abstracts.AbstractBiosphereModel.integrate">
+<span class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">integrate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/abstracts.html#AbstractBiosphereModel.integrate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.abstracts.AbstractBiosphereModel.integrate" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="abcmodel.land.abstracts.AbstractSoilModel">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">abcmodel.land.abstracts.</span></span><span class="sig-name descname"><span class="pre">AbstractSoilModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/abstracts.html#AbstractSoilModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.abstracts.AbstractSoilModel" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="abcmodel.abstracts.html#abcmodel.abstracts.AbstractModel" title="abcmodel.abstracts.AbstractModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Generic</span></code>[<code class="xref py py-obj docutils literal notranslate"><span class="pre">SoilT</span></code>]</p>
+<p>Abstract soil model class.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land.abstracts.AbstractSoilModel.run">
+<span class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/abstracts.html#AbstractSoilModel.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.abstracts.AbstractSoilModel.run" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land.abstracts.AbstractSoilModel.run_tends">
+<span class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">run_tends</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">surf_state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/abstracts.html#AbstractSoilModel.run_tends"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.abstracts.AbstractSoilModel.run_tends" title="Link to this definition">#</a></dt>
+<dd><p>Compute and store soil tendencies that depend on surface fluxes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land.abstracts.AbstractSoilModel.integrate">
+<span class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">integrate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/abstracts.html#AbstractSoilModel.integrate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.abstracts.AbstractSoilModel.integrate" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="abcmodel.land.abstracts.AbstractSurfaceModel">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">abcmodel.land.abstracts.</span></span><span class="sig-name descname"><span class="pre">AbstractSurfaceModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/abstracts.html#AbstractSurfaceModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.abstracts.AbstractSurfaceModel" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="abcmodel.abstracts.html#abcmodel.abstracts.AbstractModel" title="abcmodel.abstracts.AbstractModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractModel</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Generic</span></code>[<code class="xref py py-obj docutils literal notranslate"><span class="pre">SurfaceT</span></code>]</p>
+<p>Abstract surface model class.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land.abstracts.AbstractSurfaceModel.run">
+<span class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/abstracts.html#AbstractSurfaceModel.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.abstracts.AbstractSurfaceModel.run" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="abcmodel.land.abstracts.AbstractSurfaceModel.integrate">
+<span class="sig-name descname"><span class="pre">integrate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/abcmodel/land/abstracts.html#AbstractSurfaceModel.integrate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#abcmodel.land.abstracts.AbstractSurfaceModel.integrate" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="abcmodel.land.surface.standard.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Standard</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="abcmodel.atmos.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Atmosphere</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractBiosphereState"><code class="docutils literal notranslate"><span class="pre">AbstractBiosphereState</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractBiosphereState.rs"><code class="docutils literal notranslate"><span class="pre">AbstractBiosphereState.rs</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractBiosphereState.wl"><code class="docutils literal notranslate"><span class="pre">AbstractBiosphereState.wl</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractBiosphereState.wltend"><code class="docutils literal notranslate"><span class="pre">AbstractBiosphereState.wltend</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractBiosphereState.cliq"><code class="docutils literal notranslate"><span class="pre">AbstractBiosphereState.cliq</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractBiosphereState.wCO2"><code class="docutils literal notranslate"><span class="pre">AbstractBiosphereState.wCO2</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractBiosphereState.cveg"><code class="docutils literal notranslate"><span class="pre">AbstractBiosphereState.cveg</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSoilState"><code class="docutils literal notranslate"><span class="pre">AbstractSoilState</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSoilState.wg"><code class="docutils literal notranslate"><span class="pre">AbstractSoilState.wg</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSoilState.temp_soil"><code class="docutils literal notranslate"><span class="pre">AbstractSoilState.temp_soil</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSoilState.temp2"><code class="docutils literal notranslate"><span class="pre">AbstractSoilState.temp2</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSoilState.rssoil"><code class="docutils literal notranslate"><span class="pre">AbstractSoilState.rssoil</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSoilState.wgtend"><code class="docutils literal notranslate"><span class="pre">AbstractSoilState.wgtend</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSoilState.temp_soil_tend"><code class="docutils literal notranslate"><span class="pre">AbstractSoilState.temp_soil_tend</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSurfaceState"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceState</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSurfaceState.alpha"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceState.alpha</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSurfaceState.surf_temp"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceState.surf_temp</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSurfaceState.qsatsurf"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceState.qsatsurf</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSurfaceState.le_veg"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceState.le_veg</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSurfaceState.le_liq"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceState.le_liq</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSurfaceState.le_soil"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceState.le_soil</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSurfaceState.le"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceState.le</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSurfaceState.hf"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceState.hf</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSurfaceState.gf"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceState.gf</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSurfaceState.le_pot"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceState.le_pot</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSurfaceState.le_ref"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceState.le_ref</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSurfaceState.vpd"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceState.vpd</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSurfaceState.wtheta"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceState.wtheta</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSurfaceState.wq"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceState.wq</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSurfaceState.esat"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceState.esat</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSurfaceState.qsat"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceState.qsat</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSurfaceState.dqsatdT"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceState.dqsatdT</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSurfaceState.e"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceState.e</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractBiosphereModel"><code class="docutils literal notranslate"><span class="pre">AbstractBiosphereModel</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractBiosphereModel.run"><code class="docutils literal notranslate"><span class="pre">AbstractBiosphereModel.run()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractBiosphereModel.run_tends"><code class="docutils literal notranslate"><span class="pre">AbstractBiosphereModel.run_tends()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractBiosphereModel.integrate"><code class="docutils literal notranslate"><span class="pre">AbstractBiosphereModel.integrate()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSoilModel"><code class="docutils literal notranslate"><span class="pre">AbstractSoilModel</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSoilModel.run"><code class="docutils literal notranslate"><span class="pre">AbstractSoilModel.run()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSoilModel.run_tends"><code class="docutils literal notranslate"><span class="pre">AbstractSoilModel.run_tends()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSoilModel.integrate"><code class="docutils literal notranslate"><span class="pre">AbstractSoilModel.integrate()</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSurfaceModel"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceModel</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSurfaceModel.run"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceModel.run()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#abcmodel.land.abstracts.AbstractSurfaceModel.integrate"><code class="docutils literal notranslate"><span class="pre">AbstractSurfaceModel.integrate()</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By ABC³ Group
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright ABC³ Group.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
