@@ -159,20 +159,20 @@ class AgsModel(AbstractBiosphereModel[AgsState]):
             raise ValueError(f'''Invalid option "{c3c4}" for "c3c4".''')
 
         self.co2comp298 = 68.5 if c3c4 == "c3" else 4.3
-        self.net_rad10CO2 = 1.5 if c3c4 == "c3" else 1.5
+        self.net_rad10CO2 = 1.5
         self.gm298 = 7.0 if c3c4 == "c3" else 17.5
         self.ammax298 = 2.2 if c3c4 == "c3" else 1.7
-        self.net_rad10gm = 2.0 if c3c4 == "c3" else 2.0
+        self.net_rad10gm = 2.0
         self.temp1gm = 278.0 if c3c4 == "c3" else 286.0
         self.temp2gm = 301.0 if c3c4 == "c3" else 309.0
-        self.net_rad10Am = 2.0 if c3c4 == "c3" else 2.0
+        self.net_rad10Am = 2.0
         self.temp1Am = 281.0 if c3c4 == "c3" else 286.0
-        self.temp2Am = 311.0 if c3c4 == "c3" else 311.0
+        self.temp2Am = 311.0
         self.f0 = 0.89 if c3c4 == "c3" else 0.85
         self.ad = 0.07 if c3c4 == "c3" else 0.15
         self.alpha0 = 0.017 if c3c4 == "c3" else 0.014
-        self.kx = 0.7 if c3c4 == "c3" else 0.7
-        self.gmin = 0.25e-3 if c3c4 == "c3" else 0.25e-3
+        self.kx = 0.7
+        self.gmin = 0.25e-3
         self.nuco2q = 1.6
         self.cw = 0.0016
         self.wmax = 0.55
